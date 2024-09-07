@@ -1,19 +1,18 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 
-const ENV = process.env.NODE_ENV // ENV is 'STAGE' or 'DEPLOY'
+const ENV = process.env.NODE_ENV // ENV is 'Staging' or 'Prod'
 
-const isLocal = ENV === 'STAGE';
+const isLocal = ENV === 'Staging';
 
 const clientConfig = isLocal
 	? {
-		region: 'us-east-1',
-		endpoint: 'http://localhost:8000',
+		region: "us-west-2",
 		credentials: {
-			accessKeyId: 'local',
-			secretAccessKey: 'local',
-			sessionToken: 'local',
+			accessKeyId: "local",
+			secretAccessKey: "local"
 		},
+		endpoint: "http://localhost:8000",
 	}
 	: { region: process.env.REGION };
 
