@@ -6,14 +6,14 @@ import { DatabaseConstants } from "../global/db/db.constants";
 export const CreateTable = async (tableName: string) => {
 	const constants = new DatabaseConstants();
 	const schema: CreateTableInput = {
-		TableName: tableName,
+		TableName: constants.getTable(tableName),
 		KeySchema: [
-			{ AttributeName: 'uid', KeyType: 'HASH' }, // Primary key attribute
-			{ AttributeName: 'createdAt', KeyType: 'RANGE' }, // Sort key attribute
+			{ AttributeName: constants.getPrimaryKey('uid'), KeyType: 'HASH' }, // Primary key attribute
+			{ AttributeName: constants.getSortKey('createdAt'), KeyType: 'RANGE' }, // Sort key attribute
 		],
 		AttributeDefinitions: [
-			{ AttributeName: 'uid', AttributeType: 'S' }, // Attribute definition for 'uid'
-			{ AttributeName: 'createdAt', AttributeType: 'S' }, // Attribute definition for 'createdAt'
+			{ AttributeName: constants.getPrimaryKey('uid'), AttributeType: 'S' }, // Attribute definition for 'uid'
+			{ AttributeName: constants.getSortKey('createdAt'), AttributeType: 'S' }, // Attribute definition for 'createdAt'
 		],
 		ProvisionedThroughput: {
 			ReadCapacityUnits: 3, // Read capacity units for the table
