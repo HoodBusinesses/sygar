@@ -6,6 +6,8 @@ export class AppController {
 
   @Get('healthcheck')
   async status() {
-    return true;
+    return {
+      isValid: true,
+    };
   }
 }
