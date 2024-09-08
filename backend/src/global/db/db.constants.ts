@@ -1,3 +1,7 @@
+
+import { Injectable } from "@nestjs/common";
+
+@Injectable()
 export class DatabaseConstants {
 	private isProduction: boolean;
 	private tableSuffix: string;

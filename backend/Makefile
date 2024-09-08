@@ -3,6 +3,11 @@ RED = \033[1;31m
 YELLOW = \033[1;33m
 NC = \033[0m
 
+up: up_dynamo up_staging
+
+up_staging:
+	NODE_ENV=Staging npm run start:dev
+
 up_dynamo:
 	@ echo "${GREEN}Starting containers...${NC}"
 	@ docker-compose up -d --build

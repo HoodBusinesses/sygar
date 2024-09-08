@@ -8,19 +8,19 @@ export const CreateTable = async (tableName: string) => {
 	const schema: CreateTableInput = {
 		TableName: constants.getTable(tableName),
 		KeySchema: [
-			{ AttributeName: constants.getPrimaryKey('uid'), KeyType: 'HASH' }, // Primary key attribute
-			{ AttributeName: constants.getSortKey('createdAt'), KeyType: 'RANGE' }, // Sort key attribute
+			{ AttributeName: 'uid', KeyType: 'HASH' }, // Primary key attribute
+			{ AttributeName: 'createdAt', KeyType: 'RANGE' }, // Sort key attribute
 		],
 		AttributeDefinitions: [
-			{ AttributeName: constants.getPrimaryKey('uid'), AttributeType: 'S' }, // Attribute definition for 'uid'
-			{ AttributeName: constants.getSortKey('createdAt'), AttributeType: 'S' }, // Attribute definition for 'createdAt'
+			{ AttributeName: 'uid', AttributeType: 'S' }, // Attribute definition for 'uid'
+			{ AttributeName: 'createdAt', AttributeType: 'S' }, // Attribute definition for 'createdAt'
 		],
 		ProvisionedThroughput: {
-			ReadCapacityUnits: 3, // Read capacity units for the table
-			WriteCapacityUnits: 3, // Write capacity units for the table
+			ReadCapacityUnits: 3,
+			WriteCapacityUnits: 3,
 		},
 	};
-
+	
 	try {
 		const data = await docClient.send(new CreateTableCommand(schema)); // Send the CreateTableCommand to DynamoDB
 		console.log(`Table ${tableName} created successfully.`);
@@ -40,7 +40,7 @@ async function checkTables() {
 }
 
 // Main function to create tables and check the list of tables
-async function main() {
+export async function initTables() {
 	const tables = ['Users', 'Abilities', 'Organizations', 'Admins', 'Bills']; // List of table names to create
 
 	for (const table of tables) {
@@ -50,4 +50,3 @@ async function main() {
 	checkTables(); // Check the list of tables
 }
 
-main(); 

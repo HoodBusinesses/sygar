@@ -13,8 +13,8 @@ export interface User {
   isActive: boolean;
   phone: string;
   resetPasswordToken: string;
-  resetPasswordTokenExpiresAt: Date;
-  passwordChangeAt: Date;
-  createdAt: Date;
-  updatedAt: Date;
+  resetPasswordTokenExpiresAt: string;
+  passwordChangeAt: string;
+  createdAt: string;
+  updatedAt: string;
 }
