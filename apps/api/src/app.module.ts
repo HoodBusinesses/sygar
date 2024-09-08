@@ -6,4 +6,4 @@ import { AuthModule } from './global/auth/auth.module';
   imports: [AuthModule],
   controllers: [AppController],
 })
-export class AppModule {}
+export class AppModule { }
