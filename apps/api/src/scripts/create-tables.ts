@@ -1,7 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { ConsoleLogger, Injectable } from '@nestjs/common';
 import { DbService } from '../global/db/db.service';
 import { DatabaseConstants } from '../global/db/db.constants';
 import { ConfigService } from '@nestjs/config';
+import { NationIdentifierTypes } from 'src/shared/constants/nit.enums';
+import { User } from 'src/shared/types/user';
+import { Roles } from 'src/shared/constants/roles.enums';
+import { UsersService } from 'src/global/users/users.service';
+import { urlencoded } from 'express';
 
 /**
  * InitTables class that initializes the creation of tables if they do not exist inside the DynamoDB database.
@@ -33,18 +38,21 @@ export class InitTables {
 }
 
 /**
- * Initializes the database service and creates necessary tables if they don't exist.
+ * Initializes the database service and creates necessary tables.
  * 
- * @remarks
- * This function checks if the tables already exist in the DynamoDB database and creates them automatically if not.
- * It will keep trying to connect to the database if it is not listening yet.
+ * This function initializes the database service by creating instances of ConfigService, DatabaseConstants,
+ * DbService, and UsersService. It then creates an instance of InitTables to initialize the necessary tables
+ * in the database. If the initialization fails, it retries after a 5-second delay. If the environment is set
+ * to 'Staging', it checks if the users from the sygarUsers array exist in the database and creates them if
+ * they don't.
  * 
- * @returns A Promise that resolves when the initialization is complete.
+ * @returns {Promise<void>} A promise that resolves once the database service is initialized and tables are created.
  */
 export async function initializeDbService() {
   const configService = new ConfigService();
-  const databaseConstants = new DatabaseConstants(configService);
-  const dbService = new DbService(configService, databaseConstants);
+  const dbConstants = new DatabaseConstants(configService);
+  const dbService = new DbService(configService, dbConstants);
+  const usersService = new UsersService(dbService, dbConstants);
 
   const initTables = new InitTables(dbService);
 
@@ -54,6 +62,18 @@ export async function initializeDbService() {
     if (!shouldContinue) {
       console.warn("Faild To connect to DynamoDB database, Retry!!!");
       await sleep(5000); // Sleep for 5 seconds before re-initializing
+    }
+  }
+
+  /**
+   * 
+   */
+  if (configService.get<string>('NODE_ENV') === 'Staging') {
+    for (const user of sygarUsers) {
+      const returnedUser = await usersService.getUserById(dbConstants.getPrimaryKey(user.uid));
+      if (!returnedUser) {
+          await usersService.createUser(user);
+      }
     }
   }
 }
@@ -66,3 +86,43 @@ export async function initializeDbService() {
 async function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+
+const sygarUsers: User[] = [
+  {
+    uid: "1", // Example ID, replace with a real unique ID generation logic
+    cnss: "SYGAR-CNSS",
+    nationalIdentifier: "SYGAR-ID-ADMIN",
+    nationalIdentifierType: NationIdentifierTypes.CIN,
+    firstName: "Sygar",
+    lastName: "Admin",
+    email: "sygaradmin@example.com",
+    password: "hashed_password", // Make sure to hash the password securely
+    role: Roles.ADMIN,
+    isActive: true,
+    phone: "000-111-2222",
+    resetPasswordToken: "",
+    resetPasswordTokenExpiresAt: new Date().toISOString(),
+    passwordChangeAt: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    uid: "2", // Example ID, replace with a real unique ID generation logic
+    cnss: "SYGAR-CNSS",
+    nationalIdentifier: "SYGAR-ID-SUPERADMIN",
+    nationalIdentifierType: NationIdentifierTypes.CIN,
+    firstName: "Sygar",
+    lastName: "SuperAdmin",
+    email: "sygarsuperadmin@example.com",
+    password: "hashed_password", // Make sure to hash the password securely
+    role: Roles.SUPER_ADMIN,
+    isActive: true,
+    phone: "111-222-3333",
+    resetPasswordToken: "",
+    resetPasswordTokenExpiresAt: new Date().toISOString(),
+    passwordChangeAt: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+];

@@ -25,6 +25,7 @@ import {
 import { ResourceNotFoundException } from '@aws-sdk/client-dynamodb';
 import { ConfigService } from '@nestjs/config';
 import { DatabaseConstants } from './db.constants';
+
 /**
  * Type definition for the DynamoDB configuration.
  */
@@ -147,13 +148,18 @@ export class DbService {
 	}
 
 	/**
-	 * Get single item form a DynamoDB table.
+	 * Get single item from a DynamoDB table.
 	 *
 	 * @param params - The parameters for the GetCommand.
 	 * @return The retrieved item.
 	 */
-	public async getItem(params: GetCommandInput): Promise<any> {
-		return await this.client.send(new GetCommand(params));
+	public async getItem(params: GetCommandInput): Promise<any | null> {
+		try {
+			const result = await this.client.send(new GetCommand(params));
+			return result.Item;
+		} catch (error) {
+			return null;
+		}
 	}
 
 	/**
