@@ -19,6 +19,7 @@ async function bootstrap() {
 
   // Call initializeDbService to check if the tables already exist, and create them automatically if not.
   // It will keep trying to connect to the DynamoDB database if it is not listening yet.
+  // If everything works fine and we are in Staging stage it's initial admins automatically too.
   await initializeDbService();
 
   await app.listen(1337);
