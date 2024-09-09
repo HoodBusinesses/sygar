@@ -24,7 +24,7 @@ export class DatabaseConstants {
 	 * @returns The constructed table name.
 	 */
 	getTable(name: string) {
-		return `${this.projectName}_${name}_${this.tableSuffix.toUpperCase()}`;
+		return `${this.projectName}_${name}_${this.tableSuffix}`;
 	}
 
 	/**
@@ -42,7 +42,7 @@ export class DatabaseConstants {
    * @param name - The base name for the sort key.
    * @returns The constructed sort key name.
    */
-  getSortKey(id: string) {
-    return `${this.projectName}_${id}_${this.tableSuffix.toUpperCase()}_SECRET`;
+  getSortKey(name: string) {
+    return `${name.toUpperCase()}_${this.tableSuffix.toUpperCase()}_SECRET`;
   }
 }
