@@ -1,10 +1,11 @@
 import { Global, Module } from '@nestjs/common';
 import { DbService } from './db.service';
-import { DbConstants } from './db.constants';
+import { DatabaseConstants } from './db.constants';
+import { ConfigService } from '@nestjs/config';
 
 @Global()
 @Module({
-  providers: [DbService, DbConstants],
-  exports: [DbConstants, DbService],
+  providers: [DbService, DatabaseConstants, ConfigService],
+  exports: [DatabaseConstants, DbService, ConfigService],
 })
 export class DbModule {}
