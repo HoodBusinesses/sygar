@@ -12,7 +12,7 @@ export class DatabaseConstants {
     // Fetch the project name from environment variables or use a default value
 		this.projectName = this.config.get<string>('PROJECT_NAME') || "HOOD";
     // Determine if the environment is production based on NODE_ENV
-		this.isProduction = this.config.get<string>('N') === 'Prod';
+		this.isProduction = this.config.get<string>('NODE_ENV') === 'Prod';
     // Set the table suffix based on the environment
 		this.tableSuffix = this.isProduction ? 'Prod' : 'Staging';
 	}
