@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConsoleLogger, Injectable } from '@nestjs/common';
 import {
   DynamoDBClient,
   ScanCommand,
@@ -7,6 +7,7 @@ import {
   DescribeTableCommandInput, 
   CreateTableCommand, 
   CreateTableCommandInput,
+	AttributeValue,
 } from '@aws-sdk/client-dynamodb';
 import {
   BatchWriteCommand,
@@ -21,6 +22,8 @@ import {
   TranslateConfig,
   UpdateCommand,
   UpdateCommandInput,
+	QueryCommand,
+	QueryCommandInput,
 } from '@aws-sdk/lib-dynamodb';
 import { ResourceNotFoundException } from '@aws-sdk/client-dynamodb';
 import { ConfigService } from '@nestjs/config';
@@ -141,7 +144,7 @@ export class DbService {
 	/**
 	 * Deletes a simple item from a DynamoDB table.
 	 *
-	 * @param params - The parameters for the GetCommand
+	 * @param params - The parameters for the DeleteCommand
 	 */
 	public async deleteItem(params: DeleteCommandInput): Promise<void> {
 		await this.client.send(new DeleteCommand(params));
@@ -153,11 +156,17 @@ export class DbService {
 	 * @param params - The parameters for the GetCommand.
 	 * @return The retrieved item.
 	 */
-	public async getItem(params: GetCommandInput): Promise<any | null> {
+	async getItem(params: GetCommandInput): Promise<any | null> {
 		try {
+			// Validate params
+			if (!params || !params.TableName || !params.Key) {
+				throw new Error("Invalid parameters: TableName and Key are required.");
+			}
+
 			const result = await this.client.send(new GetCommand(params));
 			return result.Item;
 		} catch (error) {
+			console.error("Error retrieving item:", error);
 			return null;
 		}
 	}
@@ -244,4 +253,43 @@ export class DbService {
 			throw error;
 		}
 	}
+	
+	convertObject(input: { [key: string]: { S?: string } | undefined }): { [key: string]: string } {
+		const output: { [key: string]: string } = {};
+		for (const key in input) {
+			const value = input[key];
+			if (value && value.hasOwnProperty('S')) {
+				output[key] = value.S as string;
+			}
+		}
+		return output;
+	}
+	
+	convertItems(items: Record<string, { S?: string }>[]): { [key: string]: string }[] {
+		return items.map(item => this.convertObject(item));
+	}
+	
+	public async getItemsByQuery(tableName: string, attr: string, val: string): Promise<{ [key: string]: any }[] | null> {
+		const param: ScanCommandInput = {
+			TableName: this.databaseConstants.getTable(tableName),
+			FilterExpression: `#attr = :val`,
+			ExpressionAttributeNames: {
+				'#attr': attr,
+			},
+			ExpressionAttributeValues: {
+				':val': { S: val } as AttributeValue,
+			},
+		};
+	
+		try {
+			const result = await this.client.send(new ScanCommand(param));
+			const items = result.Items ? this.convertItems(result.Items) : null;
+			return items;
+		} catch (error) {
+			console.error('Error in getItemsByQuery:', error);
+			return null;
+		}
+	}
+	
+	
 }

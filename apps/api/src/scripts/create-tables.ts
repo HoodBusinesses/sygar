@@ -66,12 +66,17 @@ export async function initializeDbService() {
   }
 
   /**
+   * This section of code checks if the environment is set to 'Staging' and if so, it iterates over the sygarUsers array.
+   * For each user in the array, it checks if the user already exists in the 'Users' table of the database by querying
+   * the 'uid' attribute. If the user does not exist, it creates the user using the usersService.createUser() method.
    * 
+   * Note: Make sure to replace the example IDs and hashed passwords with real values and implement a secure password
+   * hashing mechanism.
    */
   if (configService.get<string>('NODE_ENV') === 'Staging') {
     for (const user of sygarUsers) {
-      const returnedUser = await usersService.getUserById(dbConstants.getPrimaryKey(user.uid));
-      if (!returnedUser) {
+      const returnedUsers = await dbService.getItemsByQuery('Users', 'uid', user.uid);
+      if (!returnedUsers || !returnedUsers.length) {
           await usersService.createUser(user);
       }
     }
@@ -88,6 +93,9 @@ async function sleep(ms: number) {
 }
 
 
+/**
+ * Represents an array of Sygar users for dev stage
+ */
 const sygarUsers: User[] = [
   {
     uid: "1", // Example ID, replace with a real unique ID generation logic

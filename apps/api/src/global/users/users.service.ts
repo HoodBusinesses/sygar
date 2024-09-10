@@ -66,7 +66,7 @@ export class UsersService {
 			TableName: this.tableName,
 			Key: { uid },
 		};
-
+		
 		const results = await this.dbService.getItem(params);
 		return results ? results as User : null;
 	}
@@ -114,8 +114,10 @@ export class UsersService {
 	}
 
 	/**
+	 * Deletes a user with the specified UID.
 	 * 
-	 * @param uid 
+	 * @param uid - The UID of the user to delete.
+	 * @returns A promise that resolves when the user is successfully deleted.
 	 */
 	async deleteUser(uid: string): Promise<void> {
 		const params: DeleteCommandInput = {
