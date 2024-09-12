@@ -46,11 +46,11 @@ export const createAdmins = async () => {
 		// Prepare the parameters for scanning the Users table to check 
 		// if the admin already exists
 		const paramEmail: ScanCommandInput = {
-				TableName: dbConstants.getTable('Users'),
-				FilterExpression: "email = :email",
-				ExpressionAttributeValues: {
-						":email": { S: admin.email }
-				}
+			TableName: dbConstants.getTable('Users'),
+			FilterExpression: "email = :email",
+			ExpressionAttributeValues: {
+				":email": { S: admin.email }
+			}
 		};
 		// Execute the scan command and destructure the
 		// Itemsfrom the response
@@ -59,8 +59,8 @@ export const createAdmins = async () => {
 			// If the admin already exists in the Users table,
 			// log a message and skip to the next admin
 			if (Items && Items.length > 0) {
-					console.log(`Admin ${admin.email} already exists.`);
-					continue;
+			console.log(`Admin ${admin.email} already exists.`);
+				continue;
 			}
 		} catch (e) {
 			// Log an error message if there is an issue scanning the Users table
@@ -69,15 +69,15 @@ export const createAdmins = async () => {
 		const hashedPassword = crypto.createHash('sha256').update(admin.password).digest('hex');
 		// Prepare the parameters for adding the new admin to the Users table
 		const param: PutItemCommandInput = {
-				TableName: dbConstants.getTable('Users'),
-				Item: {
-						uid: { S: admin.uid },
-						email: { S: admin.email },
-						password: { S: hashedPassword },
-						role: { S: admin.role },
-						createdAt: { N: admin.createdAt.toString() },
-						updatedAt: { N: admin.updatedAt.toString() }
-				}
+			TableName: dbConstants.getTable('Users'),
+			Item: {
+				uid: { S: admin.uid },
+				email: { S: admin.email },
+				password: { S: hashedPassword },
+				role: { S: admin.role },
+				createdAt: { N: admin.createdAt.toString() },
+				updatedAt: { N: admin.updatedAt.toString() }
+			}
 		};
 		console.log(dbConstants.getTable('Users'));
 		try {
@@ -88,7 +88,7 @@ export const createAdmins = async () => {
 			// Log an error message if there is an issue creating the admin
 			if (error instanceof Error)
 				console.error(
-						`Error creating admin ${admin.email}: ${error.message}`,
+					`Error creating admin ${admin.email}: ${error.message}`,
 				);
 		}
 	}	
