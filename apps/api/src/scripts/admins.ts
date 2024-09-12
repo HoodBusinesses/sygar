@@ -4,6 +4,7 @@ import { DbConstants } from "../global/db/db.constants";
 import { DbService } from "../global/db/db.service";
 import { ScanCommandInput } from "@aws-sdk/lib-dynamodb";
 import { config } from "dotenv";
+import crypto from "crypto";
 
 // The `config()` function is likely being called to load and configure environment variables or application settings.
 // This is a common practice in Node.js applications to ensure that configuration settings are properly initialized.
@@ -65,6 +66,7 @@ export const createAdmins = async () => {
 			// Log an error message if there is an issue scanning the Users table
 			console.error(`Error scanning for admin ${admin.email}: ${(e as Error).message}`);
 		}
+		const hashedPassword = crypto.createHash('sha256').update(admin.password).digest('hex');
 		// Prepare the parameters for adding the new admin to the Users table
 		const param: PutItemCommandInput = {
 				TableName: dbConstants.getTable('Users'),
