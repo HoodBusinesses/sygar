@@ -73,7 +73,7 @@ export const createAdmins = async () => {
 				Item: {
 						uid: { S: admin.uid },
 						email: { S: admin.email },
-						password: { S: admin.password },
+						password: { S: hashedPassword },
 						role: { S: admin.role },
 						createdAt: { N: admin.createdAt.toString() },
 						updatedAt: { N: admin.updatedAt.toString() }
