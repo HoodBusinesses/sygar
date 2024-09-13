@@ -3,9 +3,11 @@ import {
   CreateTableCommandInput,
 } from '@aws-sdk/client-dynamodb';
 import { ConfigService } from '@nestjs/config';
-import { DbConstants } from 'src/global/db/db.constants';
-import { DbService } from 'src/global/db/db.service';
-import { inspect } from 'util';
+import { DbConstants } from '../global/db/db.constants';
+import { DbService } from '../global/db/db.service';
+import { config } from 'dotenv';
+
+config();
 
 const configService = new ConfigService();
 const dbConstants = new DbConstants(configService);
@@ -19,12 +21,12 @@ export const createTables = async (tableName: string) => {
   const schema: CreateTableCommandInput = {
     TableName: dbConstants.getTable(tableName),
     KeySchema: [
-      { AttributeName: 'PK', KeyType: 'HASH' },
-      { AttributeName: 'SK', KeyType: 'RANGE' },
+      { AttributeName: dbConstants.getPrimaryKey('uid'), KeyType: 'HASH' },
+      { AttributeName: dbConstants.getSortKey('createdAt'), KeyType: 'RANGE' },
     ],
     AttributeDefinitions: [
-      { AttributeName: 'PK', AttributeType: 'S' },
-      { AttributeName: 'SK', AttributeType: 'S' },
+      { AttributeName: dbConstants.getPrimaryKey('uid'), AttributeType: 'S' },
+      { AttributeName: dbConstants.getSortKey('createdAt'), AttributeType: 'N' },
     ],
     ProvisionedThroughput: {
       ReadCapacityUnits: 3,
@@ -47,7 +49,7 @@ export const createTables = async (tableName: string) => {
  * Main function to create tables.
  */
 async function main() {
-  const tables = ['User'];
+  const tables = ['Users', 'Abilities', 'Organization', 'Admin', 'Bill'];
 
   for (const table of tables) {
     console.log('Creating table ' + table);
