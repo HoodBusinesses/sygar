@@ -5,6 +5,7 @@ import { DbService } from "../global/db/db.service";
 import { ScanCommandInput } from "@aws-sdk/lib-dynamodb";
 import { config } from "dotenv";
 import crypto from "crypto";
+import { v4 as uuid } from "uuid";
 
 // The `config()` function is likely being called to load and configure environment variables or application settings.
 // This is a common practice in Node.js applications to ensure that configuration settings are properly initialized.
@@ -12,22 +13,24 @@ config();
 const configService = new ConfigService();
 const dbConstants = new DbConstants(configService);
 const dbService = new DbService(configService);
+const uidKey = dbConstants.getPrimaryKey('uid');
+const createdAtKey = dbConstants.getSortKey('createdAt');
 
 const admins = [
 	{
-		uid: "superadmin",
+		[uidKey]: "superadmin",
 		email: configService.get<string>('SUPERADMIN_EMAIL', "superadmin@hood.com"),
 		password: configService.get<string>('SUPERADMIN_PASSWORD', "superadmin"),
 		role: "SUPERADMIN",
-		createdAt: Date.now(),
+		[createdAtKey]: Date.now(),
 		updatedAt: Date.now()
 	},
 	{
-		uid: "admin",
+		[uidKey]: "admin",
 		email: configService.get<string>('ADMIN_EMAIL', "admin@hood.com"),
 		password: configService.get<string>('ADMIN_PASSWORD', "admin"),
 		role: "ADMIN",
-		createdAt: Date.now(),
+		[createdAtKey]: Date.now(),
 		updatedAt: Date.now()
 	}
 ];
@@ -71,12 +74,12 @@ export const createAdmins = async () => {
 		const param: PutItemCommandInput = {
 			TableName: dbConstants.getTable('Users'),
 			Item: {
-				uid: { S: admin.uid },
+				[uidKey]: { S: uuid() }, // This is a function that generates a unique ID (not shown in this snippet
 				email: { S: admin.email },
 				password: { S: hashedPassword },
 				role: { S: admin.role },
-				createdAt: { N: admin.createdAt.toString() },
-				updatedAt: { N: admin.updatedAt.toString() }
+				[createdAtKey]: { N: Date.now().toString() },
+				updatedAt: { N: Date.now().toString() }
 			}
 		};
 		console.log(dbConstants.getTable('Users'));
