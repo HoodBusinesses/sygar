@@ -21,12 +21,12 @@ export const createTables = async (tableName: string) => {
   const schema: CreateTableCommandInput = {
     TableName: dbConstants.getTable(tableName),
     KeySchema: [
-      { AttributeName: 'uid', KeyType: 'HASH' },
-      { AttributeName: 'createdAt', KeyType: 'RANGE' },
+      { AttributeName: dbConstants.getPrimaryKey('uid'), KeyType: 'HASH' },
+      { AttributeName: dbConstants.getSortKey('createdAt'), KeyType: 'RANGE' },
     ],
     AttributeDefinitions: [
-      { AttributeName: 'uid', AttributeType: 'S' },
-      { AttributeName: 'createdAt', AttributeType: 'N' },
+      { AttributeName: dbConstants.getPrimaryKey('uid'), AttributeType: 'S' },
+      { AttributeName: dbConstants.getSortKey('createdAt'), AttributeType: 'N' },
     ],
     ProvisionedThroughput: {
       ReadCapacityUnits: 3,
