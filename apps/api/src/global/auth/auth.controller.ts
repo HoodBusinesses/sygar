@@ -2,9 +2,6 @@ import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common'
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt/jwt-auth.guard';
 import { User } from 'src/shared/types/user';
-import { AbilitiesGuard } from '../rbac/rbac.guard';
-import { PutAbilities } from '../rbac/roles.decorators';
-import { Action } from 'src/shared/types/roles';
 
 @Controller('auth') // Defines a controller with the route prefix 'auth'
 export class AuthController {
@@ -22,8 +19,7 @@ export class AuthController {
 	}
 
 	@Get('profile') // Defines a GET route at 'auth/profile'
-	@PutAbilities({ action: Action.Read, subject: "User" }) // Defines the abilities required to access the route
-	@UseGuards(JwtAuthGuard, AbilitiesGuard) // Protects the route with JWT authentication and RBAC authorization
+	@UseGuards(JwtAuthGuard) // Protects the route with JWT authentication
 	getProfile(@Request() req: any) {
 		return req.user as User; // Returns the authenticated user's profile
 	}
