@@ -4,7 +4,7 @@ import { AuthController } from './auth.controller';
 @Global()
 @Module({
   imports: [],
-  controller: [AuthController],
+  controllers: [AuthController],
   exports: [],
   providers: [],
 })
