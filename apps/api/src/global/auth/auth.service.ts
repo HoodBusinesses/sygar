@@ -3,13 +3,14 @@ import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import * as crypto from 'crypto';
 import { User } from "src/shared/types/user";
+import { UsersRepository } from "../users/user.repository";
 
 @Injectable()
 export class AuthService {
 	// Constructor to inject necessary services: JwtService for token management,
 	// and UsersService for user management.
 	constructor(private readonly jwtService: JwtService,
-		private readonly usersService: UsersService,
+		private readonly usersRepository: UsersRepository,
 	) {}
 
 	// Method to validate a user by email and password.
@@ -17,7 +18,7 @@ export class AuthService {
     // Returns user details if validation is successful, otherwise returns null.
 	async validateUser(email: string, password: string): Promise<any> {
 		const hashedPassword = crypto.createHash('sha256').update(password).digest('hex');
-		const user = await this.usersService.findByEmail(email);
+		const user = await this.usersRepository.findByEmail(email);
 		if (user && user.password === hashedPassword) {
 			const { password, ...result } = user;
 			return result;

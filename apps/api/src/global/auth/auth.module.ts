@@ -5,6 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt/jwt.strategy';
 import { UsersModule } from '../users/users.module';
+import { UsersRepository } from '../users/user.repository';
 
 /**
  * The `AuthModule` is responsible for handling authentication-related functionality.
@@ -30,6 +31,6 @@ import { UsersModule } from '../users/users.module';
     UsersModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, UsersRepository],
 })
 export class AuthModule {}
