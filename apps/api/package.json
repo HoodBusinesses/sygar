@@ -1,5 +1,5 @@
 {
-  "name": "Madara-manga",
+  "name": "api",
   "private": true,
   "scripts": {
     "db:prepare": "ts-node -r tsconfig-paths/register ./src/scripts/tables.ts",

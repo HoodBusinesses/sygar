@@ -8,4 +8,4 @@ import { TrainingModule } from './global/training/theme.module';
   imports: [TrainingModule],
   controllers: [AppController],
 })
-export class AppModule { }
+export class AppModule {}
