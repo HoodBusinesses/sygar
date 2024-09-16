@@ -37,6 +37,41 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "web:build": {
+      "dependsOn": [],
+      "inputs": [
+        "apps/web/**/*",
+        ".env*"
+      ],
+      "outputs": [
+        "apps/web/.next/**",
+        "dist/web/**"
+      ]
+    },
+    "desktop:build": {
+      "dependsOn": [],
+      "inputs": [
+        "apps/desktop/**/*",
+        ".env*"
+      ],
+      "outputs": [
+        "dist/desktop/**"
+      ]
+    },
+    "web:start": {
+      "cache": false,
+      "persistent": true,
+      "inputs": [
+        "apps/web/**/*"
+      ]
+    },
+    "desktop:start": {
+      "cache": false,
+      "persistent": true,
+      "inputs": [
+        "apps/desktop/**/*"
+      ]
     }
   }
 }
