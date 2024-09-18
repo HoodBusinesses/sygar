@@ -1,10 +1,10 @@
 'use client'
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect , Suspense } from "react";
 import Image from "next/image";
 import { GrLanguage } from "react-icons/gr";
 import { useTranslation } from "react-i18next";
 
-export default function HomePage() {
+function HomePageContent() {
   const { t, i18n } = useTranslation();
 
   useEffect(() => {
@@ -25,10 +25,10 @@ export default function HomePage() {
       <div className="flex min-h-screen p-6"   style={{ backgroundImage: 'url("/images/background.png")' }}>
         <div className="self-start mb-4">
           <button className="flex items-center space-x-1 text-gray-500 hover:text-gray-200"
-                  // onClick={() => changeLanguage(i18n.language === 'en' ? 'fr' : i18n.language === 'fr' ? 'ar' : 'en') }
+                  onClick={() => changeLanguage(i18n.language === 'en' ? 'fr' : i18n.language === 'fr' ? 'ar' : 'en') }
               >
             <GrLanguage className="text-gray-500" />
-            <span>English</span>
+            <span>{t('language')}</span>
           </button>
         </div>
         <div className="m-auto  rounded-xl  flex flex-col md:flex-row w-full max-w-4xl">
@@ -71,5 +71,13 @@ export default function HomePage() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function HomePage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <HomePageContent />
+    </Suspense>
   );
 }
