@@ -5,9 +5,12 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { DbConstants } from '../global/db/db.constants';
 import { DbService } from '../global/db/db.service';
-import { config } from 'dotenv';
-
-config();
+import { UserSchema } from '../modules/user/model/user.model';
+import { LocalTableInput } from '../shared/types/db';
+import { AbilitySchema } from 'src/modules/ability/model/ability.model';
+import { AdminSchema } from 'src/modules/admin/model/admin.model';
+import { OrganizationSchema } from 'src/modules/organization/model/organization.model';
+import { BillSchema } from 'src/modules/bill/model/bill.model';
 
 const configService = new ConfigService();
 const dbConstants = new DbConstants(configService);
@@ -17,16 +20,18 @@ const dbService = new DbService(configService);
  *
  * @param tableName - The base name of the table to create.
  */
-export const createTables = async (tableName: string) => {
+export const createTables = async (table: LocalTableInput) => {
   const schema: CreateTableCommandInput = {
-    TableName: dbConstants.getTable(tableName),
+    ...table,
+    TableName: dbConstants.getTable(table.TableName!),
     KeySchema: [
-      { AttributeName: dbConstants.getPrimaryKey('uid'), KeyType: 'HASH' },
-      { AttributeName: dbConstants.getSortKey('createdAt'), KeyType: 'RANGE' },
+      { AttributeName: 'PK', KeyType: 'HASH' },
+      { AttributeName: 'SK', KeyType: 'RANGE' },
     ],
     AttributeDefinitions: [
-      { AttributeName: dbConstants.getPrimaryKey('uid'), AttributeType: 'S' },
-      { AttributeName: dbConstants.getSortKey('createdAt'), AttributeType: 'N' },
+      { AttributeName: 'PK', AttributeType: 'S' },
+      { AttributeName: 'SK', AttributeType: 'S' },
+      ...(table.AttributeDefinitions ? table.AttributeDefinitions : []),
     ],
     ProvisionedThroughput: {
       ReadCapacityUnits: 3,
@@ -49,7 +54,13 @@ export const createTables = async (tableName: string) => {
  * Main function to create tables.
  */
 async function main() {
-  const tables = ['Users', 'Abilities', 'Organization', 'Admin', 'Bill'];
+  const tables = [
+    UserSchema,
+    AbilitySchema,
+    OrganizationSchema,
+    AdminSchema,
+    BillSchema
+  ];
 
   for (const table of tables) {
     console.log('Creating table ' + table);
