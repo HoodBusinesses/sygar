@@ -3,6 +3,7 @@ import { app, ipcMain } from 'electron'
 import serve from 'electron-serve'
 import { createWindow } from './helpers'
 
+
 const isProd = process.env.NODE_ENV === 'production'
 
 if (isProd) {
@@ -19,6 +20,8 @@ if (isProd) {
     height: 600,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: true,
+      nodeIntegration: true, // Ensure this is enabled
     },
   })
 

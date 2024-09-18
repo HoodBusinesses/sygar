@@ -1,4 +1,11 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron'
+import fs from 'fs';
+
+
+contextBridge.exposeInMainWorld('electron', {
+  openExternal: (url) => ipcRenderer.send('open-external', url),
+});
+
 
 const handler = {
   send(channel: string, value: unknown) {
