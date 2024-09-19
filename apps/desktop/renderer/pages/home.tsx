@@ -1,34 +1,58 @@
-'use client'
-import React, { useState, useEffect , Suspense } from "react";
+"use client";
+import React, { useState, useEffect, Suspense } from "react";
 import Image from "next/image";
 import { GrLanguage } from "react-icons/gr";
 import { useTranslation } from "react-i18next";
+import i18n from "../public/localization/i18n";
+import { HiOutlineChevronDown } from "react-icons/hi";
 
-function HomePageContent() {
-  const { t, i18n } = useTranslation();
+
+
+export default function HomePage() {
+  const { t } = useTranslation();
+  const [language, setLanguage] = useState<string | null>(null);
 
   useEffect(() => {
     // Ensure the language is set correctly on the client side
     if (typeof window !== 'undefined') {
-      const language = localStorage.getItem('i18nextLng') || 'en';
-      i18n.changeLanguage(language);
+      const storedLanguage = localStorage.getItem('i18nextLng') || 'en';
+      i18n.changeLanguage(storedLanguage);
+      setLanguage(storedLanguage);
     }
-  }, [i18n]);
+  }, []);
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
     localStorage.setItem('i18nextLng', lng);
+    setLanguage(lng);
   };
 
+  if (!language) {
+    // Render a loading state until the language is set
+    return <div>{t('Loading...')}</div>;
+  }
+
   return (
-    <main className="min-h-screen bg-gradient-to-blue p-6 flex flex-col">
-      <div className="flex min-h-screen p-6"   style={{ backgroundImage: 'url("/images/background.png")' }}>
+      <div
+        className="flex min-h-screen p-6"
+        style={{ backgroundImage: 'url("/images/background.png")' }}
+      >
         <div className="self-start mb-4">
-          <button className="flex items-center space-x-1 text-gray-500 hover:text-gray-200"
-                  onClick={() => changeLanguage(i18n.language === 'en' ? 'fr' : i18n.language === 'fr' ? 'ar' : 'en') }
-              >
+          <button
+            className="flex items-center space-x-1 text-gray-500 hover:text-gray-700"
+            onClick={() =>
+              changeLanguage(
+                i18n.language === "en"
+                  ? "fr"
+                  : i18n.language === "fr"
+                    ? "ar"
+                    : "en"
+              )
+            }
+          >
             <GrLanguage className="text-gray-500" />
-            <span>{t('language')}</span>
+            <span>{t("language")}</span>
+            <HiOutlineChevronDown />
           </button>
         </div>
         <div className="m-auto  rounded-xl  flex flex-col md:flex-row w-full max-w-4xl">
@@ -46,21 +70,20 @@ function HomePageContent() {
                 </div>
               </div>
               <h1 className="text-3xl font-bold text-gray-800 mb-4">
-                Nice to see you again, please signin to your account
+                {t('welcome')}
               </h1>
               <button className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300">
-                Sign In
+                {t('signin')}
               </button>
               <p className="text-sm text-gray-600 mt-2">
-                We will take you to the browser to log in and then bring you
-                back
+                {t('paragraph')}
               </p>
             </div>
             <div className="mt-8">
               <p className="text-sm text-gray-600">
-                You don't have an account yet?{" "}
+                {t('dontHaveAccount')}{" "}
                 <a href="#" className="text-indigo-600 hover:underline">
-                  Create your account
+                  {t('create')}
                 </a>
               </p>
             </div>
@@ -70,14 +93,5 @@ function HomePageContent() {
           <Image src={"/images/pic.png"} alt="" width={500} height={500} />
         </div>
       </div>
-    </main>
-  );
-}
-
-export default function HomePage() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <HomePageContent />
-    </Suspense>
   );
 }

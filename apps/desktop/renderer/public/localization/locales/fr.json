@@ -1,4 +1,8 @@
 {
     "language": "Français",
-    "welcome": "Bienvenue sur notre site web"
+    "welcome": "Ravi de vous revoir, veuillez vous connecter à votre compte",
+    "signin": "Se connecter",
+    "paragraph": "Nous allons vous rediriger vers le navigateur pour vous connecter, puis vous ramener ici",
+    "dontHaveAccount": "Vous n'avez pas encore de compte ?",
+    "create": "Créez votre compte"
 }
