@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import {
+  AttributeValue,
   DynamoDBClient,
+  QueryCommand,
   ScanCommand,
   ScanCommandInput,
 } from '@aws-sdk/client-dynamodb';
@@ -19,6 +21,9 @@ import {
   UpdateCommandInput,
 } from '@aws-sdk/lib-dynamodb';
 import { ConfigService } from '@nestjs/config';
+import { DbConstants } from './db.constants';
+import { UserRoles } from 'src/modules/user/model/user.model';
+import { CryptService } from '../auth/crypt.service';
 
 /**
  * Type definition for the DynamoDB configuration.
@@ -45,7 +50,11 @@ export class DbService {
    *
    * @param config - The ConfigService instance to access environment variables.
    */
-  public constructor(private readonly config: ConfigService) {
+  public constructor(
+    private readonly config: ConfigService,
+    private readonly dbConstants: DbConstants,
+    private readonly cryptService: CryptService,
+  ) {
     this.client = this.createClient();
   }
 
@@ -182,4 +191,110 @@ export class DbService {
   public async batchWriteItems(params: BatchWriteCommandInput): Promise<void> {
     await this.client.send(new BatchWriteCommand(params));
   }
+
+
+  /**
+   * Method to query items from a DynamoDB table.
+   * @param params - The parameters for the QueryCommand.
+   * @returns The queried items.
+   */
+  public async query(params: any): Promise<any> {
+    const result = await this.client.send(new QueryCommand(params));
+    return result.Items ?? [];
+  }
+
+
+  /**
+   * Seed the sugar admin user if it does not exist.
+   */
+  async seedAdmin() {
+    // params for scanning the users table for the admin user
+    const scanRoleParams: ScanCommandInput = {
+      TableName: this.dbConstants.getTable('Users'),
+      FilterExpression: '#role = :userRole',
+      ExpressionAttributeNames: {
+      '#role': 'role',
+      },
+      ExpressionAttributeValues: {
+      ':userRole': { S: UserRoles.SYGAR_ADMIN },
+      },
+    };
+
+
+    try {
+      // Scan the users table for the admin user
+      const Items = await this.scanItems(scanRoleParams);
+      // If the admin already exists, return
+      if (Items.length > 0)
+        return;
+
+      // Create the admin user
+      const admin = {
+        uid: '1',
+        PK: this.dbConstants.getPrimaryKey('Users'),
+        SK: this.dbConstants.getSortKey('1'),
+        cnss: '1',
+        nationalIdentifier: '1',
+        nationalIdentifierType: '1',
+        firstName: 'Admin',
+        lastName: 'Admin',
+        email: this.config.get<string>('SUPERADMIN_EMAIL', 'sygaradmin@hood.com'),
+        password: await this.cryptService.hash(
+          this.config.get<string>('SUPERADMIN_PASSWORD', 'password'),
+        ),
+        role: UserRoles.SYGAR_ADMIN,
+        phone: '1',
+      };
+
+      // params for putting the admin user in the database
+      const putParams: PutCommandInput = {
+        TableName: this.dbConstants.getTable('Users'),
+        Item: admin,
+      };
+
+      // Put the admin user in the database
+      await this.putItem(putParams);
+    } catch (error: any) {
+      // Log any errors
+      console.error(`Error seeding admin: ${error.message}`);
+    }
+  }
+
+  /**
+   * Method to map a DynamoDB item to an object
+   * @param item - The DynamoDB item
+   * @returns The object
+   */
+    mapDynamoDBItemToObject(item: Record<string, AttributeValue>): any {
+      const obj: any = {};
+      for (const key in item) {
+        if (item[key] && item[key].S)
+          obj[key] = item[key].S;
+        else if (item[key] && item[key].N)
+          obj[key] = parseInt(item[key].N);
+        else if (item[key] && item[key].BOOL)
+          obj[key] = item[key].BOOL;
+  
+      }
+      return obj;
+    }
+  
+    /**
+     * Method to map an object to a DynamoDB item
+     * @param obj - The object
+     * @returns The DynamoDB item
+     */
+    mapObjectToDynamoDBItem(obj: any): Record<string, AttributeValue> {
+      const item: Record<string, AttributeValue> = {};
+      for (const key in obj) {
+        if (typeof obj[key] === 'number')
+          item[key] = { N: String(obj[key]) };
+        else if (typeof obj[key] === 'string')
+          item[key] = { S: obj[key] };
+        else if (typeof obj[key] === 'boolean')
+          item[key] = { BOOL: obj[key] };
+      }
+      return item;
+    }
+
 }
