@@ -1,10 +1,10 @@
-import { Module, OnModuleInit } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AuthModule } from './global/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
-import path = require('path');
+import path = require('path'); // Import the path module for path resolution
 import { DbModule } from './global/db/db.module';
-import { DbService } from './global/db/db.service';
+import { SeedService } from './scripts/seed';
 
 @Module({
   imports: [
@@ -22,11 +22,6 @@ import { DbService } from './global/db/db.service';
     DbModule,
   ],
   controllers: [AppController],
+  providers: [SeedService], // Add the SeedService to the providers array for seeding admin users 
 })
-export class AppModule implements OnModuleInit {
-  constructor(private readonly dbService: DbService) {}
-
-  async onModuleInit() {
-    await this.dbService.seedAdmin();
-  }
-}
+export class AppModule {}
