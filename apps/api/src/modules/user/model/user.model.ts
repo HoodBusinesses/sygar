@@ -18,7 +18,6 @@ export enum NationalIdentifierTypes {
 
 // Define the User interface
 export interface User {
-	[key: string]: any;
 	PK: string;
 	SK: string;
 	uid: string;

@@ -59,7 +59,7 @@ export class AuthService {
 				role: user.role,
 			},
 			{
-				expiresIn: '7d',
+				expiresIn: this.configService.getOrThrow('JWT_EXPIRATION_TIME'),
 				secret: this.jwtSecretToken,
 			}
 		);

@@ -14,7 +14,7 @@ import { BillSchema } from 'src/modules/bill/model/bill.model';
 
 const configService = new ConfigService();
 const dbConstants = new DbConstants(configService);
-const dbService = new DbService(configService, dbConstants, undefined as any);
+const dbService = new DbService(configService);
 /**
  * Creates a DynamoDB table.
  *

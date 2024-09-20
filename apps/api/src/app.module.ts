@@ -2,9 +2,8 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AuthModule } from './global/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
-import path = require('path'); // Import the path module for path resolution
 import { DbModule } from './global/db/db.module';
-import { SeedService } from './scripts/seed';
+import path = require('path'); // Import the path module for path resolution
 
 @Module({
   imports: [
@@ -22,6 +21,5 @@ import { SeedService } from './scripts/seed';
     DbModule,
   ],
   controllers: [AppController],
-  providers: [SeedService], // Add the SeedService to the providers array for seeding admin users 
 })
 export class AppModule {}

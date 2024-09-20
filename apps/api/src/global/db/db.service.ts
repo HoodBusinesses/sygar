@@ -21,8 +21,6 @@ import {
   UpdateCommandInput,
 } from '@aws-sdk/lib-dynamodb';
 import { ConfigService } from '@nestjs/config';
-import { DbConstants } from './db.constants';
-import { CryptService } from '../auth/crypt.service';
 
 /**
  * Type definition for the DynamoDB configuration.
@@ -49,11 +47,7 @@ export class DbService {
    *
    * @param config - The ConfigService instance to access environment variables.
    */
-  public constructor(
-    private readonly config: ConfigService,
-    private readonly dbConstants: DbConstants,
-    private readonly cryptService: CryptService,
-  ) {
+  public constructor(private readonly config: ConfigService) {
     this.client = this.createClient();
   }
 
@@ -208,16 +202,21 @@ export class DbService {
    * @returns The object
    */
     mapDynamoDBItemToObject(item: Record<string, AttributeValue>): any {
-      const obj: any = {};
+      // Create an object to store the mapped values
+      const obj: Record<string, any> = {};
+
       for (const key in item) {
-        if (item[key] && item[key].S)
-          obj[key] = item[key].S;
-        else if (item[key] && item[key].N)
-          obj[key] = parseInt(item[key].N);
-        else if (item[key] && item[key].BOOL)
-          obj[key] = item[key].BOOL;
-  
+        // Skip if the key is not present
+        if (!item[key]) continue;
+      
+        // Get the value of the key
+        const value = item[key][Object.keys(item[key])[0] as keyof AttributeValue];
+
+        // Assign the value to the object
+        obj[key] = value;
       }
+
+      // Return the object
       return obj;
     }
   
@@ -227,16 +226,39 @@ export class DbService {
      * @returns The DynamoDB item
      */
     mapObjectToDynamoDBItem(obj: any): Record<string, AttributeValue> {
+      // Create an object to store the DynamoDB item
       const item: Record<string, AttributeValue> = {};
+    
       for (const key in obj) {
-        if (typeof obj[key] === 'number')
-          item[key] = { N: String(obj[key]) };
-        else if (typeof obj[key] === 'string')
-          item[key] = { S: obj[key] };
-        else if (typeof obj[key] === 'boolean')
-          item[key] = { BOOL: obj[key] };
+        // Get the value of the key
+        const value = obj[key];
+
+        // Assign the value to the item
+        item[key] = 
+          typeof value === 'number' ? { N: String(value) } :
+          typeof value === 'string' ? { S: value } :
+          typeof value === 'boolean' ? { BOOL: value } :
+          value === null ? { NULL: true } :
+          Array.isArray(value) ? { L: value.map(v => this.convertToAttributeValue(v)) } :
+          { M: this.mapObjectToDynamoDBItem(value) };
       }
+    
+      // Return the DynamoDB item
       return item;
     }
 
+    /**
+     * Method to convert a value to an AttributeValue
+     * @param value  - The value
+     * @returns The AttributeValue
+     */
+    convertToAttributeValue(value: any): AttributeValue {
+      return typeof value === 'number' ? { N: String(value) } :
+             typeof value === 'string' ? { S: value } :
+             typeof value === 'boolean' ? { BOOL: value } :
+             value === null ? { NULL: true } :
+             Array.isArray(value) ? { L: value.map(v => this.convertToAttributeValue(v)) } :
+             { M: this.mapObjectToDynamoDBItem(value) };
+    }
+    
 }
