@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AuthModule } from './global/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { DbModule } from './global/db/db.module';
+import { TrainingModule } from './global/training/theme.module';
 import path = require('path'); // Import the path module for path resolution
 
 @Module({
@@ -19,6 +20,7 @@ import path = require('path'); // Import the path module for path resolution
       // load: [appConfig(process.env.NODE_ENV)],
     }),
     DbModule,
+    TrainingModule,
   ],
   controllers: [AppController],
 })
