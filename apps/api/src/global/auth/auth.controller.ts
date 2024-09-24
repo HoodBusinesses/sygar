@@ -2,6 +2,9 @@ import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { AuthService } from './auth.service';
 import { JwtGuard } from './auth.guard';
+import { AbilitiesGuard } from '../rbac/rbac.guard';
+import { PutAbilities } from '../rbac/roles.decorators';
+import { Action } from 'src/shared/types/roles';
 
 /**
  * Auth controller
@@ -29,8 +32,12 @@ export class AuthController {
 	 * @returns The user profile without the password
 	 */
 	@Get('profile')
-	@UseGuards(JwtGuard)
+	@UseGuards(JwtGuard, AbilitiesGuard) // Protect the endpoint with JwtGuard and AbilitiesGuard
+	@PutAbilities({
+		action: Action.Read, // The action that the user can perform
+		subject: 'User', // The subject that the user can perform the action on
+	})
 	async profile(@Req() req: any) {
-		return req.user;
+		return req.user; // Return the user profile
 	}
 }

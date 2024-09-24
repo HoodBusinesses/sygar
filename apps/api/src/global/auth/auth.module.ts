@@ -3,13 +3,18 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtService } from './jwt.service';
 import { CryptService } from './crypt.service';
-import { UserModule } from 'src/modules/user/user.module';
+import { JwtGuard } from './auth.guard';
 
+/**
+ * @module AuthModule
+ * @description
+ * This module is responsible for handling authentication and authorization services.
+ * It is decorated with the `@Global()` decorator to ensure that the module is available globally throughout the application.
+ */
 @Global()
 @Module({
-  imports: [UserModule],
   controllers: [AuthController],
-  exports: [AuthService, CryptService],
-  providers: [AuthService, JwtService, CryptService],
+  exports: [AuthService, JwtService, JwtGuard],
+  providers: [AuthService, JwtService, CryptService, JwtGuard],
 })
 export class AuthModule {}

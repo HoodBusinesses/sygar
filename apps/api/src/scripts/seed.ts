@@ -45,6 +45,8 @@ export  const seedUser = async (role: UserRoles, uid: string, firstName: string,
         configService.get<string>(passwordKey, 'password'),
       ),
       role,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
     };
 
     // Add the user to the database
@@ -55,6 +57,7 @@ export  const seedUser = async (role: UserRoles, uid: string, firstName: string,
     await dbService.putItem(putParams);
   } catch (error) {
     console.error(`Error seeding ${role}:`, (error as Error).message);
+    return;
   }
   console.log(`Seeded ${role} successfully`);
 }

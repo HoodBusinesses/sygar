@@ -1,24 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import {
   AttributeValue,
+  DeleteItemCommand,
+  DeleteItemCommandInput,
   DynamoDBClient,
   QueryCommand,
   ScanCommand,
   ScanCommandInput,
+  UpdateItemCommand,
+  UpdateItemCommandInput,
 } from '@aws-sdk/client-dynamodb';
 import {
   BatchWriteCommand,
   BatchWriteCommandInput,
-  DeleteCommand,
-  DeleteCommandInput,
   DynamoDBDocumentClient,
   GetCommand,
   GetCommandInput,
   PutCommand,
   PutCommandInput,
   TranslateConfig,
-  UpdateCommand,
-  UpdateCommandInput,
 } from '@aws-sdk/lib-dynamodb';
 import { ConfigService } from '@nestjs/config';
 
@@ -47,7 +47,9 @@ export class DbService {
    *
    * @param config - The ConfigService instance to access environment variables.
    */
-  public constructor(private readonly config: ConfigService) {
+  public constructor(
+    private readonly config: ConfigService,
+  ) {
     this.client = this.createClient();
   }
 
@@ -140,8 +142,8 @@ export class DbService {
    *
    * @param params - The parameters for the DeleteCommand.
    */
-  public async deleteItem(params: DeleteCommandInput): Promise<void> {
-    await this.client.send(new DeleteCommand(params));
+  public async deleteItem(params: DeleteItemCommandInput): Promise<void> {
+    await this.client.send(new DeleteItemCommand(params));
   }
 
   /**
@@ -168,11 +170,11 @@ export class DbService {
   /**
    * Updates a single item in a DynamoDB table.
    *
-   * @param params - The parameters for the UpdateCommand.
+   * @param params - The parameters for the UpdateItemCommand.
    * @returns The updated item.
    */
-  public async updateItem(params: UpdateCommandInput): Promise<any> {
-    const result = await this.client.send(new UpdateCommand(params));
+  public async updateItem(params: UpdateItemCommandInput): Promise<any> {
+    const result = await this.client.send(new UpdateItemCommand(params));
     return result.Attributes;
   }
 
@@ -260,5 +262,5 @@ export class DbService {
              Array.isArray(value) ? { L: value.map(v => this.convertToAttributeValue(v)) } :
              { M: this.mapObjectToDynamoDBItem(value) };
     }
-    
 }
+

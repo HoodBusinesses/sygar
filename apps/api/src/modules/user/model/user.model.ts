@@ -1,5 +1,4 @@
 import { LocalTableInput } from "src/shared/types/db";
-import { v4 as uuid } from 'uuid'
 
 // Define the roles for the users
 export enum UserRoles {
@@ -29,13 +28,14 @@ export interface User {
 	email: string;
 	password: string;
 	role: UserRoles;
+	organizationId: string;
 	isActive: boolean;
 	phone: string;
-	resetPasswordToken: string;
-	resetPasswordTokenExpiresAt: Date;
-	passwordChangeAt: Date;
-	createdAt: Date;
-	updatedAt: Date;
+	resetPasswordToken: string | null;
+	resetPasswordTokenExpiresAt: number | null;
+	passwordChangeAt: number | null;
+	createdAt: number;
+	updatedAt: number;
 }
 
 

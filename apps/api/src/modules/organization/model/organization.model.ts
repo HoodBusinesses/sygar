@@ -1,5 +1,19 @@
 import { LocalTableInput } from "src/shared/types/db";
 
+// Define the Organization interface
+export interface Organization {
+	PK: string;
+	SK: string;
+	uid: string;
+	cnss: string;
+	freeTrial: number;
+	id: number;
+	key: string	;
+	name: string;
+	createdAt: number;
+	updatedAt: number;
+}
+
 // Define the schema for the 'Organizations' table
 export const OrganizationSchema: LocalTableInput = {
 	TableName: 'Organizations', // Name of the table
