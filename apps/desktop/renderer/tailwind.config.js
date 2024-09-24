@@ -16,6 +16,9 @@ module.exports = {
       backgroundImage: {
         'gradient-to-blue': 'linear-gradient(269.56deg, #2563EB -3.3%, #FFFFFF 101.39%)',
       },
+      fontFamily: {
+        poppins: ['Poppins', 'sans-serif'],  // Add Poppins to the theme
+      },
 
     },
   },

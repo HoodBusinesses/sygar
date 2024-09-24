@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -47,6 +48,11 @@ export default function Home() {
           >
             Read our docs
           </a>
+          <Link href="/login" legacyBehavior>
+            <a className="px-4 py-2 text-red-600 bg-blue-500 rounded-md">
+              Go to Login
+            </a>
+          </Link>
         </div>
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
