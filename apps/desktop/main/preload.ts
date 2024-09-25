@@ -1,6 +1,8 @@
-import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron'
-import fs from 'fs';
+import { contextBridge, ipcRenderer, IpcRendererEvent, shell } from 'electron'
 
+contextBridge.exposeInMainWorld('electronAPI', {
+  openExternal: (url: string) => shell.openExternal(url),
+});
 
 contextBridge.exposeInMainWorld('electron', {
   openExternal: (url) => ipcRenderer.send('open-external', url),
