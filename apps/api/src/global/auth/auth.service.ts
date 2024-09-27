@@ -108,7 +108,7 @@ export class AuthService {
 			<p>You have requested to reset your password. Click the link below to reset it:</p>
 			<a href="${resetLink}">Reset Password</a>
 			<p>If you didn't request this, please ignore this email.</p>
-			<p>This link will expire in 1 hour.</p>
+			<p>This link will expire in 30 minutes.</p>
 		  `,
 		};
 
