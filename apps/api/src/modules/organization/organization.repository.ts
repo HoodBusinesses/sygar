@@ -61,7 +61,7 @@ export class OrganizationRepository {
 	 */
 	async incrementCounter(counter: number) {
 		const counterName = 'organizationCounter';
-		console.log(typeof counter);
+
 		if (counter === 0) {
 			const params: PutCommandInput = {
 				TableName: this.dbConstants.getTable('Counters'),

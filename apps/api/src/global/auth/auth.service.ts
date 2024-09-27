@@ -80,21 +80,25 @@ export class AuthService {
 		};
 	}
 
+	/**
+	 * @method requestPasswordReset
+	 * @description
+	 * This method is used to request a password reset for a user.
+	*/
 	async requestPasswordReset(dto: ResetPasswordRequestDto) {
 		const user = await this.userService.getByEmail(dto.email);
 
 		if (!user)
-			return {
-				message: "User not found"
-		}
+			return { message: "User not found" }
 
 		const token = uuid();
-		const expiresAt = new Date(Date.now() + 1800000);
+		const expiresAt = new Date(Date.now() + 1800000); // expires after 30 minutes from now
 
-		await this.userService.setResetPasswordToken(user.uid, token, expiresAt);
+		await this.userService.setResetPasswordToken(user.uid, token, expiresAt); // set the reset password token for the user
 
-		const resetLink = `${this.configService.getOrThrow('APP_URL')}/reset-password?token=${token}`;
+		const resetLink = `${this.configService.getOrThrow('APP_URL')}/reset-password?token=${token}`; // generate the reset link
 
+		// send the reset password email
 		const mailOptions = {
 		  from: this.configService.getOrThrow('MAILER_FROM_ADDRESS'),
 		  to: user.email,
@@ -109,9 +113,9 @@ export class AuthService {
 		};
 
 		try {
-			await this.mailService.sendEmail(mailOptions);
+			await this.mailService.sendEmail(mailOptions); // send the reset password email
 		} catch (error) {
-			await this.userService.setResetPasswordToken(user.uid, null, null);
+			await this.userService.setResetPasswordToken(user.uid, null, null); // delete the reset password token
 		}
 
 		return {
@@ -119,6 +123,11 @@ export class AuthService {
 		}
 	}
 
+	/**
+	 * @method resetPassword
+	 * @description
+	 * This method is used to reset the password for a user.
+	*/
 	async resetPassword(dto: ResetPasswordDto) {
 		const user = await this.userService.getByResetPasswordToken(dto.token);
 
@@ -126,16 +135,16 @@ export class AuthService {
 			throw new UnauthorizedException('Invalid token');
 		}
 
-		if (user.resetPasswordTokenExpiresAt && user.resetPasswordTokenExpiresAt < Date.now()) {
-			throw new UnauthorizedException('Token expired');
+		if (user.resetPasswordTokenExpiresAt && new Date(user.resetPasswordTokenExpiresAt) < new Date()) {
+			throw new UnauthorizedException('Token expired'); // throw an unauthorized exception if the token is expired
 		}
 
-		const newPasswordHash = await this.cryptService.hash(dto.newPassword);
-		await this.userService.updatePassword(user.uid, newPasswordHash);
-		await this.userService.setResetPasswordToken(user.uid, null, null);
+		const newPasswordHash = await this.cryptService.hash(dto.newPassword); // hash the new password
+		await this.userService.updatePassword(user.uid, newPasswordHash); // update the password
+		await this.userService.setResetPasswordToken(user.uid, null, null); // delete the reset password token
 		
-		return {
-			message: "Password reset successfully"
+		return {	
+			message: "Password reset successfully" // return a message indicating the password was reset successfully
 		}
 	}
 }

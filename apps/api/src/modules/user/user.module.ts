@@ -1,6 +1,6 @@
 import { forwardRef, Global, Module } from "@nestjs/common";
 import { UserService } from "./user.service";
-import { userRepository } from "./user.repository";
+import { UserRepository } from "./user.repository";
 import { CryptService } from "src/global/auth/crypt.service";
 import { UserController } from "./user.controller";
 import { AdminsModule } from "../admins/admins,module";
@@ -14,8 +14,8 @@ import { AdminsModule } from "../admins/admins,module";
 @Module({
 	imports: [AdminsModule],
 	controllers: [UserController],
-	providers: [UserService ,userRepository, CryptService],
-	exports: [UserService, userRepository],
+	providers: [UserService, UserRepository, CryptService],
+	exports: [UserService, UserRepository],
 })
 export class UserModule {}
 

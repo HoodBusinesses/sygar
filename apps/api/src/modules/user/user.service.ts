@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
-import { userRepository } from "./user.repository";
+import { UserRepository } from "./user.repository";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { OrganizationRepository } from "../organization/organization.repository";
 import { UpdateUserDto } from "./dto/update-user.dto";
@@ -19,7 +19,7 @@ export class UserService {
 	 * This constructor is used to inject the user repository, organization repository, and ability service.
 	*/
 	constructor(
-		private readonly userRepository: userRepository, // Inject the user repository for database operations
+		private readonly userRepository: UserRepository, // Inject the user repository for database operations
 		private readonly organizationRepository: OrganizationRepository, // Inject the organization repository for database operations
 		private readonly abilityService: AbilityService, // Inject the ability service for ability operations
 	) {}
@@ -133,7 +133,7 @@ export class UserService {
 		if (!email) {
 			throw new BadRequestException('Email is required');
 		}
-		return this.userRepository.findByEmail(email);
+		return await this.userRepository.findByEmail(email);
 	}
 
 	/**
@@ -151,23 +151,45 @@ export class UserService {
 		return { message: 'Users deleted successfully' };
 	}
 
-
+	/**
+	 * @method setResetPasswordToken
+	 * @description
+	 * This method is used to set the reset password token for a user.
+	*/
 	async setResetPasswordToken(uid: string, token: string | null, expiresAt: Date | null) {
-		return this.userRepository.update({
+		const user = await this.userRepository.findByUid(uid);
+
+		if (!user) {
+			throw new Error('User does not exist');
+		}
+
+		return await this.userRepository.update({
 			uid,
-			resetPasswordToken: token,
-			resetPasswordTokenExpiresAt: expiresAt?.getTime()?.toString()
+			resetPasswordToken: token ?? null,
+			resetPasswordTokenExpiresAt: expiresAt?.getTime()?.toString() ?? null
 		})
 	}
 
+	/**
+	 * @method getByResetPasswordToken
+	 * @description
+	 * This method is used to get a user by reset password token.
+	*/
 	async getByResetPasswordToken(token: string) {
-		return this.userRepository.findByResetPasswordToken(token);
+		return await this.userRepository.findByResetPasswordToken(token);
 	}
 
+	/**
+	 * @method updatePassword
+	 * @description
+	 * This method is used to update the password for a user.
+	*/
 	async updatePassword(uid: string, password: string) {
-		return this.userRepository.update({
+		// Update the password for the user
+		return await this.userRepository.update({
 			uid,
-			password
+			password,
+			passwordUpdatedAt: Date.now()
 		})
 	}
 }

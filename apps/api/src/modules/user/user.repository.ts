@@ -5,19 +5,19 @@ import { User, UserRoles } from "./model/user.model";
 import { PutCommandInput, QueryCommandInput, ScanCommandInput } from "@aws-sdk/lib-dynamodb";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { v4 as uuid } from 'uuid';
-import { DeleteItemCommandInput, UpdateItemCommand, UpdateItemCommandInput } from "@aws-sdk/client-dynamodb";
+import { DeleteItemCommandInput, UpdateItemCommandInput } from "@aws-sdk/client-dynamodb";
 import { CryptService } from "src/global/auth/crypt.service";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { AbilityService } from "../ability/abiliry.service";
 import { AdminsService } from "../admins/admins.service";
 
 /**
- * @class userRepository
+ * @class UserRepository
  * @description
  * This class is responsible for managing users in the database.
 */
 @Injectable()
-export class userRepository {
+export class UserRepository {
 	private readonly tableName: string;
 
 	/**
@@ -61,7 +61,7 @@ export class userRepository {
 			isActive: false,
 			resetPasswordToken: null,
 			resetPasswordTokenExpiresAt: null,
-			passwordChangeAt: null,
+			passwordUpdatedAt: null,
 		};
 
 		// Add the user to the database
@@ -119,6 +119,8 @@ export class userRepository {
 		const expressionAttributeNames: any = {}; // The expression attribute names
 		const dxpressionAttributeValues: any = {}; // The expression attribute values
 		let updateExpression = 'SET '; // The update expression
+		let removeExpression = 'REMOVE '; // The remove expression
+		let finalExpression = ''; // The final expression
 
 		// Get all keys from the user object and dynamically create the update expression
 		Object.keys(user).forEach((key) => {
@@ -129,10 +131,13 @@ export class userRepository {
 				// Add the field to the expression attribute names
 				expressionAttributeNames[`#${key}`] = key;
 				// Add the field to the expression attribute values
-				dxpressionAttributeValues[`:${key}`] = { S: user[key] };
+				dxpressionAttributeValues[`:${key}`] = this.getDynamoDBAttributeValue(user[key]);
+			} else if (user[key] === null) {
+				removeExpression += `#${key}, `;
+				expressionAttributeNames[`#${key}`] = key;
 			}
 		});
-
+		
 		// Add the updatedAt field to the update expression
 		updateExpression += '#updatedAt = :updatedAt';
 		// Add the updatedAt field to the expression attribute names
@@ -140,6 +145,13 @@ export class userRepository {
 		// Add the updatedAt field to the expression attribute values
 		dxpressionAttributeValues[':updatedAt'] = { N: Date.now().toString() };
 
+		if (removeExpression !== 'REMOVE ') {
+			removeExpression = removeExpression.slice(0, -2); // Remove the last comma and space
+			finalExpression = updateExpression + ' ' + removeExpression; // Combine the update and remove expressions
+		} else {
+			finalExpression = updateExpression;
+		}
+		
 		// Update the user
 		const params: UpdateItemCommandInput = {
 			TableName: this.tableName,
@@ -147,7 +159,7 @@ export class userRepository {
 				PK: { S: this.dbConstants.getPrimaryKey('Users') },
 				SK: { S: this.dbConstants.getSortKey(user.uid) },
 			},
-			UpdateExpression: updateExpression,
+			UpdateExpression: finalExpression,
 			ExpressionAttributeNames: expressionAttributeNames,
 			ExpressionAttributeValues: dxpressionAttributeValues,
 		};
@@ -344,10 +356,12 @@ export class userRepository {
 			// Fetch the user from the database
 			const Items = await this.dbService.scanItems(params);
 
-			// Return the user found or null if not found
+			// Return an empty array if no users are found
 			if (!Items || Items.length === 0) {
 				return [];
 			}
+
+			// Return the users found after mapping the DynamoDB items to User objects
 			const users = Items.map((item) => this.dbService.mapDynamoDBItemToObject(item) as User);
 			return users;
 		} catch(_) {
@@ -363,6 +377,7 @@ export class userRepository {
 	 * It returns the user found or null if not found.
 	*/
 	async findByResetPasswordToken(token: string): Promise<User | null> {
+		// Query the user by reset password token
 		const params: QueryCommandInput = {
 			TableName: this.tableName,
 			IndexName: 'ResetPasswordTokenIndex',
@@ -373,10 +388,28 @@ export class userRepository {
 		};
 		
 		try {
+			// Fetch the user from the database
 			const Items = await this.dbService.query(params);
+
+			// Return null if no user is found
+			if (!Items || Items.length === 0) {
+				return null;
+			}
+
+			// Return the user found after mapping the DynamoDB item to a User object
 			return this.dbService.mapDynamoDBItemToObject(Items[0]) as User;
 		} catch(_) {
 			return null;
 		}
+	}
+
+
+	private getDynamoDBAttributeValue(value: any): { [key: string]: any } {
+		if (typeof value === 'string') return { S: value };
+		if (typeof value === 'number') return { N: value.toString() };
+		if (typeof value === 'boolean') return { BOOL: value };
+		if (Array.isArray(value)) return { L: value.map(item => this.getDynamoDBAttributeValue(item)) };
+		if (typeof value === 'object' && value !== null) return { M: Object.entries(value).reduce((acc, [k, v]) => ({ ...acc, [k]: this.getDynamoDBAttributeValue(v) }), {}) };
+		return { NULL: true };
 	}
 }

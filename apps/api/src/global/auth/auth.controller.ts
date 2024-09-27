@@ -42,11 +42,21 @@ export class AuthController {
 		return req.user; // Return the user profile
 	}
 
+	/**
+	 * Forgot password endpoint
+	 * @param dto - The ResetPasswordRequestDto instance
+	 * @returns The forgot password response
+	 */
 	@Post('forgot-password')
 	async forgotPassword(@Body() dto: ResetPasswordRequestDto) {
 		return this.authService.requestPasswordReset(dto);
 	}
-
+	
+	/**
+	 * Reset password endpoint
+	 * @param dto - The ResetPasswordDto instance
+	 * @returns The reset password response
+	 */
 	@Get('reset-password')
 	async resetPassword(@Body() dto: ResetPasswordDto) {
 		return this.authService.resetPassword(dto);

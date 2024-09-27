@@ -33,7 +33,7 @@ export interface User {
 	phone: string;
 	resetPasswordToken: string | null;
 	resetPasswordTokenExpiresAt: number | null;
-	passwordChangeAt: number | null;
+	passwordUpdatedAt: number | null;
 	createdAt: number;
 	updatedAt: number;
 }
