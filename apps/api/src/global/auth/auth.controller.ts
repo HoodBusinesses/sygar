@@ -5,6 +5,7 @@ import { JwtGuard } from './auth.guard';
 import { AbilitiesGuard } from '../rbac/rbac.guard';
 import { PutAbilities } from '../rbac/roles.decorators';
 import { Action } from 'src/shared/types/roles';
+import { ResetPasswordDto, ResetPasswordRequestDto } from './dto/reset-password.dto';
 
 /**
  * Auth controller
@@ -39,5 +40,15 @@ export class AuthController {
 	})
 	async profile(@Req() req: any) {
 		return req.user; // Return the user profile
+	}
+
+	@Post('forgot-password')
+	async forgotPassword(@Body() dto: ResetPasswordRequestDto) {
+		return this.authService.requestPasswordReset(dto);
+	}
+
+	@Get('reset-password')
+	async resetPassword(@Body() dto: ResetPasswordDto) {
+		return this.authService.resetPassword(dto);
 	}
 }

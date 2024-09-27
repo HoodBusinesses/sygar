@@ -4,6 +4,7 @@ import { AuthService } from './auth.service';
 import { JwtService } from './jwt.service';
 import { CryptService } from './crypt.service';
 import { JwtGuard } from './auth.guard';
+import { MailModule } from '../mail/mail.module';
 
 /**
  * @module AuthModule
@@ -13,6 +14,7 @@ import { JwtGuard } from './auth.guard';
  */
 @Global()
 @Module({
+  imports: [MailModule],
   controllers: [AuthController],
   exports: [AuthService, JwtService, JwtGuard],
   providers: [AuthService, JwtService, CryptService, JwtGuard],

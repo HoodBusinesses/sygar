@@ -354,4 +354,29 @@ export class userRepository {
 			return [];
 		}
 	}
+
+	/**
+	 * @method findByResetPasswordToken
+	 * @description
+	 * This method is used to find a user by reset password token.
+	 * It takes in the reset password token of the user to find.
+	 * It returns the user found or null if not found.
+	*/
+	async findByResetPasswordToken(token: string): Promise<User | null> {
+		const params: QueryCommandInput = {
+			TableName: this.tableName,
+			IndexName: 'ResetPasswordTokenIndex',
+			KeyConditionExpression: 'resetPasswordToken = :resetPasswordToken',
+			ExpressionAttributeValues: {
+				':resetPasswordToken': { S: token },
+			},
+		};
+		
+		try {
+			const Items = await this.dbService.query(params);
+			return this.dbService.mapDynamoDBItemToObject(Items[0]) as User;
+		} catch(_) {
+			return null;
+		}
+	}
 }

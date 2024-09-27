@@ -1,4 +1,4 @@
-import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { IsDate, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString } from "class-validator";
 import { NationalIdentifierTypes } from "../model/user.model";
 
 /**
@@ -14,28 +14,41 @@ export class UpdateUserDto {
 
 	@IsOptional()
 	@IsString()
-	cnss!: string;
+	cnss?: string;
 
 	@IsOptional()
 	@IsString()
-	nationalIdentifier!: string;
+	nationalIdentifier?: string;
 
+	@IsOptional()
 	@IsEnum(NationalIdentifierTypes)
-	nationalIdentifierType!: NationalIdentifierTypes;
+	nationalIdentifierType?: NationalIdentifierTypes;
 
 	@IsOptional()
 	@IsString()
-	firstName!: string;
+	firstName?: string;
 
 	@IsOptional()
 	@IsString()
-	lastName!: string;
+	lastName?: string;
 
 	@IsOptional()
 	@IsEmail()
-	email!: string;
+	email?: string;
 
 	@IsOptional()
 	@IsString()
-	phone!: string;
+	phone?: string;
+
+	@IsOptional()
+	@IsString()
+	resetPasswordToken?: string | null;
+
+	@IsOptional()
+	@IsDate()
+	resetPasswordExpiresAt?: Date | null;
+
+	@IsOptional()
+	@IsString()
+	password?: string;	
 }

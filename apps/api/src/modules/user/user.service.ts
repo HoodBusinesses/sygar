@@ -76,10 +76,10 @@ export class UserService {
 				if (!existingUser) {
 					throw new Error('User does not exist');
 				}
-				if (user.cnss !== existingUser.cnss && await this.userRepository.findByCnss(user.cnss)) {
+				if (user.cnss && user.cnss !== existingUser.cnss && await this.userRepository.findByCnss(user.cnss)) {
 					throw new Error('User already exists with the provided CNSS');
 				}
-				if (user.email !== existingUser.email && await this.userRepository.findByEmail(user.email)) {
+				if (user.email && user.email !== existingUser.email && await this.userRepository.findByEmail(user.email)) {
 					throw new Error('User already exists with the provided email');
 				}
 		return await this.userRepository.update(user);
@@ -149,5 +149,25 @@ export class UserService {
 		}
 
 		return { message: 'Users deleted successfully' };
+	}
+
+
+	async setResetPasswordToken(uid: string, token: string | null, expiresAt: Date | null) {
+		return this.userRepository.update({
+			uid,
+			resetPasswordToken: token,
+			resetPasswordTokenExpiresAt: expiresAt?.getTime()?.toString()
+		})
+	}
+
+	async getByResetPasswordToken(token: string) {
+		return this.userRepository.findByResetPasswordToken(token);
+	}
+
+	async updatePassword(uid: string, password: string) {
+		return this.userRepository.update({
+			uid,
+			password
+		})
 	}
 }

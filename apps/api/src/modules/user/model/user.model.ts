@@ -45,6 +45,7 @@ export const UserSchema: LocalTableInput = {
 	AttributeDefinitions: [
 		{ AttributeName: 'email', AttributeType: 'S' }, // Define 'email' attribute of type String
 		{ AttributeName: 'cnss', AttributeType: 'S' }, // Define 'cnss' attribute of type String'
+		{ AttributeName: 'resetPasswordToken', AttributeType: 'S' }, // Define 'resetPasswordToken' attribute of type String
 	],
 	GlobalSecondaryIndexes: [
 		{
@@ -64,6 +65,19 @@ export const UserSchema: LocalTableInput = {
 			IndexName: "CnssIndex", // Add the new index for 'cnss'
 			KeySchema: [
 				{ AttributeName: 'cnss', KeyType: 'HASH'}, // Define 'cnss' as the hash key for the index
+			],
+			Projection: {
+				ProjectionType: 'ALL', // Include all attributes in the index
+			},
+			ProvisionedThroughput: {
+				ReadCapacityUnits: 3, // Read capacity units for the index
+				WriteCapacityUnits: 3, // Write capacity units for the index
+			}
+		},
+		{
+			IndexName: "ResetPasswordTokenIndex", // Add the new index for 'cnss'
+			KeySchema: [
+				{ AttributeName: 'resetPasswordToken', KeyType: 'HASH'}, // Define 'cnss' as the hash key for the index
 			],
 			Projection: {
 				ProjectionType: 'ALL', // Include all attributes in the index
