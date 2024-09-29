@@ -6,6 +6,7 @@ import { AbilitiesGuard } from '../rbac/rbac.guard';
 import { PutAbilities } from '../rbac/roles.decorators';
 import { Action } from 'src/shared/types/roles';
 import { ResetPasswordDto, ResetPasswordRequestDto } from './dto/reset-password.dto';
+import { ActivateAccountDto, ValidateTokenDto } from './dto/activate-account.dto';
 
 /**
  * Auth controller
@@ -60,5 +61,25 @@ export class AuthController {
 	@Get('reset-password')
 	async resetPassword(@Body() dto: ResetPasswordDto) {
 		return this.authService.resetPassword(dto);
+	}
+
+	/**
+	 * Activate account endpoint
+	 * @param dto - The ActivateAccountDto instance
+	 * @returns The activate account response
+	 */
+	@Get('activate-account')
+	async activateAccount(@Body() dto: ActivateAccountDto) {
+		return this.authService.activateAccount(dto);
+	}
+
+	/**
+	 * Validate token endpoint
+	 * @param dto - The ValidateTokenDto instance
+	 * @returns The validate token response
+	 */
+	@Get('validate-token')
+	async validateToken(@Body() dto: ValidateTokenDto) {
+		return this.authService.validateToken(dto.token);
 	}
 }

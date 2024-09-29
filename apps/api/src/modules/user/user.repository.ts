@@ -59,9 +59,6 @@ export class UserRepository {
 			createdAt: Date.now(),
 			updatedAt: Date.now(),
 			isActive: false,
-			resetPasswordToken: null,
-			resetPasswordTokenExpiresAt: null,
-			passwordUpdatedAt: null,
 		};
 
 		// Add the user to the database
@@ -403,7 +400,13 @@ export class UserRepository {
 		}
 	}
 
-
+	/**
+	 * @method getDynamoDBAttributeValue
+	 * @description
+	 * This method is used to get the DynamoDB attribute value of a given value.
+	 * It takes in the value to get the DynamoDB attribute value of.
+	 * It returns the DynamoDB attribute value.
+	*/
 	private getDynamoDBAttributeValue(value: any): { [key: string]: any } {
 		if (typeof value === 'string') return { S: value };
 		if (typeof value === 'number') return { N: value.toString() };

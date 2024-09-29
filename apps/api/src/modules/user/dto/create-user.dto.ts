@@ -1,5 +1,3 @@
-
-
 import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, MinLength } from "class-validator";
 import { NationalIdentifierTypes, UserRoles } from "../model/user.model";
 

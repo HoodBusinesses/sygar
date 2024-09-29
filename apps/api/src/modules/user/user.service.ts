@@ -192,4 +192,16 @@ export class UserService {
 			passwordUpdatedAt: Date.now()
 		})
 	}
+
+	/**
+	 * @method activateTheUser
+	 * @description
+	 * This method is used to activate the user.
+	*/
+	async activateTheUser(uid: string) {
+		return await this.userRepository.update({
+			uid,
+			isActive: true
+		})
+	}
 }

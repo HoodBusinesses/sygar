@@ -31,9 +31,9 @@ export interface User {
 	organizationId: string;
 	isActive: boolean;
 	phone: string;
-	resetPasswordToken: string | null;
-	resetPasswordTokenExpiresAt: number | null;
-	passwordUpdatedAt: number | null;
+	resetPasswordToken?: string | null;
+	resetPasswordTokenExpiresAt?: number | null;
+	passwordUpdatedAt?: number | null;
 	createdAt: number;
 	updatedAt: number;
 }
