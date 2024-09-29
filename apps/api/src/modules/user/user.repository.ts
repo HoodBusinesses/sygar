@@ -59,9 +59,6 @@ export class UserRepository {
 			createdAt: Date.now(),
 			updatedAt: Date.now(),
 			isActive: false,
-			resetPasswordToken: null,
-			resetPasswordTokenExpiresAt: null,
-			passwordUpdatedAt: null,
 		};
 
 		// Add the user to the database
