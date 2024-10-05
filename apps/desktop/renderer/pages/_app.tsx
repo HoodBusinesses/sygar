@@ -8,11 +8,11 @@ import Sidebar from "../components/Sidebar";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <div className="flex">
-      <Sidebar />
-      <div className="flex-1 flex flex-col">
-        <Navbar />
-        <main className="min-h-screen bg-gradient-to-blue p-6 flex flex-col">
+    <div className="flex flex-col min-h-screen">
+      <Navbar/>
+      <div className="flex-1 flex">
+        <Sidebar />
+        <main className="flex-1 bg-white p-6 ">
           <Component {...pageProps} />
         </main>
       </div>

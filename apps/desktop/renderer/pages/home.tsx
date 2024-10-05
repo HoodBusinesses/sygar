@@ -4,6 +4,7 @@ import Image from "next/image";
 import { GrLanguage } from "react-icons/gr";
 import { useTranslation } from "react-i18next";
 import i18n from "../public/localization/i18n";
+import OrganizationForm from "../components/OrganizationForm";
 
 const authUrl = "http://localhost:3000/login"; // URL to authenticate the user
 
@@ -40,7 +41,7 @@ export default function HomePage() {
 
   return (
     <div
-      className="flex min-h-screen p-6"
+      className="flex bg-white bg-gradient-to-blue min-h-screen p-6 "
       style={{ backgroundImage: 'url("/images/background.png")' }}
     >
       <div className="self-start mb-4 ">

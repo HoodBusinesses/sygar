@@ -13,14 +13,14 @@ export default function Sidebar() {
   const [active, setActive] = useState("home");
 
   return (
-    <div className="h-screen w-64 bg-gray-50 border-r border-gray-200">
+    <div className="h-screen w-64 bg-gray-50 border border-gray-200">
       {/* Navigation */}
       <nav className="mt-10">
         {/* Dashboard Section */}
         <div className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase">Dashboard</div>
         <ul className="space-y-2">
           <li>
-            <Link href="/" legacyBehavior>
+            <Link href="/home" legacyBehavior>
               <a
                 className={`flex items-center px-4 py-2 space-x-3 text-sm font-medium ${
                   active === "home" ? "bg-blue-100 text-blue-500" : "text-gray-600"
