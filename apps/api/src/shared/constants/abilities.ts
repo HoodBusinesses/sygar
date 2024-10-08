@@ -15,6 +15,7 @@ export enum AbilitiesEnum {
 export interface AbilityInterface {
 	action: string;
 	subject: string;
+	userUid: string;
 	organizationId?: string;
 	createdAt: number;
 	updatedAt: number;

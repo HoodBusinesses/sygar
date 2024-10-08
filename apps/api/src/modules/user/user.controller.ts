@@ -10,6 +10,7 @@ import { AbilitiesGuard } from "src/global/rbac/rbac.guard";
 import { PutAbilities } from "src/global/rbac/roles.decorators";
 import { Action } from "src/shared/types/roles";
 import { DeleteAbilityDto } from './dto/delete-ability.dto';
+import { User, UserRoles } from "./model/user.model";
 
 /**
  * @class UserController
@@ -84,8 +85,10 @@ export class UserController {
 	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authenticated and has the necessary abilities
 	@PutAbilities({ action: Action.Manage, subject: 'Ability' }) // This is a decorator that ensures the user has the necessary abilities
 	@Post('create-ability') // This is the endpoint that will call the createAbility method
-	async createAbility(@Body() createAbilityDto: CreateAbilityDto) {
+	async createAbility(@Body() createAbilityDto: CreateAbilityDto, @Req() req: { user: User }) {
 		try {
+			if (req.user.role != UserRoles.SYGAR_ADMIN && createAbilityDto.abilityType.split('_')[1] == "ORGANIZATION")
+				throw Error("Only SYGAR ADMIN have the ability to manage abilities of Organizations");
 			return await this.abilityService.createAbility(createAbilityDto);
 		} catch (error: any) {
 			return { error: error.message }

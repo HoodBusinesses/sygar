@@ -252,6 +252,7 @@ export class AbilityService {
 			identifier: identifier,
 			action: action,
 			subject: subject,
+			userUid: ability.uid,
 			organizationId: ability.organizationId,
 			createdAt: Date.now(),
 			updatedAt: Date.now(),
