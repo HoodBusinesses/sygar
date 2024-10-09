@@ -1,12 +1,12 @@
 import { Body, Controller, Delete, Get, Post, Put, Query, UseGuards } from "@nestjs/common";
 import { JwtGuard } from "src/global/auth/auth.guard";
 import { CreateOrganizationDto } from "./dto/create-organization.dto";
+import { DeleteOrganizationDto } from "./dto/delete-organization-dtro";
 import { OrganizationService } from "./organization.service";
 import { UpdateOrganizationDto } from "./dto/update-organization.dto";
 import { AbilitiesGuard } from "src/global/rbac/rbac.guard";
 import { PutAbilities } from "src/global/rbac/roles.decorators";
 import { Action } from "src/shared/types/roles";
-import { UserService } from "../user/user.service";
 import { OrganizationRepository } from "./organization.repository";
 import { ApiResponse } from '@nestjs/swagger';
 
@@ -109,12 +109,9 @@ export class OrganizationController {
 	@PutAbilities({ action: Action.Delete, subject: 'Organization' })
 	@ApiResponse({ status: 200, description: 'Organization deleted successfully.' })
 	@ApiResponse({ status: 404, description: 'Organization not found.' })
-	async delete(@Body() { cnss }: { cnss: string }) {
-		if (!cnss) {
-			return { error: 'CNSS is required' }
-		}
+	async delete(@Body() deleteOrganizationDto: DeleteOrganizationDto) {
 		try {
-			return await this.organizationService.delete(cnss);
+			return await this.organizationService.delete(deleteOrganizationDto.cnss);
 		} catch (error: any) {
 			return { error: error.message }
 		}
