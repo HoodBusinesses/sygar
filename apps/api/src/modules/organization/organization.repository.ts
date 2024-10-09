@@ -239,22 +239,67 @@ export class OrganizationRepository {
 	}
 
 
-
-	async getAll() {
+	/**
+	 * This method fetches all organizations from the database.
+	 * @param page - The page number
+	 * @param limit - The number of items per page
+	 * @param name - The name of the organization
+	 * @param year - The year of creation
+	 * @returns The list of organizations
+	 */
+	async getAll(page: number, limit: number, name?: string, year?: number) {
+		page = !page ? 1: page;
+		limit = !limit ? 10: limit;
 		const params: ScanCommandInput = {
 			TableName: this.tableName,
+			FilterExpression: '',
+			ExpressionAttributeNames: {}, // Initialize as an empty object
+			ExpressionAttributeValues: {}, // Initialize as an empty object
 		};
+	
+		// Add filter expression for name
+		if (name) {
+			params.FilterExpression += 'contains(#name, :name)';
+			params.ExpressionAttributeNames!['#name'] = 'name'; // Use non-null assertion
+			params.ExpressionAttributeValues![':name'] = { S: name }; // Use non-null assertion
+		}
+	
+		// Add filter expression for year based on createdAt timestamp
+		if (year) {
+			if (params.FilterExpression) {
+				params.FilterExpression += ' AND ';
+			}
+			params.FilterExpression += '#createdAt BETWEEN :yearStart AND :yearEnd';
+			params.ExpressionAttributeNames!['#createdAt'] = 'createdAt'; // Use non-null assertion
+			
+			const yearStart = new Date(year, 0, 1).getTime().toString(); // Jan 1st of the year
+			const yearEnd = Date.now().toString(); // Current timestamp
 
+			params.ExpressionAttributeValues![':yearStart'] = { N: yearStart }; // Use non-null assertion
+			params.ExpressionAttributeValues![':yearEnd'] = { N: yearEnd }; // Use non-null assertion
+		}
+	
+		// If no filters were set, remove the attributes to simplify the scan
+		if (!params.FilterExpression) {
+			delete params.FilterExpression;
+			delete params.ExpressionAttributeNames;
+			delete params.ExpressionAttributeValues;
+		}
+	
 		try {
 			const Items = await this.dbService.scanItems(params);
-
-        // Map each DynamoDB item to an Organization object
-        return Items.map(item => this.dbService.mapDynamoDBItemToObject(item));
-    } catch (error) {
-        // Handle or log the error if needed
-        console.error("Error fetching organizations:", error);
-        // Return an empty array if an error occurs
-        return [];
+			// Implement pagination
+			const startIndex = (page - 1) * limit;
+			const endIndex = page * limit;
+			const paginatedItems = Items.slice(startIndex, endIndex);
+	
+			// Map each DynamoDB item to an Organization object
+			return paginatedItems.map(item => this.dbService.mapDynamoDBItemToObject(item));
+		} catch (error) {
+			console.error("Error fetching organizations:", error);
+			return [];
 		}
 	}
+	
+	
 }
