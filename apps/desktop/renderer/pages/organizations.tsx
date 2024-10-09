@@ -18,7 +18,7 @@ import {
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 const ITEMS_PER_PAGE = 10;
-const DATE_OPTIONS = ['14 Feb 2019', '15 Feb 2019', '16 Feb 2019'];
+const DATE_OPTIONS = Array.from({ length: 50 }, (_, index) => `${2023 + index}`);
 
 const mockOrganizations = Array.from({ length: 50 }, (_, index) => ({
   id: index + 1,
@@ -81,29 +81,29 @@ const OrganizationsPage = () => {
         </div>
 
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" className="flex items-center gap-2 text-gray-600">
+          {/* <Button variant="outline" className="flex items-center gap-2 text-gray-600 dis">
             <Filter className="h-4 w-4" />
             Filter By
-          </Button>
+          </Button> */}
 
           <Select value={selectedDate} onValueChange={setSelectedDate}>
             <SelectTrigger className="w-[140px] text-gray-600">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className='bg-gray-600'>
               {DATE_OPTIONS.map(date => (
                 <SelectItem key={date} value={date}>{date}</SelectItem>
               ))}
             </SelectContent>
           </Select>
 
-          <Button 
+          {/* <Button 
             variant="outline" 
-            className="text-red-500 hover:text-red-600 hover:bg-red-50"
+            className="text-red-500 hover:text-red-600 hover:bg-red-50 disabled"
             onClick={handleReset}
           >
             Reset Filter
-          </Button>
+          </Button> */}
 
           <Button className="btn-blue text-white">
             <Download className="h-4 w-4 mr-2" />

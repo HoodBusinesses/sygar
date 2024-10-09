@@ -1,38 +1,37 @@
 <p align="center"><img src="https://i.imgur.com/a9QWW0v.png"></p>
 
-## Usage
+## Desktop App
 
-### Create an App
+This is a desktop application built with Nextron and TailwindCSS.
 
-```
-# with npx
-$ npx create-nextron-app my-app --example with-tailwindcss
+### Getting Started
 
-# with yarn
-$ yarn create nextron-app my-app --example with-tailwindcss
+Follow these instructions to get a copy of the project up and running on your local machine for development and testing purposes.
 
-# with pnpm
-$ pnpm dlx create-nextron-app my-app --example with-tailwindcss
-```
+### Prerequisites
 
-### Install Dependencies
+Make sure you have the following installed on your machine:
+- Node.js
+- pnpm
 
-```
-$ cd my-app
+### Installation
 
-# using yarn or npm
-$ yarn (or `npm install`)
+1. **Clone the repository:**
 
-# using pnpm
-$ pnpm install --shamefully-hoist
-```
+    ```sh
+    git clone <repository-url>
+    cd <repository-directory>
+    ```
 
-### Use it
+2. **Install dependencies:**
 
-```
-# development mode
-$ yarn dev (or `npm run dev` or `pnpm run dev`)
+    ```sh
+    pnpm install
+    ```
 
-# production build
-$ yarn build (or `npm run build` or `pnpm run build`)
-```
+### Running the Application
+
+To start the application in development mode, run:
+
+```sh
+pnpm run dev
