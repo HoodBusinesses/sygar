@@ -8,7 +8,7 @@ export default function Navbar() {
   const [language, setLanguage] = useState("English");
 
   return (
-    <nav className="flex justify-between items-center bg-white text-gray-500 hover:text-gray-700 shadow-lg px-4 py-2">
+    <nav className="flex w-full justify-between items-center bg-white text-gray-500 hover:text-gray-700 shadow-lg px-4 py-2">
       <div>
         <Image src={"/images/logo.png"} width={100} height={100} alt="" />
       </div>
@@ -21,7 +21,7 @@ export default function Navbar() {
         <div className="flex items-center cursor-pointer">
           {/* <span className="mr-2"></span> */}
           <select
-            className="border p-1 rounded"
+            className="border bg-white p-1 rounded-md"
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
           >
