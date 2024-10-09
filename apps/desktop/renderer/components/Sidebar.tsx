@@ -13,9 +13,9 @@ export default function Sidebar() {
   const [active, setActive] = useState("home");
 
   return (
-    <div className="h-screen w-64 bg-gray-50 border border-gray-200">
+    <div className="h-screen w-64 bg-gray-50 border border-gray-200 p-4">
       {/* Navigation */}
-      <nav className="mt-10">
+      <nav className="mt-">
         {/* Dashboard Section */}
         <div className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase">Dashboard</div>
         <ul className="space-y-2">

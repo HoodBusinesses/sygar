@@ -21,7 +21,7 @@ export default function Navbar() {
         <div className="flex items-center cursor-pointer">
           {/* <span className="mr-2"></span> */}
           <select
-            className="border p-1 rounded"
+            className="border bg-white p-1 rounded-md"
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
           >
