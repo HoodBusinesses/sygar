@@ -4,7 +4,7 @@ import { CreateUserDto } from "./dto/create-user.dto";
 import { JwtGuard } from "src/global/auth/auth.guard";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { DeleteUserDto } from "./dto/delete-user-dtro";
-import { CreateAbilityDto } from "src/modules/user/dto/create-ability.dto";
+import { AssignAbilityDto } from "src/modules/user/dto/assign-ability.dto";
 import { AbilityService } from "../ability/abiliry.service";
 import { AbilitiesGuard } from "src/global/rbac/rbac.guard";
 import { PutAbilities } from "src/global/rbac/roles.decorators";
@@ -111,16 +111,16 @@ export class UserController {
 	/**
 	 * @method createAbility
 	 * @description
-	 * This method is used to create a new ability.
+	 * This method is used to assign a new ability.
 	*/
 	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authenticated and has the necessary abilities
 	@PutAbilities({ action: Action.Manage, subject: 'Ability' }) // This is a decorator that ensures the user has the necessary abilities
-	@Post('assign-ability') // This is the endpoint that will call the createAbility method
-	async assignAbility(@Body() createAbilityDto: CreateAbilityDto, @Req() req: { user: User }) {
+	@Post('assign-ability') // This is the endpoint that will call the assingAbility method
+	async assignAbility(@Body() assignAbilityDto: AssignAbilityDto, @Req() req: { user: User }) {
 		try {
-			if (req.user.role != UserRoles.SYGAR_ADMIN && createAbilityDto.abilityType.split('_')[1] == "ORGANIZATION")
+			if (req.user.role != UserRoles.SYGAR_ADMIN && assignAbilityDto.abilityType.split('_')[1] == "ORGANIZATION")
 				throw Error("Only SYGAR ADMIN have the ability to manage abilities of Organizations");
-			return await this.abilityService.createAbility(createAbilityDto);
+			return await this.abilityService.createAbility(assignAbilityDto);
 		} catch (error: any) {
 			return { error: error.message }
 		}

@@ -5,7 +5,7 @@ import { AbilitiesEnum, AbilityInterface } from "src/shared/constants/abilities"
 import { UserRoles } from "../user/model/user.model";
 import { DbConstants } from "src/global/db/db.constants";
 import { DeleteItemCommandInput } from "@aws-sdk/client-dynamodb";
-import { CreateAbilityDto } from "src/modules/user/dto/create-ability.dto";
+import { AssignAbilityDto } from "src/modules/user/dto/assign-ability.dto";
 import { UserService } from "../user/user.service";
 import { deassignAbilityDto } from "../user/dto/deassign-ability.dto";
 
@@ -210,7 +210,7 @@ export class AbilityService {
 	 * @param ability - The DTO containing the ability details.
 	 * @returns The created ability.
 	 */
-	async createAbility(ability: CreateAbilityDto): Promise<AbilityInterface> {
+	async createAbility(ability: AssignAbilityDto): Promise<AbilityInterface> {
 		// Check if the user exists if not it will throw an error
 		await this.userService.get(ability.uid);
 		
