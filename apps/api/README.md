@@ -40,3 +40,7 @@
 ## Additional Notes
 - Make sure to check the `.env_example` file for any required environment variables that need to be set.
 - If you encounter any issues, please refer to the documentation or reach out for support.
+
+## API Documentation
+  After starting the server, you can access the API documentation at:
+  [http://localhost:3000/api/docs](http://localhost:3000/api/docs)
