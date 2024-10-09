@@ -7,7 +7,7 @@ import { DbConstants } from "src/global/db/db.constants";
 import { DeleteItemCommandInput } from "@aws-sdk/client-dynamodb";
 import { CreateAbilityDto } from "src/modules/user/dto/create-ability.dto";
 import { UserService } from "../user/user.service";
-import { DeleteAbilityDto } from "../user/dto/delete-ability.dto";
+import { deassignAbilityDto } from "../user/dto/deassign-ability.dto";
 
 /**
  * @module AbilityService
@@ -157,11 +157,11 @@ export class AbilityService {
 	}
 
 	/**
-	 * Deletes an ability from the database.
+	 * Deassign an ability from the database.
 	 * 
-	 * @param ability - The ability to delete.
+	 * @param ability - The ability to deassign.
 	 */
-	async deleteAbility(ability: AbilityInterface & { PK: string, SK: string }) {
+	async deassignAbility(ability: AbilityInterface & { PK: string, SK: string }) {
 		// Create the params
 		const param: DeleteItemCommandInput = {
 			TableName: this.tableName,
@@ -181,12 +181,12 @@ export class AbilityService {
 	 * @param deleteAbilityDto - The DTO containing the user's unique identifier and the ability type.
 	 * @returns A message indicating the success of the operation.
 	 */
-	async deleteAbilityByUid(deleteAbilityDto: DeleteAbilityDto) {
+	async deassignAbilityByUid(deleteAbilityDto: deassignAbilityDto) {
 		const ability = await this.getAbility(`${deleteAbilityDto.uid}#${deleteAbilityDto.abilityType}`);
 		if (!ability) {
 			throw new Error('Ability not found');
 		}
-		await this.deleteAbility(ability);
+		await this.deassignAbility(ability);
 		return { message: 'Ability deleted successfully' };
 	}
 
@@ -200,7 +200,7 @@ export class AbilityService {
 		const abilities = await this.getAbilities(userUid, null);
 
 		for (const ability of abilities) {
-			await this.deleteAbility(this.dbService.mapDynamoDBItemToObject(ability));
+			await this.deassignAbility(this.dbService.mapDynamoDBItemToObject(ability));
 		}
 	}
 

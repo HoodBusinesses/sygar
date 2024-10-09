@@ -68,6 +68,7 @@ export class AuthService {
 		// If the user is not active, send an email to the user to activate the account
 		if (user.role !== UserRoles.SYGAR_ADMIN && !user.isActive) {
 			await this.requestActiveAccount(user.email);
+			throw new UnauthorizedException('Account not activated');
 		}
 
 		// Generate Jwt Token for the use

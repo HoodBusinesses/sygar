@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Post, Put, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Post, Put, Query, Req, UseGuards } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { JwtGuard } from "src/global/auth/auth.guard";
@@ -9,8 +9,10 @@ import { AbilityService } from "../ability/abiliry.service";
 import { AbilitiesGuard } from "src/global/rbac/rbac.guard";
 import { PutAbilities } from "src/global/rbac/roles.decorators";
 import { Action } from "src/shared/types/roles";
-import { DeleteAbilityDto } from './dto/delete-ability.dto';
+import { deassignAbilityDto } from './dto/deassign-ability.dto';
 import { User, UserRoles } from "./model/user.model";
+import { UserRepository } from "./user.repository";
+import { ApiResponse } from '@nestjs/swagger';
 
 /**
  * @class UserController
@@ -26,6 +28,7 @@ export class UserController {
 	*/
 	constructor(
 		private readonly userService: UserService,
+		private readonly userRepository: UserRepository, // Inject the user repository for database operations
 		private readonly abilityService: AbilityService,
 	) {}
 
@@ -37,6 +40,22 @@ export class UserController {
 	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authenticated and has the necessary abilities
 	@PutAbilities({ action: Action.Create, subject: 'User' }) // This is a decorator that ensures the user has the necessary abilities
 	@Post('create') // This is the endpoint that will call the create method
+	@ApiResponse({ 
+		status: 201, 
+		description: 'User created successfully.', 
+		schema: {
+			example: {
+				cnss: '123456789',
+				nationalIdentifier: 'NID123456',
+				firstName: 'John',
+				lastName: 'Doe',
+				email: 'john.doe@example.com',
+				password: 'password123',
+				phone: '1234567890',
+				role: 'USER'
+			}
+		}
+	})
 	async create(@Body() createUserDto: CreateUserDto) {
 		try {
 			return await this.userService.create(createUserDto);
@@ -53,6 +72,18 @@ export class UserController {
 	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authenticated and has the necessary abilities
 	@PutAbilities({ action: Action.Update, subject: 'User' }) // This is a decorator that ensures the user has the necessary abilities
 	@Put('update') // This is the endpoint that will call the update method
+	@ApiResponse({ 
+		status: 200, 
+		description: 'User updated successfully.', 
+		schema: {
+			example: {
+				firstName: 'John',
+				lastName: 'Doe',
+				email: 'john.doe@example.com',
+				phone: '0987654321'
+			}
+		}
+	})
 	async update(@Body() updateUserDto: UpdateUserDto) {
 		try {
 			return await this.userService.update(updateUserDto);
@@ -84,8 +115,8 @@ export class UserController {
 	*/
 	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authenticated and has the necessary abilities
 	@PutAbilities({ action: Action.Manage, subject: 'Ability' }) // This is a decorator that ensures the user has the necessary abilities
-	@Post('create-ability') // This is the endpoint that will call the createAbility method
-	async createAbility(@Body() createAbilityDto: CreateAbilityDto, @Req() req: { user: User }) {
+	@Post('assign-ability') // This is the endpoint that will call the createAbility method
+	async assignAbility(@Body() createAbilityDto: CreateAbilityDto, @Req() req: { user: User }) {
 		try {
 			if (req.user.role != UserRoles.SYGAR_ADMIN && createAbilityDto.abilityType.split('_')[1] == "ORGANIZATION")
 				throw Error("Only SYGAR ADMIN have the ability to manage abilities of Organizations");
@@ -102,10 +133,44 @@ export class UserController {
 	*/
 	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authenticated and has the necessary abilities
 	@PutAbilities({ action: Action.Manage, subject: 'Ability' }) // This is a decorator that ensures the user has the necessary abilities
-	@Delete('delete-ability') // This is the endpoint that will call the deleteAbility method
-	async deleteAbility(@Body() deleteAbilityDto: DeleteAbilityDto) {
+	@Delete('deassign-ability') // This is the endpoint that will call the deleteAbility method
+	async deassignAbility(@Body() deassignAbilityDto: deassignAbilityDto) {
 		try {
-			return await this.abilityService.deleteAbilityByUid(deleteAbilityDto);
+			return await this.abilityService.deassignAbilityByUid(deassignAbilityDto);
+		} catch (error: any) {
+			return { error: error.message }
+		}
+	}
+
+	/**
+	 * The endpoint used to get a user by userUid
+	 * @param userUid - The userUid of the user to get
+	 * @returns The user object
+	 */
+	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authenticated and has the necessary abilities
+	@PutAbilities({ action: Action.Manage, subject: 'User' }) // This is a decorator that ensures the user has the necessary abilities
+	@Get('get')
+	async getUser(@Query('userUid') userUid: string) {
+		try {
+			if (!userUid)
+				throw Error('userUid Empty!');
+			return await this.userRepository.get(userUid);
+		} catch (error: any) {
+			return { error: error.message }
+		}
+	}
+
+
+	/**
+	 * The endpoint used to get all users
+	 * @returns The list of users
+	*/
+	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authenticated and has the necessary abilities
+	@PutAbilities({ action: Action.Manage, subject: 'User' }) // This is a decorator that ensures the user has the necessary abilities
+	@Get('get-all')
+	async getAll() {
+		try {
+			return await this.userRepository.getAll();
 		} catch (error: any) {
 			return { error: error.message }
 		}

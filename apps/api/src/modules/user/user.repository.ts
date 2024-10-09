@@ -401,6 +401,29 @@ export class UserRepository {
 	}
 
 	/**
+	 * This method is used to get all users
+	 * @method getAll
+	 * @returns The list of users
+	 */
+	async getAll() {
+		const params: ScanCommandInput = {
+			TableName: this.tableName,
+		};
+
+		try {
+			const Items = await this.dbService.scanItems(params);
+
+        // Map each DynamoDB item to an Organization object
+        return Items.map(item => this.dbService.mapDynamoDBItemToObject(item));
+    } catch (error) {
+        // Handle or log the error if needed
+        console.error("Error fetching organizations:", error);
+        // Return an empty array if an error occurs
+        return [];
+		}
+	}
+
+	/**
 	 * @method getDynamoDBAttributeValue
 	 * @description
 	 * This method is used to get the DynamoDB attribute value of a given value.

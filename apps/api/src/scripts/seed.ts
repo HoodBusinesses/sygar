@@ -45,6 +45,7 @@ export  const seedUser = async (role: UserRoles, uid: string, firstName: string,
         configService.get<string>(passwordKey, 'password'),
       ),
       role,
+      isActive: true,
       createdAt: Date.now(),
       updatedAt: Date.now(),
     };
