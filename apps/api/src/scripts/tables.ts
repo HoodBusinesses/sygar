@@ -8,9 +8,10 @@ import { DbService } from '../global/db/db.service';
 import { UserSchema } from '../modules/user/model/user.model';
 import { LocalTableInput } from '../shared/types/db';
 import { AbilitySchema } from 'src/modules/ability/model/ability.model';
-import { AdminSchema } from 'src/modules/admin/model/admin.model';
+import { AdminSchema } from 'src/modules/admins/model/admins.model';
 import { OrganizationSchema } from 'src/modules/organization/model/organization.model';
 import { BillSchema } from 'src/modules/bill/model/bill.model';
+import { CounterSchema } from 'src/modules/counter/model/counter.model';
 
 const configService = new ConfigService();
 const dbConstants = new DbConstants(configService);
@@ -43,10 +44,9 @@ export const createTables = async (table: LocalTableInput) => {
     await dbService.getClient().send(new CreateTableCommand(schema));
     console.log(`Table ${schema.TableName} created successfully.`);
   } catch (error) {
-    if (error instanceof Error)
-      console.error(
-        `Error creating table ${schema.TableName}: ${error.message}`,
-      );
+    console.error(
+      `Error creating table ${schema.TableName}: ${(error as any).message}`,
+    );
   }
 };
 
@@ -59,7 +59,8 @@ async function main() {
     AbilitySchema,
     OrganizationSchema,
     AdminSchema,
-    BillSchema
+    BillSchema,
+    CounterSchema
   ];
 
   for (const table of tables) {

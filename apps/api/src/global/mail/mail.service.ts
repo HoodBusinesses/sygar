@@ -18,11 +18,11 @@ export class MailService {
   constructor(private readonly configService: ConfigService) {
     // Create a transporter for sending emails using nodemailer
     this.transporter = nodemailer.createTransport({
-      host: this.configService.get<string>('MAILER_HOST'),
-      port: this.configService.get<number>('MAILER_PORT'),
+      host: this.configService.getOrThrow<string>('MAILER_HOST'),
+      port: this.configService.getOrThrow<number>('MAILER_PORT'),
       auth: {
-        user: this.configService.get<string>('MAILER_USERNAME'),
-        pass: this.configService.get<string>('MAILER_PASSWORD'),
+        user: this.configService.getOrThrow<string>('MAILER_USERNAME'),
+        pass: this.configService.getOrThrow<string>('MAILER_PASSWORD'),
       },
     });
   }
@@ -36,10 +36,10 @@ export class MailService {
    */
   async sendEmail(options: MailOptionsInterface): Promise<void> {
     try {
-      await this.transporter.sendMail(options);
-      console.log('Email sent successfully');
+      await this.transporter.sendMail(options);``
+      // console.log('Email sent successfully');
     } catch (error) {
-      console.error('Error sending email:', error);
+      // console.error('Error sending email:', error);
       throw new Error('Failed to send email');
     }
   }

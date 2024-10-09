@@ -6,10 +6,10 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
-import { ForbiddenError, subject } from '@casl/ability';
 import { AbilityFactory } from './rbac.service';
-import { Action, RequirementsRules } from '../../shared/types/roles';
+import { RequirementsRules } from '../../shared/types/roles';
 import { PUT_ABILITY } from '../../shared/constants/roles';
+import { User, UserRoles } from 'src/modules/user/model/user.model';
 
 /**
  * Guard that checks if a user has the necessary abilities to perform an action on a resource.
@@ -17,8 +17,8 @@ import { PUT_ABILITY } from '../../shared/constants/roles';
 @Injectable()
 export class AbilitiesGuard implements CanActivate {
   constructor(
-    private reflector: Reflector,
-    private abilityFactory: AbilityFactory,
+    private reflector: Reflector, // Reflector service to access metadata
+    private abilityFactory: AbilityFactory, // AbilityFactory service to create abilities
   ) {}
 
   /**
@@ -28,38 +28,37 @@ export class AbilitiesGuard implements CanActivate {
    * @returns A boolean indicating whether the user has the necessary abilities.
    * @throws ForbiddenException if the user does not have the necessary abilities.
    */
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     // Get the rules for the action from the metadata
-    const rules =
-      this.reflector.get<RequirementsRules[]>(
-        PUT_ABILITY,
-        context.getHandler(),
-      ) || [];
+    const rules: RequirementsRules[] =
+      this.reflector.get<RequirementsRules[]>(PUT_ABILITY, context.getHandler()) || [];
 
     // Get the request object from the context
-    const req = context.switchToHttp().getRequest<Request>();
+    const req = context.switchToHttp().getRequest<Request & { user: User }>();
+    const { organizationId } = req.body; // Dynamic organization ID from request body
+    const user: User = req.user; // Get the user object
 
     // Create an ability instance for the current user
-    const ability = this.abilityFactory.createForUser((req as any).user as any);
+    const ability = await this.abilityFactory.createForUser(user);
 
-    try {
-      // Check if the user has the required abilities for each rule
-      rules.forEach((rule) => {
-        const subjectName = rule.subject.toString();
-        const subjectValue = req[subjectName.toLowerCase() as keyof typeof req];
-        // Check if the user can perform the action on the subject
-        ForbiddenError.from(ability).throwUnlessCan(
-          rule.action,
-          // If the action is read, update, or delete, create a subject using the subject's name and value else pass just the subject's name
-          [Action.Delete, Action.Update, Action.Read].includes(rule.action)
-            ? subject(subjectName, subjectValue)
-            : rule.subject,
-        );
-      });
-    } catch (error) {
-      // If the user does not have the necessary abilities, throw a ForbiddenException
-      if (error instanceof ForbiddenError) {
-        throw new ForbiddenException(error.message);
+    // Loop through each rule and check if the user's ability allows the action
+    for (const rule of rules) {
+      if ([UserRoles.ORG_USER, UserRoles.ORG_ADMIN].includes(user.role)) {
+        if (!organizationId) {
+          throw new ForbiddenException(
+            'Organization ID is required for organization user and admin',
+          );
+        }
+
+        // Check if the user has the necessary abilities with organization ID
+        if (!ability.can(rule.action, rule.subject, organizationId)) {
+          throw new ForbiddenException('User does not have the necessary abilities for this organization'); 
+        }
+      } else {
+        // Check if the user has the necessary abilities without organization ID
+        if (!ability.can(rule.action, rule.subject)) {
+          throw new ForbiddenException('User does not have the necessary abilities');
+        }
       }
     }
 

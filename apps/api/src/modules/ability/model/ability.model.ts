@@ -22,3 +22,12 @@ export const AbilitySchema: LocalTableInput = {
 		},
 	]
 }
+
+// Table schema for the 'Abilities' table
+// export interface Ability {
+// 	PK: string;
+// 	SK: string;
+// 	identifier: string;
+// 	createdAt: number;
+// 	updatedAt: number;
+// }
