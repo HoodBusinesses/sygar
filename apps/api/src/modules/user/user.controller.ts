@@ -9,7 +9,7 @@ import { AbilityService } from "../ability/abiliry.service";
 import { AbilitiesGuard } from "src/global/rbac/rbac.guard";
 import { PutAbilities } from "src/global/rbac/roles.decorators";
 import { Action } from "src/shared/types/roles";
-import { deassignAbilityDto } from './dto/deassign-ability.dto';
+import { DeassignAbilityDto } from './dto/deassign-ability.dto';
 import { User, UserRoles } from "./model/user.model";
 import { UserRepository } from "./user.repository";
 import { ApiResponse } from '@nestjs/swagger';
@@ -134,7 +134,7 @@ export class UserController {
 	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authenticated and has the necessary abilities
 	@PutAbilities({ action: Action.Manage, subject: 'Ability' }) // This is a decorator that ensures the user has the necessary abilities
 	@Delete('deassign-ability') // This is the endpoint that will call the deleteAbility method
-	async deassignAbility(@Body() deassignAbilityDto: deassignAbilityDto) {
+	async deassignAbility(@Body() deassignAbilityDto: DeassignAbilityDto) {
 		try {
 			return await this.abilityService.deassignAbilityByUid(deassignAbilityDto);
 		} catch (error: any) {
