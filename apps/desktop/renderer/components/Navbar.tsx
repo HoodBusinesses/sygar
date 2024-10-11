@@ -1,11 +1,20 @@
 import { useState } from "react";
 import Image from "next/image";
-import { FaUserCircle } from "react-icons/fa"; // Optional: for user icon
-import { HiOutlineChevronDown } from "react-icons/hi"; // Optional: for dropdown
+import { FaUserCircle } from "react-icons/fa";
+import { HiOutlineChevronDown } from "react-icons/hi";
 import { IoNotificationsOutline } from "react-icons/io5";
+import { useLanguage } from '../contexts/LanguageContext';
+import { useTranslation } from 'react-i18next';
 
 export default function Navbar() {
-  const [language, setLanguage] = useState("English");
+  const { language, changeLanguage } = useLanguage();
+  const { t } = useTranslation();
+
+  const languageOptions = [
+    { value: 'en', label: 'English' },
+    { value: 'fr', label: 'Français' },
+    { value: 'ar', label: 'العربية' }
+  ];
 
   return (
     <nav className="flex w-full justify-between items-center bg-white text-gray-500 hover:text-gray-700 shadow-lg px-4 py-2">
@@ -19,15 +28,16 @@ export default function Navbar() {
           <HiOutlineChevronDown />
         </div>
         <div className="flex items-center cursor-pointer">
-          {/* <span className="mr-2"></span> */}
           <select
             className="border bg-white p-1 rounded-md"
             value={language}
-            onChange={(e) => setLanguage(e.target.value)}
+            onChange={(e) => changeLanguage(e.target.value)}
           >
-            <option value="English">English</option>
-            <option value="French">Français</option>
-            <option value="Arabic">العربية</option>
+            {languageOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
           </select>
         </div>
         <IoNotificationsOutline />

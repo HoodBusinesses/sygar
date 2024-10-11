@@ -1,3 +1,4 @@
+'use client'
 import Link from 'next/link';
 import { useState } from 'react';
 import {
@@ -8,16 +9,19 @@ import {
   UsersIcon,
   IdentificationIcon,
 } from '@heroicons/react/24/outline';
+import { useTranslation } from 'react-i18next';
 
 export default function Sidebar() {
   const [active, setActive] = useState("home");
+  const { t } = useTranslation();
+
 
   return (
-    <div className="h-screen w-64 bg-gray-50 border border-gray-200 p-4">
+    <div className="h-auto w-64 bg-gray-50 border border-gray-200 p-4">
       {/* Navigation */}
-      <nav className="mt-">
+      <nav className="mt-6">
         {/* Dashboard Section */}
-        <div className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase">Dashboard</div>
+        <div className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase">{t('sidebar.sections.dashboard')}</div>
         <ul className="space-y-2">
           <li>
             <Link href="/home" legacyBehavior>
@@ -28,7 +32,7 @@ export default function Sidebar() {
                 onClick={() => setActive("home")}
               >
                 <HomeIcon className="h-5 w-5" />
-                <span>Home</span>
+                <span>{t('sidebar.items.home')}</span>
               </a>
             </Link>
           </li>
@@ -41,7 +45,7 @@ export default function Sidebar() {
                 onClick={() => setActive("registration")}
               >
                 <IdentificationIcon className="h-5 w-5" />
-                <span>Registration</span>
+                <span>{t('sidebar.items.registration')}</span>
               </a>
             </Link>
           </li>
@@ -54,7 +58,7 @@ export default function Sidebar() {
                 onClick={() => setActive("organizations")}
               >
                 <UsersIcon className="h-5 w-5" />
-                <span>Organizations</span>
+                <span>{t('sidebar.items.organizations')}</span>
               </a>
             </Link>
           </li>
@@ -67,14 +71,14 @@ export default function Sidebar() {
                 onClick={() => setActive("settings")}
               >
                 <Cog6ToothIcon className="h-5 w-5" />
-                <span>Settings</span>
+                <span>{t('sidebar.items.settings')}</span>
               </a>
             </Link>
           </li>
         </ul>
 
         {/* Othres Section */}
-        <div className="px-4 py-2 mt-8 text-xs font-semibold text-gray-500 uppercase">Othres</div>
+        <div className="px-4 py-2 mt-8 text-xs font-semibold text-gray-500 uppercase">{t('sidebar.sections.others')}</div>
         <ul className="space-y-2">
           <li>
             <Link href="/notifications" legacyBehavior>
@@ -85,7 +89,7 @@ export default function Sidebar() {
                 onClick={() => setActive("notifications")}
               >
                 <BellIcon className="h-5 w-5" />
-                <span>Manage Notifications</span>
+                <span>{t('sidebar.items.notifications')}</span>
               </a>
             </Link>
           </li>
@@ -98,7 +102,7 @@ export default function Sidebar() {
                 onClick={() => setActive("reports")}
               >
                 <ClipboardDocumentListIcon className="h-5 w-5" />
-                <span>Reports</span>
+                <span>{t('sidebar.items.reports')}</span>
               </a>
             </Link>
           </li>

@@ -3,8 +3,10 @@ import { Input } from "./ui/input";
 import { useFormContext } from "react-hook-form";
 import type { OrganizationFormData } from "../schemas/organization";
 import { Card, CardContent } from "./ui/card";
+import { useTranslation } from "react-i18next";
 
 export const OrganizationBasicInfo = () => {
+  const { t } = useTranslation();
   const {
     register,
     formState: { errors },
@@ -14,17 +16,17 @@ export const OrganizationBasicInfo = () => {
     <Card className="p-1 mb-6">
       <CardContent className="p-6">
         <p className="text-lg text-gray-950 font-bold mb-6">
-          Organization informations
+          {t('organization.basicInfo.title')}
         </p>
 
         <div className="grid grid-cols-3 gap-4 mb-6 ">
           <div className="flex flex-col w-3/4">
             <p className="text-sm text-gray-950">
-              R.S <span className="text-red-500">*</span>
+              {t('organization.basicInfo.fields.rs.label')} <span className="text-red-500">*</span>
             </p>
             <Input
               {...register("name")}
-              placeholder="Enter the organization rs"
+              placeholder={t('organization.basicInfo.fields.rs.placeholder')}
               className="bg-gray-100 mb-4 text-gray-950"
               error={errors.name?.message}
             />
@@ -34,25 +36,27 @@ export const OrganizationBasicInfo = () => {
               </span>
             )}
           </div>
+
           <div className="flex flex-col w-3/4">
             <p className="text-sm text-gray-950">
-              ICE <span className="text-red-500">*</span>
+              {t('organization.basicInfo.fields.ice.label')} <span className="text-red-500">*</span>
             </p>
             <Input
               {...register("ice")}
-              placeholder="Enter the organization ICE"
+              placeholder={t('organization.basicInfo.fields.ice.placeholder')}
               className="bg-gray-100 mb-4 text-gray-950"
-              erroe={errors.ice?.message}
+              error={errors.ice?.message}
             />
             {errors.ice && (
               <span className="text-sm text-red-500">{errors.ice.message}</span>
             )}
           </div>
+
           <div className="flex flex-col w-3/4 ">
-            <p className="text-sm text-gray-950">CNSS</p>
+            <p className="text-sm text-gray-950">{t('organization.basicInfo.fields.cnss.label')}</p>
             <Input
               {...register("cnss")}
-              placeholder="Enter the organization CNSS"
+              placeholder={t('organization.basicInfo.fields.cnss.placeholder')}
               className="bg-gray-100 mb-4 text-gray-950"
               error={errors.cnss?.message}
             />
@@ -62,13 +66,14 @@ export const OrganizationBasicInfo = () => {
               </span>
             )}
           </div>
+
           <div className="flex flex-col w-3/4">
             <p className="text-sm text-gray-950">
-              Address <span className="text-red-500">*</span>
+              {t('organization.basicInfo.fields.address.label')} <span className="text-red-500">*</span>
             </p>
             <Input
               {...register("address")}
-              placeholder="Enter the address of organization"
+              placeholder={t('organization.basicInfo.fields.address.placeholder')}
               className="bg-gray-100 mb-4 text-gray-950"
               error={errors.address?.message}
             />
@@ -78,13 +83,14 @@ export const OrganizationBasicInfo = () => {
               </span>
             )}
           </div>
+
           <div className="flex flex-col w-3/4">
             <p className="text-sm text-gray-950">
-              Phone <span className="text-red-500">*</span>
+              {t('organization.basicInfo.fields.phone.label')} <span className="text-red-500">*</span>
             </p>
             <Input
               {...register("email")}
-              placeholder="Enter the email of organization"
+              placeholder={t('organization.basicInfo.fields.email.placeholder')}
               className="bg-gray-100 mb-4 text-gray-950"
               error={errors.email?.message}
             />
@@ -94,9 +100,10 @@ export const OrganizationBasicInfo = () => {
               </span>
             )}
           </div>
+
           <div className="flex flex-col">
             <p className="text-sm text-gray-950">
-              Company Logo <span className="text-red-500">*</span>
+              {t('organization.basicInfo.fields.logo.label')} <span className="text-red-500">*</span>
             </p>
             <div className="flex flex-col items-center justify-center border border-dashed rounded-md p-4 cursor-pointer hover:bg-gray-50 w-3/4">
               <input
@@ -109,18 +116,18 @@ export const OrganizationBasicInfo = () => {
                 htmlFor="logo"
                 className="text-sm text-gray-500 cursor-pointer"
               >
-                Upload the logo of company
+                {t('organization.basicInfo.fields.logo.placeholder')}
               </label>
             </div>
           </div>
 
           <div className="flex flex-col w-3/4">
             <p className="text-sm text-gray-950">
-              Responsible Name <span className="text-red-500">*</span>
+              {t('organization.basicInfo.fields.responsibleName.label')} <span className="text-red-500">*</span>
             </p>
             <Input
               {...register("responsibleName")}
-              placeholder="Enter the name of Responsible"
+              placeholder={t('organization.basicInfo.fields.responsibleName.placeholder')}
               className="bg-gray-100 mb-4 text-gray-950"
               error={errors.responsibleName?.message}
             />
@@ -130,13 +137,14 @@ export const OrganizationBasicInfo = () => {
               </span>
             )}
           </div>
+
           <div className="flex flex-col w-3/4">
             <p className="text-sm text-gray-950">
-              Training Manager Name <span className="text-red-500">*</span>
+              {t('organization.basicInfo.fields.trainingManagerName.label')} <span className="text-red-500">*</span>
             </p>
             <Input
               {...register("trainingManagerName")}
-              placeholder="Enter the name of training manager"
+              placeholder={t('organization.basicInfo.fields.trainingManagerName.placeholder')}
               className="bg-gray-100 mb-4 text-gray-950"
               error={errors.trainingManagerName?.message}
             />

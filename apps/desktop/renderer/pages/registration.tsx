@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,6 +18,8 @@ import {
   type MemberFormData,
 } from "../schemas/organization";
 import { useToast } from "../components/ui/use-toast";
+import { useLanguage } from '../contexts/LanguageContext';
+import { useTranslation } from "react-i18next";
 
 const staticMembers: MemberFormData[] = [
   {
@@ -36,12 +37,16 @@ const staticMembers: MemberFormData[] = [
 ];
 
 const RegistrationPage = () => {
+  const { t } = useTranslation();
+  const { language } = useLanguage();
+  console.log(language);
+  
   const [members, setMembers] = useState<MemberFormData[]>(staticMembers);
   const [editingMember, setEditingMember] = useState<{
     index: number;
     data: MemberFormData;
   } | null>(null);
-  const { toast } = useToast();
+  const { addToast } = useToast();
 
   const methods = useForm<OrganizationFormData>({
     resolver: zodResolver(organizationSchema),
@@ -51,16 +56,9 @@ const RegistrationPage = () => {
     try {
       // Handle form submission
       console.log({ ...data, members });
-      toast({
-        title: "Success",
-        description: "Organization information saved successfully",
-      });
+      addToast("Success", "Organization information saved successfully");
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to save organization information",
-        variant: "destructive",
-      });
+      addToast("Error", "Failed to save organization information");
     }
   };
 
@@ -93,10 +91,10 @@ const RegistrationPage = () => {
             <CardContent>
               <div className="flex justify-between items-center mb-6">
                 <p className="text-lg text-gray-950 font-bold  mb-6">
-                  Organization Members Informations
+                {t('organization.title')}
                 </p>
-                <Button className="" type="submit">
-                  Import
+                <Button className="btn-blue" type="submit">
+                  {t('organization.buttons.import')}
                 </Button>
               </div>
               <MembersTable
@@ -114,7 +112,7 @@ const RegistrationPage = () => {
             </CardContent>
           </Card>
 
-          <Button className="btn-blue" type="submit">Save</Button>
+          <Button className="btn-blue" type="submit">{t('organization.buttons.save')}</Button>
         </form>
       </FormProvider>
     </div>
