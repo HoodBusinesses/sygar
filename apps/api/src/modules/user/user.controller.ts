@@ -13,6 +13,7 @@ import { DeassignAbilityDto } from './dto/deassign-ability.dto';
 import { User, UserRoles } from "./model/user.model";
 import { UserRepository } from "./user.repository";
 import { ApiResponse } from '@nestjs/swagger';
+import { LanguageService } from "src/global/language/language.service";
 
 /**
  * @class UserController
@@ -30,6 +31,7 @@ export class UserController {
 		private readonly userService: UserService,
 		private readonly userRepository: UserRepository, // Inject the user repository for database operations
 		private readonly abilityService: AbilityService,
+		private readonly languageService: LanguageService,
 	) {}
 
 	/**
@@ -56,12 +58,15 @@ export class UserController {
 			}
 		}
 	})
-	async create(@Body() createUserDto: CreateUserDto) {
+	async create(@Body() createUserDto: CreateUserDto, @Req() req: Request) {
+		const header: Record<string, any> = req.headers; // Changed object to Record<string, any>
+		let lang = header['accept-language'] ?? 'en'; // Get the language from the request headers or default to 'en'
+
 		try {
 			const user = await this.userService.create(createUserDto);
 			return { user, date: new Date().toISOString() }; // Added date to response
 		} catch (error: any) {
-			return { error: error.message, date: new Date().toISOString() }; // Added date to error response
+			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }; // Added date to error response
 		}
 	}
 
@@ -85,12 +90,15 @@ export class UserController {
 			}
 		}
 	})
-	async update(@Body() updateUserDto: UpdateUserDto) {
+	async update(@Body() updateUserDto: UpdateUserDto, @Req() req: Request) {
+		const header: Record<string, any> = req.headers; // Changed object to Record<string, any>
+		let lang = header['accept-language'] ?? 'en'; // Get the language from the request headers or default to 'en'
+
 		try {
 			const user = await this.userService.update(updateUserDto);
 			return { user, date: new Date().toISOString() }; // Added date to response
 		} catch (error: any) {
-			return { error: error.message, date: new Date().toISOString() }; // Added date to error response
+			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }; // Added date to error response
 		}
 	}
 
@@ -106,12 +114,15 @@ export class UserController {
 		status: 200,
 		description: 'User deleted successfully.'
 	})
-	async delete(@Body() deleteUserDto: DeleteUserDto) {
+	async delete(@Body() deleteUserDto: DeleteUserDto, @Req() req: Request) {
+		const header: Record<string, any> = req.headers; // Changed object to Record<string, any>
+		let lang = header['accept-language'] ?? 'en'; // Get the language from the request headers or default to 'en'
+
 		try {
 			await this.userService.delete(deleteUserDto.email);
 			return { message: 'User deleted successfully.', date: new Date().toISOString() }; // Added date to response
 		} catch (error: any) {
-			return { error: error.message, date: new Date().toISOString() }; // Added date to error response
+			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }; // Added date to error response
 		}
 	}
 
@@ -123,14 +134,17 @@ export class UserController {
 	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authenticated and has the necessary abilities
 	@PutAbilities({ action: Action.Manage, subject: 'Ability' }) // This is a decorator that ensures the user has the necessary abilities
 	@Post('assign-ability') // This is the endpoint that will call the assingAbility method
-	async assignAbility(@Body() assignAbilityDto: AssignAbilityDto, @Req() req: { user: User }) {
+	async assignAbility(@Body() assignAbilityDto: AssignAbilityDto, @Req() req: { user: User, headers: Record<string, any> }) {
+		const header = req.headers;
+		let lang = header['accept-language'] ?? 'en'; // Get the language from the request headers or default to 'en'
+
 		try {
 			if (req.user.role != UserRoles.SYGAR_ADMIN && assignAbilityDto.abilityType.split('_')[1] == "ORGANIZATION")
-				throw Error("Only SYGAR ADMIN have the ability to manage abilities of Organizations");
+				throw Error('onlySygarAdminMangeOrgAbilities');
 			const ability = await this.abilityService.createAbility(assignAbilityDto);
 			return { ability, date: new Date().toISOString() }; // Added date to response
 		} catch (error: any) {
-			return { error: error.message, date: new Date().toISOString() }; // Added date to error response
+			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }; // Added date to error response
 		}
 	}
 
@@ -171,8 +185,6 @@ export class UserController {
 			return { error: error.message, date: new Date().toISOString() }; // Added date to error response
 		}
 	}
-
-
 
 	/**
 	 * The endpoint used to get a all users of an organization

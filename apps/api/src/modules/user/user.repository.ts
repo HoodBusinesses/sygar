@@ -188,7 +188,7 @@ export class UserRepository {
 		const existingUser = await this.findByEmail(email);
 
 		if (!existingUser) {
-			throw new Error('User does not exist');
+			throw new Error('userNotFound');
 		}
 
 		// Delete the user
@@ -224,7 +224,7 @@ export class UserRepository {
 		const existingUser = await this.findByUid(uid);
 
 		if (!existingUser) {
-			throw new Error('User does not exist');
+			throw new Error('userNotFound');
 		}
 
 		return existingUser;
@@ -423,8 +423,6 @@ export class UserRepository {
 			// Map each DynamoDB item to an Organization object
 			return paginatedItems.map(item => this.dbService.mapDynamoDBItemToObject(item));
 		} catch (error) {
-        // Handle or log the error if needed
-        console.error("Error fetching organizations:", error);
         // Return an empty array if an error occurs
         return [];
 		}
