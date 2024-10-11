@@ -39,16 +39,36 @@ const SignIn: React.FC = () => {
     resolver: zodResolver(signInSchema),
   });
 
-  // Submit handler
-  const onSubmit: SubmitHandler<FieldValues> = (data: FieldValues) => {
-    setLoading(true);
-    // Simulate an API request
-    setTimeout(() => {
-      setLoading(false);
-      alert(`Welcome, ${data.login}`);
-      console.log(data);
-    }, 2000); // Simulate a 2-second delay
-  };
+ // Submit handler
+ const onSubmit: SubmitHandler<FieldValues> = async (data: FieldValues) => {
+  setLoading(true);
+  try {
+    const response = await fetch('http://localhost:1337/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: data.login, // Assuming 'login' field is used for email
+        password: data.password, // Assuming 'password' field is present in the form
+      }),
+    });
+
+    const result = await response.json();
+    setLoading(false);
+
+    if (response.ok) {
+      alert(`Welcome, ${result.user.name}`);
+      console.log(result);
+    } else {
+      alert(`Error: ${result.message}`);
+    }
+  } catch (error) {
+    setLoading(false);
+    alert('An error occurred. Please try again.');
+    console.error(error);
+  }
+};
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-50">
