@@ -48,9 +48,13 @@ export class OrganizationController {
 	@ApiResponse({ status: 400, description: 'Bad request.' })
 	async create(@Body() createOrganizationDto: CreateOrganizationDto) {
 		try {
-			return await this.organizationService.create(createOrganizationDto);
+			return {
+				organization:
+				await this.organizationService.create(createOrganizationDto),
+				date: new Date().toISOString()
+			};
 		} catch (error: any) {
-			return { error: error.message }
+			return { error: error.message, date: new Date().toISOString() }
 		}
 	}
 
@@ -77,9 +81,13 @@ export class OrganizationController {
 		try {
 			if (!cnss)
 				throw Error("cnss is required!");
-			return await this.organizationService.get(cnss);
+			return {
+				organization:
+					await this.organizationService.get(cnss),
+				date: new Date().toISOString()
+			};
 		} catch (error: any) {
-			return { error: error.message };
+			return { error: error.message, date: new Date().toISOString()};
 		}
 	}
 
@@ -94,9 +102,13 @@ export class OrganizationController {
 	@ApiResponse({ status: 400, description: 'Bad request.' })
 	async update(cnss: string, @Body() updateOrganizationDto: UpdateOrganizationDto) {
 		try {
-			return await this.organizationService.update(cnss, updateOrganizationDto);
+			return {
+				organization:
+				await this.organizationService.update(cnss, updateOrganizationDto),
+				date: new Date().toISOString()
+			};
 		} catch (error: any) {
-			return { error: error.message }
+			return { error: error.message, date: new Date().toISOString() }
 		}
 	}
 
@@ -111,25 +123,57 @@ export class OrganizationController {
 	@ApiResponse({ status: 404, description: 'Organization not found.' })
 	async delete(@Body() deleteOrganizationDto: DeleteOrganizationDto) {
 		try {
-			return await this.organizationService.delete(deleteOrganizationDto.cnss);
+			return {
+				success: await this.organizationService.delete(deleteOrganizationDto.cnss),
+				date: new Date().toISOString()
+			};
 		} catch (error: any) {
-			return { error: error.message }
+			return { error: error.message, date: new Date().toISOString() }
 		}
 	}
 
-
 	/**
-	 * Get all organizations
+	 * Get all organizations endpoint
+	 * 
+	 * This endpoint retrieves a paginated list of organizations. 
+	 * You can filter the results by name and year. 
+	 * If no filters are provided, it returns the first page of organizations with a default limit of 10.
+	 * 
+	 * @param page - The page number to retrieve (default is 1).
+	 * @param limit - The number of organizations to return per page (default is 10).
+	 * @param name - Optional filter to search organizations by name.
+	 * @param year - Optional filter to search organizations by year.
+	 * @returns A list of organizations along with pagination information.
 	 */
 	@Get('get-all')
 	@UseGuards(JwtGuard, AbilitiesGuard)
 	@PutAbilities({ action: Action.Read, subject: "Organization"})
-	@ApiResponse({ status: 200, description: 'All organizations retrieved successfully.' })
-	async getAll() {
+	@ApiResponse({ 
+		status: 200, 
+		description: 'All organizations retrieved successfully.', 
+		schema: {
+			example: [
+				{
+					cnss: '123456789',
+					name: 'My Organization',
+					freeTrial: 30
+				},
+				{
+					cnss: '987654321',
+					name: 'Another Organization',
+					freeTrial: 15
+				}
+			]
+		}
+	})
+	@ApiResponse({ status: 400, description: 'Bad request due to invalid parameters.' })
+	@ApiResponse({ status: 404, description: 'No organizations found for the given filters.' })
+	async getAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10, @Query('name') name?: string, @Query('year') year?: number) {
 		try {
-			return await this.organizationRepository.getAll();
+			const organizations = await this.organizationRepository.getAll(page, limit, name, year);
+			return { organizations, date: new Date().toISOString() };
 		} catch (error: any) {
-			return { error: error.message }
+			return { error: error.message, date: new Date().toISOString() }
 		}
 	}
 }

@@ -405,7 +405,9 @@ export class UserRepository {
 	 * @method getAll
 	 * @returns The list of users
 	 */
-	async getAll() {
+	async getAll(page: number, limit: number): Promise<User[]> {
+		page = !page ? 1: page;
+		limit = !limit ? 10: limit;
 		const params: ScanCommandInput = {
 			TableName: this.tableName,
 		};
@@ -413,9 +415,14 @@ export class UserRepository {
 		try {
 			const Items = await this.dbService.scanItems(params);
 
-        // Map each DynamoDB item to an Organization object
-        return Items.map(item => this.dbService.mapDynamoDBItemToObject(item));
-    } catch (error) {
+			// Implement pagination
+			const start = (page - 1) * limit;
+			const end = start + limit;
+			const paginatedItems = Items.slice(start, end);
+
+			// Map each DynamoDB item to an Organization object
+			return paginatedItems.map(item => this.dbService.mapDynamoDBItemToObject(item));
+		} catch (error) {
         // Handle or log the error if needed
         console.error("Error fetching organizations:", error);
         // Return an empty array if an error occurs

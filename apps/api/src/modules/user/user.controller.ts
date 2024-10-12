@@ -33,10 +33,10 @@ export class UserController {
 	) {}
 
 	/**
-	 * @method create
-	 * @description
-	 * This method is used to create a new user.
-	*/
+	 * The endpoint used to create a user
+	 * @param createUserDto The DTO containing the user information
+	 * @returns The user created
+	 */
 	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authenticated and has the necessary abilities
 	@PutAbilities({ action: Action.Create, subject: 'User' }) // This is a decorator that ensures the user has the necessary abilities
 	@Post('create') // This is the endpoint that will call the create method
@@ -58,17 +58,18 @@ export class UserController {
 	})
 	async create(@Body() createUserDto: CreateUserDto) {
 		try {
-			return await this.userService.create(createUserDto);
+			const user = await this.userService.create(createUserDto);
+			return { user, date: new Date().toISOString() }; // Added date to response
 		} catch (error: any) {
-			return { error: error.message }
+			return { error: error.message, date: new Date().toISOString() }; // Added date to error response
 		}
 	}
 
 	/**
-	 * @method update
-	 * @description
-	 * This method is used to update a user.
-	*/
+	 * The endpoint used to update a user
+	 * @param updateUserDto The DTO containing the userUid and the new user data
+	 * @returns The user updated
+	 */
 	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authenticated and has the necessary abilities
 	@PutAbilities({ action: Action.Update, subject: 'User' }) // This is a decorator that ensures the user has the necessary abilities
 	@Put('update') // This is the endpoint that will call the update method
@@ -86,33 +87,39 @@ export class UserController {
 	})
 	async update(@Body() updateUserDto: UpdateUserDto) {
 		try {
-			return await this.userService.update(updateUserDto);
+			const user = await this.userService.update(updateUserDto);
+			return { user, date: new Date().toISOString() }; // Added date to response
 		} catch (error: any) {
-			return { error: error.message }
+			return { error: error.message, date: new Date().toISOString() }; // Added date to error response
 		}
 	}
 
 	/**
-	 * @method delete
-	 * @description
-	 * This method is used to delete a user.
-	*/
+	 * The endpoint used to delete a user
+	 * @param deleteUserDto The DTO containing the userUid
+	 * @returns a success message if the user is deleted successfully
+	 */
 	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authenticated and has the necessary abilities
 	@PutAbilities({ action: Action.Delete, subject: 'User' }) // This is a decorator that ensures the user has the necessary abilities
 	@Delete('delete') // This is the endpoint that will call the delete method
+	@ApiResponse({
+		status: 200,
+		description: 'User deleted successfully.'
+	})
 	async delete(@Body() deleteUserDto: DeleteUserDto) {
 		try {
-			return await this.userService.delete(deleteUserDto.email);
+			await this.userService.delete(deleteUserDto.email);
+			return { message: 'User deleted successfully.', date: new Date().toISOString() }; // Added date to response
 		} catch (error: any) {
-			return { error: error.message }
+			return { error: error.message, date: new Date().toISOString() }; // Added date to error response
 		}
 	}
 
 	/**
-	 * @method createAbility
-	 * @description
-	 * This method is used to assign a new ability.
-	*/
+	 * The endpoint used to assign an ability to a user
+	 * @param assignAbilityDto The DTO containing the userUid and the abilityType
+	 * @returns The ability assigned to the user
+	 */
 	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authenticated and has the necessary abilities
 	@PutAbilities({ action: Action.Manage, subject: 'Ability' }) // This is a decorator that ensures the user has the necessary abilities
 	@Post('assign-ability') // This is the endpoint that will call the assingAbility method
@@ -120,43 +127,70 @@ export class UserController {
 		try {
 			if (req.user.role != UserRoles.SYGAR_ADMIN && assignAbilityDto.abilityType.split('_')[1] == "ORGANIZATION")
 				throw Error("Only SYGAR ADMIN have the ability to manage abilities of Organizations");
-			return await this.abilityService.createAbility(assignAbilityDto);
+			const ability = await this.abilityService.createAbility(assignAbilityDto);
+			return { ability, date: new Date().toISOString() }; // Added date to response
 		} catch (error: any) {
-			return { error: error.message }
+			return { error: error.message, date: new Date().toISOString() }; // Added date to error response
 		}
 	}
 
 	/**
-	 * @method deleteAbility
-	 * @description
-	 * This method is used to delete an ability.
+	 * The endpoint used to deassign an ability from a user
+	 * @param deassignAbilityDto The DTO containing the userUid and the abilityType
+	 * @returns a success message if the ability is deassigned successfully
 	*/
 	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authenticated and has the necessary abilities
 	@PutAbilities({ action: Action.Manage, subject: 'Ability' }) // This is a decorator that ensures the user has the necessary abilities
 	@Delete('deassign-ability') // This is the endpoint that will call the deleteAbility method
 	async deassignAbility(@Body() deassignAbilityDto: DeassignAbilityDto) {
 		try {
-			return await this.abilityService.deassignAbilityByUid(deassignAbilityDto);
+			await this.abilityService.deassignAbilityByUid(deassignAbilityDto);
+			return { message: 'Ability deassigned successfully.', date: new Date().toISOString() }; // Added date to response
 		} catch (error: any) {
-			return { error: error.message }
+			return { error: error.message, date: new Date().toISOString() }; // Added date to error response
 		}
 	}
 
 	/**
-	 * The endpoint used to get a user by userUid
-	 * @param userUid - The userUid of the user to get
-	 * @returns The user object
+	 * The endpoint used to get a user if the userUid is provided
+	 * @returns The user with the userUid provided o
+	 * @returns An error message if the userUid or organizationId is not provided
 	 */
 	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authenticated and has the necessary abilities
 	@PutAbilities({ action: Action.Manage, subject: 'User' }) // This is a decorator that ensures the user has the necessary abilities
+	@ApiResponse({
+		status: 200,
+		description: 'User retrieved successfully.'
+	})
 	@Get('get')
 	async getUser(@Query('userUid') userUid: string) {
 		try {
-			if (!userUid)
-				throw Error('userUid Empty!');
-			return await this.userRepository.get(userUid);
+			const user = await this.userRepository.get(userUid);
+			return { user, date: new Date().toISOString() }; // Added date to response
 		} catch (error: any) {
-			return { error: error.message }
+			return { error: error.message, date: new Date().toISOString() }; // Added date to error response
+		}
+	}
+
+
+
+	/**
+	 * The endpoint used to get a all users of an organization
+	 * @returns The list of users of the organization
+	 */
+	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authentic                                                             ated and has the necessary abilities
+	@PutAbilities({ action: Action.Manage, subject: 'User' }) // This is a decorator that ensures the user has the necessary abilities
+	@ApiResponse({
+		status: 200,
+		description: 'Users retrieved successfully.'
+	})
+	@Get('get-by-organizationid')
+	async getByOrganizationId(@Query('organizationId') organizationId: string) {
+		try {
+			const users = await this.userRepository.findByOrganizationId(organizationId);
+			return { users, date: new Date().toISOString() }; // Added date to response
+		} catch (error: any) {
+			return { error: error.message, date: new Date().toISOString() }; // Added date to error response
 		}
 	}
 
@@ -168,11 +202,16 @@ export class UserController {
 	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authenticated and has the necessary abilities
 	@PutAbilities({ action: Action.Manage, subject: 'User' }) // This is a decorator that ensures the user has the necessary abilities
 	@Get('get-all')
-	async getAll() {
+	@ApiResponse({
+		status: 200,
+		description: 'Users retrieved successfully.'
+	})
+	async getAll(@Query('page') page: number, @Query('limit') limit: number) {
 		try {
-			return await this.userRepository.getAll();
+			const users = await this.userRepository.getAll(page, limit);
+			return { users, date: new Date().toISOString() }; // Added date to response
 		} catch (error: any) {
-			return { error: error.message }
+			return { error: error.message, date: new Date().toISOString() }; // Added date to error response
 		}
 	}
 }
