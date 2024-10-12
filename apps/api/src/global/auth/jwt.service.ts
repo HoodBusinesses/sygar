@@ -18,7 +18,7 @@ export class JwtService {
 		try {
 			return jwt.sign(payload, config.secret, { expiresIn: config.expiresIn });
 		} catch (error) {
-			throw new Error('Failed to sign JWT token.');
+			throw new Error('faildSignJwtToken');
 		}
 	}
 
@@ -33,7 +33,7 @@ export class JwtService {
 			return jwt.verify(token, secret);
 		} catch (error) {
       // Handle token errors (e.g., expired, invalid signature)
-			throw new UnauthorizedException('Invalid or expired token.');
+			throw new UnauthorizedException('invalidToken');
 		}
 	}
 
@@ -44,13 +44,13 @@ export class JwtService {
    */
 		extractToken(authorizationHeader: string): string {
 			if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
-				throw new UnauthorizedException('Invalid authorization header.');
+				throw new UnauthorizedException('invalidAuthHeader');
 			}
 	
 			// Extract the token from the header
 			const token = authorizationHeader.split(' ')[1];
 			if (!token) {
-				throw new UnauthorizedException('Token not provided.');
+				throw new UnauthorizedException('tokenNotProvided');
 			}
 	
 			// Return the extracted token

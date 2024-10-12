@@ -27,5 +27,10 @@
     "alreadyExistsWithThisCNSS": "المستخدم موجود بالفعل بهذا CNSS",
     "orgnNotFoundWithThisOrgId": "المنظمة غير موجودة بهذا معرف المنظمة",
     "orgnAlreadyHasAdmin": "المنظمة لديها بالفعل مسؤول",
-    "emailIsRequired": "البريد الإلكتروني مطلوب"
+    "emailIsRequired": "البريد الإلكتروني مطلوب",
+    "onlySygarAdminMangeOrgAbilities": "يمكن لمسؤول SYGAR فقط إدارة قدرات المنظمات",
+    "faildSignJwtToken": "فشل في توقيع رمز JWT.",
+    "orgIdRequiredForOrgUser": "معرف المنظمة مطلوب لمستخدم المنظمة والمسؤول",
+    "userDoesNotHaveAbilities": "المستخدم ليس لديه القدرات اللازمة لهذه المنظمة",
+    "userDoesNotHaveTheNecessaryAbilities": "المستخدم ليس لديه القدرات اللازمة"
 }

@@ -27,5 +27,8 @@
     "alreadyExistsWithThisCNSS": "L'utilisateur existe déjà avec ce CNSS",
     "orgnNotFoundWithThisOrgId": "Organisation non trouvée avec cet identifiant d'organisation",
     "orgnAlreadyHasAdmin": "L'organisation a déjà un administrateur",
-    "emailIsRequired": "L'email est requis"
+    "emailIsRequired": "L'email est requis",
+    "onlySygarAdminMangeOrgAbilities": "Seul l'administrateur SYGAR peut gérer les capacités des organisations",
+    "faildSignJwtToken": "Échec de la signature du jeton JWT.",
+    "orgIdRequiredForOrgUser": "L'ID de l'organisation est requis pour l'utilisateur et l'administrateur de l'organisation"
 }

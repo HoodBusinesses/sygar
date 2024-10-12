@@ -29,5 +29,9 @@
     "orgnNotFoundWithThisOrgId": "Organization not found with this organizationId",
     "orgnAlreadyHasAdmin": "Organization already has an admin",
     "emailIsRequired": "Email is required",
-    "onlySygarAdminMangeOrgAbilities": "Only SYGAR ADMIN have the ability to manage abilities of Organizations"
+    "onlySygarAdminMangeOrgAbilities": "Only SYGAR ADMIN have the ability to manage abilities of Organizations",
+    "faildSignJwtToken": "Failed to sign JWT token.",
+    "orgIdRequiredForOrgUser": "Organization ID is required for organization user and admin",
+    "userDoesNotHaveAbilities": "User does not have the necessary abilities for this organization",
+    "userDoesNotHaveTheNecessaryAbilities": "User does not have the necessary abilities"
 }

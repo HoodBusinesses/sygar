@@ -23,27 +23,28 @@ export class JwtGuard implements CanActivate {
 
 		// Extract the authorization header (expected format: 'Bearer <token>')
 		const authHeader = req.headers.authorization;
+		const lang = req.headers['accept-language'] ?? 'en';
 		if (!authHeader) {
-			throw new UnauthorizedException('invalidAuthHeader');
+			throw new UnauthorizedException(this.languageService.getTranslation('invalidAuthHeader', lang));
 		}
 
-		// Extract the token from the authorization header
-		const token = this.jwtService.extractToken(authHeader);
-
+		
 		// Verify the token
 		let payload: any;
-
+		
 		try {
+			const token = this.jwtService.extractToken(authHeader);
+			// Extract the token from the authorization header
 			payload = this.jwtService.verify(token, this.jwtSecret);
 		} catch (error: any) {
-			throw new UnauthorizedException(error.message);
+			throw new UnauthorizedException(this.languageService.getTranslation(error.message, lang));
 		}
 
 		// Fetch the user from the database
 		const user = await this.userService.getByEmail(payload.email);
 
 		if (!user) {
-			throw new UnauthorizedException('userNotFound');
+			throw new UnauthorizedException(this.languageService.getTranslation('userNotFound', lang));
 		}
 
 		// Attach the user to the request object
