@@ -8,6 +8,7 @@ import { Action } from 'src/shared/types/roles';
 import { ResetPasswordDto, ResetPasswordRequestDto } from './dto/reset-password.dto';
 import { ActivateAccountDto, ValidateTokenDto } from './dto/activate-account.dto';
 import { ApiResponse } from '@nestjs/swagger';
+import { LanguageService } from '../language/language.service';
 
 /**
  * Auth controller
@@ -15,7 +16,10 @@ import { ApiResponse } from '@nestjs/swagger';
 @Controller('auth')
 export class AuthController {
 	// Inject the AuthService
-	constructor(private readonly authService: AuthService) {}
+	constructor(
+		private readonly authService: AuthService,
+		private readonly languageService: LanguageService
+	) {}
 	
 	/**
 	 * Login endpoint
@@ -47,9 +51,16 @@ export class AuthController {
 			}
 		}
 	})
-	async login(@Body() loginDto: LoginDto) {
-		// Call the login method from the AuthService and return the token response
-		return this.authService.login(loginDto.email, loginDto.password);
+	async login(@Body() loginDto: LoginDto, @Req() req: Request) {
+		const header: Record<string, any> = req.headers;
+		const lang = header['accept-language'] ?? 'en';
+
+		try {
+			// Call the login method from the AuthService and return the token response
+			return await this.authService.login(loginDto.email, loginDto.password);
+		} catch (error: any) {
+			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }
+		}
 	}
 
 	/**
@@ -95,8 +106,15 @@ export class AuthController {
 			}
 		}
 	})
-	async forgotPassword(@Body() dto: ResetPasswordRequestDto) {
-		return this.authService.requestPasswordReset(dto);
+	async forgotPassword(@Body() dto: ResetPasswordRequestDto, @Req() req: Request) {
+		const header: Record<string, any> = req.headers;
+		const lang = header['accept-language'] ?? 'en';
+
+		try {
+			return await this.authService.requestPasswordReset(dto);
+		} catch (error: any) {
+			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }
+		}
 	}
 	
 	/**
@@ -114,8 +132,15 @@ export class AuthController {
 			}
 		}
 	})
-	async resetPassword(@Body() dto: ResetPasswordDto) {
-		return this.authService.resetPassword(dto);
+	async resetPassword(@Body() dto: ResetPasswordDto, @Req() req: Request) {
+		const header: Record<string, any> = req.headers;
+		const lang = header['accept-language'] ?? 'en';
+
+		try {
+			return await this.authService.resetPassword(dto);
+		} catch (error: any) {
+			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }
+		}
 	}
 
 	/**
@@ -133,8 +158,15 @@ export class AuthController {
 			}
 		}
 	})
-	async activateAccount(@Body() dto: ActivateAccountDto) {
-		return this.authService.activateAccount(dto);
+	async activateAccount(@Body() dto: ActivateAccountDto, @Req() req: Request) {
+		const header: Record<string, any> = req.headers;
+		const lang = header['accept-language'] ?? 'en';
+
+		try {
+			return await this.authService.activateAccount(dto);
+		} catch (error: any) {
+			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }
+		}
 	}
 
 	/**
@@ -153,6 +185,6 @@ export class AuthController {
 		}
 	})
 	async validateToken(@Body() dto: ValidateTokenDto) {
-		return this.authService.validateToken(dto.token);
+		return await this.authService.validateToken(dto.token);
 	}
 }

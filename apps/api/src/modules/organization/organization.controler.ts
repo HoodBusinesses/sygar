@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Post, Put, Query, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Post, Put, Query, Req, UseGuards } from "@nestjs/common";
 import { JwtGuard } from "src/global/auth/auth.guard";
 import { CreateOrganizationDto } from "./dto/create-organization.dto";
 import { DeleteOrganizationDto } from "./dto/delete-organization-dtro";
@@ -9,6 +9,7 @@ import { PutAbilities } from "src/global/rbac/roles.decorators";
 import { Action } from "src/shared/types/roles";
 import { OrganizationRepository } from "./organization.repository";
 import { ApiResponse } from '@nestjs/swagger';
+import { LanguageService } from "src/global/language/language.service";
 
 /**
  * @module OrganizationController
@@ -26,6 +27,7 @@ export class OrganizationController {
 	constructor(
 		private readonly organizationService: OrganizationService,
 		private readonly organizationRepository: OrganizationRepository,		
+		private readonly languageService: LanguageService,
 	) {}
 	/**
 	 * Create organization endpoint
@@ -46,7 +48,10 @@ export class OrganizationController {
 		}
 	})
 	@ApiResponse({ status: 400, description: 'Bad request.' })
-	async create(@Body() createOrganizationDto: CreateOrganizationDto) {
+	async create(@Body() createOrganizationDto: CreateOrganizationDto, @Req() req: Request) {
+		const header: Record<string, any> = req.headers; // Changed object to Record<string, any>
+		let lang = header['accept-language'] ?? 'en'; // Get the language from the request headers or default to 'en'
+
 		try {
 			return {
 				organization:
@@ -54,7 +59,7 @@ export class OrganizationController {
 				date: new Date().toISOString()
 			};
 		} catch (error: any) {
-			return { error: error.message, date: new Date().toISOString() }
+			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }
 		}
 	}
 
@@ -77,17 +82,20 @@ export class OrganizationController {
 		}
 	})
 	@ApiResponse({ status: 404, description: 'Organization not found.' })
-	async get(@Query("cnss") cnss: string) {
+	async get(@Query("cnss") cnss: string, @Req() req: Request) {
+		const header: Record<string, any> = req.headers;
+		let lang = header['accept-language'] ?? 'en';
+
 		try {
 			if (!cnss)
-				throw Error("cnss is required!");
+				throw Error('cnssRequired');
 			return {
 				organization:
 					await this.organizationService.get(cnss),
 				date: new Date().toISOString()
 			};
 		} catch (error: any) {
-			return { error: error.message, date: new Date().toISOString()};
+			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString()};
 		}
 	}
 
@@ -100,7 +108,9 @@ export class OrganizationController {
 	@PutAbilities({ action: Action.Update, subject: 'Organization' })
 	@ApiResponse({ status: 200, description: 'Organization updated successfully.' })
 	@ApiResponse({ status: 400, description: 'Bad request.' })
-	async update(cnss: string, @Body() updateOrganizationDto: UpdateOrganizationDto) {
+	async update(cnss: string, @Body() updateOrganizationDto: UpdateOrganizationDto, @Req() req: Request) {
+		const header: Record<string, any> = req.headers;
+		let lang = header['accept-language'] ?? 'en';
 		try {
 			return {
 				organization:
@@ -108,7 +118,7 @@ export class OrganizationController {
 				date: new Date().toISOString()
 			};
 		} catch (error: any) {
-			return { error: error.message, date: new Date().toISOString() }
+			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }
 		}
 	}
 
@@ -121,14 +131,17 @@ export class OrganizationController {
 	@PutAbilities({ action: Action.Delete, subject: 'Organization' })
 	@ApiResponse({ status: 200, description: 'Organization deleted successfully.' })
 	@ApiResponse({ status: 404, description: 'Organization not found.' })
-	async delete(@Body() deleteOrganizationDto: DeleteOrganizationDto) {
+	async delete(@Body() deleteOrganizationDto: DeleteOrganizationDto, @Req() req: Request) {
+		const header: Record<string, any> = req.headers;
+		let lang = header['accept-language'] ?? 'en';
+
 		try {
 			return {
 				success: await this.organizationService.delete(deleteOrganizationDto.cnss),
 				date: new Date().toISOString()
 			};
 		} catch (error: any) {
-			return { error: error.message, date: new Date().toISOString() }
+			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }
 		}
 	}
 

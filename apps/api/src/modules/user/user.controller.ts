@@ -156,12 +156,15 @@ export class UserController {
 	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authenticated and has the necessary abilities
 	@PutAbilities({ action: Action.Manage, subject: 'Ability' }) // This is a decorator that ensures the user has the necessary abilities
 	@Delete('deassign-ability') // This is the endpoint that will call the deleteAbility method
-	async deassignAbility(@Body() deassignAbilityDto: DeassignAbilityDto) {
+	async deassignAbility(@Body() deassignAbilityDto: DeassignAbilityDto, @Req() req: Request) {
+		const header: Record<string, any> = req.headers;
+		let lang = header['accept-language'] ?? 'en'; // Get the language from the request headers or default to 'en'
+	
 		try {
 			await this.abilityService.deassignAbilityByUid(deassignAbilityDto);
 			return { message: 'Ability deassigned successfully.', date: new Date().toISOString() }; // Added date to response
 		} catch (error: any) {
-			return { error: error.message, date: new Date().toISOString() }; // Added date to error response
+			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }; // Added date to error response
 		}
 	}
 
@@ -177,12 +180,14 @@ export class UserController {
 		description: 'User retrieved successfully.'
 	})
 	@Get('get')
-	async getUser(@Query('userUid') userUid: string) {
+	async getUser(@Query('userUid') userUid: string, @Req() req: Request) {
+		const header: Record<string, any> = req.headers;
+		let lang = header['accept-language'] ?? 'en';
 		try {
 			const user = await this.userRepository.get(userUid);
 			return { user, date: new Date().toISOString() }; // Added date to response
 		} catch (error: any) {
-			return { error: error.message, date: new Date().toISOString() }; // Added date to error response
+			return {  error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }; // Added date to error response
 		}
 	}
 

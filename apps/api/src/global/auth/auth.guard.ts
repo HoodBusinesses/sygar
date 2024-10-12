@@ -2,6 +2,7 @@ import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "./jwt.service";
 import { UserService } from "src/modules/user/user.service";
+import { LanguageService } from "../language/language.service";
 
 @Injectable()
 export class JwtGuard implements CanActivate {
@@ -11,6 +12,7 @@ export class JwtGuard implements CanActivate {
 		private readonly configService: ConfigService,
 		private readonly jwtService: JwtService,
 		private readonly userService: UserService,
+		private readonly languageService: LanguageService
 
 	) {
 		this.jwtSecret = this.configService.getOrThrow('JWT_SECRET_TOKEN');
@@ -22,7 +24,7 @@ export class JwtGuard implements CanActivate {
 		// Extract the authorization header (expected format: 'Bearer <token>')
 		const authHeader = req.headers.authorization;
 		if (!authHeader) {
-			throw new UnauthorizedException('Authorization header is missing');
+			throw new UnauthorizedException('invalidAuthHeader');
 		}
 
 		// Extract the token from the authorization header
@@ -41,7 +43,7 @@ export class JwtGuard implements CanActivate {
 		const user = await this.userService.getByEmail(payload.email);
 
 		if (!user) {
-			throw new UnauthorizedException('User not found');
+			throw new UnauthorizedException('userNotFound');
 		}
 
 		// Attach the user to the request object

@@ -8,6 +8,7 @@ import { v4 as uuid } from "uuid";
 import { MailService } from "../mail/mail.service";
 import { UserRoles } from "src/modules/user/model/user.model";
 import { ActivateAccountDto, ValidateTokenDto } from "./dto/activate-account.dto";
+import { error } from "console";
 
 @Injectable()
 export class AuthService {
@@ -43,17 +44,12 @@ export class AuthService {
 	 * @returns Object containing the JWT token and user information.
 	 */
 	async login(email: string, password: string) {
-		// Ensure both email and password are provided
-		if (!email || !password) {
-			throw new BadRequestException('email and password are required');
-		}
-
 		// Fetch user by email
 		const user = await this.userService.getByEmail(email);
 
 		// Ensure user exists
 		if (!user) {
-			throw new UnauthorizedException('Invalid credentials');
+			throw new UnauthorizedException('invalidCredentials');
 		}
 
 		// Verify the provided password against the stored hash
@@ -61,14 +57,14 @@ export class AuthService {
 
 		// If password is incoreect, throw unauthorized exception
 		if (!isValid) {
-			throw new UnauthorizedException('Invalid credentials');
+			throw new UnauthorizedException('invalidCredentials');
 		}
 
 	
 		// If the user is not active, send an email to the user to activate the account
 		if (user.role !== UserRoles.SYGAR_ADMIN && !user.isActive) {
 			await this.requestActiveAccount(user.email);
-			throw new UnauthorizedException('Account not activated');
+			throw new UnauthorizedException('accountNotActivated');
 		}
 
 		// Generate Jwt Token for the use
@@ -108,12 +104,12 @@ export class AuthService {
 
 		// If the user is not found, throw an unauthorized exception
 		if (!user) {
-			throw new UnauthorizedException('Invalid token');
+			throw new UnauthorizedException('invalidToken');
 		}
 
 		// If the token is expired, throw an unauthorized exception
 		if (user.resetPasswordTokenExpiresAt && new Date(user.resetPasswordTokenExpiresAt) < new Date()) {
-			throw new UnauthorizedException('Token expired'); // throw an unauthorized exception if the token is expired
+			throw new UnauthorizedException('invalidToken'); // throw an unauthorized exception if the token is expired
 		}
 	
 		// Hash the new password
@@ -200,7 +196,7 @@ export class AuthService {
 
 		// If the user is not found, return a message indicating that the user was not found
 		if (!user) {
-			return { message: "User not found" }
+			throw Error('userNotFound');
 		}
 
 		// Generate a token
@@ -233,7 +229,7 @@ export class AuthService {
 		} catch (error: any) {
 			// Delete the reset password token
 			await this.userService.setResetPasswordToken(user.uid, null, null);
-			return { error: error.message };
+			throw Error(error.message);
 		}
 
 		// Return a message indicating that the password reset email was sent
