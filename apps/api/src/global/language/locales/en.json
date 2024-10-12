@@ -12,7 +12,7 @@
     "emailPasswordRequired": "email and password are required",
     "invalidCredentials": "Invalid credentials",
     "accountNotActivated": "Account not activated",
-    "c": "Organization already exists with the provided CNSS",
+    "organizationExists": "Organization already exists with the provided CNSS",
 	"organizationDoesntExists": "Organization does not exist",
     "invalidToken": "Invalid or expired token.",
     "invalidAuthHeader": "Invalid authorization header.",
