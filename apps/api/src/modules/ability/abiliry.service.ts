@@ -1,7 +1,7 @@
 import { forwardRef, Inject, Injectable } from "@nestjs/common";
 import { PutCommandInput, ScanCommandInput } from '@aws-sdk/lib-dynamodb';
 import { DbService } from 'src/global/db/db.service';
-import { AbilitiesEnum, AbilityInterface } from "src/shared/constants/abilities";
+import { AbilityInterface } from "src/shared/constants/abilities";
 import { UserRoles } from "../user/model/user.model";
 import { DbConstants } from "src/global/db/db.constants";
 import { DeleteItemCommandInput } from "@aws-sdk/client-dynamodb";

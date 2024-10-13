@@ -12,6 +12,7 @@ import { AdminSchema } from 'src/modules/admins/model/admins.model';
 import { OrganizationSchema } from 'src/modules/organization/model/organization.model';
 import { BillSchema } from 'src/modules/bill/model/bill.model';
 import { CounterSchema } from 'src/modules/counter/model/counter.model';
+import { NotificationSchema } from 'src/global/notifactions/model/notifactions.model';
 
 const configService = new ConfigService();
 const dbConstants = new DbConstants(configService);
@@ -60,7 +61,8 @@ async function main() {
     OrganizationSchema,
     AdminSchema,
     BillSchema,
-    CounterSchema
+    CounterSchema,
+    NotificationSchema,
   ];
 
   for (const table of tables) {

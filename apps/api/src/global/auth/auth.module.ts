@@ -5,6 +5,10 @@ import { JwtService } from './jwt.service';
 import { CryptService } from './crypt.service';
 import { JwtGuard } from './auth.guard';
 import { MailModule } from '../mail/mail.module';
+import { UserService } from 'src/modules/user/user.service';
+import { NotificationService } from '../notifactions/notifications.service';
+import { NotificationsGetWay } from '../notifactions/notifications.gateway';
+import { LanguageModule } from '../language/language.module';
 
 /**
  * @module AuthModule
@@ -14,9 +18,9 @@ import { MailModule } from '../mail/mail.module';
  */
 @Global()
 @Module({
-  imports: [MailModule],
+  imports: [MailModule, LanguageModule],
   controllers: [AuthController],
   exports: [AuthService, JwtService, JwtGuard],
-  providers: [AuthService, JwtService, CryptService, JwtGuard],
+  providers: [AuthService, JwtService, CryptService, JwtGuard, UserService, NotificationService, NotificationsGetWay],
 })
 export class AuthModule {}

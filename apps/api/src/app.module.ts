@@ -10,6 +10,7 @@ import { OrganizationModule } from './modules/organization/organization.module';
 import { AbilityModule } from './modules/ability/ability.module';
 import { RbacModule } from './global/rbac/roles.module';
 import { LanguageModule } from './global/language/language.module';
+import { NotificationsModule } from './global/notifactions/notifications.module';
 
 /**
  * @module AppModule
@@ -36,6 +37,7 @@ import { LanguageModule } from './global/language/language.module';
     }),
     DbModule,
     TrainingModule,
+    // NotificationsModule,
   ],
   controllers: [AppController],
 })
