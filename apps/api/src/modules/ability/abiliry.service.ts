@@ -184,7 +184,7 @@ export class AbilityService {
 	async deassignAbilityByUid(deleteAbilityDto: DeassignAbilityDto) {
 		const ability = await this.getAbility(`${deleteAbilityDto.uid}#${deleteAbilityDto.abilityType}`);
 		if (!ability) {
-			throw new Error('Ability not found');
+			throw new Error('abilityNotFound');
 		}
 		await this.deassignAbility(ability);
 		return { message: 'Ability deleted successfully' };
@@ -219,18 +219,18 @@ export class AbilityService {
 		const existingAbility = await this.getAbility(identifier);
 
 		if (existingAbility) {
-			throw new Error('Ability already exists');
+			throw new Error('abilityExists');
 		}
 
 		// Create the ability
 		if (!ability.abilityType) {
-			throw new Error('Ability type is required');
+			throw new Error('abilityTypeRequired');
 		}
 
 		const abilityType = ability?.abilityType; // Use optional chaining to avoid errors
 
 		if (!abilityType) {
-			throw new Error('AbilityType is undefined');
+			throw new Error('abilityTypeUndefined');
 		}
 
 		const [action, subject] = abilityType.split('_').map((item, index) => {
@@ -242,7 +242,7 @@ export class AbilityService {
 		});
 
 		if (!action || !subject) {
-			throw new Error('Invalid ability type');
+			throw new Error('invalidAbilityType');
 		}
 
 		// Create the ability

@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty } from "class-validator";
+import { IsEmail, IsNotEmpty, IsString } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
 /**
@@ -8,7 +8,7 @@ import { ApiProperty } from "@nestjs/swagger";
 */
 export class DeleteOrganizationDto {
 	@IsNotEmpty()
-	@IsEmail()
+	@IsString()
 	@ApiProperty({
 		description: 'The cnss of the organization to be deleted',
 		example: '123456789',

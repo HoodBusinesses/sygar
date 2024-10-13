@@ -39,7 +39,7 @@ export class OrganizationService {
 
 		// Throw an error if the organization already exists
 		if (organization) {
-			throw new Error('Organization already exists with the provided CNSS');
+			throw new Error('organizationExists');
 		}
 
 		// Create the organization
@@ -62,7 +62,7 @@ export class OrganizationService {
 		
 		// Throw an error if the organization does not exist
 		if (!organization) {
-			throw new Error('Organization does not exist');
+			throw new Error('organizationDoesntExists');
 		}
 		
 		// Return the organization found
@@ -91,7 +91,7 @@ export class OrganizationService {
 	async delete(cnss: string) {
 		// Throw an error if the CNSS is not provided
 		if (!cnss) {
-			throw new Error('CNSS is required');
+			throw new Error('cnssRequired');
 		}
 		
 		// Find the organization by CNSS
@@ -99,7 +99,7 @@ export class OrganizationService {
 		
 		// Throw an error if the organization does not exist
 		if (!organization) {
-			throw new Error('Organization does not exist');
+			throw new Error('organizationDoesntExists');
 		}
 
 		// Erase all users in the organization

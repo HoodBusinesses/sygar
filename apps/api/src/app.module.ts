@@ -9,6 +9,7 @@ import { UserModule } from './modules/user/user.module';
 import { OrganizationModule } from './modules/organization/organization.module';
 import { AbilityModule } from './modules/ability/ability.module';
 import { RbacModule } from './global/rbac/roles.module';
+import { LanguageModule } from './global/language/language.module';
 
 /**
  * @module AppModule
@@ -17,6 +18,7 @@ import { RbacModule } from './global/rbac/roles.module';
  */
 @Module({
   imports: [
+    LanguageModule,
     AbilityModule,
     UserModule,
     AuthModule,

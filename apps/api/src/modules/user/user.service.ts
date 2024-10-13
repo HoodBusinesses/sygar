@@ -30,18 +30,18 @@ export class UserService {
 	 * This method is used to create a new user.
 	*/
 	async create(user: CreateUserDto) {
-		// check if the user already exists on the organization
+		// check if the user already exists
 		let userExists = await this.userRepository.findByEmail(user.email);
 
 		if (userExists) {
-			throw new Error('User already exists with the provided email');
+			throw new Error('alreadyExistsWithThisEmail');
 		}
 
 		// check if the user already exists with the provided CNSS
 		userExists = await this.userRepository.findByCnss(user.cnss);
 
 		if (userExists) {
-			throw new Error('User already exists with the provided CNSS');
+			throw new Error('alreadyExistsWithThisCNSS');
 		}
 
 		// check if the organization exists
@@ -49,15 +49,15 @@ export class UserService {
 			const organization = await this.organizationRepository.findByCnss(user.organizationId);
 
 			if (!organization) {
-				throw new Error('Organization does not exist with the provided organizationId');
+				throw new Error('orgnNotFoundWithThisOrgId');
 			}
 
 			// check if the organization is has an admin
 			if (user.role === UserRoles.ORG_ADMIN) {
 				const organizationAdmin = await this.userRepository.findByOrganizationId(user.organizationId);
 
-				if (organizationAdmin.length > 0) {
-					throw new Error('Organization already has an admin');
+				if (organizationAdmin.length > 0 && organizationAdmin.some((u) => u.role === UserRoles.ORG_ADMIN)) {
+					throw new Error('orgnAlreadyHasAdmin');
 				}
 			}
 		}
@@ -73,15 +73,15 @@ export class UserService {
 		// Check if the user exists
 		const existingUser = await this.userRepository.findByUid(user.uid);
 
-				if (!existingUser) {
-					throw new Error('User does not exist');
-				}
-				if (user.cnss && user.cnss !== existingUser.cnss && await this.userRepository.findByCnss(user.cnss)) {
-					throw new Error('User already exists with the provided CNSS');
-				}
-				if (user.email && user.email !== existingUser.email && await this.userRepository.findByEmail(user.email)) {
-					throw new Error('User already exists with the provided email');
-				}
+		if (!existingUser) {
+			throw new Error('userNotFound');
+		}
+		if (user.cnss && user.cnss !== existingUser.cnss && await this.userRepository.findByCnss(user.cnss)) {
+			throw new Error('alreadyExistsWithThisCNSS');
+		}
+		if (user.email && user.email !== existingUser.email && await this.userRepository.findByEmail(user.email)) {
+			throw new Error('alreadyExistsWithThisEmail');
+		}
 		return await this.userRepository.update(user);
 	}
 
@@ -95,7 +95,7 @@ export class UserService {
 		const existingUser = await this.userRepository.findByEmail(email);
 
 		if (!existingUser) {
-			throw new Error('User does not exist');
+			throw new Error('userNotFound');
 		}
 
 		try {

@@ -144,7 +144,7 @@ export class OrganizationRepository {
 		// Find the organization by CNSS
 		const organization = await this.findByCnss(cnss);
 		if (!organization) {
-			return new Error('Organization does not exist');
+			return new Error('organizationDoesntExists');
 		}
 
 		// Update the organization
@@ -184,7 +184,7 @@ export class OrganizationRepository {
 		// Find The organization by CNSS
 		const organization = await this.findByCnss(cnss);
 		if (!organization) {
-			return new Error('Organization does not exist');
+			return new Error('organizationDoesntExists');
 		}
 
 		// Delete the organization
