@@ -19,6 +19,7 @@ import { NotificationsModule } from './global/notifactions/notifications.module'
  */
 @Module({
   imports: [
+    NotificationsModule,
     LanguageModule,
     AbilityModule,
     UserModule,

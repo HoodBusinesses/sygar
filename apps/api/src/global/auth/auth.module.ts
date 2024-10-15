@@ -6,8 +6,6 @@ import { CryptService } from './crypt.service';
 import { JwtGuard } from './auth.guard';
 import { MailModule } from '../mail/mail.module';
 import { UserService } from 'src/modules/user/user.service';
-import { NotificationService } from '../notifactions/notifications.service';
-import { NotificationsGetWay } from '../notifactions/notifications.gateway';
 import { LanguageModule } from '../language/language.module';
 
 /**
@@ -21,6 +19,6 @@ import { LanguageModule } from '../language/language.module';
   imports: [MailModule, LanguageModule],
   controllers: [AuthController],
   exports: [AuthService, JwtService, JwtGuard],
-  providers: [AuthService, JwtService, CryptService, JwtGuard, UserService, NotificationService, NotificationsGetWay],
+  providers: [AuthService, JwtService, CryptService, JwtGuard, UserService],
 })
 export class AuthModule {}

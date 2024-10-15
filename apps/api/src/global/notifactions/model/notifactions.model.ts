@@ -1,5 +1,6 @@
 import { LocalTableInput } from "src/shared/types/db";
 
+// Define the notifications interface
 export interface Notifications {
 	PK: string;
 	SK: string;
@@ -11,6 +12,8 @@ export interface Notifications {
 	updatedAt?: number;
 }
 
+
+// Define the schema for the 'Notifications' table
 export const NotificationSchema: LocalTableInput = {
 	TableName: 'Notifications',
 	AttributeDefinitions: [

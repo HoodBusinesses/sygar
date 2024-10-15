@@ -296,7 +296,6 @@ export class OrganizationRepository {
 			// Map each DynamoDB item to an Organization object
 			return paginatedItems.map(item => this.dbService.mapDynamoDBItemToObject(item));
 		} catch (error) {
-			console.error("Error fetching organizations:", error);
 			return [];
 		}
 	}

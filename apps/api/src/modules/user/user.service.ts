@@ -6,7 +6,7 @@ import { UpdateUserDto } from "./dto/update-user.dto";
 import { UserRoles } from "./model/user.model";
 import { AbilityService } from "../ability/abiliry.service";
 import { NotificationService } from "src/global/notifactions/notifications.service";
-import { NotificationsGetWay } from "src/global/notifactions/notifications.gateway";
+import { NotificationsGateway } from "src/global/notifactions/notifications.gateway";
 
 /**
  * @class UserService
@@ -25,7 +25,7 @@ export class UserService {
 		private readonly organizationRepository: OrganizationRepository, // Inject the organization repository for database operations
 		private readonly abilityService: AbilityService, // Inject the ability service for ability operations
 		private readonly notificationService: NotificationService,
-		private readonly notificationGetWay: NotificationsGetWay,
+		private readonly notificationGetWay: NotificationsGateway,
 	) {}
 
 	/**
