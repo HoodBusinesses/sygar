@@ -18,26 +18,52 @@ import {
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { useTranslation } from 'react-i18next';
+import { usePermissions } from '../contexts/PermissionsContext';
 
 const ITEMS_PER_PAGE = 10;
-const DATE_OPTIONS = Array.from({ length: 50 }, (_, index) => `${2023 + index}`);
+const DATE_OPTIONS = ["All" , ...Array.from({ length: 50 }, (_, index) => `${2020 + index}`)];
+type FilterObject = {
+  searchQuery?: string;
+  selectedDate?: string;
+};
 
-const mockOrganizations = Array.from({ length: 50 }, (_, index) => ({
-  id: index + 1,
-  image: "/api/placeholder/40/40",
-  ss: `Organization ${index + 1}`,
-  cms: `CMS-${index + 1}`,
-  address: `Address ${index + 1}`,
-  email: `org${index + 1}@example.com`,
-  responsibleName: `Manager ${index + 1}`,
-  trainingManagerName: `Trainer ${index + 1}`
-}));
+const applyFilters = (organizations, filters: FilterObject) => {
+  return organizations.filter(org => {
+    const matchesSearchQuery = filters.searchQuery
+      ? Object.values(org).some(value =>
+          value.toString().toLowerCase().includes(filters.searchQuery.toLowerCase())
+        )
+      : true;
+    const matchesSelectedDate = filters.selectedDate
+      ? filters.selectedDate === "All" || org.date.includes(filters.selectedDate)
+      : true;
+    return matchesSearchQuery && matchesSelectedDate;
+  });
+};
+
+const mockOrganizations = Array.from({ length: 50 }, (_, index) => {
+  const year = 2020 + Math.floor(index / 12);
+  const month = (index % 12) + 1;
+  const formattedMonth = month.toString().padStart(2, '0');
+  return {
+    id: index + 1,
+    image: "/api/placeholder/40/40",
+    ss: `Organization ${index + 1}`,
+    cms: `CMS-${index + 1}`,
+    address: `Address ${index + 1}`,
+    email: `org${index + 1}@example.com`,
+    responsibleName: `Manager ${index + 1}`,
+    trainingManagerName: `Trainer ${index + 1}`,
+    date: `**/${formattedMonth}/${year}`
+  };
+});
 
 const OrganizationsPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedDate, setSelectedDate] = useState(DATE_OPTIONS[0]);
-  const [language, setLanguage] = useState("en"); // Default language
+  const permissions = usePermissions();
+
 
   // Load language translations
   const { t } = useTranslation();
@@ -45,12 +71,12 @@ const OrganizationsPage = () => {
 
   // Memoized filtered data
   const filteredOrganizations = useMemo(() => {
-    return mockOrganizations.filter(org => 
-      Object.values(org).some(value => 
-        value.toString().toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    );
-  }, [searchQuery]);
+    const filters: FilterObject = {
+      searchQuery,
+      selectedDate,
+    };
+    return applyFilters(mockOrganizations, filters);
+  }, [searchQuery, selectedDate]);
 
   // Memoized paginated data
   const paginatedData = useMemo(() => {
@@ -69,9 +95,19 @@ const OrganizationsPage = () => {
     setCurrentPage(1);
     setSelectedDate(DATE_OPTIONS[0]);
   };
+  if (!permissions?.organizations.canView && !permissions?.organizations.canModify) {
+    return (
+      <div className="p-6 space-y-6">
+        <h1 className="text-2xl font-semibold text-gray-700">{t('organizations')}</h1>
+        <div className="text-red-500">{t('noPermission')}</div>
+
+        
+      </div>
+    );
+  }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="h-full w-full p-6 space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-semibold text-gray-700">{t('organizations')}</h1>
       </div>
@@ -99,10 +135,11 @@ const OrganizationsPage = () => {
             </SelectContent>
           </Select>
 
-          <Button className="btn-blue text-white">
+          { permissions?.organizations.canModify &&
+            <Button className="btn-blue text-white">
             <Download className="h-4 w-4 mr-2" />
             {t('export')}
-          </Button>
+          </Button>}
         </div>
       </div>
 
@@ -138,7 +175,8 @@ const OrganizationsPage = () => {
                   <TableCell className="text-gray-600">{org.responsibleName}</TableCell>
                   <TableCell className="text-gray-600">{org.trainingManagerName}</TableCell>
                   <TableCell>
-                    <div className="flex gap-2">
+                    { permissions?.organizations.canModify &&
+                      <div className="flex gap-2">
                       <Button 
                         variant="ghost" 
                         size="sm" 
@@ -153,7 +191,7 @@ const OrganizationsPage = () => {
                       >
                         {t('delete')}
                       </Button>
-                    </div>
+                    </div>}
                   </TableCell>
                 </TableRow>
               ))}

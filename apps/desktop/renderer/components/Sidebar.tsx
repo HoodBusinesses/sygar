@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Cog6ToothIcon,
   BellIcon,
@@ -10,12 +10,20 @@ import {
   IdentificationIcon,
 } from '@heroicons/react/24/outline';
 import { useTranslation } from 'react-i18next';
+import { usePersistentStore } from '../contexts/PersistentStoreContext';
 
 export default function Sidebar() {
   const [active, setActive] = useState("home");
   const { t } = useTranslation();
 
+  const {data , saveData} = usePersistentStore();
+  const handleSave = () => {
+    const newData = { ...data, canView: true , canModify: true };
+  };
 
+  useEffect(()=> {
+    handleSave();
+  }, []);
   return (
     <div className="h-auto w-64 bg-gray-50 border border-gray-200 p-4">
       {/* Navigation */}

@@ -32,7 +32,7 @@
   "buttons": {
     "add": "إضافة"
   },
-  "organization": {
+  "registration": {
     "title": "معلومات أعضاء المؤسسة",
     "basicInfo": {
       "title": "معلومات المؤسسة",
@@ -117,6 +117,7 @@
       }
     }
   },
+  "noPermission": "لا تملك الصلاحية للوصول إلى هذه الصفحة",
   "organizations": "المنظمات",
   "searchPlaceholder": "ابحث عن منظمة...",
   "dateSelect": "اختر التاريخ",
@@ -136,15 +137,15 @@
   "next": "التالي",
   "sidebar": {
     "sections": {
-      "dashboard": "لوحة التحكم",
+      "dashboard": "لوحة القيادة",
       "others": "أخرى"
     },
     "items": {
-      "home": "الرئيسية",
+      "home": "الصفحة الرئيسية",
       "registration": "التسجيل",
       "organizations": "المنظمات",
       "settings": "الإعدادات",
-      "notifications": "إدارة الإشعارات",
+      "notifications": "الإشعارات",
       "reports": "التقارير"
     }
   }

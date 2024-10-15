@@ -32,7 +32,7 @@
     "buttons": {
         "add": "Ajouter"
     },
-    "organization": {
+    "registration": {
         "title": "Informations des membres de l'organisation",
         "basicInfo": {
             "title": "Informations de l'organisation",
@@ -117,6 +117,7 @@
             }
         }
     },
+    "noPermission" : "VOUS N'AVEZ PAS ACCÈS",
     "organizations": "Organisations",
     "searchPlaceholder": "Rechercher une organisation...",
     "dateSelect": "Sélectionner la date",
@@ -144,7 +145,7 @@
             "registration": "Inscription",
             "organizations": "Organisations",
             "settings": "Paramètres",
-            "notifications": "Gérer les notifications",
+            "notifications": "Notifications",
             "reports": "Rapports"
         }
     }

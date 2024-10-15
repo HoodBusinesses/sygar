@@ -1,8 +1,8 @@
 import path from 'path'
-import { app, BrowserWindow, ipcMain, screen } from 'electron'
+import { app, BrowserWindow, ipcMain, screen, Notification, dialog } from 'electron'
 import serve from 'electron-serve'
 import { createWindow } from './helpers'
-
+import fs from 'fs'
 
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -27,6 +27,8 @@ if (isProd) {
       nodeIntegration: true, // Ensure this is enabled
     },
   })
+  console.log('****** preload.js path:', path.join(__dirname, 'preload.js'));
+  
 
   if (isProd) {
     await mainWindow.loadURL('app://')
@@ -58,3 +60,41 @@ ipcMain.on('auth-success', (event, arg) => {
     console.error('Main window not found');
   }
 });
+
+ipcMain.on('show-notification', (event, { title, body }) => {
+  const notification = new Notification({ title, body });
+  notification.show();
+});
+
+ipcMain.handle('save-file', async (event, content) => {
+  // Get the default save directory
+  console.log('saveFile called with content:', content);
+  const defaultSavePath = app.getPath('documents'); // You can use 'documents', 'downloads', etc.
+
+  const { canceled, filePath } = await dialog.showSaveDialog({
+    title: 'Save File',
+    defaultPath: path.join(defaultSavePath, 'filename.txt'), // Use the default save path
+    buttonLabel: 'Save',
+    filters: [
+      { name: 'Text Files', extensions: ['txt'] },
+      { name: 'All Files', extensions: ['*'] },
+    ],
+  });
+  if (!canceled && filePath) {
+    fs.writeFileSync(filePath, content);
+    return 'File saved successfully!';
+  } else {
+    return 'Save operation canceled';
+  }
+});
+
+
+/***
+ *    // Set a custom path for user data (example)
+ *    app.setPath('userData', '/custom/path/to/user/data');
+
+ *    // Now you can use app.getPath('userData') to get this custom path
+ *    const customUserDataPath = app.getPath('userData');
+ *    console.log('Custom User Data Path:', customUserDataPath);
+ * 
+ */
