@@ -23,8 +23,8 @@ export const PermissionsProvider: React.FC<{ children: React.ReactNode }> = ({ c
     const fetchPermissions = async () => {
       // Simulated API response
       const response: Permissions = {
-        registration: { canView: true, canModify: false },
-        organizations: { canView: false, canModify: false },
+        registration: { canView: true, canModify: true },
+        organizations: { canView: true, canModify: true },
       };
       setPermissions(response);
     };

@@ -22,9 +22,10 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { useTranslation } from "react-i18next";
 import { usePermissions } from "../contexts/PermissionsContext";
 import { Notification } from "electron";
-import { errorToast, putNotification } from "../notifications/Notification";
+import { errorToast, infoToast, putNotification } from "../notifications/Notification";
 
 import { toast } from "react-toastify";
+import { useRouter } from "next/router";
 
 const staticMembers: MemberFormData[] = [
   {
@@ -43,17 +44,18 @@ const staticMembers: MemberFormData[] = [
   
 const RegistrationPage = () => {
 
-  putNotification('Registration', 'Page rendered successfully');
+  // putNotification('Registration', 'Page rendered successfully');
 
   const { t } = useTranslation();
   const permissions = usePermissions();
-  
   const [members, setMembers] = useState<MemberFormData[]>(staticMembers);
   const [editingMember, setEditingMember] = useState<{
     index: number;
     data: MemberFormData;
   } | null>(null);
   const { addToast } = useToast();
+  const router = useRouter();
+  const [organization, setOrganization] = useState(null);
 
   const methods = useForm<OrganizationFormData>({
     resolver: zodResolver(organizationSchema),
@@ -69,8 +71,15 @@ const RegistrationPage = () => {
     }
   };
   useEffect(() => {
-    errorToast("hello world");
-  }, [])
+    if (router.query.organization){
+      if (typeof router.query.organization === 'string') {
+        setOrganization(JSON.parse(router.query.organization));
+      }
+      console.log("aaaaa : ", organization);
+      
+      // infoToast('Organization data loaded successfully');
+    }
+  }, [router.query.organization]);
   const handleAddMember = (data: MemberFormData) => {
     if (editingMember !== null) {
       setMembers(
@@ -89,6 +98,7 @@ const RegistrationPage = () => {
   const handleDeleteMember = (index: number) => {
     setMembers(members.filter((_, i) => i !== index));
   };
+  // console.log(organization);
   
   
   if (!permissions.registration?.canModify && !permissions.registration.canView) {
@@ -104,7 +114,8 @@ const RegistrationPage = () => {
     <div className=" space-y-6 w-full h-full min-h-screen mx-auto">
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)}>
-          {permissions?.registration?.canModify && <OrganizationBasicInfo />}
+          {permissions?.registration?.canModify && 
+            <OrganizationBasicInfo organization={organization} />}
 
           <Card className="p-6 mb-6">
             <CardContent>

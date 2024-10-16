@@ -117,24 +117,7 @@
             }
         }
     },
-    "noPermission" : "YOU DON'T HAVE ACCESS",
-    "organizations": "Organizations",
-    "searchPlaceholder": "Search for organization...",
-    "dateSelect": "Select Date",
-    "image": "Image",
-    "ss": "S.S",
-    "cms": "CMS",
-    "address": "Address",
-    "email": "Email",
-    "responsibleName": "Responsible Name",
-    "trainingManagerName": "Training Manager Name",
-    "edit": "Edit",
-    "delete": "Delete",
-    "export": "Export",
-    "page": "Page",
-    "of": "of",
-    "previous": "Previous",
-    "next": "Next",
+    "noPermission": "YOU DON'T HAVE ACCESS",
     "sidebar": {
         "sections": {
             "dashboard": "Dashboard",
@@ -148,5 +131,24 @@
             "notifications": "Notifications",
             "reports": "Reports"
         }
+    },
+    "organization": {
+        "organizations": "Organizations",
+        "searchPlaceholder": "Search for organization...",
+        "dateSelect": "Select Date",
+        "image": "Image",
+        "rs": "R.S",
+        "cnss": "CNSS",
+        "address": "Address",
+        "email": "Email",
+        "responsibleName": "Responsible Name",
+        "trainingManagerName": "Training Manager Name",
+        "edit": "Edit",
+        "delete": "Delete",
+        "export": "Export",
+        "page": "Page",
+        "of": "of",
+        "previous": "Previous",
+        "next": "Next"
     }
 }

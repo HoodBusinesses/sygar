@@ -118,23 +118,6 @@
     }
   },
   "noPermission": "لا تملك الصلاحية للوصول إلى هذه الصفحة",
-  "organizations": "المنظمات",
-  "searchPlaceholder": "ابحث عن منظمة...",
-  "dateSelect": "اختر التاريخ",
-  "image": "الصورة",
-  "ss": "المنظمة",
-  "cms": "نظام إدارة المحتوى",
-  "address": "العنوان",
-  "email": "البريد الإلكتروني",
-  "responsibleName": "اسم المسؤول",
-  "trainingManagerName": "اسم المدرب",
-  "edit": "تعديل",
-  "delete": "حذف",
-  "export": "تصدير",
-  "page": "صفحة",
-  "of": "من",
-  "previous": "السابق",
-  "next": "التالي",
   "sidebar": {
     "sections": {
       "dashboard": "لوحة القيادة",
@@ -148,5 +131,24 @@
       "notifications": "الإشعارات",
       "reports": "التقارير"
     }
+  },
+  "organization": {
+    "image": "الصورة",
+    "organizations": "المنظمات",
+    "searchPlaceholder": "ابحث عن منظمة...",
+    "dateSelect": "اختر التاريخ",
+    "rs": "المنظمة",
+    "cnss": "نظام إدارة المحتوى",
+    "address": "العنوان",
+    "email": "البريد الإلكتروني",
+    "responsibleName": "اسم المسؤول",
+    "trainingManagerName": "اسم المدرب",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "export": "تصدير",
+    "page": "صفحة",
+    "of": "من",
+    "previous": "السابق",
+    "next": "التالي"
   }
 }

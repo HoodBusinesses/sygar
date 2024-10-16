@@ -117,24 +117,7 @@
             }
         }
     },
-    "noPermission" : "VOUS N'AVEZ PAS ACCÈS",
-    "organizations": "Organisations",
-    "searchPlaceholder": "Rechercher une organisation...",
-    "dateSelect": "Sélectionner la date",
-    "image": "Image",
-    "ss": "S.S",
-    "cms": "CMS",
-    "address": "Adresse",
-    "email": "Email",
-    "responsibleName": "Nom du responsable",
-    "trainingManagerName": "Nom du formateur",
-    "edit": "Modifier",
-    "delete": "Supprimer",
-    "export": "Exporter",
-    "page": "Page",
-    "of": "de",
-    "previous": "Précédent",
-    "next": "Suivant",
+    "noPermission": "VOUS N'AVEZ PAS ACCÈS",
     "sidebar": {
         "sections": {
             "dashboard": "Tableau de bord",
@@ -148,5 +131,24 @@
             "notifications": "Notifications",
             "reports": "Rapports"
         }
+    },
+    "organization": {
+        "organizations": "Organisations",
+        "searchPlaceholder": "Rechercher une organisation...",
+        "dateSelect": "Sélectionner la date",
+        "image": "Image",
+        "rs": "R.S",
+        "cnss": "CNSS",
+        "address": "Adresse",
+        "email": "Email",
+        "responsibleName": "Nom du responsable",
+        "trainingManagerName": "Nom du formateur",
+        "edit": "Modifier",
+        "delete": "Supprimer",
+        "export": "Exporter",
+        "page": "Page",
+        "of": "de",
+        "previous": "Précédent",
+        "next": "Suivant"
     }
 }

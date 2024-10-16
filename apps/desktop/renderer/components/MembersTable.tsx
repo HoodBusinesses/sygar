@@ -92,7 +92,8 @@ export const MembersTable = ({
                   </SelectContent>
                 </Select> : <TableCell className="bg-blue-100 text-blue-800 rounded-md w-auto" >{member.actionType === "edit" ? t("membersTable.editingDocuments") : t("membersTable.viewingOnly")}</TableCell>}
               </TableCell>
-              {permissions?.registration?.canModify && <TableCell>
+              {permissions?.registration?.canModify && 
+              <TableCell>
                 <Button
                   variant="ghost"
                   size="icon"
