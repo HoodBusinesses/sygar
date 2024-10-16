@@ -1,5 +1,5 @@
 import path from 'path'
-import { app, ipcMain, screen } from 'electron'
+import { app, BrowserWindow, ipcMain, screen } from 'electron'
 import serve from 'electron-serve'
 import { createWindow } from './helpers'
 
@@ -44,3 +44,17 @@ app.on('window-all-closed', () => {
 ipcMain.on('message', async (event, arg) => {
   event.reply('message', `${arg} World!`)
 })
+
+ipcMain.on('auth-success', (event, arg) => {
+  console.log('Received auth success message:', arg); // You can log user details if necessary
+
+  // Open the main window or redirect to the authenticated area
+  const mainWindow = BrowserWindow.getFocusedWindow();
+
+  if (mainWindow) {
+    // Redirect to the authenticated page
+    mainWindow.loadURL('app://authenticated');
+  } else {
+    console.error('Main window not found');
+  }
+});

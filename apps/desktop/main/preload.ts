@@ -24,6 +24,15 @@ const handler = {
   },
 }
 
+contextBridge.exposeInMainWorld('electron', {
+  ipcRenderer: {
+    send: (channel, data) => {
+      ipcRenderer.send(channel, data);
+    }
+  }
+});
+
+
 contextBridge.exposeInMainWorld('ipc', handler)
 
 export type IpcHandler = typeof handler

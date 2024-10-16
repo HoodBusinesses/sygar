@@ -9,9 +9,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const hideLayout = router.pathname === "/signin"; // Adjust this if your sign-in route is different
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col h-full">
       {!hideLayout && <Navbar />}
-      <div className="flex-1 flex">
+      <div className="flex-1 flex h-full">
         {!hideLayout && <Sidebar />}
         <main className="flex-1 bg-white p-6">{children}</main>
       </div>

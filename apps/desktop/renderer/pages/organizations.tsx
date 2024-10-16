@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Search, Filter, Download } from 'lucide-react';
+import { Search, Download } from 'lucide-react';
 import {
   Table,
   TableBody,
@@ -17,8 +17,10 @@ import {
 } from "../components/ui/select";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
+import { useTranslation } from 'react-i18next';
+
 const ITEMS_PER_PAGE = 10;
-const DATE_OPTIONS = ['14 Feb 2019', '15 Feb 2019', '16 Feb 2019'];
+const DATE_OPTIONS = Array.from({ length: 50 }, (_, index) => `${2023 + index}`);
 
 const mockOrganizations = Array.from({ length: 50 }, (_, index) => ({
   id: index + 1,
@@ -35,6 +37,11 @@ const OrganizationsPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedDate, setSelectedDate] = useState(DATE_OPTIONS[0]);
+  const [language, setLanguage] = useState("en"); // Default language
+
+  // Load language translations
+  const { t } = useTranslation();
+
 
   // Memoized filtered data
   const filteredOrganizations = useMemo(() => {
@@ -66,14 +73,14 @@ const OrganizationsPage = () => {
   return (
     <div className="p-6 space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-semibold text-gray-700">Organizations</h1>
+        <h1 className="text-2xl font-semibold text-gray-700">{t('organizations')}</h1>
       </div>
 
       <div className="flex flex-col md:flex-row gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
           <Input
-            placeholder="Search for organization..."
+            placeholder={t('searchPlaceholder')}
             className="pl-10 text-gray-600 placeholder:text-gray-400"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -81,33 +88,20 @@ const OrganizationsPage = () => {
         </div>
 
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" className="flex items-center gap-2 text-gray-600">
-            <Filter className="h-4 w-4" />
-            Filter By
-          </Button>
-
           <Select value={selectedDate} onValueChange={setSelectedDate}>
             <SelectTrigger className="w-[140px] text-gray-600">
-              <SelectValue />
+              <SelectValue placeholder={t('dateSelect')} />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className='bg-gray-600'>
               {DATE_OPTIONS.map(date => (
                 <SelectItem key={date} value={date}>{date}</SelectItem>
               ))}
             </SelectContent>
           </Select>
 
-          <Button 
-            variant="outline" 
-            className="text-red-500 hover:text-red-600 hover:bg-red-50"
-            onClick={handleReset}
-          >
-            Reset Filter
-          </Button>
-
           <Button className="btn-blue text-white">
             <Download className="h-4 w-4 mr-2" />
-            Export
+            {t('export')}
           </Button>
         </div>
       </div>
@@ -117,13 +111,13 @@ const OrganizationsPage = () => {
           <Table>
             <TableHeader>
               <TableRow className="bg-gray-50">
-                <TableHead className="text-gray-600">Image</TableHead>
-                <TableHead className="text-gray-600">S.S</TableHead>
-                <TableHead className="text-gray-600">CMS</TableHead>
-                <TableHead className="text-gray-600">Address</TableHead>
-                <TableHead className="text-gray-600">Email</TableHead>
-                <TableHead className="text-gray-600">Responsible Name</TableHead>
-                <TableHead className="text-gray-600">Training Manager Name</TableHead>
+                <TableHead className="text-gray-600">{t('image')}</TableHead>
+                <TableHead className="text-gray-600">{t('ss')}</TableHead>
+                <TableHead className="text-gray-600">{t('cms')}</TableHead>
+                <TableHead className="text-gray-600">{t('address')}</TableHead>
+                <TableHead className="text-gray-600">{t('email')}</TableHead>
+                <TableHead className="text-gray-600">{t('responsibleName')}</TableHead>
+                <TableHead className="text-gray-600">{t('trainingManagerName')}</TableHead>
                 <TableHead className="text-gray-600">Action</TableHead>
               </TableRow>
             </TableHeader>
@@ -132,7 +126,6 @@ const OrganizationsPage = () => {
                 <TableRow key={org.id} className="hover:bg-gray-50">
                   <TableCell>
                     <img
-                      // src={org.image}
                       src='/images/profile_img.png'
                       alt="Organization"
                       className="w-8 h-8 rounded-full"
@@ -151,14 +144,14 @@ const OrganizationsPage = () => {
                         size="sm" 
                         className="text-blue-500 hover:text-blue-600 hover:bg-blue-50"
                       >
-                        Edit
+                        {t('edit')}
                       </Button>
                       <Button 
                         variant="ghost" 
                         size="sm" 
                         className="text-red-500 hover:text-red-600 hover:bg-red-50"
                       >
-                        Delete
+                        {t('delete')}
                       </Button>
                     </div>
                   </TableCell>
@@ -171,7 +164,7 @@ const OrganizationsPage = () => {
 
       <div className="flex justify-between items-center mt-4">
         <div className="text-sm text-gray-500">
-          Page {currentPage} of {totalPages}
+          {t('page')} {currentPage} {t('of')} {totalPages}
         </div>
         <div className="flex gap-2">
           <Button
@@ -181,7 +174,7 @@ const OrganizationsPage = () => {
             disabled={currentPage === 1}
             className="text-gray-600"
           >
-            Previous
+            {t('previous')}
           </Button>
           <Button
             variant="outline"
@@ -190,7 +183,7 @@ const OrganizationsPage = () => {
             disabled={currentPage === totalPages}
             className="text-gray-600"
           >
-            Next
+            {t('next')}
           </Button>
         </div>
       </div>
