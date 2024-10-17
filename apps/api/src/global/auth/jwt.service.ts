@@ -37,7 +37,26 @@ export class JwtService {
 		}
 	}
 
-	  /**
+  /**
+   * Verify a JWT token and return the decoded payload asynchronously.
+   * @param token - The JWT token to verify.
+   * @param secret - The secret key used to sign the token.
+   * @returns A Promise resolving to the decoded payload or throws an UnauthorizedException if invalid.
+   */
+	async verifyAsync(token: string, secret: string): Promise<string | object> {
+		return new Promise((resolve, reject) => {
+		jwt.verify(token, secret, (error, decoded) => {
+			if (error) {
+			reject(new UnauthorizedException('invalidToken'));
+			} else {
+			resolve(decoded as string | object);
+			}
+		});
+		});
+	}
+
+
+	 /**
    * Extracts the token from the authorization header.
    * @param authorizationHeader - The Authorization header in the format: 'Bearer token'.
    * @returns The extracted token or throws an UnauthorizedException if invalid.

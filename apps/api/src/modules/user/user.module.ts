@@ -4,6 +4,7 @@ import { UserRepository } from "./user.repository";
 import { CryptService } from "src/global/auth/crypt.service";
 import { UserController } from "./user.controller";
 import { AdminsModule } from "../admins/admins,module";
+import { NotificationsModule } from "src/global/notifactions/notifications.module";
 
 /**
  * @module UserModule
@@ -12,7 +13,7 @@ import { AdminsModule } from "../admins/admins,module";
 */
 @Global()
 @Module({
-	imports: [AdminsModule],
+	imports: [AdminsModule, NotificationsModule],
 	controllers: [UserController],
 	providers: [UserService, UserRepository, CryptService],
 	exports: [UserService, UserRepository],

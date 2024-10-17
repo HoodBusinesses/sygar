@@ -5,6 +5,8 @@ import { OrganizationRepository } from "../organization/organization.repository"
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { UserRoles } from "./model/user.model";
 import { AbilityService } from "../ability/abiliry.service";
+import { NotificationService } from "src/global/notifactions/notifications.service";
+import { NotificationsGateway } from "src/global/notifactions/notifications.gateway";
 
 /**
  * @class UserService
@@ -22,6 +24,8 @@ export class UserService {
 		private readonly userRepository: UserRepository, // Inject the user repository for database operations
 		private readonly organizationRepository: OrganizationRepository, // Inject the organization repository for database operations
 		private readonly abilityService: AbilityService, // Inject the ability service for ability operations
+		private readonly notificationService: NotificationService,
+		private readonly notificationGetWay: NotificationsGateway,
 	) {}
 
 	/**
@@ -61,7 +65,17 @@ export class UserService {
 				}
 			}
 		}
-		return await this.userRepository.create(user);
+		const newUser = await this.userRepository.create(user);
+
+		await this.notificationService.createNotification(newUser.uid, `User ${newUser.email} has been created.`)
+
+		this.notificationGetWay.server.emit('notification', {
+			userUid: newUser.uid,
+			message: `User ${newUser.email} has been created.`,
+		});
+
+
+		return newUser;
 	}
 
 	/**

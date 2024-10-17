@@ -3,13 +3,13 @@ import { AppController } from './app.controller';
 import { AuthModule } from './global/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { DbModule } from './global/db/db.module';
-import { TrainingModule } from './global/training/theme.module';
-import path = require('path'); // Import the path module for path resolution
+import path from 'path';
 import { UserModule } from './modules/user/user.module';
 import { OrganizationModule } from './modules/organization/organization.module';
 import { AbilityModule } from './modules/ability/ability.module';
 import { RbacModule } from './global/rbac/roles.module';
 import { LanguageModule } from './global/language/language.module';
+import { NotificationsModule } from './global/notifactions/notifications.module';
 
 /**
  * @module AppModule
@@ -18,6 +18,7 @@ import { LanguageModule } from './global/language/language.module';
  */
 @Module({
   imports: [
+    NotificationsModule,
     LanguageModule,
     AbilityModule,
     UserModule,
@@ -35,7 +36,7 @@ import { LanguageModule } from './global/language/language.module';
       // load: [appConfig(process.env.NODE_ENV)],
     }),
     DbModule,
-    TrainingModule,
+    // NotificationsModule,
   ],
   controllers: [AppController],
 })
