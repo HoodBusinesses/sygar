@@ -1,5 +1,5 @@
 import path from 'path'
-import { app, ipcMain } from 'electron'
+import { app, BrowserWindow, ipcMain, screen } from 'electron'
 import serve from 'electron-serve'
 import { createWindow } from './helpers'
 
@@ -15,9 +15,12 @@ if (isProd) {
 ;(async () => {
   await app.whenReady()
 
+  // Get the primary display's dimensions
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize
+
   const mainWindow = createWindow('main', {
-    width: 1000,
-    height: 600,
+    width: width,
+    height: height,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
@@ -26,10 +29,10 @@ if (isProd) {
   })
 
   if (isProd) {
-    await mainWindow.loadURL('app://./home')
+    await mainWindow.loadURL('app://')
   } else {
     const port = process.argv[2]
-    await mainWindow.loadURL(`http://localhost:${port}/home`)
+    await mainWindow.loadURL(`http://localhost:${port}`)
     mainWindow.webContents.openDevTools()
   }
 })()
@@ -41,3 +44,17 @@ app.on('window-all-closed', () => {
 ipcMain.on('message', async (event, arg) => {
   event.reply('message', `${arg} World!`)
 })
+
+ipcMain.on('auth-success', (event, arg) => {
+  console.log('Received auth success message:', arg); // You can log user details if necessary
+
+  // Open the main window or redirect to the authenticated area
+  const mainWindow = BrowserWindow.getFocusedWindow();
+
+  if (mainWindow) {
+    // Redirect to the authenticated page
+    mainWindow.loadURL('app://authenticated');
+  } else {
+    console.error('Main window not found');
+  }
+});

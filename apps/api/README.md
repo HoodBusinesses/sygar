@@ -43,4 +43,4 @@
 
 ## API Documentation
   After starting the server, you can access the API documentation at:
-  [http://localhost:3000/api/docs](http://localhost:3000/api/docs)
+  [http://localhost:3000/api/docs](http://localhost:1337/api/docs)
