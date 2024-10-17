@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from "react";
 import Image from "next/image";
 import { FaUserCircle } from "react-icons/fa";
@@ -5,6 +7,7 @@ import { HiOutlineChevronDown } from "react-icons/hi";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { useLanguage } from '../contexts/LanguageContext';
 import { useTranslation } from 'react-i18next';
+import { useToast } from "../contexts/toastContext";
 
 export default function Navbar() {
   const { language, changeLanguage } = useLanguage();
@@ -15,6 +18,13 @@ export default function Navbar() {
     { value: 'fr', label: 'Français' },
     { value: 'ar', label: 'العربية' }
   ];
+
+  // const { addToast } = useToast();
+
+  //   const handleNotificationClick = () => {
+  //       addToast("Notification", "You have new notifications!");
+  //   };
+
 
   return (
     <nav className="flex w-full justify-between items-center bg-white text-gray-500 hover:text-gray-700 shadow-lg px-4 py-2">
@@ -40,7 +50,7 @@ export default function Navbar() {
             ))}
           </select>
         </div>
-        <IoNotificationsOutline />
+        <IoNotificationsOutline/>
       </div>
     </nav>
   );

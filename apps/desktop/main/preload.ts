@@ -29,10 +29,16 @@ contextBridge.exposeInMainWorld('electron', {
     send: (channel, data) => {
       ipcRenderer.send(channel, data);
     }
-  }
+  },
+  sendNotification: (title, body) => ipcRenderer.send('show-notification', { title, body }),
+  saveFile: (content: string) => ipcRenderer.invoke('save-file', content),
 });
 
 
-contextBridge.exposeInMainWorld('ipc', handler)
+contextBridge.exposeInMainWorld('ipc', handler);
+
+// contextBridge.exposeInMainWorld('electron', {
+//   saveFile: (content) => ipcRenderer.invoke('save-file', content),
+// });
 
 export type IpcHandler = typeof handler
