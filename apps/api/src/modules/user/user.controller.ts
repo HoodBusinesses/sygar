@@ -58,12 +58,11 @@ export class UserController {
 			}
 		}
 	})
-	async create(@Body() createUserDto: CreateUserDto, @Req() req: Request) {
-		const header: Record<string, any> = req.headers; // Changed object to Record<string, any>
-		let lang = header['accept-language'] ?? 'en'; // Get the language from the request headers or default to 'en'
+	async create(@Body() createUserDto: CreateUserDto, @Req() req: {headers: Record<string, any>, user: User}) {
+		let lang = req.headers['accept-language'] ?? 'en'; // Get the language from the request headers or default to 'en'
 
 		try {
-			const user = await this.userService.create(createUserDto);
+			const user = await this.userService.create(createUserDto, req.user.uid);
 			return { user, date: new Date().toISOString() }; // Added date to response
 		} catch (error: any) {
 			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }; // Added date to error response

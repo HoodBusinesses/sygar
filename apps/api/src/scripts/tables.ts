@@ -13,6 +13,7 @@ import { OrganizationSchema } from 'src/modules/organization/model/organization.
 import { BillSchema } from 'src/modules/bill/model/bill.model';
 import { CounterSchema } from 'src/modules/counter/model/counter.model';
 import { NotificationSchema } from 'src/global/notifactions/model/notifactions.model';
+import { ThemeSchema } from 'src/modules/organization/model/theme.model';
 
 const configService = new ConfigService();
 const dbConstants = new DbConstants(configService);
@@ -63,6 +64,7 @@ async function main() {
     BillSchema,
     CounterSchema,
     NotificationSchema,
+    ThemeSchema,
   ];
 
   for (const table of tables) {

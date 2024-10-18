@@ -22,6 +22,22 @@ services:
     depends_on:
       - dynamodb
 
+  pnpm:
+    image: node:20
+    container_name: pnpm
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: ["sh", "-c", "apt update && apt install -y curl git zsh && curl -fsSL https://get.pnpm.io/install.sh | sh && (curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | sh || echo 'skipp installing zsh already installed') && tail -f /dev/null"]
+    depends_on:
+      - dynamodb
+    env_file:
+      - ./apps/api/.env
+    environment:
+      - SHELL=zsh
+    ports:
+      - "1338:1337"
+
 volumes:
   dynamo_data:
     driver: local

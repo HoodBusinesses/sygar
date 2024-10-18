@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Post, Put, Query, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req, UseGuards } from "@nestjs/common";
 import { JwtGuard } from "src/global/auth/auth.guard";
 import { CreateOrganizationDto } from "./dto/create-organization.dto";
 import { DeleteOrganizationDto } from "./dto/delete-organization-dtro";
@@ -10,6 +10,8 @@ import { Action } from "src/shared/types/roles";
 import { OrganizationRepository } from "./organization.repository";
 import { ApiResponse } from '@nestjs/swagger';
 import { LanguageService } from "src/global/language/language.service";
+import { CreateThemeDto } from "./dto/create-theme.dto";
+import { UpdateThemeDto } from "./dto/update-theme.dto";
 
 /**
  * @module OrganizationController
@@ -190,3 +192,126 @@ export class OrganizationController {
 		}
 	}
 }
+
+/**
+ * @module ThemeController
+ * @description
+ * This controller is responsible for handling requests related to themes.
+ * It provides endpoints for creating, retrieving, updating, and deleting themes.
+ */
+@Controller('theme')
+export class ThemeController {
+
+	/**
+	 * Constructor for the ThemeController.
+	 * 
+	 * @param organizationService - The service for managing organizations.
+	 * @param organizationRepository - The repository for organization data.
+	 * @param languageService - The service for managing languages.
+	 */
+	constructor(
+		private readonly organizationService: OrganizationService,
+		private readonly organizationRepository: OrganizationRepository,
+		private readonly languageService: LanguageService,
+	) {}
+
+	/**
+	 * Create theme endpoint
+	 * @returns The theme created
+	 */
+	@Post('create')
+	@UseGuards(JwtGuard, AbilitiesGuard)
+	async create(@Body() createThemeDto: CreateThemeDto, @Req() req: Request) {
+		const header: Record<string, any> = req.headers;
+		let lang = header['accept-language'] ?? 'en';
+
+		try {
+			return {
+				theme:
+					await this.organizationService.createTheme(createThemeDto),
+				date: new Date().toISOString()
+			};
+		} catch (error: any) {
+			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }
+		}
+	}
+
+	/**
+	 * Get theme endpoint
+	 * @returns The theme retrieved
+	 */
+	@Get('get')
+	@UseGuards(JwtGuard, AbilitiesGuard)
+	async get(@Query("uid") uid: string, @Req() req: Request) {
+		const header: Record<string, any> = req.headers;
+		let lang = header['accept-language'] ?? 'en';
+
+		try {
+			if (!uid)
+				throw Error('uidRequired');
+			return {
+				theme:
+					await this.organizationService.getTheme(uid),
+				date: new Date().toISOString()
+			};
+		} catch (error: any) {
+			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() };
+		}
+	}
+
+	/**
+	 * Update theme endpoint
+	 * @returns The theme updated
+	 */
+	@Put('update')
+	@UseGuards(JwtGuard, AbilitiesGuard)
+	async update(@Query	("uid") uid: string, @Body() updateThemeDto: UpdateThemeDto, @Req() req: Request) {
+		const header: Record<string, any> = req.headers;
+		let lang = header['accept-language'] ?? 'en';
+		try {
+			return {
+				theme:
+					await this.organizationService.updateTheme(uid, updateThemeDto),
+				date: new Date().toISOString()
+			};
+		} catch (error: any) {
+			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }
+		}
+	}
+
+	/**
+	 * Delete theme endpoint
+	 * @returns The theme deleted
+	 */
+	@Delete('delete')
+	@UseGuards(JwtGuard, AbilitiesGuard)
+	async delete(@Query("uid") uid: string, @Req() req: Request) {
+		const header: Record<string, any> = req.headers;
+		let lang = header['accept-language'] ?? 'en';
+
+		try {
+			return {
+				success: await this.organizationService.deleteTheme(uid),
+				date: new Date().toISOString()
+			};
+		} catch (error: any) {
+			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }
+		}
+	}
+
+	/**
+	 * Get all themes endpoint
+	 * @returns The themes retrieved
+	 */
+	@Get('get-all')
+	@UseGuards(JwtGuard, AbilitiesGuard)
+	async getAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10, @Query('name') name?: string, @Query('year') year?: number) {
+		try {
+			const themes = await this.organizationRepository.getAllThemes(page, limit, name, year);
+			return { themes, date: new Date().toISOString() };
+		} catch (error: any) {
+			return { error: error.message, date: new Date().toISOString() }
+		}
+	}
+}
+
