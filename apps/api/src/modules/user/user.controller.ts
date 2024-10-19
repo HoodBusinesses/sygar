@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Post, Put, Query, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Post, Put, Query, Req, UseGuards, HttpException, HttpStatus } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { JwtGuard } from "src/global/auth/auth.guard";
@@ -65,16 +65,18 @@ export class UserController {
 		try {
 			const user = await this.userService.create(createUserDto);
 			return {
-				statusCode: 200,
-				user,
+				user, // Removed statusCode
 				date: new Date().toISOString()
 			};
 		} catch (error: any) {
-			return {
-				statusCode: 400,
-				error: this.languageService.getTranslation(error.message, lang),
-				date: new Date().toISOString()
-			};
+			// Throw an HttpException with status 400
+			throw new HttpException(
+				{
+					error: this.languageService.getTranslation(error.message, lang),
+					date: new Date().toISOString(),
+				},
+				HttpStatus.BAD_REQUEST
+			);
 		}
 	}
 
@@ -105,16 +107,18 @@ export class UserController {
 		try {
 			const user = await this.userService.update(updateUserDto);
 			return {
-				statusCode: 200,
-				user,
+				user, // Removed statusCode
 				date: new Date().toISOString()
 			};
 		} catch (error: any) {
-			return {
-				statusCode: 400,
-				error: this.languageService.getTranslation(error.message, lang),
-				date: new Date().toISOString()
-			};
+			// Throw an HttpException with status 400
+			throw new HttpException(
+				{
+					error: this.languageService.getTranslation(error.message, lang),
+					date: new Date().toISOString(),
+				},
+				HttpStatus.BAD_REQUEST
+			);
 		}
 	}
 
@@ -142,11 +146,14 @@ export class UserController {
 				date: new Date().toISOString()
 			};
 		} catch (error: any) {
-			return {
-				statusCode: 400,
-				error: this.languageService.getTranslation(error.message, lang),
-				date: new Date().toISOString()
-			};
+			// Throw an HttpException with status 400
+			throw new HttpException(
+				{
+					error: this.languageService.getTranslation(error.message, lang),
+					date: new Date().toISOString(),
+				},
+				HttpStatus.BAD_REQUEST
+			);
 		}
 	}
 
@@ -172,11 +179,14 @@ export class UserController {
 				date: new Date().toISOString()
 			};
 		} catch (error: any) {
-			return {
-				statusCode: 400,
-				error: this.languageService.getTranslation(error.message, lang),
-				date: new Date().toISOString()
-			};
+			// Throw an HttpException with status 400
+			throw new HttpException(
+				{
+					error: this.languageService.getTranslation(error.message, lang),
+					date: new Date().toISOString(),
+				},
+				HttpStatus.BAD_REQUEST
+			);
 		}
 	}
 
@@ -200,11 +210,14 @@ export class UserController {
 				date: new Date().toISOString()
 			};
 		} catch (error: any) {
-			return {
-				statusCode: 400,
-				error: this.languageService.getTranslation(error.message, lang),
-				date: new Date().toISOString()
-			};
+			// Throw an HttpException with status 400
+			throw new HttpException(
+				{
+					error: this.languageService.getTranslation(error.message, lang),
+					date: new Date().toISOString(),
+				},
+				HttpStatus.BAD_REQUEST
+			);
 		}
 	}
 
@@ -231,11 +244,14 @@ export class UserController {
 				date: new Date().toISOString()
 			};
 		} catch (error: any) {
-			return {
-				statusCode: 400,
-				error: this.languageService.getTranslation(error.message, lang),
-				date: new Date().toISOString()
-			};
+			// Throw an HttpException with status 400
+			throw new HttpException(
+				{
+					error: this.languageService.getTranslation(error.message, lang),
+					date: new Date().toISOString(),
+				},
+				HttpStatus.BAD_REQUEST
+			);
 		}
 	}
 
@@ -259,11 +275,14 @@ export class UserController {
 				date: new Date().toISOString()
 			};
 		} catch (error: any) {
-			return {
-				statusCode: 400,
-				error: error.message,
-				date: new Date().toISOString()
-			};
+			// Throw an HttpException with status 400
+			throw new HttpException(
+				{
+					error: error.message,
+					date: new Date().toISOString(),
+				},
+				HttpStatus.BAD_REQUEST
+			);
 		}
 	}
 
@@ -288,11 +307,14 @@ export class UserController {
 				date: new Date().toISOString()
 			};
 		} catch (error: any) {
-			return {
-				statusCode: 400,
-				error: error.message,
-				date: new Date().toISOString()
-			};
+			// Throw an HttpException with status 400
+			throw new HttpException(
+				{
+					error: error.message,
+					date: new Date().toISOString(),
+				},
+				HttpStatus.BAD_REQUEST
+			);
 		}
 	}
 }

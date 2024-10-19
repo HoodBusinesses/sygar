@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards, HttpException, HttpStatus } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { AuthService } from './auth.service';
 import { JwtGuard } from './auth.guard';
@@ -63,11 +63,14 @@ export class AuthController {
 				...result
 			};
 		} catch (error: any) {
-			return {
-				statusCode: 400,
-				error: this.languageService.getTranslation(error.message, lang),
-				date: new Date().toISOString()
-			};
+			// Throw an HttpException with status 400
+			throw new HttpException(
+				{
+					error: this.languageService.getTranslation(error.message, lang),
+					date: new Date().toISOString(),
+				},
+				HttpStatus.BAD_REQUEST
+			);
 		}
 	}
 
@@ -128,11 +131,14 @@ export class AuthController {
 				...result
 			};
 		} catch (error: any) {
-			return {
-				statusCode: 400,
-				error: this.languageService.getTranslation(error.message, lang),
-				date: new Date().toISOString()
-			};
+			// Throw an HttpException with status 400
+			throw new HttpException(
+				{
+					error: this.languageService.getTranslation(error.message, lang),
+					date: new Date().toISOString(),
+				},
+				HttpStatus.BAD_REQUEST
+			);
 		}
 	}
 	
@@ -162,11 +168,14 @@ export class AuthController {
 				...result
 			};
 		} catch (error: any) {
-			return {
-				statusCode: 400,
-				error: this.languageService.getTranslation(error.message, lang),
-				date: new Date().toISOString()
-			};
+			// Throw an HttpException with status 400
+			throw new HttpException(
+				{
+					error: this.languageService.getTranslation(error.message, lang),
+					date: new Date().toISOString(),
+				},
+				HttpStatus.BAD_REQUEST
+			);
 		}
 	}
 
@@ -196,11 +205,14 @@ export class AuthController {
 				...result
 			};
 		} catch (error: any) {
-			return {
-				statusCode: 400,
-				error: this.languageService.getTranslation(error.message, lang),
-				date: new Date().toISOString()
-			};
+			// Throw an HttpException with status 400
+			throw new HttpException(
+				{
+					error: this.languageService.getTranslation(error.message, lang),
+					date: new Date().toISOString(),
+				},
+				HttpStatus.BAD_REQUEST
+			);
 		}
 	}
 
@@ -227,11 +239,14 @@ export class AuthController {
 				valid: result
 			};
 		} catch (error: any) {
-			return {
-				statusCode: 400,
-				error: error.message,
-				date: new Date().toISOString()
-			};
+			// Throw an HttpException with status 400
+			throw new HttpException(
+				{
+					error: error.message,
+					date: new Date().toISOString(),
+				},
+				HttpStatus.BAD_REQUEST
+			);
 		}
 	}
 }

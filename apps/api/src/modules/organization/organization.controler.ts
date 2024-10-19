@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Post, Put, Query, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Post, Put, Query, Req, UseGuards, HttpException, HttpStatus } from "@nestjs/common";
 import { JwtGuard } from "src/global/auth/auth.guard";
 import { CreateOrganizationDto } from "./dto/create-organization.dto";
 import { DeleteOrganizationDto } from "./dto/delete-organization-dtro";
@@ -58,15 +58,17 @@ export class OrganizationController {
 				date: new Date().toISOString()
 			};
 			return {
-				statusCode: 200,
-				...result
+				...result // Removed statusCode
 			};
 		} catch (error: any) {
-			return {
-				statusCode: 400,
-				error: this.languageService.getTranslation(error.message, lang),
-				date: new Date().toISOString()
-			};
+			// Throw an HttpException with status 400
+			throw new HttpException(
+				{
+					error: this.languageService.getTranslation(error.message, lang),
+					date: new Date().toISOString(),
+				},
+				HttpStatus.BAD_REQUEST
+			);
 		}
 	}
 
@@ -101,15 +103,17 @@ export class OrganizationController {
 				date: new Date().toISOString()
 			};
 			return {
-				statusCode: 200,
-				...result
+				...result // Removed statusCode
 			};
 		} catch (error: any) {
-			return {
-				statusCode: 400,
-				error: this.languageService.getTranslation(error.message, lang),
-				date: new Date().toISOString()
-			};
+			// Throw an HttpException with status 400
+			throw new HttpException(
+				{
+					error: this.languageService.getTranslation(error.message, lang),
+					date: new Date().toISOString(),
+				},
+				HttpStatus.BAD_REQUEST
+			);
 		}
 	}
 
@@ -131,15 +135,17 @@ export class OrganizationController {
 				date: new Date().toISOString()
 			};
 			return {
-				statusCode: 200,
-				...result
+				...result // Removed statusCode
 			};
 		} catch (error: any) {
-			return {
-				statusCode: 400,
-				error: this.languageService.getTranslation(error.message, lang),
-				date: new Date().toISOString()
-			};
+			// Throw an HttpException with status 400
+			throw new HttpException(
+				{
+					error: this.languageService.getTranslation(error.message, lang),
+					date: new Date().toISOString(),
+				},
+				HttpStatus.BAD_REQUEST
+			);
 		}
 	}
 
@@ -162,15 +168,17 @@ export class OrganizationController {
 				date: new Date().toISOString()
 			};
 			return {
-				statusCode: 200,
-				...result
+				...result // Removed statusCode
 			};
 		} catch (error: any) {
-			return {
-				statusCode: 400,
-				error: this.languageService.getTranslation(error.message, lang),
-				date: new Date().toISOString()
-			};
+			// Throw an HttpException with status 400
+			throw new HttpException(
+				{
+					error: this.languageService.getTranslation(error.message, lang),
+					date: new Date().toISOString(),
+				},
+				HttpStatus.BAD_REQUEST
+			);
 		}
 	}
 
@@ -214,16 +222,17 @@ export class OrganizationController {
 		try {
 			const organizations = await this.organizationRepository.getAll(page, limit, name, year);
 			return {
-				statusCode: 200,
-				organizations,
+				...organizations, // Removed statusCode
 				date: new Date().toISOString()
 			};
 		} catch (error: any) {
-			return {
-				statusCode: 400,
-				error: error.message,
-				date: new Date().toISOString()
-			};
-		}
+			throw new HttpException(
+				{
+					error: error.message,
+					date: new Date().toISOString(),
+				},
+				HttpStatus.BAD_REQUEST
+			);
+		};
 	}
 }
