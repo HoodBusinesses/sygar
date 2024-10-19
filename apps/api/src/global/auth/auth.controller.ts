@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Put, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { AuthService } from './auth.service';
 import { JwtGuard } from './auth.guard';
@@ -57,9 +57,17 @@ export class AuthController {
 
 		try {
 			// Call the login method from the AuthService and return the token response
-			return await this.authService.login(loginDto.email, loginDto.password);
+			const result = await this.authService.login(loginDto.email, loginDto.password);
+			return {
+				statusCode: 200,
+				...result
+			};
 		} catch (error: any) {
-			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }
+			return {
+				statusCode: 400,
+				error: this.languageService.getTranslation(error.message, lang),
+				date: new Date().toISOString()
+			};
 		}
 	}
 
@@ -88,7 +96,10 @@ export class AuthController {
 		}
 	})
 	async profile(@Req() req: any) {
-		return req.user; // Return the user profile
+		return {
+			statusCode: 200,
+			...req.user
+		};
 	}
 
 	/**
@@ -111,9 +122,17 @@ export class AuthController {
 		const lang = header['accept-language'] ?? 'en';
 
 		try {
-			return await this.authService.requestPasswordReset(dto);
+			const result = await this.authService.requestPasswordReset(dto);
+			return {
+				statusCode: 200,
+				...result
+			};
 		} catch (error: any) {
-			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }
+			return {
+				statusCode: 400,
+				error: this.languageService.getTranslation(error.message, lang),
+				date: new Date().toISOString()
+			};
 		}
 	}
 	
@@ -137,9 +156,17 @@ export class AuthController {
 		const lang = header['accept-language'] ?? 'en';
 
 		try {
-			return await this.authService.resetPassword(dto);
+			const result = await this.authService.resetPassword(dto);
+			return {
+				statusCode: 200,
+				...result
+			};
 		} catch (error: any) {
-			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }
+			return {
+				statusCode: 400,
+				error: this.languageService.getTranslation(error.message, lang),
+				date: new Date().toISOString()
+			};
 		}
 	}
 
@@ -163,9 +190,17 @@ export class AuthController {
 		const lang = header['accept-language'] ?? 'en';
 
 		try {
-			return await this.authService.activateAccount(dto);
+			const result = await this.authService.activateAccount(dto);
+			return {
+				statusCode: 200,
+				...result
+			};
 		} catch (error: any) {
-			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }
+			return {
+				statusCode: 400,
+				error: this.languageService.getTranslation(error.message, lang),
+				date: new Date().toISOString()
+			};
 		}
 	}
 
@@ -185,6 +220,18 @@ export class AuthController {
 		}
 	})
 	async validateToken(@Body() dto: ValidateTokenDto) {
-		return await this.authService.validateToken(dto.token);
+		try {
+			const result = await this.authService.validateToken(dto.token);
+			return {
+				statusCode: 200,
+				valid: result
+			};
+		} catch (error: any) {
+			return {
+				statusCode: 400,
+				error: error.message,
+				date: new Date().toISOString()
+			};
+		}
 	}
 }

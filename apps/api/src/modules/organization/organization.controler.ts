@@ -49,17 +49,24 @@ export class OrganizationController {
 	})
 	@ApiResponse({ status: 400, description: 'Bad request.' })
 	async create(@Body() createOrganizationDto: CreateOrganizationDto, @Req() req: Request) {
-		const header: Record<string, any> = req.headers; // Changed object to Record<string, any>
-		let lang = header['accept-language'] ?? 'en'; // Get the language from the request headers or default to 'en'
+		const header: Record<string, any> = req.headers; 
+		let lang = header['accept-language'] ?? 'en'; 
 
 		try {
-			return {
-				organization:
-				await this.organizationService.create(createOrganizationDto),
+			const result = {
+				organization: await this.organizationService.create(createOrganizationDto),
 				date: new Date().toISOString()
 			};
+			return {
+				statusCode: 200,
+				...result
+			};
 		} catch (error: any) {
-			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }
+			return {
+				statusCode: 400,
+				error: this.languageService.getTranslation(error.message, lang),
+				date: new Date().toISOString()
+			};
 		}
 	}
 
@@ -89,13 +96,20 @@ export class OrganizationController {
 		try {
 			if (!cnss)
 				throw Error('cnssRequired');
-			return {
-				organization:
-					await this.organizationService.get(cnss),
+			const result = {
+				organization: await this.organizationService.get(cnss),
 				date: new Date().toISOString()
 			};
+			return {
+				statusCode: 200,
+				...result
+			};
 		} catch (error: any) {
-			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString()};
+			return {
+				statusCode: 400,
+				error: this.languageService.getTranslation(error.message, lang),
+				date: new Date().toISOString()
+			};
 		}
 	}
 
@@ -112,13 +126,20 @@ export class OrganizationController {
 		const header: Record<string, any> = req.headers;
 		let lang = header['accept-language'] ?? 'en';
 		try {
-			return {
-				organization:
-				await this.organizationService.update(cnss, updateOrganizationDto),
+			const result = {
+				organization: await this.organizationService.update(cnss, updateOrganizationDto),
 				date: new Date().toISOString()
 			};
+			return {
+				statusCode: 200,
+				...result
+			};
 		} catch (error: any) {
-			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }
+			return {
+				statusCode: 400,
+				error: this.languageService.getTranslation(error.message, lang),
+				date: new Date().toISOString()
+			};
 		}
 	}
 
@@ -136,12 +157,20 @@ export class OrganizationController {
 		let lang = header['accept-language'] ?? 'en';
 
 		try {
-			return {
+			const result = {
 				success: await this.organizationService.delete(deleteOrganizationDto.cnss),
 				date: new Date().toISOString()
 			};
+			return {
+				statusCode: 200,
+				...result
+			};
 		} catch (error: any) {
-			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }
+			return {
+				statusCode: 400,
+				error: this.languageService.getTranslation(error.message, lang),
+				date: new Date().toISOString()
+			};
 		}
 	}
 
@@ -184,9 +213,17 @@ export class OrganizationController {
 	async getAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10, @Query('name') name?: string, @Query('year') year?: number) {
 		try {
 			const organizations = await this.organizationRepository.getAll(page, limit, name, year);
-			return { organizations, date: new Date().toISOString() };
+			return {
+				statusCode: 200,
+				organizations,
+				date: new Date().toISOString()
+			};
 		} catch (error: any) {
-			return { error: error.message, date: new Date().toISOString() }
+			return {
+				statusCode: 400,
+				error: error.message,
+				date: new Date().toISOString()
+			};
 		}
 	}
 }

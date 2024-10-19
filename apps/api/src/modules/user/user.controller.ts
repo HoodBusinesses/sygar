@@ -39,9 +39,9 @@ export class UserController {
 	 * @param createUserDto The DTO containing the user information
 	 * @returns The user created
 	 */
-	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authenticated and has the necessary abilities
-	@PutAbilities({ action: Action.Create, subject: 'User' }) // This is a decorator that ensures the user has the necessary abilities
-	@Post('create') // This is the endpoint that will call the create method
+	@UseGuards(JwtGuard, AbilitiesGuard) 
+	@PutAbilities({ action: Action.Create, subject: 'User' }) 
+	@Post('create') 
 	@ApiResponse({ 
 		status: 201, 
 		description: 'User created successfully.', 
@@ -59,14 +59,22 @@ export class UserController {
 		}
 	})
 	async create(@Body() createUserDto: CreateUserDto, @Req() req: Request) {
-		const header: Record<string, any> = req.headers; // Changed object to Record<string, any>
-		let lang = header['accept-language'] ?? 'en'; // Get the language from the request headers or default to 'en'
+		const header: Record<string, any> = req.headers; 
+		let lang = header['accept-language'] ?? 'en'; 
 
 		try {
 			const user = await this.userService.create(createUserDto);
-			return { user, date: new Date().toISOString() }; // Added date to response
+			return {
+				statusCode: 200,
+				user,
+				date: new Date().toISOString()
+			};
 		} catch (error: any) {
-			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }; // Added date to error response
+			return {
+				statusCode: 400,
+				error: this.languageService.getTranslation(error.message, lang),
+				date: new Date().toISOString()
+			};
 		}
 	}
 
@@ -75,9 +83,9 @@ export class UserController {
 	 * @param updateUserDto The DTO containing the userUid and the new user data
 	 * @returns The user updated
 	 */
-	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authenticated and has the necessary abilities
-	@PutAbilities({ action: Action.Update, subject: 'User' }) // This is a decorator that ensures the user has the necessary abilities
-	@Put('update') // This is the endpoint that will call the update method
+	@UseGuards(JwtGuard, AbilitiesGuard) 
+	@PutAbilities({ action: Action.Update, subject: 'User' }) 
+	@Put('update') 
 	@ApiResponse({ 
 		status: 200, 
 		description: 'User updated successfully.', 
@@ -91,14 +99,22 @@ export class UserController {
 		}
 	})
 	async update(@Body() updateUserDto: UpdateUserDto, @Req() req: Request) {
-		const header: Record<string, any> = req.headers; // Changed object to Record<string, any>
-		let lang = header['accept-language'] ?? 'en'; // Get the language from the request headers or default to 'en'
+		const header: Record<string, any> = req.headers; 
+		let lang = header['accept-language'] ?? 'en'; 
 
 		try {
 			const user = await this.userService.update(updateUserDto);
-			return { user, date: new Date().toISOString() }; // Added date to response
+			return {
+				statusCode: 200,
+				user,
+				date: new Date().toISOString()
+			};
 		} catch (error: any) {
-			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }; // Added date to error response
+			return {
+				statusCode: 400,
+				error: this.languageService.getTranslation(error.message, lang),
+				date: new Date().toISOString()
+			};
 		}
 	}
 
@@ -107,22 +123,30 @@ export class UserController {
 	 * @param deleteUserDto The DTO containing the userUid
 	 * @returns a success message if the user is deleted successfully
 	 */
-	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authenticated and has the necessary abilities
-	@PutAbilities({ action: Action.Delete, subject: 'User' }) // This is a decorator that ensures the user has the necessary abilities
-	@Delete('delete') // This is the endpoint that will call the delete method
+	@UseGuards(JwtGuard, AbilitiesGuard) 
+	@PutAbilities({ action: Action.Delete, subject: 'User' }) 
+	@Delete('delete') 
 	@ApiResponse({
 		status: 200,
 		description: 'User deleted successfully.'
 	})
 	async delete(@Body() deleteUserDto: DeleteUserDto, @Req() req: Request) {
-		const header: Record<string, any> = req.headers; // Changed object to Record<string, any>
-		let lang = header['accept-language'] ?? 'en'; // Get the language from the request headers or default to 'en'
+		const header: Record<string, any> = req.headers; 
+		let lang = header['accept-language'] ?? 'en'; 
 
 		try {
 			await this.userService.delete(deleteUserDto.email);
-			return { message: 'User deleted successfully.', date: new Date().toISOString() }; // Added date to response
+			return {
+				statusCode: 200,
+				message: 'User deleted successfully.',
+				date: new Date().toISOString()
+			};
 		} catch (error: any) {
-			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }; // Added date to error response
+			return {
+				statusCode: 400,
+				error: this.languageService.getTranslation(error.message, lang),
+				date: new Date().toISOString()
+			};
 		}
 	}
 
@@ -131,20 +155,28 @@ export class UserController {
 	 * @param assignAbilityDto The DTO containing the userUid and the abilityType
 	 * @returns The ability assigned to the user
 	 */
-	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authenticated and has the necessary abilities
-	@PutAbilities({ action: Action.Manage, subject: 'Ability' }) // This is a decorator that ensures the user has the necessary abilities
-	@Post('assign-ability') // This is the endpoint that will call the assingAbility method
+	@UseGuards(JwtGuard, AbilitiesGuard) 
+	@PutAbilities({ action: Action.Manage, subject: 'Ability' }) 
+	@Post('assign-ability') 
 	async assignAbility(@Body() assignAbilityDto: AssignAbilityDto, @Req() req: { user: User, headers: Record<string, any> }) {
 		const header = req.headers;
-		let lang = header['accept-language'] ?? 'en'; // Get the language from the request headers or default to 'en'
+		let lang = header['accept-language'] ?? 'en'; 
 
 		try {
 			if (req.user.role != UserRoles.SYGAR_ADMIN && assignAbilityDto.abilityType.split('_')[1] == "ORGANIZATION")
 				throw Error('onlySygarAdminMangeOrgAbilities');
 			const ability = await this.abilityService.createAbility(assignAbilityDto);
-			return { ability, date: new Date().toISOString() }; // Added date to response
+			return {
+				statusCode: 200,
+				ability,
+				date: new Date().toISOString()
+			};
 		} catch (error: any) {
-			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }; // Added date to error response
+			return {
+				statusCode: 400,
+				error: this.languageService.getTranslation(error.message, lang),
+				date: new Date().toISOString()
+			};
 		}
 	}
 
@@ -153,18 +185,26 @@ export class UserController {
 	 * @param deassignAbilityDto The DTO containing the userUid and the abilityType
 	 * @returns a success message if the ability is deassigned successfully
 	*/
-	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authenticated and has the necessary abilities
-	@PutAbilities({ action: Action.Manage, subject: 'Ability' }) // This is a decorator that ensures the user has the necessary abilities
-	@Delete('deassign-ability') // This is the endpoint that will call the deleteAbility method
+	@UseGuards(JwtGuard, AbilitiesGuard) 
+	@PutAbilities({ action: Action.Manage, subject: 'Ability' }) 
+	@Delete('deassign-ability') 
 	async deassignAbility(@Body() deassignAbilityDto: DeassignAbilityDto, @Req() req: Request) {
 		const header: Record<string, any> = req.headers;
-		let lang = header['accept-language'] ?? 'en'; // Get the language from the request headers or default to 'en'
+		let lang = header['accept-language'] ?? 'en'; 
 	
 		try {
 			await this.abilityService.deassignAbilityByUid(deassignAbilityDto);
-			return { message: 'Ability deassigned successfully.', date: new Date().toISOString() }; // Added date to response
+			return {
+				statusCode: 200,
+				message: 'Ability deassigned successfully.',
+				date: new Date().toISOString()
+			};
 		} catch (error: any) {
-			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }; // Added date to error response
+			return {
+				statusCode: 400,
+				error: this.languageService.getTranslation(error.message, lang),
+				date: new Date().toISOString()
+			};
 		}
 	}
 
@@ -173,8 +213,8 @@ export class UserController {
 	 * @returns The user with the userUid provided o
 	 * @returns An error message if the userUid or organizationId is not provided
 	 */
-	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authenticated and has the necessary abilities
-	@PutAbilities({ action: Action.Manage, subject: 'User' }) // This is a decorator that ensures the user has the necessary abilities
+	@UseGuards(JwtGuard, AbilitiesGuard) 
+	@PutAbilities({ action: Action.Manage, subject: 'User' }) 
 	@ApiResponse({
 		status: 200,
 		description: 'User retrieved successfully.'
@@ -185,9 +225,17 @@ export class UserController {
 		let lang = header['accept-language'] ?? 'en';
 		try {
 			const user = await this.userRepository.get(userUid);
-			return { user, date: new Date().toISOString() }; // Added date to response
+			return {
+				statusCode: 200,
+				user,
+				date: new Date().toISOString()
+			};
 		} catch (error: any) {
-			return {  error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }; // Added date to error response
+			return {
+				statusCode: 400,
+				error: this.languageService.getTranslation(error.message, lang),
+				date: new Date().toISOString()
+			};
 		}
 	}
 
@@ -195,8 +243,8 @@ export class UserController {
 	 * The endpoint used to get a all users of an organization
 	 * @returns The list of users of the organization
 	 */
-	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authentic                                                             ated and has the necessary abilities
-	@PutAbilities({ action: Action.Manage, subject: 'User' }) // This is a decorator that ensures the user has the necessary abilities
+	@UseGuards(JwtGuard, AbilitiesGuard) 
+	@PutAbilities({ action: Action.Manage, subject: 'User' }) 
 	@ApiResponse({
 		status: 200,
 		description: 'Users retrieved successfully.'
@@ -205,9 +253,17 @@ export class UserController {
 	async getByOrganizationId(@Query('organizationId') organizationId: string) {
 		try {
 			const users = await this.userRepository.findByOrganizationId(organizationId);
-			return { users, date: new Date().toISOString() }; // Added date to response
+			return {
+				statusCode: 200,
+				users,
+				date: new Date().toISOString()
+			};
 		} catch (error: any) {
-			return { error: error.message, date: new Date().toISOString() }; // Added date to error response
+			return {
+				statusCode: 400,
+				error: error.message,
+				date: new Date().toISOString()
+			};
 		}
 	}
 
@@ -216,8 +272,8 @@ export class UserController {
 	 * The endpoint used to get all users
 	 * @returns The list of users
 	*/
-	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authenticated and has the necessary abilities
-	@PutAbilities({ action: Action.Manage, subject: 'User' }) // This is a decorator that ensures the user has the necessary abilities
+	@UseGuards(JwtGuard, AbilitiesGuard) 
+	@PutAbilities({ action: Action.Manage, subject: 'User' }) 
 	@Get('get-all')
 	@ApiResponse({
 		status: 200,
@@ -226,9 +282,17 @@ export class UserController {
 	async getAll(@Query('page') page: number, @Query('limit') limit: number) {
 		try {
 			const users = await this.userRepository.getAll(page, limit);
-			return { users, date: new Date().toISOString() }; // Added date to response
+			return {
+				statusCode: 200,
+				users,
+				date: new Date().toISOString()
+			};
 		} catch (error: any) {
-			return { error: error.message, date: new Date().toISOString() }; // Added date to error response
+			return {
+				statusCode: 400,
+				error: error.message,
+				date: new Date().toISOString()
+			};
 		}
 	}
 }
