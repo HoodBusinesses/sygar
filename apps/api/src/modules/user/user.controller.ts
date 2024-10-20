@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Post, Put, Query, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpException, Post, Put, Query, Req, UseGuards } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { JwtGuard } from "src/global/auth/auth.guard";
@@ -12,7 +12,7 @@ import { Action } from "src/shared/types/roles";
 import { DeassignAbilityDto } from './dto/deassign-ability.dto';
 import { User, UserRoles } from "./model/user.model";
 import { UserRepository } from "./user.repository";
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LanguageService } from "src/global/language/language.service";
 
 /**
@@ -20,6 +20,7 @@ import { LanguageService } from "src/global/language/language.service";
  * @description
  * This class is the controller for the User module.
 */
+@ApiTags('user')
 @Controller('user')
 export class UserController {
 	/**
@@ -42,6 +43,7 @@ export class UserController {
 	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authenticated and has the necessary abilities
 	@PutAbilities({ action: Action.Create, subject: 'User' }) // This is a decorator that ensures the user has the necessary abilities
 	@Post('create') // This is the endpoint that will call the create method
+	@ApiOperation({ summary: 'Create a new user' })
 	@ApiResponse({ 
 		status: 201, 
 		description: 'User created successfully.', 
@@ -58,6 +60,7 @@ export class UserController {
 			}
 		}
 	})
+	@ApiResponse({ status: 400, description: 'Bad request.' })
 	async create(@Body() createUserDto: CreateUserDto, @Req() req: {headers: Record<string, any>, user: User}) {
 		let lang = req.headers['accept-language'] ?? 'en'; // Get the language from the request headers or default to 'en'
 
@@ -65,7 +68,7 @@ export class UserController {
 			const user = await this.userService.create(createUserDto, req.user.uid);
 			return { user, date: new Date().toISOString() }; // Added date to response
 		} catch (error: any) {
-			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }; // Added date to error response
+			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }, 400); // Added date to error response
 		}
 	}
 
@@ -77,6 +80,7 @@ export class UserController {
 	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authenticated and has the necessary abilities
 	@PutAbilities({ action: Action.Update, subject: 'User' }) // This is a decorator that ensures the user has the necessary abilities
 	@Put('update') // This is the endpoint that will call the update method
+	@ApiOperation({ summary: 'Update a user' })
 	@ApiResponse({ 
 		status: 200, 
 		description: 'User updated successfully.', 
@@ -89,6 +93,7 @@ export class UserController {
 			}
 		}
 	})
+	@ApiResponse({ status: 400, description: 'Bad request.' })
 	async update(@Body() updateUserDto: UpdateUserDto, @Req() req: Request) {
 		const header: Record<string, any> = req.headers; // Changed object to Record<string, any>
 		let lang = header['accept-language'] ?? 'en'; // Get the language from the request headers or default to 'en'
@@ -97,7 +102,7 @@ export class UserController {
 			const user = await this.userService.update(updateUserDto);
 			return { user, date: new Date().toISOString() }; // Added date to response
 		} catch (error: any) {
-			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }; // Added date to error response
+			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }, 400); // Added date to error response
 		}
 	}
 
@@ -109,10 +114,12 @@ export class UserController {
 	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authenticated and has the necessary abilities
 	@PutAbilities({ action: Action.Delete, subject: 'User' }) // This is a decorator that ensures the user has the necessary abilities
 	@Delete('delete') // This is the endpoint that will call the delete method
+	@ApiOperation({ summary: 'Delete a user' })
 	@ApiResponse({
 		status: 200,
 		description: 'User deleted successfully.'
 	})
+	@ApiResponse({ status: 400, description: 'Bad request.' })
 	async delete(@Body() deleteUserDto: DeleteUserDto, @Req() req: Request) {
 		const header: Record<string, any> = req.headers; // Changed object to Record<string, any>
 		let lang = header['accept-language'] ?? 'en'; // Get the language from the request headers or default to 'en'
@@ -121,7 +128,7 @@ export class UserController {
 			await this.userService.delete(deleteUserDto.email);
 			return { message: 'User deleted successfully.', date: new Date().toISOString() }; // Added date to response
 		} catch (error: any) {
-			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }; // Added date to error response
+			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }, 400); // Added date to error response
 		}
 	}
 
@@ -133,6 +140,25 @@ export class UserController {
 	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authenticated and has the necessary abilities
 	@PutAbilities({ action: Action.Manage, subject: 'Ability' }) // This is a decorator that ensures the user has the necessary abilities
 	@Post('assign-ability') // This is the endpoint that will call the assingAbility method
+	@ApiOperation({ summary: 'Assign an ability to a user' })
+	@ApiResponse({ 
+		status: 201, 
+		description: 'Ability assigned successfully.', 
+		schema: {
+			example: {
+				PK: 'Ability',
+				SK: 'Ability',
+				identifier: '`${ability.uid}#${ability.abilityType}`',
+				action: 'Manage',
+				subject: 'User',
+				userUid: 'user-123',
+				organizationId: 'org-123',
+				createdAt: '2022-01-01T00:00:00.000Z',
+				updatedAt: '2022-01-01T00:00:00.000Z'
+			}
+		}
+	})
+	@ApiResponse({ status: 400, description: 'Bad request.' })
 	async assignAbility(@Body() assignAbilityDto: AssignAbilityDto, @Req() req: { user: User, headers: Record<string, any> }) {
 		const header = req.headers;
 		let lang = header['accept-language'] ?? 'en'; // Get the language from the request headers or default to 'en'
@@ -143,7 +169,7 @@ export class UserController {
 			const ability = await this.abilityService.createAbility(assignAbilityDto);
 			return { ability, date: new Date().toISOString() }; // Added date to response
 		} catch (error: any) {
-			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }; // Added date to error response
+			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }, 400); // Added date to error response
 		}
 	}
 
@@ -155,6 +181,11 @@ export class UserController {
 	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authenticated and has the necessary abilities
 	@PutAbilities({ action: Action.Manage, subject: 'Ability' }) // This is a decorator that ensures the user has the necessary abilities
 	@Delete('deassign-ability') // This is the endpoint that will call the deleteAbility method
+	@ApiOperation({ summary: 'Deassign an ability from a user' })
+	@ApiResponse({ status: 200, description: 'Ability deassigned successfully.',
+		schema: { example: { message: 'Ability deassigned successfully.', date: '2022-01-01T00:00:00.000Z' } }
+	})
+	@ApiResponse({ status: 400, description: 'Bad request.' })
 	async deassignAbility(@Body() deassignAbilityDto: DeassignAbilityDto, @Req() req: Request) {
 		const header: Record<string, any> = req.headers;
 		let lang = header['accept-language'] ?? 'en'; // Get the language from the request headers or default to 'en'
@@ -163,7 +194,7 @@ export class UserController {
 			await this.abilityService.deassignAbilityByUid(deassignAbilityDto);
 			return { message: 'Ability deassigned successfully.', date: new Date().toISOString() }; // Added date to response
 		} catch (error: any) {
-			return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }; // Added date to error response
+			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }, 400); // Added date to error response
 		}
 	}
 
@@ -174,19 +205,31 @@ export class UserController {
 	 */
 	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authenticated and has the necessary abilities
 	@PutAbilities({ action: Action.Manage, subject: 'User' }) // This is a decorator that ensures the user has the necessary abilities
+	@ApiOperation({ summary: 'Get a user by userUid' })
 	@ApiResponse({
 		status: 200,
-		description: 'User retrieved successfully.'
+		description: 'User retrieved successfully.',
+		schema: {
+			example: {
+				cnss: '123456789',
+				nationalIdentifier: 'NID123456',
+				firstName: 'John',
+				lastName: 'Doe',
+				email: 'test@hoood.com',
+				// etc"
+			}
+		}
 	})
+	@ApiResponse({ status: 400, description: 'Bad request.' })
 	@Get('get')
-	async getUser(@Query('userUid') userUid: string, @Req() req: Request) {
+	async getUser(@Query('uid') uid: string, @Req() req: Request) {
 		const header: Record<string, any> = req.headers;
 		let lang = header['accept-language'] ?? 'en';
 		try {
-			const user = await this.userRepository.get(userUid);
+			const { password, ...user } = await this.userRepository.get(uid);
 			return { user, date: new Date().toISOString() }; // Added date to response
 		} catch (error: any) {
-			return {  error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }; // Added date to error response
+			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }, 400);
 		}
 	}
 
@@ -196,17 +239,19 @@ export class UserController {
 	 */
 	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authentic                                                             ated and has the necessary abilities
 	@PutAbilities({ action: Action.Manage, subject: 'User' }) // This is a decorator that ensures the user has the necessary abilities
+	@ApiOperation({ summary: 'Get all users by organizationId' })
 	@ApiResponse({
 		status: 200,
 		description: 'Users retrieved successfully.'
 	})
+	@ApiResponse({ status: 400, description: 'Bad request.' })
 	@Get('get-by-organizationid')
 	async getByOrganizationId(@Query('organizationId') organizationId: string) {
 		try {
 			const users = await this.userRepository.findByOrganizationId(organizationId);
 			return { users, date: new Date().toISOString() }; // Added date to response
 		} catch (error: any) {
-			return { error: error.message, date: new Date().toISOString() }; // Added date to error response
+			throw new HttpException({ error: error.message, date: new Date().toISOString() }, 400);
 		}
 	}
 
@@ -217,6 +262,23 @@ export class UserController {
 	*/
 	@UseGuards(JwtGuard, AbilitiesGuard) // This is a guard that ensures the user is authenticated and has the necessary abilities
 	@PutAbilities({ action: Action.Manage, subject: 'User' }) // This is a decorator that ensures the user has the necessary abilities
+	@ApiOperation({ summary: 'Get all users' })
+	@ApiResponse({ status: 200, description: 'Users retrieved successfully.',
+		schema: {
+			example: {
+				users: [
+					{
+						cnss: '123456789',
+						nationalIdentifier: 'NID123456',
+						firstName: 'John',
+						lastName: 'Doe',
+						email: 'example@hood.com',
+					},
+				]
+			}
+		}
+	})
+	@ApiResponse({ status: 400, description: 'Bad request.' })
 	@Get('get-all')
 	@ApiResponse({
 		status: 200,
@@ -227,7 +289,7 @@ export class UserController {
 			const users = await this.userRepository.getAll(page, limit);
 			return { users, date: new Date().toISOString() }; // Added date to response
 		} catch (error: any) {
-			return { error: error.message, date: new Date().toISOString() }; // Added date to error response
+			throw new HttpException({ error: error.message, date: new Date().toISOString() }, 400);
 		}
 	}
 }
