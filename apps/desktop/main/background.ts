@@ -12,11 +12,20 @@ if (isProd) {
   app.setPath('userData', `${app.getPath('userData')} (development)`)
 }
 
-;(async () => {
+; (async () => {
   await app.whenReady()
 
   // Get the primary display's dimensions
   const { width, height } = screen.getPrimaryDisplay().workAreaSize
+
+  // set sygar as default protocol
+  app.setAsDefaultProtocolClient('sygar')
+
+  // handle sygar protocol req
+  app.on('open-url', function(event, data) {
+    event.preventDefault();
+    console.log(data);
+  });
 
   const mainWindow = createWindow('main', {
     width: width,
@@ -28,7 +37,7 @@ if (isProd) {
     },
   })
   console.log('****** preload.js path:', path.join(__dirname, 'preload.js'));
-  
+
 
   if (isProd) {
     await mainWindow.loadURL('app://')
