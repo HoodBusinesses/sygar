@@ -33,7 +33,7 @@
     "@radix-ui/react-toast": "^1.2.2",
     "lucide-react": "^0.445.0",
     "shadcn-cli": "^0.0.6",
-    "react-router-dom" : "^6.27.0"
+    "react-router-dom": "^6.27.0"
   },
   "devDependencies": {
     "@types/node": "^20.11.16",
@@ -47,5 +47,11 @@
     "react-dom": "^18.3.1",
     "tailwindcss": "^3.4.3",
     "typescript": "^5.4.5"
+  },
+  "protocols": {
+    "name": "foobar-protocol",
+    "schemes": [
+      "foobar"
+    ]
   }
 }
