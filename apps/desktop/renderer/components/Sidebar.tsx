@@ -71,6 +71,19 @@ export default function Sidebar() {
             </Link>
           </li>
           <li>
+            <Link href="/themes" legacyBehavior>
+              <a
+                className={`flex items-center px-4 py-2 space-x-3 text-sm font-medium ${
+                  active === "themes" ? "bg-blue-100 text-blue-500" : "text-gray-600"
+                } hover:bg-blue-100 hover:text-blue-500`}
+                onClick={() => setActive("themes")}
+              >
+                <Cog6ToothIcon className="h-5 w-5" />
+                <span>{t('sidebar.items.themes')}</span>
+              </a>
+            </Link>
+          </li>
+          <li>
             <Link href="/settings" legacyBehavior>
               <a
                 className={`flex items-center px-4 py-2 space-x-3 text-sm font-medium ${

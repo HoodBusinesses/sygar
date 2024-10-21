@@ -127,6 +127,7 @@
       "home": "الصفحة الرئيسية",
       "registration": "التسجيل",
       "organizations": "المنظمات",
+      "themes": "المواضيع",
       "settings": "الإعدادات",
       "notifications": "الإشعارات",
       "reports": "التقارير"
@@ -150,5 +151,21 @@
     "of": "من",
     "previous": "السابق",
     "next": "التالي"
-  }
+  },
+  "theme": {
+    "basicInfo": {
+        "title": "إنشاء موضوع",
+        "fields": {
+            "fiscalYear": "السنة المالية",
+            "theme": "الموضوع",
+            "action": "الإجراء",
+            "date": "التاريخ",
+            "trainer": "المدرب",
+            "operator": "المشغل",
+            "location": "الموقع",
+            "costDay": "التكلفة/اليوم",
+            "numParticipants": "عدد المشاركين"
+        }
+    }
+}
 }

@@ -127,6 +127,7 @@
             "home": "Home",
             "registration": "Registration",
             "organizations": "Organizations",
+            "themes": "Themes",
             "settings": "Settings",
             "notifications": "Notifications",
             "reports": "Reports"
@@ -150,5 +151,21 @@
         "of": "of",
         "previous": "Previous",
         "next": "Next"
+    }, 
+    "theme": {
+        "basicInfo": {
+            "title": "Create Theme",
+            "fields": {
+                "fiscalYear" : "Failed Year",
+                "theme": "Theme",
+                "action" : "Action",
+                "date": "Date",
+                "trainer": "Trainer",
+                "operator": "Operator",
+                "location": "Location", 
+                "costDay": "Cost/Day",
+                "numParticipants": "Number Participants"
+            }
+        }
     }
 }

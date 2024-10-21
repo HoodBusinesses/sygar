@@ -41,16 +41,11 @@ const OrganizationForm = () => {
               R.S <span className="text-red-500">*</span>
             </p>
             <Input
-              {...register("name")}
+              {...register("rs")}
               placeholder="Enter the organization rs"
               className="bg-gray-100 mb-4 text-gray-950"
-              error={errors.name?.message}
+              // error={errors.name?.message}
             />
-            {errors.name && (
-              <span className="text-sm text-red-500">
-                {errors.name.message}
-              </span>
-            )}
           </div>
           <div className="flex flex-col w-3/4">
             <p className="text-sm text-gray-950">
@@ -60,7 +55,7 @@ const OrganizationForm = () => {
               {...register("ice")}
               placeholder="Enter the organization ICE"
               className="bg-gray-100 mb-4 text-gray-950"
-              erroe={errors.ice?.message}
+              // erroe={errors.ice?.message}
             />
             {errors.ice && (
               <span className="text-sm text-red-500">{errors.ice.message}</span>
@@ -72,7 +67,7 @@ const OrganizationForm = () => {
               {...register("cnss")}
               placeholder="Enter the organization CNSS"
               className="bg-gray-100 mb-4 text-gray-950"
-              error={errors.cnss?.message}
+              // error={errors.cnss?.message}
             />
             {errors.cnss && (
               <span className="text-sm text-red-500">
@@ -88,13 +83,8 @@ const OrganizationForm = () => {
               {...register("address")}
               placeholder="Enter the address of organization"
               className="bg-gray-100 mb-4 text-gray-950"
-              error={errors.address?.message}
+              // error={errors.address?.message}
             />
-            {errors.address && (
-              <span className="text-sm text-red-500">
-                {errors.address.message}
-              </span>
-            )}
           </div>
           <div className="flex flex-col w-3/4">
             <p className="text-sm text-gray-950">
@@ -104,13 +94,8 @@ const OrganizationForm = () => {
               {...register("email")}
               placeholder="Enter the email of organization"
               className="bg-gray-100 mb-4 text-gray-950"
-              error={errors.email?.message}
+              // error={errors.email?.message}
             />
-            {errors.email && (
-              <span className="text-sm text-red-500">
-                {errors.email.message}
-              </span>
-            )}
           </div>
           <div className="flex flex-col">
             <p className="text-sm text-gray-950">
@@ -119,7 +104,7 @@ const OrganizationForm = () => {
             <div className="flex flex-col items-center justify-center border border-dashed rounded-md p-4 cursor-pointer hover:bg-gray-50 w-3/4">
               <input
                 type="file"
-                {...register("logo")}
+                // {...register("logo")}
                 className="hidden"
                 id="logo"
               />
@@ -140,13 +125,8 @@ const OrganizationForm = () => {
               {...register("responsibleName")}
               placeholder="Enter the name of Responsible"
               className="bg-gray-100 mb-4 text-gray-950"
-              error={errors.responsibleName?.message}
+              // error={errors.responsibleName?.message}
             />
-            {errors.responsibleName && (
-              <span className="text-sm text-red-500">
-                {errors.responsibleName.message}
-              </span>
-            )}
           </div>
           <div className="flex flex-col w-3/4">
             <p className="text-sm text-gray-950">
@@ -156,13 +136,8 @@ const OrganizationForm = () => {
               {...register("trainingManagerName")}
               placeholder="Enter the name of training manager"
               className="bg-gray-100 mb-4 text-gray-950"
-              error={errors.trainingManagerName?.message}
+              // error={errors.trainingManagerName?.message}
             />
-            {errors.trainingManagerName && (
-              <span className="text-sm text-red-500">
-                {errors.trainingManagerName.message}
-              </span>
-            )}
           </div>
         </div>
       </CardContent>

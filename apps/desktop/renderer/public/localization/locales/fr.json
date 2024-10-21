@@ -128,6 +128,7 @@
             "registration": "Inscription",
             "organizations": "Organisations",
             "settings": "Paramètres",
+            "themes": "Thèmes",
             "notifications": "Notifications",
             "reports": "Rapports"
         }
@@ -150,5 +151,21 @@
         "of": "de",
         "previous": "Précédent",
         "next": "Suivant"
+    },
+    "theme": {
+    "basicInfo": {
+        "title": "Créer un thème",
+        "fields": {
+            "fiscalYear": "Année fiscale",
+            "theme": "Thème",
+            "action": "Action",
+            "date": "Date",
+            "trainer": "Formateur",
+            "operator": "Opérateur",
+            "location": "Lieu",
+            "costDay": "Coût/Jour",
+            "numParticipants": "Nombre de participants"
+        }
     }
+}
 }

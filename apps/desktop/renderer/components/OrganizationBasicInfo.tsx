@@ -16,14 +16,14 @@ export const OrganizationBasicInfo = (organization) => {
   
   useEffect(() => {
     if (organization) {
-      setValue("name", organization?.organization?.rs);
-      setValue("ice", organization?.organization?.ice);
-      setValue("cnss", organization?.organization?.cnss);
-      setValue("address", organization?.organization?.address);
-      setValue("email", organization?.organization?.email);
-      setValue("logo", organization?.organization?.logo);
-      setValue("responsibleName", organization?.organization?.responsibleName);
-      setValue("trainingManagerName", organization?.organization?.trainingManagerName);
+      // setValue("name", organization?.organization?.rs);
+      // setValue("ice", organization?.organization?.ice);
+      // setValue("cnss", organization?.organization?.cnss);
+      // setValue("address", organization?.organization?.address);
+      // setValue("email", organization?.organization?.email);
+      // setValue("logo", organization?.organization?.logo);
+      // setValue("responsibleName", organization?.organization?.responsibleName);
+      // setValue("trainingManagerName", organization?.organization?.trainingManagerName);
       console.log("bbbbb ", organization?.organization);
       console.log(typeof(organization.organization));
       
@@ -45,7 +45,7 @@ export const OrganizationBasicInfo = (organization) => {
             </p>
             <Input
               {...register("name")}
-              value={organization?.organization?.rs || ""}
+              defaultValue={organization?.organization?.rs || ""}
               placeholder={t('registration.basicInfo.fields.rs.placeholder')}
               className="bg-gray-100 mb-4 text-gray-950"
               // error={errors.name?.message}
@@ -63,7 +63,7 @@ export const OrganizationBasicInfo = (organization) => {
             </p>
             <Input
               {...register("ice")}
-              value={organization?.organization?.ice || ""}
+              defaultValue={organization?.organization?.ice || ""}
               placeholder={t('registration.basicInfo.fields.ice.placeholder')}
               className="bg-gray-100 mb-4 text-gray-950"
               // error={errors.ice?.message}
@@ -77,7 +77,7 @@ export const OrganizationBasicInfo = (organization) => {
             <p className="text-sm text-gray-950">{t('registration.basicInfo.fields.cnss.label')}</p>
             <Input
               {...register("cnss")}
-              value={organization?.organization?.cnss || ""}
+              defaultValue={organization?.organization?.cnss || ""}
               placeholder={t('registration.basicInfo.fields.cnss.placeholder')}
               className="bg-gray-100 mb-4 text-gray-950"
               // error={errors.cnss?.message}
@@ -95,7 +95,7 @@ export const OrganizationBasicInfo = (organization) => {
             </p>
             <Input
               {...register("address")}
-              value={organization?.organization?.address || ""}
+              defaultValue={organization?.organization?.address || ""}
               placeholder={t('registration.basicInfo.fields.address.placeholder')}
               className="bg-gray-100 mb-4 text-gray-950"
               // error={errors.address?.message}
@@ -113,7 +113,7 @@ export const OrganizationBasicInfo = (organization) => {
             </p>
             <Input
               {...register("email")}
-              value={organization?.organization?.email || ""}
+              defaultValue={organization?.organization?.email || ""}
               placeholder={t('registration.basicInfo.fields.email.placeholder')}
               className="bg-gray-100 mb-4 text-gray-950"
               // error={errors.email?.message}
@@ -151,7 +151,7 @@ export const OrganizationBasicInfo = (organization) => {
             </p>
             <Input
               {...register("responsibleName")}
-              value={organization?.organization?.responsibleName || ""}
+              defaultValue={organization?.organization?.responsibleName || ""}
               placeholder={t('registration.basicInfo.fields.responsibleName.placeholder')}
               className="bg-gray-100 mb-4 text-gray-950"
               // error={errors.responsibleName?.message}
@@ -169,7 +169,7 @@ export const OrganizationBasicInfo = (organization) => {
             </p>
             <Input
               {...register("trainingManagerName")}
-              value={organization?.organization?.trainingManagerName || ""}
+              defaultValue={organization?.organization?.trainingManagerName || ""}
               placeholder={t('registration.basicInfo.fields.trainingManagerName.placeholder')}
               className="bg-gray-100 mb-4 text-gray-950"
               // error={errors.trainingManagerName?.message}
