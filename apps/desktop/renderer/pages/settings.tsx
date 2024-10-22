@@ -29,7 +29,7 @@ const OrganizationForm = () => {
   };
 
   return (
-    <Card className="p-1 mb-6">
+    <Card className="ml-64 p-6">
       <CardContent className="p-6">
         <p className="text-lg text-gray-950 font-bold mb-6">
           Sygafor informations

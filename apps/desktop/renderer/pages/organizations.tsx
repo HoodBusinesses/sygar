@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from 'react';
-import { Search, Filter, Download } from 'lucide-react';
+import React, { useMemo, useState } from "react";
+
 import {
   Table,
   TableBody,
@@ -9,6 +9,14 @@ import {
   TableRow,
 } from "../components/ui/table";
 import {
+  FiUpload,
+  FiDownload,
+  FiSearch,
+  FiFilter,
+  FiArrowDown,
+} from "react-icons/fi";
+
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -17,18 +25,19 @@ import {
 } from "../components/ui/select";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
+
 const ITEMS_PER_PAGE = 10;
-const DATE_OPTIONS = ['14 Feb 2019', '15 Feb 2019', '16 Feb 2019'];
+const DATE_OPTIONS = ["14 Feb 2019", "15 Feb 2019", "16 Feb 2019"];
 
 const mockOrganizations = Array.from({ length: 50 }, (_, index) => ({
   id: index + 1,
-  image: "/api/placeholder/40/40",
+  image: "/images/profile_img.png", // Example image path
   ss: `Organization ${index + 1}`,
   cms: `CMS-${index + 1}`,
   address: `Address ${index + 1}`,
   email: `org${index + 1}@example.com`,
   responsibleName: `Manager ${index + 1}`,
-  trainingManagerName: `Trainer ${index + 1}`
+  trainingManagerName: `Trainer ${index + 1}`,
 }));
 
 const OrganizationsPage = () => {
@@ -36,16 +45,14 @@ const OrganizationsPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedDate, setSelectedDate] = useState(DATE_OPTIONS[0]);
 
-  // Memoized filtered data
   const filteredOrganizations = useMemo(() => {
-    return mockOrganizations.filter(org => 
-      Object.values(org).some(value => 
+    return mockOrganizations.filter((org) =>
+      Object.values(org).some((value) =>
         value.toString().toLowerCase().includes(searchQuery.toLowerCase())
       )
     );
   }, [searchQuery]);
 
-  // Memoized paginated data
   const paginatedData = useMemo(() => {
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     return filteredOrganizations.slice(startIndex, startIndex + ITEMS_PER_PAGE);
@@ -64,134 +71,155 @@ const OrganizationsPage = () => {
   };
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-semibold text-gray-700">Organizations</h1>
-      </div>
+    <div className="ml-64 p-6 bg-gray-50 min-h-screen">
+      {/* Header */}
+      <header className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-semibold text-gray-800">Organizations</h1>
+        <div className="flex gap-4">
+          {" "}
+          {/* Increased gap between Import/Export buttons */}
+          <button className="flex items-center gap-2 bg-blue-50 text-blue-600 px-6 py-2 rounded-lg">
+            <FiUpload className="h-5 w-5" />
+            Import
+          </button>
+          <button className="flex items-center gap-2 bg-blue-600 text-white px-6 py-2 rounded-lg">
+            <FiDownload className="h-5 w-5" />
+            Export
+          </button>
+        </div>
+      </header>
 
-      <div className="flex flex-col md:flex-row gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-          <Input
-            placeholder="Search for organization..."
-            className="pl-10 text-gray-600 placeholder:text-gray-400"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+      {/* Search and Filters */}
+      <div className="flex justify-between items-center mb-6">
+        {/* Left Section: Search Input */}
+        <div className="relative w-64">
+          <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+          <input
+            placeholder="Search for organization by email or cnes"
+            className="pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-400 focus:outline-none w-full"
           />
         </div>
 
-        <div className="flex flex-wrap gap-2">
-          <Button variant="outline" className="flex items-center gap-2 text-gray-600">
-            <Filter className="h-4 w-4" />
-            Filter By
-          </Button>
-
-          <Select value={selectedDate} onValueChange={setSelectedDate}>
-            <SelectTrigger className="w-[140px] text-gray-600">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {DATE_OPTIONS.map(date => (
-                <SelectItem key={date} value={date}>{date}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          <Button 
-            variant="outline" 
-            className="text-red-500 hover:text-red-600 hover:bg-red-50"
-            onClick={handleReset}
-          >
-            Reset Filter
-          </Button>
-
-          <Button className="btn-blue text-white">
-            <Download className="h-4 w-4 mr-2" />
-            Export
-          </Button>
+        {/* Right Section: Buttons and Profile */}
+        <div className="flex items-center gap-6 ml-auto">
+          {/* Buttons Section with Two Rows */}
+          <div className="flex flex-col gap-4">
+            <div className="flex gap-4">
+              {" "}
+              {/* Increased horizontal gap */}
+              <button className="flex items-center gap-1 px-3 py-2 border border-gray-300 rounded-lg text-gray-700">
+                <FiArrowDown className="h-5 w-5" />
+                Sort by
+              </button>
+              <button className="flex items-center gap-1 px-3 py-2 border border-gray-300 rounded-lg text-gray-700">
+                <FiFilter className="h-5 w-5" />
+                Filter
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="border rounded-lg overflow-hidden">
-        <div className="overflow-x-auto">
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-gray-50">
-                <TableHead className="text-gray-600">Image</TableHead>
-                <TableHead className="text-gray-600">S.S</TableHead>
-                <TableHead className="text-gray-600">CMS</TableHead>
-                <TableHead className="text-gray-600">Address</TableHead>
-                <TableHead className="text-gray-600">Email</TableHead>
-                <TableHead className="text-gray-600">Responsible Name</TableHead>
-                <TableHead className="text-gray-600">Training Manager Name</TableHead>
-                <TableHead className="text-gray-600">Action</TableHead>
+      {/* Table */}
+      <div className="overflow-hidden border border-gray-300 rounded-lg bg-white shadow-md">
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-gray-50">
+              <TableHead className="text-gray-600">Image</TableHead>
+              <TableHead className="text-gray-600">S.S</TableHead>
+              <TableHead className="text-gray-600">CMS</TableHead>
+              <TableHead className="text-gray-600">Address</TableHead>
+              <TableHead className="text-gray-600">Email</TableHead>
+              <TableHead className="text-gray-600">Responsible Name</TableHead>
+              <TableHead className="text-gray-600">
+                Training Manager Name
+              </TableHead>
+              <TableHead className="text-gray-600">Action</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {paginatedData.map((org) => (
+              <TableRow key={org.id} className="hover:bg-gray-50">
+                <TableCell>
+                  <img
+                    src={org.image}
+                    alt={`Organization ${org.id}`}
+                    className="w-8 h-8 rounded-full"
+                  />
+                </TableCell>
+                <TableCell className="text-gray-800">{org.ss}</TableCell>
+                <TableCell className="text-gray-800">{org.cms}</TableCell>
+                <TableCell className="text-gray-800">{org.address}</TableCell>
+                <TableCell className="text-gray-800">{org.email}</TableCell>
+                <TableCell className="text-gray-800">
+                  {org.responsibleName}
+                </TableCell>
+                <TableCell className="text-gray-800">
+                  {org.trainingManagerName}
+                </TableCell>
+                <TableCell className="flex gap-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-blue-500 hover:text-blue-600 hover:bg-blue-50 rounded-full"
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-red-500 hover:text-red-600 hover:bg-red-50 rounded-full"
+                  >
+                    Delete
+                  </Button>
+                </TableCell>
               </TableRow>
-            </TableHeader>
-            <TableBody>
-              {paginatedData.map((org) => (
-                <TableRow key={org.id} className="hover:bg-gray-50">
-                  <TableCell>
-                    <img
-                      // src={org.image}
-                      src='/images/profile_img.png'
-                      alt="Organization"
-                      className="w-8 h-8 rounded-full"
-                    />
-                  </TableCell>
-                  <TableCell className="text-gray-600">{org.ss}</TableCell>
-                  <TableCell className="text-gray-600">{org.cms}</TableCell>
-                  <TableCell className="text-gray-600">{org.address}</TableCell>
-                  <TableCell className="text-gray-600">{org.email}</TableCell>
-                  <TableCell className="text-gray-600">{org.responsibleName}</TableCell>
-                  <TableCell className="text-gray-600">{org.trainingManagerName}</TableCell>
-                  <TableCell>
-                    <div className="flex gap-2">
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className="text-blue-500 hover:text-blue-600 hover:bg-blue-50"
-                      >
-                        Edit
-                      </Button>
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className="text-red-500 hover:text-red-600 hover:bg-red-50"
-                      >
-                        Delete
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+            ))}
+          </TableBody>
+        </Table>
       </div>
 
-      <div className="flex justify-between items-center mt-4">
-        <div className="text-sm text-gray-500">
-          Page {currentPage} of {totalPages}
+      {/* Pagination */}
+      <div className="flex items-center gap-4 mt-4">
+        {/* Page Info with Dropdown and Buttons */}
+        <div className="flex items-center gap-2 text-sm text-gray-700">
+          <span>Page</span>
+
+          {/* Dropdown for Page Selection */}
+          <select
+            value={currentPage}
+            onChange={(e) => handlePageChange(Number(e.target.value))}
+            className="border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:ring-1 focus:ring-gray-400"
+          >
+            {Array.from({ length: totalPages }, (_, index) => (
+              <option key={index + 1} value={index + 1}>
+                {index + 1}
+              </option>
+            ))}
+          </select>
+
+          <span>of {totalPages}</span>
         </div>
+
+        {/* Back and Next Buttons */}
         <div className="flex gap-2">
-          <Button
-            variant="outline"
-            size="sm"
+          <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="text-gray-600"
+            className={`border border-gray-300 px-4 py-2 rounded-md text-gray-700 
+      ${currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""}`}
           >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
+            Back
+          </button>
+
+          <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="text-gray-600"
+            className={`px-4 py-2 rounded-md text-white bg-gray-800
+      ${currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""}`}
           >
             Next
-          </Button>
+          </button>
         </div>
       </div>
     </div>
