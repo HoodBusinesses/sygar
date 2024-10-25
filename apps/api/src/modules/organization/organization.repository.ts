@@ -9,6 +9,9 @@ import { DeleteItemCommandInput, PutItemCommandInput, UpdateItemCommandInput } f
 import { UpdateOrganizationDto } from "./dto/update-organization.dto";
 import { CreateThemeDto } from "./dto/create-theme.dto";
 import { UpdateThemeDto } from "./dto/update-theme.dto";
+import { CreateAnimaotorItemDto, CreateAnimatorDto, UpdateAnimatorDto } from "./dto/create-animator.dto";
+import { Animator } from "./model/animator.model";
+import { throwIfEmpty } from "rxjs";
 
 /**
  * @module OrganizationRepository
@@ -20,8 +23,6 @@ import { UpdateThemeDto } from "./dto/update-theme.dto";
 export class OrganizationRepository {
 	private readonly tableName: string;
 	private readonly primaryKey: string;
-	private readonly themeTableName: string;
-	private readonly themePrimaryKey: string;
 	
 	/**
 	 * Constructor for the OrganizationRepository.
@@ -36,10 +37,6 @@ export class OrganizationRepository {
 		const table = 'Organizations';
 		this.tableName = dbConstants.getTable(table);
 		this.primaryKey = this.dbConstants.getPrimaryKey(table);
-
-		const themeTable = 'Themes';
-		this.themeTableName = dbConstants.getTable(themeTable);
-		this.themePrimaryKey = this.dbConstants.getPrimaryKey(themeTable);
 	}
 
 	/**
@@ -307,13 +304,21 @@ export class OrganizationRepository {
 			return [];
 		}
 	}
-	
-	/**
-	 * Create a new theme.
-	 * 
-	 * @param createThemeDto - The data for creating the theme.
-	 * @returns The created theme.
-	 */
+}
+
+@Injectable()
+export class ThemeRepository {
+	private readonly themeTableName: string;
+	private readonly themePrimaryKey: string;
+	constructor(
+		private readonly dbService: DbService,
+		private readonly dbConstants: DbConstants,
+	) {
+		const themeTable = 'Themes';
+		this.themeTableName = this.dbConstants.getTable(themeTable);
+		this.themePrimaryKey = this.dbConstants.getPrimaryKey(themeTable);
+	}
+
 	async getNextCounterValueOfTheme() {
 		const params: ScanCommandInput = {
 			TableName: this.dbConstants.getTable('Counters'),
@@ -366,7 +371,6 @@ export class OrganizationRepository {
 	 * @returns The created theme.
 	 */
 	async createTheme(createThemeDto: CreateThemeDto) {
-		
 		const currentDate = new Date();
 		const year = currentDate.getFullYear();
 		const counter = await this.getNextCounterValueOfTheme();
@@ -573,5 +577,181 @@ export class OrganizationRepository {
 		} catch (error) {
 			return [];
 		}
+	}
+}
+
+@Injectable()
+export class AnimatorRepository {
+	private readonly animatorTableName: string;
+	private readonly animatorPrimaryKey: string;
+
+	constructor(
+		private readonly dbConstants: DbConstants,
+		private readonly dbService: DbService,
+	) {
+		const animatorTable = 'Animators';
+		this.animatorTableName = this.dbConstants.getTable(animatorTable);
+		this.animatorPrimaryKey = this.dbConstants.getPrimaryKey(animatorTable);
+	}
+	async createAnimator(createAnimatorDto: CreateAnimaotorItemDto) {
+		const uid = uuid();
+		const Item = {
+			PK: this.animatorPrimaryKey,
+			SK: this.dbConstants.getSortKey(uid),
+			uid,
+			...createAnimatorDto,
+			createdAt: Date.now(),
+		};
+
+		const params: PutItemCommandInput = {
+			TableName: this.animatorTableName,
+			Item: Item as Record<string, any>
+		};
+
+		await this.dbService.putItem(params);
+
+		return Item;
+	}
+
+	async getByEmail(email: string): Promise<Animator | null> {
+		const params: QueryCommandInput = {
+			TableName: this.animatorTableName,
+			IndexName: 'EmailIndex',
+			KeyConditionExpression: 'enail = :enail',
+			ExpressionAttributeValues: {
+				':enail': email,
+			}
+		};
+
+		try {
+			const Items = await this.dbService.query(params);
+
+			if (!Items || Items.length  === 0) {
+				return null;
+			}
+
+			return this.dbService.mapDynamoDBItemToObject(Items[0]) as Animator;
+		} catch (error) {
+			if (error instanceof Error) {
+				throw new Error(error.message);
+			} else {
+				throw new Error('An unknown error occurred');
+			}
+		}
+	}
+
+
+
+	async updateAnimator(email: string, updateAnimatorDto: UpdateAnimatorDto): Promise <Animator | null> {
+		const animator: Animator | null = await this.getByEmail(email);
+
+		if (!animator) {
+			throw new Error('animatorDoesntExists');
+		} 
+
+		const updateExpressionParts: string[] = [];
+		const expressionAttributeNames: { [key: string]: string } = {};
+		const expressionAttributeValues: { [key: string]: any } = {};
+
+		const fieldsToUpdate = {
+			name: updateAnimatorDto.name,
+			workingHours: updateAnimatorDto.workingHours,
+			updatedAt: Date.now().toString(),
+		};
+
+		for (const [key, value] of Object.entries(fieldsToUpdate)) {
+			if (value !== undefined) {
+				const attributeName = `#${key}`;
+				const attributeValue = `:${key}`;
+				updateExpressionParts.push(`${attributeName} = ${attributeValue}`);
+				expressionAttributeNames[attributeName] = key;
+				expressionAttributeValues[attributeValue] = this.dbService.convertToAttributeValue(value);
+			}
+		}
+
+		const updateExpression = `SET ${updateExpressionParts.join(', ')}`;
+
+		const params: UpdateItemCommandInput = {
+			TableName: this.animatorTableName,
+			Key: {
+				PK: { S: animator.PK },
+				SK: { S: animator.SK },
+			},
+			UpdateExpression: updateExpression,
+			ExpressionAttributeNames: expressionAttributeNames,
+			ExpressionAttributeValues: expressionAttributeValues,
+		};
+
+		await this.dbService.updateItem(params);
+
+		return { ...animator, ...updateAnimatorDto };
+
+	}
+
+	async deleteAnimator(email: string) {
+		const animator = await this.getByEmail(email);
+
+		if (!animator) {
+			throw new Error('animatorDoesntExists');
+		}
+
+		const params: DeleteItemCommandInput = {
+			TableName: this.animatorTableName,
+			Key: {
+				PK: { S: animator.PK },
+				SK: { S: animator.SK },
+			},
+		};
+
+		await this.dbService.deleteItem(params);
+
+		return { message: 'Theme deleted successfully' };
+	}
+
+	/**
+	 * This method fetches all animators from the database.
+	 * 
+	 * @param page - The page number
+	 * @param limit - The number of items per page
+	 * @param name - The name of the animator
+	 * @returns The list of animators
+	 */
+	async getAllAnimators(page: number, limit: number, name?: string) {
+		page = !page ? 1 : page;
+		limit = !limit ? 10 : limit;
+		const params: ScanCommandInput = {
+			TableName: this.animatorTableName,
+			FilterExpression: '',
+			ExpressionAttributeNames: {},
+			ExpressionAttributeValues: {},
+		};
+
+		// Add filter expression for name
+		if (name) {
+			params.FilterExpression += 'contains(#name, :name)';
+			params.ExpressionAttributeNames!['#name'] = 'name';
+			params.ExpressionAttributeValues![':name'] = { S: name };
+		}
+
+		// If no filters were set, remove the attributes to simplify the scan
+		if (!params.FilterExpression) {
+			delete params.FilterExpression;
+			delete params.ExpressionAttributeNames;
+			delete params.ExpressionAttributeValues;
+		}
+
+		const Items = await this.dbService.scanItems(params);
+
+		// Apply pagination
+		const startIndex = (page - 1) * limit;
+		const endIndex = startIndex + limit;
+		const paginatedItems = Items.slice(startIndex, endIndex);
+
+		return {
+			items: paginatedItems.map((item: Record<string, any>) => this.dbService.mapDynamoDBItemToObject(item)),
+			total: Items.length,
+			page,
+			limit,
+		};
 	}
 }

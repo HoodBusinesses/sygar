@@ -1,17 +1,20 @@
-import { Body, Controller, Delete, Get, HttpException, Param, Post, Put, Query, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Query, Req, UseGuards } from "@nestjs/common";
 import { JwtGuard } from "src/global/auth/auth.guard";
 import { CreateOrganizationDto } from "./dto/create-organization.dto";
 import { DeleteOrganizationDto } from "./dto/delete-organization-dtro";
-import { OrganizationService } from "./organization.service";
+import { AnimatorService, OrganizationService, ThemeService } from "./organization.service";
 import { UpdateOrganizationDto } from "./dto/update-organization.dto";
 import { AbilitiesGuard } from "src/global/rbac/rbac.guard";
 import { PutAbilities } from "src/global/rbac/roles.decorators";
 import { Action } from "src/shared/types/roles";
-import { OrganizationRepository } from "./organization.repository";
+import { OrganizationRepository, ThemeRepository } from "./organization.repository";
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LanguageService } from "src/global/language/language.service";
 import { CreateThemeDto, ThemeGroup } from "./dto/create-theme.dto";
 import { UpdateThemeDto } from "./dto/update-theme.dto";
+import { CreateAnimatorDto } from "./dto/create-animator.dto";
+import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 
 /**
  * @module OrganizationController
@@ -57,7 +60,7 @@ export class OrganizationController {
 	@ApiResponse({ status: 400, description: 'Bad request.' })
 	async create(@Body() createOrganizationDto: CreateOrganizationDto, @Req() req: Request) {
 		const header: Record<string, any> = req.headers; // Changed object to Record<string, any>
-		let lang = header['accept-language'] ?? 'en'; // Get the language from the request headers or default to 'en'
+		const lang = header['accept-language'] ?? 'en'; // Get the language from the request headers or default to 'en'
 
 		try {
 			return {
@@ -95,7 +98,7 @@ export class OrganizationController {
 	@ApiResponse({ status: 404, description: 'Organization not found.' })
 	async get(@Query("cnss") cnss: string, @Req() req: Request) {
 		const header: Record<string, any> = req.headers;
-		let lang = header['accept-language'] ?? 'en';
+		const lang = header['accept-language'] ?? 'en';
 
 		try {
 			if (!cnss)
@@ -135,7 +138,7 @@ export class OrganizationController {
 	@ApiResponse({ status: 400, description: 'Bad request.' })
 	async update(cnss: string, @Body() updateOrganizationDto: UpdateOrganizationDto, @Req() req: Request) {
 		const header: Record<string, any> = req.headers;
-		let lang = header['accept-language'] ?? 'en';
+		const lang = header['accept-language'] ?? 'en';
 		try {
 			return {
 				organization:
@@ -168,7 +171,7 @@ export class OrganizationController {
 	@ApiResponse({ status: 404, description: 'Organization not found.' })
 	async delete(@Body() deleteOrganizationDto: DeleteOrganizationDto, @Req() req: Request) {
 		const header: Record<string, any> = req.headers;
-		let lang = header['accept-language'] ?? 'en';
+		const lang = header['accept-language'] ?? 'en';
 
 		try {
 			return {
@@ -243,8 +246,8 @@ export class ThemeController {
 	 * @param languageService - The service for managing languages.
 	 */
 	constructor(
-		private readonly organizationService: OrganizationService,
-		private readonly organizationRepository: OrganizationRepository,
+		private readonly themeService: ThemeService,
+		private readonly themeRepository: ThemeRepository,
 		private readonly languageService: LanguageService,
 	) {}
 
@@ -286,12 +289,11 @@ export class ThemeController {
 	@ApiResponse({ status: 400, description: 'Bad request.' })
 	async create(@Body() createThemeDto: CreateThemeDto, @Req() req: Request) {
 		const header: Record<string, any> = req.headers;
-		let lang = header['accept-language'] ?? 'en';
-
+		const lang = header['accept-language'] ?? 'en';
 		try {
 			return {
 				theme:
-					await this.organizationService.createTheme(createThemeDto),
+					await this.themeService.createTheme(createThemeDto),
 				date: new Date().toISOString()
 			};
 		} catch (error: any) {
@@ -338,14 +340,14 @@ export class ThemeController {
 	@ApiResponse({ status: 400, description: 'Bad request.' })
 	async get(@Query("uid") uid: string, @Req() req: Request) {
 		const header: Record<string, any> = req.headers;
-		let lang = header['accept-language'] ?? 'en';
+		const lang = header['accept-language'] ?? 'en';
 
 		try {
 			if (!uid)
-				throw Error('uidRequired');
+				throw new Error('uidRequired');
 			return {
 				theme:
-					await this.organizationService.getTheme(uid),
+					await this.themeService.getTheme(uid),
 				date: new Date().toISOString()
 			};
 		} catch (error: any) {
@@ -391,11 +393,11 @@ export class ThemeController {
 	@ApiResponse({ status: 400, description: 'Bad request.' })
 	async update(@Query	("uid") uid: string, @Body() updateThemeDto: UpdateThemeDto, @Req() req: Request) {
 		const header: Record<string, any> = req.headers;
-		let lang = header['accept-language'] ?? 'en';
+		const lang = header['accept-language'] ?? 'en';
 		try {
 			return {
 				theme:
-					await this.organizationService.updateTheme(uid, updateThemeDto),
+					await this.themeService.updateTheme(uid, updateThemeDto),
 				date: new Date().toISOString()
 			};
 		} catch (error: any) {
@@ -424,11 +426,11 @@ export class ThemeController {
 	@ApiResponse({ status: 400, description: 'Bad request.' })
 	async delete(@Query("uid") uid: string, @Req() req: Request) {
 		const header: Record<string, any> = req.headers;
-		let lang = header['accept-language'] ?? 'en';
+		const lang = header['accept-language'] ?? 'en';
 
 		try {
 			return {
-				success: await this.organizationService.deleteTheme(uid),
+				success: await this.themeService.deleteTheme(uid),
 				date: new Date().toISOString()
 			};
 		} catch (error: any) {
@@ -472,13 +474,55 @@ export class ThemeController {
 		}
 	})
 	@ApiResponse({ status: 400, description: 'Bad request.' })
-	async getAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10, @Query('name') name?: string, @Query('year') year?: number) {
+	async getAll(@Req() req: Request, @Query('page') page: number = 1, @Query('limit') limit: number = 10, @Query('name') name?: string, @Query('year') year?: number) {
+		const header: Record<string, any> = req.headers;
+		const lang = header['accept-language'] ?? 'en';
 		try {
-			const themes = await this.organizationRepository.getAllThemes(page, limit, name, year);
+			const themes = await this.themeRepository.getAllThemes(page, limit, name, year);
 			return { themes, date: new Date().toISOString() };
 		} catch (error: any) {
-			throw new HttpException({ error: error.message, date: new Date().toISOString() }, 400);
+			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }, HttpStatus.BAD_REQUEST);
 		}
 	}
+}
+
+@Controller('animator')
+export class AnimatorController {
+	constructor(
+		private readonly languageService: LanguageService,
+		private readonly animatorService: AnimatorService,
+	) {};
+
+	@Post('create')
+	async createAnimator(@Body() createAnimatorDto: CreateAnimatorDto, @Req() req: Request) {
+		const header: Record<string, any> = req.headers;
+		const lang = header['accept-language'] ?? 'en';
+
+		try {
+			return {
+				animator: await this.animatorService.createAnimator(createAnimatorDto),
+				date: new Date().toISOString(),
+			}
+		} catch (error: any) {
+			console.debug('Invalid workingHour or ', error.message);
+			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString()}, HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@Get('get')
+	async get(@Query('email') email: string, @Req() req: Request) {
+		const header:Record<string, any> = req.headers;
+		const lang: string = header['accept-language'] ?? 'en';
+
+		try {
+			return {
+				animator: await this.animatorService.getAnimator(email),
+				date: new Date().toISOString(),
+			};
+		} catch (error: any){
+			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString()}, HttpStatus.BAD_REQUEST);
+		} 
+	}
+	
 }
 

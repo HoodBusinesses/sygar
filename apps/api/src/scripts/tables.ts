@@ -14,6 +14,10 @@ import { BillSchema } from 'src/modules/bill/model/bill.model';
 import { CounterSchema } from 'src/modules/counter/model/counter.model';
 import { NotificationSchema } from 'src/global/notifactions/model/notifactions.model';
 import { ThemeSchema } from 'src/modules/organization/model/theme.model';
+import { GroupSchema } from 'src/modules/organization/model/group.model';
+import { AnimatorSchema } from 'src/modules/organization/model/animator.model';
+import { FormateurSchema } from 'src/modules/organization/model/formateur.model';
+import { ParticipantSchema } from 'src/modules/organization/model/participant.model';
 
 const configService = new ConfigService();
 const dbConstants = new DbConstants(configService);
@@ -65,6 +69,10 @@ async function main() {
     CounterSchema,
     NotificationSchema,
     ThemeSchema,
+    GroupSchema,
+    AnimatorSchema,
+    FormateurSchema,
+    ParticipantSchema
   ];
 
   for (const table of tables) {
