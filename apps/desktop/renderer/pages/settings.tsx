@@ -4,6 +4,7 @@ import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
 import { organizationSchema } from "../schemas/organization";
+import withAuth from "../hoc/with-auth";
 
 interface OrganizationFormData {
   rs: string;
@@ -170,4 +171,4 @@ const OrganizationForm = () => {
   );
 };
 
-export default OrganizationForm;
+export default withAuth(OrganizationForm);

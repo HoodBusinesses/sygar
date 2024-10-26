@@ -9,6 +9,16 @@ contextBridge.exposeInMainWorld('electron', {
 });
 
 
+// Listen for the token sent from the main process
+ipcRenderer.on('token', (event, data) => {
+  const { eventName, eventData } = data;
+  if (eventName === 'token') {
+
+    // Save the token in localStorage
+    localStorage.setItem('token', eventData);
+  }
+});
+
 const handler = {
   send(channel: string, value: unknown) {
     ipcRenderer.send(channel, value)

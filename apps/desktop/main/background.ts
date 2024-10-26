@@ -21,13 +21,22 @@ if (isProd) {
   // set sygar as default protocol
   app.setAsDefaultProtocolClient('sygar')
 
+  let mainWindow: BrowserWindow;
   // handle sygar protocol req
   app.on('open-url', function(event, data) {
     event.preventDefault();
-    console.log(data);
+    const url = new URL(data);
+
+    const token = url.searchParams.get('token')
+    console.log(token)
+
+    if (mainWindow) {
+      mainWindow.webContents.send('token', { eventName: 'token', eventData: token })
+    }
+
   });
 
-  const mainWindow = createWindow('main', {
+  mainWindow = createWindow('main', {
     width: width,
     height: height,
     webPreferences: {

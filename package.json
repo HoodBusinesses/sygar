@@ -1,5 +1,5 @@
 {
-  "name": "charging-app",
+  "name": "Sygar",
   "private": true,
   "scripts": {
     "build": "turbo build",

@@ -37,17 +37,17 @@ export default function Signin() {
     if (window.electronAPI && window.electronAPI.openExternal) {
       window.electronAPI.openExternal(authUrl);
       console.log("OPEN EXTERNAL");
-      
+
     } else {
       console.error("Electron API is not available");
     }
-    router.push("/home")
+    router.push("/")
   };
 
   return (
     <div
       className="flex bg-white bg-gradient-to-blue min-h-screen p-6 "
-      // style={{ backgroundImage: 'url("/images/background.png") , linear-gradient(269.56deg, #2563EB -3.3%, #FFFFFF 101.39%)' }}
+    // style={{ backgroundImage: 'url("/images/background.png") , linear-gradient(269.56deg, #2563EB -3.3%, #FFFFFF 101.39%)' }}
     >
       <div className="self-start mb-4 ">
         <div className="flex items-center font-poppins space-x-1 text-gray-500 hover:text-gray-700">
