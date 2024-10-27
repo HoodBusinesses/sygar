@@ -1,284 +1,184 @@
-import React, { useMemo, useState } from "react";
-import { Search, Download, Edit2, Trash2 } from "lucide-react";
+import { useMemo, useState } from 'react'
+import Search from '../components/Search'
+import { Button } from '../components/ui/button'
+import { useTranslation } from 'react-i18next'
+import DeleteModal from '../components/DeleteModal'
+import ExportModal from '../components/ExportModal'
+import ImportModal from '../components/ImportModal'
+import SubscriptionModal from '../components/SubscriptionModal'
+import SortByPopover from '../components/SortBy'
+import Filter from '../components/Filter'
+import RegistrationInfo from '../components/RegistrationInfo'
+import OrgListingHeader from '@renderer/components/OrganizationListingHeader'
+import Pagination from '@renderer/components/Pagination'
+import OrganizationTable from '@renderer/components/OrganizationTable'
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../components/ui/table";
-
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../components/ui/select";
-import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
-import { useTranslation } from "react-i18next";
-import { usePermissions } from "../contexts/PermissionsContext";
-import withAuth from "../hoc/with-auth";
-
-const ITEMS_PER_PAGE = 10;
-const DATE_OPTIONS = [
-  "All",
-  ...Array.from({ length: 50 }, (_, index) => `${2020 + index}`),
-];
+const ITEMS_PER_PAGE = 10
+const DATE_OPTIONS = ['All', ...Array.from({ length: 50 }, (_, index) => `${2020 + index}`)]
 type FilterObject = {
-  searchQuery?: string;
-  selectedDate?: string;
-};
+  searchQuery?: string
+  selectedDate?: string
+}
 
 const applyFilters = (organizations, filters: FilterObject) => {
   return organizations.filter((org) => {
     const matchesSearchQuery = filters.searchQuery
       ? Object.values(org).some((value) =>
-        value
-          .toString()
-          .toLowerCase()
-          .includes(filters.searchQuery.toLowerCase())
-      )
-      : true;
+          value.toString().toLowerCase().includes(filters.searchQuery.toLowerCase())
+        )
+      : true
     const matchesSelectedDate = filters.selectedDate
-      ? filters.selectedDate === "All" ||
-      org.date.includes(filters.selectedDate)
-      : true;
-    return matchesSearchQuery && matchesSelectedDate;
-  });
-};
+      ? filters.selectedDate === 'All' || org.date.includes(filters.selectedDate)
+      : true
+    return matchesSearchQuery && matchesSelectedDate
+  })
+}
 
 const mockOrganizations = Array.from({ length: 50 }, (_, index) => {
-  const year = 2020 + Math.floor(index / 12);
-  const month = (index % 12) + 1;
-  const formattedMonth = month.toString().padStart(2, "0");
+  const year = 2020 + Math.floor(index / 12)
+  const month = (index % 12) + 1
+  const formattedMonth = month.toString().padStart(2, '0')
   return {
     id: index + 1,
-    image: "/api/placeholder/40/40",
+    image: '/api/placeholder/40/40',
     rs: `Organization ${index + 1}`,
     cnss: `CNSS-${index + 1}`,
     address: `Address ${index + 1}`,
     email: `org${index + 1}@example.com`,
     responsibleName: `Manager ${index + 1}`,
     trainingManagerName: `Trainer ${index + 1}`,
-    date: `**/${formattedMonth}/${year}`,
-  };
-});
+    date: `**/${formattedMonth}/${year}`
+  }
+})
 
-const OrganizationsPage = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [selectedDate, setSelectedDate] = useState(DATE_OPTIONS[0]);
-  const permissions = usePermissions();
-  const router = useRouter();
-
-  // Load language translations
-  const { t } = useTranslation();
+const OrganizationsPage: React.FC = () => {
+  const [searchQuery, setSearchQuery] = useState('')
+  const [currentPage, setCurrentPage] = useState(1)
+  const [selectedDate, setSelectedDate] = useState(DATE_OPTIONS[0])
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false)
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false)
+  const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false)
+  const [editModalOpen, setEditModalOpen] = useState(false)
+  const [sortConfig, setSortConfig] = useState(null)
+  const {t} = useTranslation()
 
   // Memoized filtered data
   const filteredOrganizations = useMemo(() => {
-    const filters: FilterObject = {
+    let filtered = applyFilters(mockOrganizations, {
       searchQuery,
-      selectedDate,
-    };
-    return applyFilters(mockOrganizations, filters);
-  }, [searchQuery, selectedDate]);
+      selectedDate
+    })
+
+    if (sortConfig) {
+      filtered.sort((a, b) => {
+        if (sortConfig.field === 'email') {
+          return sortConfig.direction === 'asc'
+            ? a.email.localeCompare(b.email)
+            : b.email.localeCompare(a.email)
+        }
+        if (sortConfig.field === 'createdDate') {
+          return sortConfig.direction === 'asc'
+            ? new Date(a.date).getTime() - new Date(b.date).getTime()
+            : new Date(b.date).getTime() - new Date(a.date).getTime()
+        }
+        return 0
+      })
+    }
+
+    return filtered
+  }, [searchQuery, selectedDate, sortConfig])
 
   // Memoized paginated data
   const paginatedData = useMemo(() => {
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    return filteredOrganizations.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-  }, [filteredOrganizations, currentPage]);
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
+    return filteredOrganizations.slice(startIndex, startIndex + ITEMS_PER_PAGE)
+  }, [filteredOrganizations, currentPage])
 
-  const totalPages = Math.ceil(filteredOrganizations.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(filteredOrganizations.length / ITEMS_PER_PAGE)
 
-  const handlePageChange = (newPage) => {
-    setCurrentPage(Math.min(Math.max(1, newPage), totalPages));
-  };
-
-  const handleReset = () => {
-    setSearchQuery("");
-    setCurrentPage(1);
-    setSelectedDate(DATE_OPTIONS[0]);
-  };
-
-  const handleEditClick = (organization) => {
-    router.push({
-      pathname: "/registration",
-      query: { organization: JSON.stringify(organization) },
-    });
-  };
-
-  if (
-    !permissions?.organizations.canView &&
-    !permissions?.organizations.canModify
-  ) {
-    return (
-      <div className="p-6 space-y-6">
-        <h1 className="text-2xl font-semibold text-gray-700">
-          {t("organization.organizations")}
-        </h1>
-        <div className="text-red-500">{t("noPermission")}</div>
-      </div>
-    );
+  const handlePageChange = (newPage): void => {
+    setCurrentPage(Math.min(Math.max(1, newPage), totalPages))
   }
-  const token = localStorage.getItem('token');
 
-  console.log(`token is: ${token}`)
+  const handleReset = (): void => {
+    setSearchQuery('')
+    setCurrentPage(1)
+    setSelectedDate(DATE_OPTIONS[0])
+  }
+
+
+  const handleCloseModals = (): void => {
+    setIsDeleteModalOpen(false)
+    setIsExportModalOpen(false)
+    setIsImportModalOpen(false)
+    setIsSubscriptionModalOpen(false)
+    setEditModalOpen(false)
+  }
+
+  const openDeleteModal = (): void => setIsDeleteModalOpen(true)
+  const openExportModal = (): void => setIsExportModalOpen(true)
+  const openImportModal = (): void => setIsImportModalOpen(true)
+  const openSubscriptionModal = (): void => setIsSubscriptionModalOpen(true)
+  const openEditModal = (): void => setEditModalOpen(true)
 
   return (
-    <div className="h-full w-full p-6 space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-semibold text-gray-700">
-          {t("organization.organizations")}
-        </h1>
-      </div>
+    <main className="h-full bg-white w-full p-6 space-y-6">
+      {/* Header */}
+      {!editModalOpen && (
+        <>
+          <OrgListingHeader openImportModal={openImportModal} openExportModal={openExportModal} />
 
-      <div className="flex flex-col md:flex-row gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-          <Input
-            placeholder={t("organization.searchPlaceholder")}
-            className="pl-10 text-gray-600 placeholder:text-gray-400"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+          {/* Search and Filters */}
+          <div className="flex justify-between items-center mb-6 gap-4">
+
+            {/* Left Section: Search Input */}
+            <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+
+            {/* Right Section: Buttons and Profile */}
+            <div className="flex gap-4">
+              <SortByPopover onSort={(sortConfig) => setSortConfig(sortConfig)} />
+              <Filter OnFilter={(filters) => console.log(filters)} />
+            </div>
+          </div>
+
+          {/* Organization Table Component */}
+          <OrganizationTable
+            openEditModal={openEditModal}
+            paginatedData={paginatedData}
+            openSubscriptionModal={openSubscriptionModal}
+            openDeleteModal={openDeleteModal}
           />
-        </div>
 
-        <div className="flex flex-wrap gap-2">
-          <Select value={selectedDate} onValueChange={setSelectedDate}>
-            <SelectTrigger className="w-[140px] text-gray-600">
-              <SelectValue placeholder={t("organization.dateSelect")} />
-            </SelectTrigger>
-            <SelectContent className="bg-gray-600">
-              {DATE_OPTIONS.map((date) => (
-                <SelectItem key={date} value={date}>
-                  {date}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          {permissions?.organizations.canModify && (
-            <Button className="btn-blue text-white">
-              <Download className="h-4 w-4 mr-2" />
-              {t("organization.export")}
+          {/* Pagination */}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </>
+      )}
+      {isDeleteModalOpen && <DeleteModal onClose={handleCloseModals} />}
+      {isExportModalOpen && <ExportModal onClose={handleCloseModals} />}
+      {isImportModalOpen && <ImportModal onClose={handleCloseModals} />}
+      {isSubscriptionModalOpen && <SubscriptionModal onClose={handleCloseModals} />}
+      {editModalOpen && (
+        <>
+          <div className="flex flex-row p-5">
+            <Button
+              className="custom-button bg-blue-600 hover:bg-blue-500 "
+              onClick={handleCloseModals}
+            >
+              Close
             </Button>
-          )}
-        </div>
-      </div>
+            <p className="text-xl text-gray-900 px-5">Back To Organizations</p>
+          </div>
 
-      <div className="border rounded-lg overflow-hidden">
-        <div className="overflow-x-auto">
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-gray-50">
-                <TableHead className="text-gray-600">
-                  {t("organization.image")}
-                </TableHead>
-                <TableHead className="text-gray-600">
-                  {t("organization.rs")}
-                </TableHead>
-                <TableHead className="text-gray-600">
-                  {t("organization.cnss")}
-                </TableHead>
-                <TableHead className="text-gray-600">
-                  {t("organization.address")}
-                </TableHead>
-                <TableHead className="text-gray-600">
-                  {t("organization.email")}
-                </TableHead>
-                <TableHead className="text-gray-600">
-                  {t("organization.responsibleName")}
-                </TableHead>
-                <TableHead className="text-gray-600">
-                  {t("organization.trainingManagerName")}
-                </TableHead>
-                <TableHead className="text-gray-600">Action</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {paginatedData.map((org) => (
-                <TableRow key={org.id} className="hover:bg-gray-50">
-                  <TableCell>
-                    <img
-                      src="/images/profile_img.png"
-                      alt="Organization"
-                      className="w-8 h-8 rounded-full"
-                    />
-                  </TableCell>
-                  <TableCell className="text-gray-600">{org.rs}</TableCell>
-                  <TableCell className="text-gray-600">{org.cnss}</TableCell>
-                  <TableCell className="text-gray-600">{org.address}</TableCell>
-                  <TableCell className="text-gray-600">{org.email}</TableCell>
-                  <TableCell className="text-gray-600">
-                    {org.responsibleName}
-                  </TableCell>
-                  <TableCell className="text-gray-600">
-                    {org.trainingManagerName}
-                  </TableCell>
-                  <TableCell>
-                    {permissions?.organizations.canModify && (
-                      <div className="flex">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => {
-                            handleEditClick(org);
-                          }}
-                          className="bg-blue-100 text-blue-800 rounded-l-full"
-                        >
-                          <Edit2 className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          // onClick={() => ()}
-                          className="bg-red-100 text-red-800 rounded-r-full"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      </div>
+          <RegistrationInfo />
+        </>
+      )}
+    </main>
+  )
+}
 
-      <div className="flex justify-between items-center mt-4">
-        <div className="text-sm text-gray-500">
-          {t("organization.page")} {currentPage} {t("organization.of")}{" "}
-          {totalPages}
-        </div>
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="text-gray-600"
-          >
-            {t("organization.previous")}
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className="text-gray-600"
-          >
-            {t("organization.next")}
-          </Button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default withAuth(OrganizationsPage);
+export default OrganizationsPage
