@@ -9,7 +9,7 @@ const authUrl = 'http://localhost:3000/login' // URL to authenticate the user
 
 export default function Signin() {
   // get the translation function from the hook , it will return also { t, i18n }
-  const { t } = useTranslate();
+  const { t } = useTranslate()
 
   const handleSignIn = () => {
     // Use the exposed electronAPI to open the URL in the browser
@@ -21,7 +21,7 @@ export default function Signin() {
     // }
     // <a href={authUrl}></a>
   }
-  
+
   return (
     <div
       className="flex bg-white bg-gradient-to-blue min-h-screen p-6 "

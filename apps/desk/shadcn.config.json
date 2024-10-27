@@ -1,6 +1,6 @@
 {
-    "resolvedPaths": {
-        "components": "components/ui",
-        "utils": "components/ui/lib/utils.ts"
-    }
+  "resolvedPaths": {
+    "components": "components/ui",
+    "utils": "components/ui/lib/utils.ts"
+  }
 }

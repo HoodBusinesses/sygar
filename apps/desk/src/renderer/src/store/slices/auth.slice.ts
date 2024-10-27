@@ -21,7 +21,7 @@ const authSlice = createSlice({
       state.auth.isAuth = payload
     },
     setToken: (state: AuthSliceType, { payload: token }: PayloadAction<string>) => {
-      state.auth.token = token;
+      state.auth.token = token
     }
   }
 })

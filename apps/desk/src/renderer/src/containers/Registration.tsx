@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { zodResolver } from '@hookform/resolvers/zod'
 // import { Card, CardContent } from '@/components/ui/card'
@@ -21,7 +21,11 @@ import { Card, CardContent } from '@renderer/components/ui/card'
 import { Button } from '@renderer/components/ui/button'
 import { MembersTable } from '@renderer/components/MembersTable'
 import { AddMemberForm } from '@renderer/components/AddMemberForm'
-import { MemberFormData, OrganizationFormData, organizationSchema } from '@renderer/utils/schemas/organization'
+import {
+  MemberFormData,
+  OrganizationFormData,
+  organizationSchema
+} from '@renderer/utils/schemas/organization'
 
 // Moved to a separate file: data/mockData.ts
 const INITIAL_MEMBERS: MemberFormData[] = [
@@ -31,15 +35,15 @@ const INITIAL_MEMBERS: MemberFormData[] = [
 
 // Moved to a separate service: services/organizationService.ts
 const useOrganizationData = (organizationId: string | null) => {
-  return useQuery(
-    ['organizationData', organizationId],
-    async () => {
+  return useQuery({
+    queryKey: ['organizationData', organizationId],
+    queryFn: async () => {
       if (!organizationId) return null
       const response = await fetch(`/api/organizations/${organizationId}`)
       if (!response.ok) throw new Error('Failed to fetch organization')
       return response.json()
-    },
-  )
+    }
+  })
 }
 
 const Registration: React.FC = () => {

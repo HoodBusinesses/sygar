@@ -10,7 +10,7 @@ body {
 
 @layer base {
   body {
-    @apply bg-red-50 text-gray-950 ;
+    @apply bg-red-50 text-gray-950;
   }
 }
 

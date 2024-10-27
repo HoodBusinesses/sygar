@@ -1,13 +1,13 @@
 // components/ui/use-toast.ts
-import { Toast } from "./toast";
-import { useState } from "react";
+import { Toast } from './toast'
+import { useState } from 'react'
 
 export function useToast() {
-    const [toasts, setToasts] = useState([]);
+  const [toasts, setToasts] = useState([])
 
-    function addToast(title, description) {
-        setToasts([...toasts, { title, description }]);
-    }
+  function addToast(title, description) {
+    setToasts([...toasts, { title, description }])
+  }
 
-    return { addToast, toasts };
+  return { addToast, toasts }
 }

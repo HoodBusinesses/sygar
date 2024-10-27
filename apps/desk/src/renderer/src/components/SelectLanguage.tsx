@@ -4,12 +4,11 @@ import { changeLang, langs } from '@renderer/store/slices/lang.slice'
 import { GrLanguage } from 'react-icons/gr'
 
 export default function SelectLanguage() {
-  const { lng: Language } = useTranslate();
+  const { lng: Language } = useTranslate()
 
-  const dispatcher = useAppDispatch();
+  const dispatcher = useAppDispatch()
 
   const changeLanguage = (lng: string) => {
-
     const lang = langs.find((lang) => lang.id === lng)
     dispatcher(
       changeLang({
