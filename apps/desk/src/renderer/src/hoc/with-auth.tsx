@@ -19,7 +19,8 @@ const withAuth = (WrappedComponent: ComponentType<any>): FC<any> => {
     });
 
     if (!token || status === 'error') {
-      console.log('hello from error')
+      // console.log('hello from error')
+      return <WrappedComponent {...props} />;
     }
 
     if (status === 'loading') {
