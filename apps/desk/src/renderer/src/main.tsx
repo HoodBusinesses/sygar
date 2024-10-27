@@ -3,19 +3,17 @@ import "./assets/globals.css";
 import 'react-toastify/dist/ReactToastify.css';
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { I18nProvider } from '@renderer/providers/i18n'
 import { ReactQueryProvider } from "./providers/react-query";
 import { ReactRouterProvider } from "./providers/router";
-
-
+import StoreProvider from "./providers/redux-store";
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <I18nProvider>
+    <StoreProvider>
       <ToastContainer />
       <ReactQueryProvider>
         <ReactRouterProvider />
       </ReactQueryProvider>
-    </I18nProvider>
+    </StoreProvider>
   </React.StrictMode>
 )
