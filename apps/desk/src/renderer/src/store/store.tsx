@@ -1,4 +1,5 @@
 import langReducer from '../store/slices/lang.slice'
+import authReducer from '../store/slices/auth.slice'
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { persistReducer, persistStore } from 'redux-persist'
 import createWebStorage from 'redux-persist/lib/storage/createWebStorage'
@@ -27,6 +28,7 @@ const persistConfig = {
 
 const reducers = combineReducers({
   lang: langReducer,
+  auth: authReducer
 })
 
 const persistedReducer = persistReducer(persistConfig, reducers)
