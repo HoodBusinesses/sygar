@@ -1,128 +1,155 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { AddMemberForm } from '@renderer/components/AddMemberForm'
-import { MembersTable } from '@renderer/components/MembersTable'
-import { OrganizationBasicInfo } from '@renderer/components/OrganizationBasicInfo'
-import { Button } from '@renderer/components/ui/button'
-import { Card, CardContent } from '@renderer/components/ui/card'
-import { useToast } from '@renderer/components/ui/use-toast'
-import withAuth from '@renderer/hoc/with-auth'
-import {
-  MemberFormData,
-  OrganizationFormData,
-  organizationSchema
-} from '@renderer/utils/schemas/organization'
-import { useState } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
+import React, { useState, useMemo } from 'react'
+import { useForm, FormProvider } from 'react-hook-form'
 import { useQuery } from 'react-query'
+import { useTranslation } from 'react-i18next'
+import { zodResolver } from '@hookform/resolvers/zod'
+// import { Card, CardContent } from '@/components/ui/card'
+// import { Button } from '@/components/ui/button'
+// import { useToast } from '@/components/ui/use-toast'
+// import { OrganizationBasicInfo } from '@/components/OrganizationBasicInfo'
+// import { MembersTable } from '@/components/MembersTable'
+// import { AddMemberForm
+import withAuth from '@renderer/hoc/with-auth'
+// import {
+//   MemberFormData,
+//   OrganizationFormData,
+//   organizationSchema
+// } from '@/utils/schemas/organization'
+import { useToast } from '@renderer/components/ui/use-toast'
+import { OrganizationBasicInfo } from '@renderer/components/OrganizationBasicInfo'
+import { Card, CardContent } from '@renderer/components/ui/card'
+import { Button } from '@renderer/components/ui/button'
+import { MembersTable } from '@renderer/components/MembersTable'
+import { AddMemberForm } from '@renderer/components/AddMemberForm'
+import { MemberFormData, OrganizationFormData, organizationSchema } from '@renderer/utils/schemas/organization'
 
-const staticMembers: MemberFormData[] = [
+// Moved to a separate file: data/mockData.ts
+const INITIAL_MEMBERS: MemberFormData[] = [
   { fullName: 'John Doe', email: 'john.doe@example.com', role: 'manager', actionType: 'edit' },
   { fullName: 'Jane Smith', email: 'jane.smith@example.com', role: 'employee', actionType: 'view' }
 ]
 
-const mockOrganizations = Array.from({ length: 50 }, (_, index) => {
-  const year = 2020 + Math.floor(index / 12)
-  const month = (index % 12) + 1
-  const formattedMonth = month.toString().padStart(2, '0')
-  return {
-    id: index + 1,
-    image: '/api/placeholder/40/40',
-    rs: `Organization ${index + 1}`,
-    cnss: `CNSS-${index + 1}`,
-    address: `Address ${index + 1}`,
-    email: `org${index + 1}@example.com`,
-    responsibleName: `Manager ${index + 1}`,
-    trainingManagerName: `Trainer ${index + 1}`,
-    date: `**/${formattedMonth}/${year}`
-  }
-})
-
-const fetchMockOrganizationData = (organizationId: string | null) => {
-  if (!organizationId) return null
-  const organization = mockOrganizations.find((org) => org.id === Number(organizationId))
-  if (!organization) throw new Error('Organization not found')
-  return organization
+// Moved to a separate service: services/organizationService.ts
+const useOrganizationData = (organizationId: string | null) => {
+  return useQuery(
+    ['organizationData', organizationId],
+    async () => {
+      if (!organizationId) return null
+      const response = await fetch(`/api/organizations/${organizationId}`)
+      if (!response.ok) throw new Error('Failed to fetch organization')
+      return response.json()
+    },
+  )
 }
 
 const Registration: React.FC = () => {
   const { t } = useTranslation()
-  // const { addtoast } = useToast();
+  const { toast } = useToast()
+  const organizationId = useMemo(
+    () => new URLSearchParams(window.location.search).get('organization'),
+    []
+  )
 
-  const [members, setMembers] = useState<MemberFormData[]>(staticMembers)
+  const [members, setMembers] = useState<MemberFormData[]>(INITIAL_MEMBERS)
   const [editingMember, setEditingMember] = useState<{
     index: number
     data: MemberFormData
   } | null>(null)
 
-  const organizationId = new URLSearchParams(location.search).get('organization')
-
-  const {
-    data: organization,
-    error,
-    isLoading
-  } = useQuery(
-    ['organizationData', organizationId],
-    () => fetchMockOrganizationData(organizationId),
-    { enabled: !!organizationId }
-  )
+  const { data: organization, error, isLoading } = useOrganizationData(organizationId)
 
   const methods = useForm<OrganizationFormData>({
-    resolver: zodResolver(organizationSchema)
+    resolver: zodResolver(organizationSchema),
+    defaultValues: useMemo(
+      () => ({
+        // default values
+      }),
+      []
+    )
   })
 
-  const onSubmit = (data: OrganizationFormData) => {
-    console.log({ ...data, members })
-    // addtoast("Success", "Organization information saved successfully");
+  const handleSubmit = async (data: OrganizationFormData) => {
+    try {
+      // Assuming you have an API endpoint to save the data
+      const response = await fetch('/api/organizations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...data, members })
+      })
+
+      if (!response.ok) throw new Error('Failed to save')
+
+      toast({
+        title: t('success'),
+        description: t('registration.messages.saveSuccess')
+      })
+    } catch (error) {
+      toast({
+        title: t('error'),
+        description: t('registration.messages.saveError'),
+        variant: 'destructive'
+      })
+    }
   }
 
-  const handleAddOrUpdateMember = (data: MemberFormData) => {
-    setMembers((prevMembers) =>
-      editingMember
-        ? prevMembers.map((member, i) => (i === editingMember.index ? data : member))
-        : [...prevMembers, data]
-    )
-    setEditingMember(null)
-  }
+  const memberOperations = useMemo(
+    () => ({
+      handleAdd: (data: MemberFormData) => {
+        setMembers((prev) => [...prev, data])
+        setEditingMember(null)
+      },
+      handleUpdate: (data: MemberFormData, index: number) => {
+        setMembers((prev) => prev.map((member, i) => (i === index ? data : member)))
+        setEditingMember(null)
+      },
+      handleEdit: (index: number) =>
+        setEditingMember({
+          index,
+          data: members[index]
+        }),
+      handleDelete: (index: number) => setMembers((prev) => prev.filter((_, i) => i !== index))
+    }),
+    [members]
+  )
 
-  const handleEditMember = (index: number) => setEditingMember({ index, data: members[index] })
-  const handleDeleteMember = (index: number) =>
-    setMembers((prevMembers) => prevMembers.filter((_, i) => i !== index))
-
-  if (isLoading) return <p>Loading...</p>
-  if (error) return <p>Error loading organization data</p>
-
-  console.log('organization', organization);
+  if (isLoading) return <div className="flex items-center justify-center h-screen">Loading...</div>
+  if (error) return <div className="text-red-500 p-4">Error loading organization data</div>
 
   return (
-    <div className="space-y-6 w-full h-full min-h-screen mx-auto">
+    <div className="max-w-7xl mx-auto py-6 space-y-6">
       <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(onSubmit)}>
-
+        <form onSubmit={methods.handleSubmit(handleSubmit)} className="space-y-6">
           <OrganizationBasicInfo organization={organization} />
 
-          <Card className="p-6 mb-6">
-            <CardContent>
+          <Card>
+            <CardContent className="p-6">
               <div className="flex justify-between items-center mb-6">
-                <p className="text-lg text-gray-950 font-bold mb-6">{t('registration.title')}</p>
-                <Button className="btn-blue" type="submit">
-                  {t('registration.buttons.import')}
-                </Button>
+                <h2 className="text-lg font-bold text-gray-950">{t('registration.title')}</h2>
+                <Button variant="default">{t('registration.buttons.import')}</Button>
               </div>
 
               <MembersTable
                 members={members}
-                onEdit={handleEditMember}
-                onDelete={handleDeleteMember}
+                onEdit={memberOperations.handleEdit}
+                onDelete={memberOperations.handleDelete}
               />
 
-              <AddMemberForm onSubmit={handleAddOrUpdateMember} initialData={editingMember?.data} />
+              <AddMemberForm
+                onSubmit={
+                  editingMember
+                    ? (data) => memberOperations.handleUpdate(data, editingMember.index)
+                    : memberOperations.handleAdd
+                }
+                initialData={editingMember?.data}
+              />
             </CardContent>
           </Card>
 
-          <Button className="btn-blue" type="submit">
-            {t('registration.buttons.save')}
-          </Button>
+          <div className="flex justify-end">
+            <Button type="submit" className="w-full sm:w-auto">
+              {t('registration.buttons.save')}
+            </Button>
+          </div>
         </form>
       </FormProvider>
     </div>
