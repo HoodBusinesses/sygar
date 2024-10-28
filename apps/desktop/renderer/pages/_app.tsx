@@ -10,7 +10,7 @@ import { ToastContainer } from "react-toastify";
 import "../public/localization/i18n";
 import "../styles/globals.css";
 import 'react-toastify/dist/ReactToastify.css';
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { queryObjects } from "v8";
 
 const queryClient = new QueryClient()
