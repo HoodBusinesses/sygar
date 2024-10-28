@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { ArrowDownIcon } from 'lucide-react'
 import { Button } from './ui/button'
-import { useTranslate } from '@renderer/hooks/useTranslate';
+import { useTranslate } from '@renderer/hooks/useTranslate'
+import SortOption from './ui/sort-options'
 
 const SortByPopover = ({ onSort }) => {
   const { t } = useTranslate()
@@ -9,18 +10,18 @@ const SortByPopover = ({ onSort }) => {
   const [email, setEmail] = useState('asc')
   const [creationDate, setCreationDate] = useState('asc')
   const popoverRef = useRef(null)
-  
+
   // Handle click outside to close popover
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (popoverRef.current && !popoverRef.current.contains(event.target)) {
-        setIsOpen(false);
+        setIsOpen(false)
       }
-    };
+    }
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   const handleApply = (): void => {
     console.log({ email, creationDate })
@@ -33,12 +34,12 @@ const SortByPopover = ({ onSort }) => {
     }
     setIsOpen(false)
   }
-  
+
   const handleReset = (): void => {
     setEmail('')
     setCreationDate('')
     onSort(null)
-  };
+  }
 
   return (
     <div className="relative" ref={popoverRef}>
@@ -53,83 +54,43 @@ const SortByPopover = ({ onSort }) => {
       {isOpen && (
         <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
           <div className="p-4 space-y-4 text-gray-700">
-          <h4 className="font-medium mb-3">{t('buttons.sortBy')}</h4>
+            <h4 className="font-medium mb-3">{t('buttons.sortBy')}</h4>
 
-            <div>
-              <h4 className="font-medium mb-3">Email</h4>
-              <div className="space-y-2 ">
-                <label className="flex items-center  space-x-2 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="sortEmail"
-                    value="asc"
-                    checked={email === 'asc'}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-4 h-4 text-blue-600"
-                  />
-                  <span>A_Z</span>
-                </label>
-                <label className="flex items-center space-x-2 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="sortEmail"
-                    value="desc"
-                    checked={email === 'desc'}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-4 h-4 text-blue-600"
-                  />
-                  <span>Z_A</span>
-                </label>
-              </div>
-            </div>
-
-            <div>
-              <h4 className="font-medium mb-3">Created Date</h4>
-              <div className="space-y-2">
-                <label className="flex items-center space-x-2 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="sortCreationDate"
-                    value="asc"
-                    checked={creationDate === 'asc'}
-                    onChange={(e) => setCreationDate(e.target.value)}
-                    className="w-4 h-4 text-blue-600"
-                  />
-                  <span>Ascending</span>
-                </label>
-                <label className="flex items-center space-x-2 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="sortCreationDate"
-                    value="desc"
-                    checked={creationDate === 'desc'}
-                    onChange={(e) => setCreationDate(e.target.value)}
-                    className="w-4 h-4 text-blue-600"
-                  />
-                  <span>Descending</span>
-                </label>
-              </div>
-            </div>
-
+            <SortOption
+              title="Email"
+              name="sortEmail"
+              value={email}
+              checkedValue={email}
+              onChange={setEmail}
+              labels={{ asc: 'A_Z', desc: 'Z_A' }}
+            />
+            <SortOption
+              title="Created Date"
+              name="sortCreationDate"
+              value={creationDate}
+              checkedValue={creationDate}
+              onChange={setCreationDate}
+              labels={{ asc: 'Ascending', desc: 'Descending' }}
+            />
             <div className="flex justify-between pt-4 border-t">
-              <button
+              <Button
                 onClick={handleReset}
                 className="px-4 py-2 border border-gray-300 rounded-lg text-gray-500 hover:bg-gray-50"
               >
                 Reset all
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={handleApply}
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
               >
                 Apply now
-              </button>
+              </Button>
             </div>
           </div>
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default SortByPopover;
+export default SortByPopover

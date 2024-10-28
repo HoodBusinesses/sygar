@@ -20,11 +20,11 @@ export default function SelectLanguage(): JSX.Element {
   }
 
   return (
-    <div className="self-start mb-4 flex items-center font-poppins space-x-1 text-gray-500 hover:text-gray-700">
+    <div className="self-start cursor-pointer  border rounded-md py-1 px-2 mb-4 flex items-center font-poppins space-x-1 text-gray-500 hover:text-gray-700">
       <GrLanguage className="text-gray-500" />
 
       <select
-        className="border p-1 rounded"
+        className="border p-1 absolute top-10 right-0 bg-white rounded-lg shadow-md  mt-2 z-50"
         value={Language.id}
         onChange={(e) => changeLanguage(e.target.value)} // Directly update the language based on the selected option
       >

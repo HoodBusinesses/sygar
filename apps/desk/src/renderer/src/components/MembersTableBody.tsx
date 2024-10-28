@@ -1,9 +1,9 @@
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
 } from '@radix-ui/react-select'
 import { useTranslate } from '@renderer/hooks/useTranslate'
 import { MemberFormData } from '@renderer/utils/schemas/organization'
@@ -24,8 +24,8 @@ export default function MembersTableBody({
   members,
   onEdit,
   onDelete
-}: MembersTableBodyProps) {
-    const { t, isRtl } = useTranslate();
+}: MembersTableBodyProps): JSX.Element {
+  const { t, isRtl } = useTranslate()
   return (
     <TableBody>
       {members.map((member, index) => (

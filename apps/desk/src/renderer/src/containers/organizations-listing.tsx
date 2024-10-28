@@ -9,6 +9,7 @@ import { mockOrganizations } from '@renderer/utils/static/organizations'
 import { applyFilters, sortConfig } from '@renderer/utils/filter/filter'
 import OrgModals from '@renderer/components/OrgModals'
 import Navbar from '@renderer/components/Navbar'
+import { useTranslate } from '@renderer/hooks/useTranslate'
 
 const ITEMS_PER_PAGE = 10
 
@@ -16,6 +17,8 @@ const OrganizationsPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [sortConfig, setSortConfig] = useState<sortConfig>()
+  const { isRtl} = useTranslate()
+
   const [modals, setModals] = useState({
     isDeleteModalOpen: false,
     isExportModalOpen: false,
@@ -69,8 +72,7 @@ const OrganizationsPage: React.FC = () => {
   }
 
   return (
-    <main className="h-full bg-white w-full p-6 space-y-6">
-      <Navbar />
+    <main dir={isRtl ? 'rtl' : 'ltr'} className="h-full bg-white w-full p-6 space-y-6">
       {!modals.editModalOpen && (
         <>
           {/* Header */}
