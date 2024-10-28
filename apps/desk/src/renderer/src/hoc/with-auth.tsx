@@ -1,37 +1,22 @@
-import { ComponentType, FC } from 'react';
-import { useQuery } from 'react-query'
-
-const fetchUser = async (token: string | null) => {
-  if (!token) {
-    throw new Error('invalid token');
-  }
-  return new Promise((res) => {
-    setTimeout(() => res('ok'), 3000);
-  })
-}
+import { InternalError } from '@renderer/containers/internal-error'
+import { Loading } from '@renderer/containers/laoding'
+import { useAuth } from '@renderer/hooks/useAuth'
+import { ComponentType, FC } from 'react'
 
 const withAuth = (WrappedComponent: ComponentType<any>): FC<any> => {
   return (props) => {
-    const token = localStorage.getItem('token');
-    const { status } = useQuery(['fetch-user-data', token], () => fetchUser(token), {
-      enabled: !!token,
-      retry: 0,
-    });
+    const auth = useAuth()
 
-    if (!token || status === 'error') {
-      // console.log('hello from error')
-      return <WrappedComponent {...props} />;
+    if (auth.isAuth) {
+      return <WrappedComponent {...props} />
     }
 
-    if (status === 'loading') {
-      return <p>Loading...</p>;
+    if (auth.isLoading) {
+      return <Loading />
     }
 
-    if (status === 'success') {
-      return <WrappedComponent {...props} />;
-    }
+    return <InternalError />
+  }
+}
 
-    return <p>Something went wrong badly</p>;
-  };
-};
 export default withAuth

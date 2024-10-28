@@ -29,7 +29,7 @@ export const langs = [
   }
 ]
 
-const main = langs[1];
+const main = langs[1]
 
 const initialState: LangSliceType = {
   main,

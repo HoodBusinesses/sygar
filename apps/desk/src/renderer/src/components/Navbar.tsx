@@ -14,7 +14,6 @@ export default function Navbar(): JSX.Element {
   //       addToast("Notification", "You have new notifications!");
   //   };
 
-
   return (
     <nav className="flex w-full justify-between items-center bg-white text-gray-500 hover:text-gray-700 shadow-lg px-4 py-2">
       <div>
@@ -44,5 +43,5 @@ export default function Navbar(): JSX.Element {
         <IoNotificationsOutline />
       </div>
     </nav>
-  );
+  )
 }

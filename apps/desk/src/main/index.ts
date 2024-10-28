@@ -16,6 +16,20 @@ function createWindow(): void {
       sandbox: false
     }
   })
+  app.setAsDefaultProtocolClient('sygar')
+
+  // handle sygar protocol req
+  app.on('open-url', function (event, data) {
+    event.preventDefault()
+    const url = new URL(data)
+
+    const token = url.searchParams.get('token')
+    console.log({ mainWindow: !!mainWindow, token, url })
+    // Send the token to the renderer process
+    if (mainWindow && token) {
+      mainWindow.webContents.send('token-received', token)
+    }
+  })
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()

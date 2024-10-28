@@ -49,6 +49,7 @@ const OrganizationTable: React.FC<OrganizationTableProps> = ({
         </TableHeader>
         <TableBody>
           {paginatedData.map((org) => (
+
             <TableRow key={org.id} className="hover:bg-gray-50">
               <TableCell>
                 <img src={Profile_Img} alt="Organization" className="w-8 h-8 rounded-full" />
@@ -76,6 +77,7 @@ const OrganizationTable: React.FC<OrganizationTableProps> = ({
                   />
                 </div>
               </TableCell>
+              
               <TableCell>
                 <div className="flex">
                   <Button

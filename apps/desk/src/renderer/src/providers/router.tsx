@@ -17,8 +17,8 @@ const rootRoute = createRootRoute({
         <Link to="/" className="[&.active]:font-bold">
           Home
         </Link>{' '}
-        <Link to="/about" className="[&.active]:font-bold">
-          About
+        <Link to="/organizations" className="[&.active]:font-bold">
+          organizations
         </Link>{' '}
         <Link to="/registration" className="[&.active]:font-bold">
           Registration
@@ -33,21 +33,13 @@ const rootRoute = createRootRoute({
 const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
-  component: function Index() {
-    return (
-      <Signin />
-    )
-  }
+  component: Signin
 })
 
-const aboutRoute = createRoute({
+const organizationRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/about',
-  component: function About() {
-    return (
-      <OrganizationsPage />
-    )
-  }
+  path: '/organizations',
+  component: OrganizationsPage
 })
 
 const registrationRoute = createRoute({
@@ -56,7 +48,7 @@ const registrationRoute = createRoute({
   component: Registration
 })
 
-const routeTree = rootRoute.addChildren([indexRoute, aboutRoute, registrationRoute])
+const routeTree = rootRoute.addChildren([indexRoute, organizationRoute, registrationRoute])
 
 const router = createRouter({ routeTree })
 

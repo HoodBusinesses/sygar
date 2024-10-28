@@ -6,7 +6,7 @@ import { GrLanguage } from 'react-icons/gr'
 export default function SelectLanguage(): JSX.Element {
   const { lng: Language } = useTranslate();
 
-  const dispatcher = useAppDispatch();
+  const dispatcher = useAppDispatch()
 
   const changeLanguage = (lng: string): void => {
     const lang = langs.find((lang) => lang.id === lng)

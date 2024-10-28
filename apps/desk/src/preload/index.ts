@@ -1,5 +1,4 @@
-import { contextBridge } from 'electron'
-import { electronAPI } from '@electron-toolkit/preload'
+import { contextBridge, ipcRenderer } from 'electron'
 
 // Custom APIs for renderer
 const api = {}
@@ -9,14 +8,34 @@ const api = {}
 // just add to the DOM global.
 if (process.contextIsolated) {
   try {
-    contextBridge.exposeInMainWorld('electron', electronAPI)
+    contextBridge.exposeInMainWorld('electron', {
+      onTokenReceived: (callback: any) => {
+        console.log('isfired')
+        ipcRenderer.on('token-received', (_event, token) => callback(token))
+      },
+      removeTokenListeners: () => {
+        ipcRenderer.off('token-received', () => {})
+      },
+      sendPing: () => ipcRenderer.send('ping')
+    })
     contextBridge.exposeInMainWorld('api', api)
   } catch (error) {
     console.error(error)
   }
 } else {
-  // @ts-ignore (define in dts)
-  window.electron = electronAPI
-  // @ts-ignore (define in dts)
-  window.api = api
+  // Fallback for non-isolated environments
+  // @ts-ignore
+  window.electron = {
+    onTokenReceived: (callback: (token: string) => void) => {
+      console.log('isfired')
+      ipcRenderer.on('token-received', (_event, token) => callback(token))
+    },
+    removeTokenListeners: () => {
+      ipcRenderer.off('token-received', () => {})
+    },
+    sendPing: () => ipcRenderer.send('ping')
+  }
+
+  // @ts-ignore
+  window.api = {}
 }

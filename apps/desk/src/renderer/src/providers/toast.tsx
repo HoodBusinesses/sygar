@@ -1,2 +1,1 @@
-
-export const toastProvider = ({ children }) => { }
+export const toastProvider = ({ children }) => {}
