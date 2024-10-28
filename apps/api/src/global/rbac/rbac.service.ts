@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Ability, AbilityBuilder } from '@casl/ability';
-import { Action, AppAbility } from 'src/shared/types/roles';
+import { Action, AppAbility, Subject } from 'src/shared/types/roles';
 import { User } from 'src/modules/user/model/user.model';
 import { UserRoles } from 'src/modules/user/model/user.model';
 import { DbConstants } from '../db/db.constants';
@@ -37,7 +37,6 @@ export class AbilityFactory {
       }
       can(Action.Manage, 'User', { organizationId: user.organizationId });
       can(Action.Manage, 'Ability', { organizationId: user.organizationId });
-      can(Action.Manage, 'Theme', { organizationId: user.organizationId });
     } 
 
     // Organization User and Sygar User

@@ -1,5 +1,5 @@
 import { Global, Module } from "@nestjs/common";
-import { OrganizationController, ThemeController } from "./organization.controler";
+import { OrganizationController } from "./organization.controler";
 import { OrganizationRepository } from "./organization.repository";
 import { OrganizationService } from "./organization.service";
 
@@ -15,7 +15,7 @@ import { OrganizationService } from "./organization.service";
  */
 @Global()
 @Module({
-	controllers: [OrganizationController, ThemeController],
+	controllers: [OrganizationController],
 	providers: [OrganizationRepository, OrganizationService],
 	exports: [OrganizationRepository],
 })

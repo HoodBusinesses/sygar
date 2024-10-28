@@ -3,8 +3,6 @@ import { CreateOrganizationDto } from "./dto/create-organization.dto";
 import { OrganizationRepository } from "./organization.repository";
 import { UpdateOrganizationDto } from "./dto/update-organization.dto";
 import { UserService } from "../user/user.service";
-import { CreateThemeDto } from "./dto/create-theme.dto";
-import { UpdateThemeDto } from "./dto/update-theme.dto";
 
 /**
  * @class OrganizationService
@@ -109,94 +107,5 @@ export class OrganizationService {
 
 		// Delete the organization
 		return this.organizationRepository.deleteOrganization(cnss);
-	}
-
-	/**
-	 * Create a new theme.
-	 * 
-	 * @param createThemeDto - The data for creating the theme.
-	 * @returns The created theme.
-	 */
-	async createTheme(createThemeDto: CreateThemeDto) {
-		if (createThemeDto.startDate > createThemeDto.endDate) {
-			throw new Error('invalidDates');
-		}
-
-		// Find the organization by organizationId
-		const organization = await this.organizationRepository.findByCnss(createThemeDto.organizationId);
-
-		// Throw an error if the organization does not exist
-		if (!organization) {
-			throw new Error('organizationDoesntExists');
-		}
-
-		return this.organizationRepository.createTheme(createThemeDto);
-	}
-
-	/**
-	 * Get a theme by UID.
-	 * 
-	 * @param uid - The UID of the theme to retrieve.
-	 * @returns The theme found.
-	 */
-	async getTheme(uid: string) {
-		if (!uid) {
-			throw new Error('uidRequired');
-		}
-
-		const theme = await this.organizationRepository.findThemeByUid(uid);		
-
-		if (!theme) {
-			throw new Error('themeDoesntExists');
-		}
-
-		return theme;
-	}
-
-	/**
-	 * Update a theme by UID.
-	 * 
-	 * @param uid - The UID of the theme to update.
-	 * @param updateThemeDto - The data for updating the theme.
-	 * @returns The updated theme.
-	 */
-	async updateTheme(uid: string, updateThemeDto: UpdateThemeDto) {
-		const theme = await this.organizationRepository.findThemeByUid(uid);
-
-		if (!theme) {
-			throw new Error('themeDoesntExists');
-		}
-
-		if (updateThemeDto.startDate && !updateThemeDto.endDate && updateThemeDto.startDate > theme.endDate) {
-			throw new Error('invalidDates');
-		}
-		else if (updateThemeDto.endDate && !updateThemeDto.startDate && updateThemeDto.endDate < theme.startDate) {
-			throw new Error('invalidDates');
-		}
-		else if (updateThemeDto.startDate && updateThemeDto.endDate && updateThemeDto.startDate > updateThemeDto.endDate) {
-			throw new Error('invalidDates');
-		}
-
-		return this.organizationRepository.updateTheme(uid, updateThemeDto);
-	}
-
-	/**
-	 * Delete a theme by UID.
-	 * 
-	 * @param uid - The UID of the theme to delete.
-	 * @returns The deleted theme.
-	 */
-	async deleteTheme(uid: string) {
-		if (!uid) {
-			throw new Error('uidRequired');
-		}
-
-		const theme = await this.organizationRepository.findThemeByUid(uid);
-
-		if (!theme) {
-			throw new Error('themeDoesntExists');
-		}
-
-		return this.organizationRepository.deleteTheme(uid);
 	}
 }

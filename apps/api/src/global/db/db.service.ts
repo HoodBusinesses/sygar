@@ -232,8 +232,6 @@ export class DbService {
       const item: Record<string, AttributeValue> = {};
     
       for (const key in obj) {
-        if (!obj[key]) continue;
-
         // Get the value of the key
         const value = obj[key];
 
