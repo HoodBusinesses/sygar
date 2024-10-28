@@ -29,9 +29,6 @@
         "edit": "Modification des documents",
         "view": "Consultation uniquement"
     },
-    "buttons": {
-        "add": "Ajouter"
-    },
     "registration": {
         "title": "Informations des membres de l'organisation",
         "basicInfo": {
@@ -143,6 +140,8 @@
         "email": "Email",
         "responsibleName": "Nom du responsable",
         "trainingManagerName": "Nom du formateur",
+        "enabled": "Activé",
+        "actions": "Actions",
         "edit": "Modifier",
         "delete": "Supprimer",
         "export": "Exporter",
@@ -150,5 +149,17 @@
         "of": "de",
         "previous": "Précédent",
         "next": "Suivant"
+    },
+    "buttons": {
+        "add": "Ajouter",
+        "save": "Enregistrer",
+        "cancel": "Annuler",
+        "delete": "Supprimer",
+        "edit": "Modifier",
+        "view": "Voir",
+        "export": "Exporter",
+        "import": "Importer",
+        "sortBy": "Trier par",
+        "filter": "Filtrer"
     }
 }

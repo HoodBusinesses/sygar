@@ -1,93 +1,55 @@
 import { useMemo, useState } from 'react'
 import Search from '../components/Search'
-import { Button } from '../components/ui/button'
-import { useTranslation } from 'react-i18next'
-import DeleteModal from '../components/DeleteModal'
-import ExportModal from '../components/ExportModal'
-import ImportModal from '../components/ImportModal'
-import SubscriptionModal from '../components/SubscriptionModal'
 import SortByPopover from '../components/SortBy'
 import Filter from '../components/Filter'
-import RegistrationInfo from '../components/RegistrationInfo'
 import OrgListingHeader from '@renderer/components/OrganizationListingHeader'
 import Pagination from '@renderer/components/Pagination'
 import OrganizationTable from '@renderer/components/OrganizationTable'
+import { mockOrganizations } from '@renderer/utils/static/organizations'
+import { applyFilters, sortConfig } from '@renderer/utils/filter/filter'
+import OrgModals from '@renderer/components/OrgModals'
+import Navbar from '@renderer/components/Navbar'
 
 const ITEMS_PER_PAGE = 10
-const DATE_OPTIONS = ['All', ...Array.from({ length: 50 }, (_, index) => `${2020 + index}`)]
-type FilterObject = {
-  searchQuery?: string
-  selectedDate?: string
-}
-
-const applyFilters = (organizations, filters: FilterObject) => {
-  return organizations.filter((org) => {
-    const matchesSearchQuery = filters.searchQuery
-      ? Object.values(org).some((value) =>
-          value.toString().toLowerCase().includes(filters.searchQuery.toLowerCase())
-        )
-      : true
-    const matchesSelectedDate = filters.selectedDate
-      ? filters.selectedDate === 'All' || org.date.includes(filters.selectedDate)
-      : true
-    return matchesSearchQuery && matchesSelectedDate
-  })
-}
-
-const mockOrganizations = Array.from({ length: 50 }, (_, index) => {
-  const year = 2020 + Math.floor(index / 12)
-  const month = (index % 12) + 1
-  const formattedMonth = month.toString().padStart(2, '0')
-  return {
-    id: index + 1,
-    image: '/api/placeholder/40/40',
-    rs: `Organization ${index + 1}`,
-    cnss: `CNSS-${index + 1}`,
-    address: `Address ${index + 1}`,
-    email: `org${index + 1}@example.com`,
-    responsibleName: `Manager ${index + 1}`,
-    trainingManagerName: `Trainer ${index + 1}`,
-    date: `**/${formattedMonth}/${year}`
-  }
-})
 
 const OrganizationsPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
-  const [selectedDate, setSelectedDate] = useState(DATE_OPTIONS[0])
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
-  const [isExportModalOpen, setIsExportModalOpen] = useState(false)
-  const [isImportModalOpen, setIsImportModalOpen] = useState(false)
-  const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false)
-  const [editModalOpen, setEditModalOpen] = useState(false)
-  const [sortConfig, setSortConfig] = useState(null)
-  const {t} = useTranslation()
+  const [sortConfig, setSortConfig] = useState<sortConfig>()
+  const [modals, setModals] = useState({
+    isDeleteModalOpen: false,
+    isExportModalOpen: false,
+    isImportModalOpen: false,
+    isSubscriptionModalOpen: false,
+    editModalOpen: false
+  })
+
+  const setModalState = (modalName, state): void => {
+    setModals(prevModals => ({
+      ...prevModals,
+      [modalName]: state
+    }))
+  }
+
+  const handleCloseModals = (): void => {
+    setModals({
+      isDeleteModalOpen: false,
+      isExportModalOpen: false,
+      isImportModalOpen: false,
+      isSubscriptionModalOpen: false,
+      editModalOpen: false
+    })
+  }
+  const openDeleteModal = (): void => setModalState('isDeleteModalOpen', true)
+  const openExportModal = (): void => setModalState('isExportModalOpen', true)
+  const openImportModal = (): void => setModalState('isImportModalOpen', true)
+  const openSubscriptionModal = (): void => setModalState('isSubscriptionModalOpen', true)
+  const openEditModal = (): void => setModalState('editModalOpen', true)
 
   // Memoized filtered data
   const filteredOrganizations = useMemo(() => {
-    let filtered = applyFilters(mockOrganizations, {
-      searchQuery,
-      selectedDate
-    })
-
-    if (sortConfig) {
-      filtered.sort((a, b) => {
-        if (sortConfig.field === 'email') {
-          return sortConfig.direction === 'asc'
-            ? a.email.localeCompare(b.email)
-            : b.email.localeCompare(a.email)
-        }
-        if (sortConfig.field === 'createdDate') {
-          return sortConfig.direction === 'asc'
-            ? new Date(a.date).getTime() - new Date(b.date).getTime()
-            : new Date(b.date).getTime() - new Date(a.date).getTime()
-        }
-        return 0
-      })
-    }
-
-    return filtered
-  }, [searchQuery, selectedDate, sortConfig])
+    return applyFilters(mockOrganizations, { searchQuery, sortConfig })
+  }, [searchQuery, sortConfig])
 
   // Memoized paginated data
   const paginatedData = useMemo(() => {
@@ -104,29 +66,14 @@ const OrganizationsPage: React.FC = () => {
   const handleReset = (): void => {
     setSearchQuery('')
     setCurrentPage(1)
-    setSelectedDate(DATE_OPTIONS[0])
   }
-
-
-  const handleCloseModals = (): void => {
-    setIsDeleteModalOpen(false)
-    setIsExportModalOpen(false)
-    setIsImportModalOpen(false)
-    setIsSubscriptionModalOpen(false)
-    setEditModalOpen(false)
-  }
-
-  const openDeleteModal = (): void => setIsDeleteModalOpen(true)
-  const openExportModal = (): void => setIsExportModalOpen(true)
-  const openImportModal = (): void => setIsImportModalOpen(true)
-  const openSubscriptionModal = (): void => setIsSubscriptionModalOpen(true)
-  const openEditModal = (): void => setEditModalOpen(true)
 
   return (
     <main className="h-full bg-white w-full p-6 space-y-6">
-      {/* Header */}
-      {!editModalOpen && (
+      <Navbar />
+      {!modals.editModalOpen && (
         <>
+          {/* Header */}
           <OrgListingHeader openImportModal={openImportModal} openExportModal={openExportModal} />
 
           {/* Search and Filters */}
@@ -158,25 +105,9 @@ const OrganizationsPage: React.FC = () => {
           />
         </>
       )}
-      {isDeleteModalOpen && <DeleteModal onClose={handleCloseModals} />}
-      {isExportModalOpen && <ExportModal onClose={handleCloseModals} />}
-      {isImportModalOpen && <ImportModal onClose={handleCloseModals} />}
-      {isSubscriptionModalOpen && <SubscriptionModal onClose={handleCloseModals} />}
-      {editModalOpen && (
-        <>
-          <div className="flex flex-row p-5">
-            <Button
-              className="custom-button bg-blue-600 hover:bg-blue-500 "
-              onClick={handleCloseModals}
-            >
-              Close
-            </Button>
-            <p className="text-xl text-gray-900 px-5">Back To Organizations</p>
-          </div>
 
-          <RegistrationInfo />
-        </>
-      )}
+      {/** MODALS */}
+      <OrgModals modals={modals} handleCloseModals={handleCloseModals} />
     </main>
   )
 }

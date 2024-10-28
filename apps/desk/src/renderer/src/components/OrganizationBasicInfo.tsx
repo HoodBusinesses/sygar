@@ -10,7 +10,7 @@ export const OrganizationBasicInfo = (organization) => {
   const {
     register,
     setValue,
-    formState: { errors },
+    formState: { errors }
   } = useFormContext<OrganizationFormData>();
 
 

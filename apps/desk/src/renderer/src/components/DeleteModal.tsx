@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useRef } from "react";
+import { Button } from "./ui/button";
 
 interface DeleteModalProps {
   onClose: () => void;
@@ -6,26 +7,27 @@ interface DeleteModalProps {
 
 const DeleteModal: FC<DeleteModalProps> = ({ onClose }) => {
 
-  const popoverRef = useRef(null);
+  // const popoverRef = useRef(null)
   
   // Handle click outside to close popover
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (popoverRef.current && !popoverRef.current.contains(event.target)) {
-        console.log("outside");
+  // useEffect(() => {
+  //   const handleClickOutside = (event) => {
+  //     console.log('first')
+  //     if (popoverRef.current && !popoverRef.current.contains(event.target)) {
+  //       console.log("outside")
         
-        onClose();
-      }
-    };
+  //       onClose()
+  //     }
+  //   }
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  //   document.addEventListener('mousedown', handleClickOutside);
+  //   return () => document.removeEventListener('mousedown', handleClickOutside);
+  // }, [])
 
-  const handleDelete = () => {
+  const handleDelete = (): void => {
     console.log("delete");
-    onClose();
-  };
+    onClose()
+  }
 
   return (
     <div className="fixed inset-0 flex items-center backdrop-brightness-75 justify-center bg-black bg-opacity-50">
@@ -36,16 +38,16 @@ const DeleteModal: FC<DeleteModalProps> = ({ onClose }) => {
         <p className="text-gray-400">Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit natus</p>
         </div>
         <div className="flex justify-end">
-          <button onClick={onClose} className="custom-button text-gray-500 hover:bg-gray-200 border border-gray-500 mr-2">
+          <Button onClick={onClose} className="custom-button text-gray-500 hover:bg-gray-200 border border-gray-500 mr-2">
             Cancel
-          </button>
-          <button onClick={handleDelete} className="custom-button bg-red-500 hover:bg-red-800">
+          </Button>
+          <Button onClick={handleDelete} className="custom-button bg-red-500 hover:bg-red-800">
             Delete
-          </button>
+          </Button>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default DeleteModal;
+export default DeleteModal

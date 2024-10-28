@@ -29,9 +29,6 @@
         "edit": "Editing documents",
         "view": "Viewing only"
     },
-    "buttons": {
-        "add": "Add"
-    },
     "registration": {
         "title": "Organization Members Information",
         "basicInfo": {
@@ -143,6 +140,8 @@
         "email": "Email",
         "responsibleName": "Responsible Name",
         "trainingManagerName": "Training Manager Name",
+        "enabled": "Enabled",
+        "actions": "Actions",
         "edit": "Edit",
         "delete": "Delete",
         "export": "Export",
@@ -150,5 +149,17 @@
         "of": "of",
         "previous": "Previous",
         "next": "Next"
+    },
+    "buttons": {
+        "add": "Add",
+        "save": "Save",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "edit": "Edit",
+        "view": "View",
+        "export": "Export",
+        "import": "Import",
+        "sortBy": "Sort By",
+        "filter": "Filter"
     }
 }

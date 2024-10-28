@@ -1,9 +1,10 @@
 import React from 'react'
-import { t } from 'i18next'
 import { Button } from './ui/button'
 import { Edit2, Trash2 } from 'lucide-react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
 import { FiCalendar } from 'react-icons/fi'
+import { useTranslate } from '@renderer/hooks/useTranslate'
+import Profile_Img from '../assets/images/profile_img.png'
 
 interface Organization {
   id: string
@@ -29,6 +30,7 @@ const OrganizationTable: React.FC<OrganizationTableProps> = ({
   openSubscriptionModal,
   openDeleteModal
 }) => {
+  const { t } = useTranslate()
   return (
     <div className="border rounded-lg overflow-hidden overflow-x-auto">
       <Table>
@@ -41,19 +43,15 @@ const OrganizationTable: React.FC<OrganizationTableProps> = ({
             <TableHead className="text-gray-600">{t('organization.email')}</TableHead>
             <TableHead className="text-gray-600">{t('organization.responsibleName')}</TableHead>
             <TableHead className="text-gray-600">{t('organization.trainingManagerName')}</TableHead>
-            <TableHead className="text-gray-600">Enabled</TableHead>
-            <TableHead className="text-gray-600">Action</TableHead>
+            <TableHead className="text-gray-600">{t('organization.enabled')}</TableHead>
+            <TableHead className="text-gray-600">{t('organization.actions')}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {paginatedData.map((org) => (
             <TableRow key={org.id} className="hover:bg-gray-50">
               <TableCell>
-                <img
-                  src="/images/profile_img.png"
-                  alt="Organization"
-                  className="w-8 h-8 rounded-full"
-                />
+                <img src={Profile_Img} alt="Organization" className="w-8 h-8 rounded-full" />
               </TableCell>
               <TableCell className="text-gray-600">{org.rs}</TableCell>
               <TableCell className="text-gray-600">{org.cnss}</TableCell>

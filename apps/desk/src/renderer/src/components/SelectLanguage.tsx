@@ -3,13 +3,12 @@ import { useAppDispatch } from '@renderer/store/hooks'
 import { changeLang, langs } from '@renderer/store/slices/lang.slice'
 import { GrLanguage } from 'react-icons/gr'
 
-export default function SelectLanguage() {
+export default function SelectLanguage(): JSX.Element {
   const { lng: Language } = useTranslate();
 
   const dispatcher = useAppDispatch();
 
-  const changeLanguage = (lng: string) => {
-
+  const changeLanguage = (lng: string): void => {
     const lang = langs.find((lang) => lang.id === lng)
     dispatcher(
       changeLang({

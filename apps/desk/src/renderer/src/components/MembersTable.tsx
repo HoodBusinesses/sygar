@@ -65,7 +65,6 @@ export const MembersTable = ({ members, onEdit, onDelete }: MembersTableProps) =
                     <SelectItem value="view">{t('membersTable.viewingOnly')}</SelectItem>
                   </SelectContent>
                 </Select>
-                {/* //  <TableCell className="bg-blue-100 text-blue-800 rounded-md w-auto" >{member.actionType === "edit" ? t("membersTable.editingDocuments") : t("membersTable.viewingOnly")}</TableCell> */}
               </TableCell>
               <TableCell>
                 <Button

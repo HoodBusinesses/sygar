@@ -1,9 +1,11 @@
-import { ArrowDownIcon } from 'lucide-react';
+import { ArrowDownIcon } from 'lucide-react'
 import React, { useEffect, useRef, useState } from 'react'
+import { useTranslate } from '@renderer/hooks/useTranslate'
 
-const Filter = (OnFilter) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const popoverRef = useRef(null);
+const Filter = (OnFilter): JSX.Element => {
+  const { t } = useTranslate()
+  const [isOpen, setIsOpen] = useState(false)
+  const popoverRef = useRef(null)
 
   // Handle click outside to close popover
   useEffect(() => {
@@ -18,11 +20,13 @@ const Filter = (OnFilter) => {
   }, []);
 
 
-  const handleReset = () => {
-    OnFilter(null);
-  };
+  const handleReset = (): void => {
+    OnFilter(null)
+  }
 
-  const handleApply = () => {};
+  const handleApply = (): void => {
+    console.log('Filter applied')
+  }
 
 
   return (
@@ -32,13 +36,13 @@ const Filter = (OnFilter) => {
         className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-gray-50"
       >
         <ArrowDownIcon className="h-5 w-5" />
-        Filter
+        {t('buttons.filter')}
       </button>
 
       {isOpen && (
         <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
           <div className="p-4 space-y-4 text-gray-700">
-          <h4 className="font-medium mb-3">Filter</h4>
+          <h4 className="font-medium mb-3">{t('buttons.filter')}</h4>
 
             <div>
               <h4 className="font-medium mb-3">Enabled</h4>
@@ -68,7 +72,6 @@ const Filter = (OnFilter) => {
               </div>
             </div>
 
-
             <div className="flex justify-between pt-4 border-t">
               <button
                 onClick={handleReset}
@@ -87,7 +90,7 @@ const Filter = (OnFilter) => {
         </div>
       )}
     </div>
-  );
+  )
 }
 
 export default Filter

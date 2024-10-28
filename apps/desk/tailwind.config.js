@@ -10,7 +10,7 @@ module.exports = {
       blue: colors.blue,
       red: colors.red,
       green: colors.green,
-      purple: colors.purple,
+      purple: colors.purple
     },
     extend: {
       backgroundImage: {

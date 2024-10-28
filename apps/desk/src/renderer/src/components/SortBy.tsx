@@ -1,11 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { ArrowDownIcon } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react'
+import { ArrowDownIcon } from 'lucide-react'
+import { Button } from './ui/button'
+import { useTranslate } from '@renderer/hooks/useTranslate';
 
 const SortByPopover = ({ onSort }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [email, setEmail] = useState('');
-  const [creationDate, setCreationDate] = useState('asc');
-  const popoverRef = useRef(null);
+  const { t } = useTranslate()
+  const [isOpen, setIsOpen] = useState(false)
+  const [email, setEmail] = useState('asc')
+  const [creationDate, setCreationDate] = useState('asc')
+  const popoverRef = useRef(null)
   
   // Handle click outside to close popover
   useEffect(() => {
@@ -19,37 +22,38 @@ const SortByPopover = ({ onSort }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleApply = () => {
-    // onSort({ field, direction });
-    console.log({ email, creationDate });
-    
-    if (email)
-      onSort({ field: 'email', email });
-    if (creationDate)
-      onSort({ field: 'createdDate', creationDate });
-    setIsOpen(false);
-  };
+  const handleApply = (): void => {
+    console.log({ email, creationDate })
+
+    if (email) {
+      onSort({ field: 'email', direction: email })
+    }
+    if (creationDate) {
+      onSort({ field: 'createdDate', direction: creationDate })
+    }
+    setIsOpen(false)
+  }
   
-  const handleReset = () => {
-    setEmail('asc');
-    setCreationDate('asc');
-    onSort(null);
+  const handleReset = (): void => {
+    setEmail('')
+    setCreationDate('')
+    onSort(null)
   };
 
   return (
     <div className="relative" ref={popoverRef}>
-      <button
+      <Button
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-gray-50"
       >
         <ArrowDownIcon className="h-5 w-5" />
-        Sort by
-      </button>
+        {t('buttons.sortBy')}
+      </Button>
 
       {isOpen && (
         <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
           <div className="p-4 space-y-4 text-gray-700">
-          <h4 className="font-medium mb-3">Sort By</h4>
+          <h4 className="font-medium mb-3">{t('buttons.sortBy')}</h4>
 
             <div>
               <h4 className="font-medium mb-3">Email</h4>

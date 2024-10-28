@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button } from './ui/button'
+import { useTranslate } from '@renderer/hooks/useTranslate'
 
 interface PaginationProps {
   currentPage: number
@@ -8,6 +9,7 @@ interface PaginationProps {
 }
 
 const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
+  const { t } = useTranslate()
   const handlePageChange = (page: number | React.ChangeEvent<HTMLSelectElement>): void => {
     if (typeof page === 'number') {
       onPageChange(page)
@@ -19,7 +21,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
   return (
     <div className="flex items-center gap-4 mt-4">
       <div className="flex items-center gap-2 text-sm text-gray-700">
-        <span>Page</span>
+        <span>{t('organization.page')}</span>
         <select
           value={currentPage}
           onChange={handlePageChange}
@@ -31,7 +33,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
             </option>
           ))}
         </select>
-        <span>of {totalPages}</span>
+        <span>{t('organization.of')} {totalPages}</span>
       </div>
 
       {/* Back and Next Buttons */}
@@ -42,7 +44,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
           className={`border border-gray-300 px-4 py-2 rounded-md text-gray-700 
       ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
-          Back
+          {t('organization.next')}
         </Button>
 
         <Button
@@ -51,7 +53,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
           className={`px-4 py-2 rounded-md text-white bg-gray-800
       ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
-          Next
+          {t('organization.previous')}
         </Button>
       </div>
     </div>
