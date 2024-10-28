@@ -29,9 +29,6 @@
     "edit": "Modification des documents",
     "view": "Consultation uniquement"
   },
-  "buttons": {
-    "add": "Ajouter"
-  },
   "registration": {
     "title": "Informations des membres de l'organisation",
     "basicInfo": {
@@ -102,9 +99,138 @@
       "submit": "Ajouter membre",
       "update": "Mettre à jour membre"
     },
+    "registration": {
+      "title": "Informations des membres de l'organisation",
+      "basicInfo": {
+        "title": "Informations de l'organisation",
+        "fields": {
+          "rs": {
+            "label": "R.S",
+            "placeholder": "Entrez le R.S de l'organisation"
+          },
+          "ice": {
+            "label": "ICE",
+            "placeholder": "Entrez le ICE de l'organisation"
+          },
+          "cnss": {
+            "label": "CNSS",
+            "placeholder": "Entrez le CNSS de l'organisation"
+          },
+          "address": {
+            "label": "Adresse",
+            "placeholder": "Entrez l'adresse de l'organisation"
+          },
+          "phone": {
+            "label": "Téléphone",
+            "placeholder": "Entrez le numéro de téléphone de l'organisation"
+          },
+          "email": {
+            "label": "Email",
+            "placeholder": "Entrez l'email de l'organisation"
+          },
+          "logo": {
+            "label": "Logo de l'entreprise",
+            "placeholder": "Téléchargez le logo de l'entreprise"
+          },
+          "responsibleName": {
+            "label": "Nom du responsable",
+            "placeholder": "Entrez le nom du responsable"
+          },
+          "trainingManagerName": {
+            "label": "Nom du responsable de formation",
+            "placeholder": "Entrez le nom du responsable de formation"
+          }
+        },
+        "required": "Champ requis"
+      },
+      "members": {
+        "title": "Membres",
+        "table": {
+          "fullName": "Nom complet",
+          "email": "Email",
+          "role": "Rôle",
+          "actions": "Actions"
+        },
+        "roles": {
+          "manager": "Manager",
+          "employee": "Employé"
+        },
+        "actions": {
+          "edit": "Modifier",
+          "view": "Voir",
+          "delete": "Supprimer"
+        }
+      },
+      "addMember": {
+        "title": "Ajouter un nouveau membre",
+        "fullName": "Nom complet",
+        "email": "Adresse e-mail",
+        "role": "Rôle",
+        "submit": "Ajouter membre",
+        "update": "Mettre à jour membre"
+      },
+      "buttons": {
+        "import": "Importer",
+        "save": "Enregistrer"
+      },
+      "toast": {
+        "success": {
+          "title": "Succès",
+          "description": "Informations de l'organisation enregistrées avec succès"
+        },
+        "error": {
+          "title": "Erreur",
+          "description": "Échec de l'enregistrement des informations de l'organisation"
+        }
+      }
+    },
+    "noPermission": "VOUS N'AVEZ PAS ACCÈS",
+    "sidebar": {
+      "sections": {
+        "dashboard": "Tableau de bord",
+        "others": "Autres"
+      },
+      "items": {
+        "home": "Accueil",
+        "registration": "Inscription",
+        "organizations": "Organisations",
+        "settings": "Paramètres",
+        "notifications": "Notifications",
+        "reports": "Rapports"
+      }
+    },
+    "organization": {
+      "organizations": "Organisations",
+      "searchPlaceholder": "Rechercher une organisation...",
+      "dateSelect": "Sélectionner la date",
+      "image": "Image",
+      "rs": "R.S",
+      "cnss": "CNSS",
+      "address": "Adresse",
+      "email": "Email",
+      "responsibleName": "Nom du responsable",
+      "trainingManagerName": "Nom du formateur",
+      "enabled": "Activé",
+      "actions": "Actions",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "export": "Exporter",
+      "page": "Page",
+      "of": "de",
+      "previous": "Précédent",
+      "next": "Suivant"
+    },
     "buttons": {
+      "add": "Ajouter",
+      "save": "Enregistrer",
+      "cancel": "Annuler",
+      "delete": "Supprimer",
+      "edit": "Modifier",
+      "view": "Voir",
+      "export": "Exporter",
       "import": "Importer",
-      "save": "Enregistrer"
+      "sortBy": "Trier par",
+      "filter": "Filtrer"
     },
     "toast": {
       "success": {
@@ -143,6 +269,8 @@
     "email": "Email",
     "responsibleName": "Nom du responsable",
     "trainingManagerName": "Nom du formateur",
+    "enabled": "Activé",
+    "actions": "Actions",
     "edit": "Modifier",
     "delete": "Supprimer",
     "export": "Exporter",
@@ -150,5 +278,17 @@
     "of": "de",
     "previous": "Précédent",
     "next": "Suivant"
+  },
+  "buttons": {
+    "add": "Ajouter",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "view": "Voir",
+    "export": "Exporter",
+    "import": "Importer",
+    "sortBy": "Trier par",
+    "filter": "Filtrer"
   }
 }

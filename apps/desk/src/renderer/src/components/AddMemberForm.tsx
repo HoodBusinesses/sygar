@@ -11,7 +11,7 @@ interface AddMemberFormProps {
   initialData?: MemberFormData
 }
 
-export const AddMemberForm = ({ onSubmit, initialData }: AddMemberFormProps) => {
+export const AddMemberForm = ({ onSubmit, initialData }: AddMemberFormProps): JSX.Element => {
   const { t } = useTranslation() // Hook for translations
 
   const {
@@ -24,7 +24,7 @@ export const AddMemberForm = ({ onSubmit, initialData }: AddMemberFormProps) => 
     defaultValues: initialData
   })
 
-  const handleFormSubmit = (data: MemberFormData) => {
+  const handleFormSubmit = (data: MemberFormData): void => {
     onSubmit(data)
     reset()
   }

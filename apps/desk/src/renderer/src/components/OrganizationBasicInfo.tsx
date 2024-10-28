@@ -5,7 +5,7 @@ import { useTranslate } from '@renderer/hooks/useTranslate'
 import FormInputItem from './ui/form-input-item'
 import { fields } from '@renderer/data/organinzation-fields-input'
 
-export const OrganizationBasicInfo = (organization) => {
+export const OrganizationBasicInfo = (organization): JSX.Element => {
   const { t } = useTranslate()
   const {
     register,

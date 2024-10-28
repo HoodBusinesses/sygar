@@ -10,12 +10,12 @@ body {
 
 @layer base {
   body {
-    @apply bg-red-50 text-gray-950;
+    @apply bg-white text-gray-900 ;
   }
 }
 
 @layer components {
-  .btn-blue {
-    @apply text-white font-bold px-4 py-2 rounded bg-blue-600 hover:bg-blue-500;
+  .custom-button {
+    @apply text-white font-bold px-4 py-2 rounded ;
   }
 }

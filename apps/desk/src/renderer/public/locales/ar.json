@@ -29,9 +29,6 @@
     "edit": "تحرير المستندات",
     "view": "عرض فقط"
   },
-  "buttons": {
-    "add": "إضافة"
-  },
   "registration": {
     "title": "معلومات أعضاء المؤسسة",
     "basicInfo": {
@@ -143,6 +140,8 @@
     "email": "البريد الإلكتروني",
     "responsibleName": "اسم المسؤول",
     "trainingManagerName": "اسم المدرب",
+    "enabled": "مفعل",
+    "actions": "الإجراءات",
     "edit": "تعديل",
     "delete": "حذف",
     "export": "تصدير",
@@ -150,5 +149,17 @@
     "of": "من",
     "previous": "السابق",
     "next": "التالي"
+  },
+  "buttons": {
+    "add": "إضافة",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "view": "عرض",
+    "export": "تصدير",
+    "import": "استيراد",
+    "sortBy": "ترتيب حسب",
+    "filter": "تصفية"
   }
 }
