@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { memberSchema, type MemberFormData } from '../utils/schemas/organization'
 import MembersTableBody from './MembersTableBody'
 import { Table, TableHead, TableHeader, TableRow } from './ui/table'
+import { cn } from './ui/lib/utils'
 
 interface MembersTableProps {
   members: MemberFormData[]
@@ -12,7 +13,7 @@ interface MembersTableProps {
 }
 
 export const MembersTable = ({ members, onEdit, onDelete }: MembersTableProps) => {
-  const { t } = useTranslate()
+  const { t, isRtl } = useTranslate()
 
   const {
     register,
@@ -21,16 +22,24 @@ export const MembersTable = ({ members, onEdit, onDelete }: MembersTableProps) =
     resolver: zodResolver(memberSchema)
   })
 
+  const TableHeadElements = [
+    'membersTable.id',
+    'membersTable.fullName',
+    'membersTable.email',
+    'membersTable.role',
+    'membersTable.actionType',
+    'membersTable.actions'
+  ]
+
   return (
     <Table className="border-2 rounded-lg border-gray-200 border-separate">
       <TableHeader>
         <TableRow className="border border-gray-200 rounded-t-lg">
-          <TableHead className="text-gray-950">{t('membersTable.id')}</TableHead>
-          <TableHead className="text-gray-950">{t('membersTable.fullName')}</TableHead>
-          <TableHead className="text-gray-950">{t('membersTable.email')}</TableHead>
-          <TableHead className="text-gray-950">{t('membersTable.role')}</TableHead>
-          <TableHead className="text-gray-950">{t('membersTable.actionType')}</TableHead>
-          <TableHead className="text-gray-950">{t('membersTable.actions')}</TableHead>
+          {TableHeadElements.map((element, index) => (
+            <TableHead key={index} className={cn(isRtl && 'text-right', "text-gray-950")}>
+              {t(element)}
+            </TableHead>
+          ))}
         </TableRow>
       </TableHeader>
 
