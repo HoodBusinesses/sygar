@@ -4,7 +4,6 @@ import Image from "next/image";
 import { GrLanguage } from "react-icons/gr";
 import { useTranslation } from "react-i18next";
 import i18n from "../public/localization/i18n";
-import OrganizationForm from "../components/OrganizationForm";
 import { Button } from "../components/ui/button";
 import { useRouter } from "next/router";
 
@@ -37,6 +36,8 @@ export default function Signin() {
     // Use the exposed electronAPI to open the URL in the browser
     if (window.electronAPI && window.electronAPI.openExternal) {
       window.electronAPI.openExternal(authUrl);
+      console.log("OPEN EXTERNAL");
+      
     } else {
       console.error("Electron API is not available");
     }
@@ -52,7 +53,7 @@ export default function Signin() {
         <div className="flex items-center font-poppins space-x-1 text-gray-500 hover:text-gray-700">
           <GrLanguage className="text-gray-500" />
           <select
-            className="border p-1 rounded borde"
+            className="border p-1 rounded"
             value={language} // Bind select to the current language state
             onChange={(e) => changeLanguage(e.target.value)} // Directly update the language based on the selected option
           >

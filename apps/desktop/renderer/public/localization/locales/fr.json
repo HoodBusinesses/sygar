@@ -32,7 +32,7 @@
     "buttons": {
         "add": "Ajouter"
     },
-    "organization": {
+    "registration": {
         "title": "Informations des membres de l'organisation",
         "basicInfo": {
             "title": "Informations de l'organisation",
@@ -117,23 +117,7 @@
             }
         }
     },
-    "organizations": "Organisations",
-    "searchPlaceholder": "Rechercher une organisation...",
-    "dateSelect": "Sélectionner la date",
-    "image": "Image",
-    "ss": "S.S",
-    "cms": "CMS",
-    "address": "Adresse",
-    "email": "Email",
-    "responsibleName": "Nom du responsable",
-    "trainingManagerName": "Nom du formateur",
-    "edit": "Modifier",
-    "delete": "Supprimer",
-    "export": "Exporter",
-    "page": "Page",
-    "of": "de",
-    "previous": "Précédent",
-    "next": "Suivant",
+    "noPermission": "VOUS N'AVEZ PAS ACCÈS",
     "sidebar": {
         "sections": {
             "dashboard": "Tableau de bord",
@@ -144,8 +128,27 @@
             "registration": "Inscription",
             "organizations": "Organisations",
             "settings": "Paramètres",
-            "notifications": "Gérer les notifications",
+            "notifications": "Notifications",
             "reports": "Rapports"
         }
+    },
+    "organization": {
+        "organizations": "Organisations",
+        "searchPlaceholder": "Rechercher une organisation...",
+        "dateSelect": "Sélectionner la date",
+        "image": "Image",
+        "rs": "R.S",
+        "cnss": "CNSS",
+        "address": "Adresse",
+        "email": "Email",
+        "responsibleName": "Nom du responsable",
+        "trainingManagerName": "Nom du formateur",
+        "edit": "Modifier",
+        "delete": "Supprimer",
+        "export": "Exporter",
+        "page": "Page",
+        "of": "de",
+        "previous": "Précédent",
+        "next": "Suivant"
     }
 }
