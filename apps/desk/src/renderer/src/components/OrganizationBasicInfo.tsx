@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 import type { OrganizationFormData } from '../utils/schemas/organization'
 import { Card, CardContent } from './ui/card'
@@ -10,18 +9,8 @@ export const OrganizationBasicInfo = (organization) => {
   const { t } = useTranslate()
   const {
     register,
-    setValue,
     formState: { errors }
   } = useFormContext<OrganizationFormData>()
-
-  useEffect(() => {
-    if (organization?.organization) {
-      fields.forEach((field) => {
-        setValue(field.name as keyof OrganizationFormData, organization.organization?.[field.value])
-      })
-      console.log(typeof organization.organization)
-    }
-  }, [organization, setValue])
 
   return (
     <Card className="p-1 mb-6">
