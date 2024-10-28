@@ -1,16 +1,10 @@
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue
-} from '@radix-ui/react-select'
 import { useTranslate } from '@renderer/hooks/useTranslate'
 import { MemberFormData } from '@renderer/utils/schemas/organization'
 import { Edit, Trash2 } from 'lucide-react'
 import { UseFormRegister } from 'react-hook-form'
 import { Button } from './ui/button'
 import { cn } from './ui/lib/utils'
+import SelectInputItem from './ui/select-input-item'
 import { TableBody, TableCell, TableRow } from './ui/table'
 
 interface MembersTableBodyProps {
@@ -25,7 +19,7 @@ export default function MembersTableBody({
   onEdit,
   onDelete
 }: MembersTableBodyProps) {
-    const { t, isRtl } = useTranslate();
+  const { t, isRtl } = useTranslate()
   return (
     <TableBody>
       {members.map((member, index) => (
@@ -38,25 +32,27 @@ export default function MembersTableBody({
               {member.role}
             </span>
           </TableCell>
+
           <TableCell className="text-gray-950">
-            <Select
+            <SelectInputItem
+              label=""
               onValueChange={(value) => register('actionType').onChange({ target: { value } })}
-            >
-              <SelectTrigger className="bg-blue-100 text-blue-800 rounded w-auto">
-                <SelectValue
-                  placeholder={
-                    member.actionType === 'edit'
-                      ? t('membersTable.editingDocuments')
-                      : t('membersTable.viewingOnly')
-                  }
-                />
-              </SelectTrigger>
-              <SelectContent className="bg-blue-100 text-gray-700">
-                <SelectItem value="edit">{t('membersTable.editingDocuments')}</SelectItem>
-                <SelectItem value="view">{t('membersTable.viewingOnly')}</SelectItem>
-              </SelectContent>
-            </Select>
+              items={[
+                { value: 'edit', translationKey: 'membersTable.editingDocuments' },
+                { value: 'view', translationKey: 'membersTable.viewingOnly' }
+              ]}
+              placeholder={
+                member.actionType === 'edit'
+                  ? t('membersTable.editingDocuments')
+                  : t('membersTable.viewingOnly')
+              }
+              classNames={{
+                trigger: 'bg-blue-100 text-blue-800 rounded w-auto',
+                content: 'bg-blue-100 text-gray-700'
+              }}
+            />
           </TableCell>
+          
           <TableCell>
             <Button
               variant="ghost"
