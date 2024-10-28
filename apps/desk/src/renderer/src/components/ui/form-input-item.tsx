@@ -21,11 +21,11 @@ export default function FormInputItem({
   value,
   isLogoInput
 }: FormInputProps) {
-  const { t, lng } = useTranslate()
+  const { t } = useTranslate()
 
   return (
     <div className="flex flex-col mb-4 gap-1">
-      <p className="text-sm text-gray-950">
+      <p className="text-sm text-gray-950 mb-2">
         {t(label)} {required && <span className="text-red-500">*</span>}
       </p>
       {isLogoInput ? (

@@ -1,10 +1,10 @@
-import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Input } from './ui/input'
-import { Button } from './ui/button'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
-import { memberSchema, type MemberFormData } from '../utils/schemas/organization'
+import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { memberSchema, type MemberFormData } from '../utils/schemas/organization'
+import { Button } from './ui/button'
+import FormInputItem from './ui/form-input-item'
+import SelectInputItem from './ui/select-input-item'
 
 interface AddMemberFormProps {
   onSubmit: (data: MemberFormData) => void
@@ -30,68 +30,52 @@ export const AddMemberForm = ({ onSubmit, initialData }: AddMemberFormProps) => 
   }
 
   return (
-    <div className="space-y-5">
-      <div className="grid grid-cols-5 gap-4">
-        <div className="flex flex-col">
-          <p className="text-gray-600 text-sm">{t('membersTable.fullName')}</p>
-          <Input
-            {...register('fullName')}
-            placeholder={t('placeholders.fullName')} // Translated placeholder
-            className="bg-gray-100 text-gray-950"
-          />
-          {errors.fullName && (
-            <span className="text-sm text-red-500">{errors.fullName.message}</span>
-          )}
-        </div>
-        <div className="flex flex-col">
-          <p className="text-gray-600 text-sm">{t('membersTable.email')}</p>
-          <Input
-            {...register('email')}
-            placeholder={t('placeholders.email')} // Translated placeholder
-            className="bg-gray-100 text-gray-950"
-          />
-          {errors.email && <span className="text-sm text-red-500">{errors.email.message}</span>}
-        </div>
-        <div className="flex flex-col">
-          <p className="text-gray-600 text-sm">{t('membersTable.role')}</p>
-          <Select onValueChange={(value) => register('role').onChange({ target: { value } })}>
-            <SelectTrigger className="text-gray-700">
-              <SelectValue placeholder={t('placeholders.selectRole')} />{' '}
-              {/* Translated placeholder */}
-            </SelectTrigger>
-            <SelectContent className="text-gray-700 bg-white">
-              <SelectItem value="manager">{t('roles.manager')}</SelectItem>
-              <SelectItem value="employee">{t('roles.employee')}</SelectItem>
-            </SelectContent>
-          </Select>
-          {errors.role && <span className="text-sm text-red-500">{errors.role.message}</span>}
-        </div>
-        <div className="flex flex-col">
-          <p className="text-gray-600 text-sm">{t('membersTable.actionType')}</p>
-          <Select onValueChange={(value) => register('actionType').onChange({ target: { value } })}>
-            <SelectTrigger className="text-gray-700">
-              <SelectValue placeholder={t('placeholders.selectActionType')} />{' '}
-              {/* Translated placeholder */}
-            </SelectTrigger>
-            <SelectContent className="text-gray-700 bg-white">
-              <SelectItem value="edit">{t('actionTypes.edit')}</SelectItem>
-              <SelectItem value="view">{t('actionTypes.view')}</SelectItem>
-            </SelectContent>
-          </Select>
-          {errors.actionType && (
-            <span className="text-sm text-red-500">{errors.actionType.message}</span>
-          )}
-        </div>
-        <div className="flex items-end">
-          <Button
-            type="button"
-            onClick={handleSubmit(handleFormSubmit)}
-            className="btn-blue rounded-md"
-          >
-            {t('buttons.add')} {/* Translated button label */}
-          </Button>
-        </div>
-      </div>
+    <div className="grid grid-cols-5 gap-4 mt-4">
+      <FormInputItem
+        label={'membersTable.fullName'}
+        placeholder={'placeholders.fullName'}
+        register={register('fullName')}
+        value={''}
+        error={errors['fullName']?.message}
+      />
+
+      <FormInputItem
+        label={'membersTable.email'}
+        placeholder={'placeholders.email'}
+        register={register('email')}
+        value={''}
+        error={errors['email']?.message}
+      />
+
+      <SelectInputItem
+        label={'membersTable.role'}
+        placeholder={'placeholders.selectRole'}
+        onValueChange={(value) => register('role').onChange({ target: { value } })}
+        error={errors['role']?.message}
+        items={[
+          { value: 'manager', translationKey: 'roles.manager' },
+          { value: 'employee', translationKey: 'roles.employee' }
+        ]}
+      />
+
+      <SelectInputItem
+        label={'membersTable.actionType'}
+        placeholder={'placeholders.selectActionType'}
+        onValueChange={(value) => register('actionType').onChange({ target: { value } })}
+        error={errors['actionType']?.message}
+        items={[
+          { value: 'edit', translationKey: 'actionTypes.edit' },
+          { value: 'view', translationKey: 'actionTypes.view' }
+        ]}
+      />
+
+      <Button
+        type="button"
+        onClick={handleSubmit(handleFormSubmit)}
+        className="btn-blue mb-4 w-32 rounded-md self-center "
+      >
+        {t('buttons.add')} {/* Translated button label */}
+      </Button>
     </div>
   )
 }
