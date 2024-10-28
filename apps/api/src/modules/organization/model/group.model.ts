@@ -1,6 +1,6 @@
 // 1. **Formation Group Fields**                                                       
 // - **Animator**: Name or identifier of the facilitator.
-// - **Formateur**: Name or identifier of the trainer.
+// - **Formator**: Name or identifier of the trainer.
 // - **Thème**: Topic or theme of the formation.
 // - **Lieu**: Location where the formation will take place.
 // - **Nbr of Participants**: Total number of participants.
@@ -8,7 +8,8 @@
 // - **Action**: Status field with options (e.g., “Planned” or “Not Planned”).
 
 import { LocalTableInput } from "src/shared/types/db";
-import { IsEnum, IsNumber } from 'class-validator';
+import { IsEmail, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { WorkerType } from "./working-time.model";
 
 export enum DaysOfWrork {
     Monday = "monday",
@@ -22,22 +23,45 @@ export enum DaysOfWrork {
 
 export enum WorkTimeLimit {
 	MINSTART = 12 * 60 * 60 * 1000, // 12:00 PM in milliseconds
-	MAXEND = 0, // 12:00 AM in milliseconds
+	MAXEND = 18 * 60 * 60 * 1000, // 18:00 PM in milliseconds
 }
 
-export class WorkingTime {
+
+export class UpdateWorkingTimeDto {
+	@IsOptional()
+	@IsEnum(DaysOfWrork)
+	day?: DaysOfWrork;
+
+	@IsOptional()
+	@IsNumber()
+	startTime?: number;
+
+	@IsOptional()
+	@IsNumber()
+	endTime?: number;
+}
+
+export class CreateWorkingTimeDto {
+	@IsNotEmpty()
     @IsEnum(DaysOfWrork)
-    day!: DaysOfWrork;
+	day!: DaysOfWrork;
 
-    @IsNumber()
-    startTime!: number;
+	@IsNotEmpty()
+	@IsNumber()
+	startTime!: number;
 
-    @IsNumber()
-    endTime!: number;
+	@IsNotEmpty()
+	@IsNumber()
+	endTime!: number;
+
+	@IsNotEmpty()
+	@IsEnum(WorkerType)
+	workerType!: WorkerType;
+
+	@IsNotEmpty()
+	@IsString()
+	groupUid!: string;
 }
-
-
-
 
 export enum GroupAction {
 	Planned = "Planned",
@@ -49,7 +73,7 @@ export interface Group {
     uid: string;
     themeId: string;
     animatorsUid: string[]; // we will store it in an isolated table
-    formateurUid: string; // we will store it in an isolated table
+    formatorUid: string; // we will store it in an isolated table
     theme: string; // the title of the theme
     location: string;
     participantsUid: string[]; // we will store it in an isolated table

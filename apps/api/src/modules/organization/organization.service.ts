@@ -1,14 +1,14 @@
 import { Injectable } from "@nestjs/common";
 import { CreateOrganizationDto } from "./dto/create-organization.dto";
-import { AnimatorRepository, OrganizationRepository, ThemeRepository } from "./organization.repository";
+import { AnimatorRepository, FormatorRepository, OrganizationRepository, ThemeRepository, WorkingHoursManager } from "./organization.repository";
 import { UpdateOrganizationDto } from "./dto/update-organization.dto";
 import { UserService } from "../user/user.service";
 import { CreateThemeDto } from "./dto/create-theme.dto";
 import { UpdateThemeDto } from "./dto/update-theme.dto";
-import { CreateAnimaotorItemDto, CreateAnimatorDto } from "./dto/create-animator.dto";
+import { CreateAnimatorDto, CreateAnimatorItemDto, UpdateAnimatorDto } from "./dto/create-animator.dto";
 import { Animator } from "./model/animator.model";
-import { WorkingTime, WorkTimeLimit } from "./model/group.model";
-import { UpdateUserDto } from "../user/dto/update-user.dto";
+import { CreateWorkingTimeDto, WorkTimeLimit } from "./model/group.model";
+import { CreateFormatorDto, CreateFormatorItem, Formator } from "./model/formator.model";
 
 /**
  * @class OrganizationService
@@ -84,7 +84,7 @@ export class OrganizationService {
 	 * @throws {Error} If the organization does not exist.
 	 */
 	async update(cnss: string, updateOrganizationDto: UpdateOrganizationDto) {
-		return this.organizationRepository.updateOrganization(cnss, updateOrganizationDto);
+		return await this.organizationRepository.updateOrganization(cnss, updateOrganizationDto);
 	}
 
 	/**
@@ -112,7 +112,7 @@ export class OrganizationService {
 		await this.userService.eraseAllUsersInOrganization(organization.cnss);
 
 		// Delete the organization
-		return this.organizationRepository.deleteOrganization(cnss);
+		return await this.organizationRepository.deleteOrganization(cnss);
 	}
 }
 
@@ -188,7 +188,7 @@ export class ThemeService {
 			throw new Error('invalidDates');
 		}
 
-		return this.themeRepository.updateTheme(uid, updateThemeDto);
+		return await this.themeRepository.updateTheme(uid, updateThemeDto);
 	}
 
 	/**
@@ -208,7 +208,7 @@ export class ThemeService {
 			throw new Error('themeDoesntExists');
 		}
 
-		return this.themeRepository.deleteTheme(uid);
+		return await this.themeRepository.deleteTheme(uid);
 	}
 }
 
@@ -216,6 +216,7 @@ export class ThemeService {
 export class AnimatorService {
 	constructor(
 		private readonly animatorRepository: AnimatorRepository,
+		private readonly workingHoursManager: WorkingHoursManager,
 	) {}
 	private convertToNumber(dateString: string): number {
 		const date = new Date(dateString);
@@ -225,38 +226,26 @@ export class AnimatorService {
 		return date.getTime();
 	}
 	async createAnimator(createAnimatorDto: CreateAnimatorDto) {
-		console.debug('Start invalid endpoint');
 		const animator = await this.animatorRepository.getByEmail(createAnimatorDto.email);
-		console.debug('End invalid endpoint', animator);
 
-		if (!animator) throw new Error('Animator already exist with this email!');
+		if (animator) throw new Error('Animator already exist with this email!');
 
-		if (animator.workingHours && Array.isArray(animator.workingHours)) {
-			for (let i = 0; i < animator.workingHours.length; i++) {
-				const workingHour = animator.workingHours[i];
-				// Check if workingHour is undefined or if startTime or endTime is undefined
-				if (!workingHour || workingHour.startTime === undefined || workingHour.endTime === undefined) {
-					// Remove the invalid workingHour from the array
-					animator.workingHours.splice(i, 1);
-					// Adjust index after removal to avoid skipping the next element
-					i--;
-					continue;
-				}
-				
-				// Validate the working hours to ensure they are within the allowed limits
-				if (!(workingHour.startTime < workingHour.endTime && workingHour.startTime >= WorkTimeLimit.MINSTART && workingHour.endTime <= WorkTimeLimit.MAXEND)) {
-					throw new Error('Invalid Dates: minTime: ' + WorkTimeLimit.MINSTART + ' <= working startTime < endTime <= ' + WorkTimeLimit.MAXEND);
-				}
-			}
-		}
-		const workingHours: WorkingTime[] = createAnimatorDto.workingHours;
-		const animatorItem: CreateAnimaotorItemDto = {
+		const workingHours: CreateWorkingTimeDto[] = createAnimatorDto.workingHours;
+		
+		await this.workingHoursManager.validateWorkingHours(workingHours, createAnimatorDto.email);
+
+		const animatorItem: CreateAnimatorItemDto = {
 			name: createAnimatorDto.name,
-			email: createAnimatorDto.email
+			email: createAnimatorDto.email,
+			organizationId: createAnimatorDto.organizationId,
 		};
 
-		console.debug('workingHours', workingHours);
-		return await this.animatorRepository.createAnimator(animatorItem); 
+		const newAnimator = await this.animatorRepository.createAnimator(animatorItem);
+		
+		await this.workingHoursManager.addWorkingHours(workingHours, createAnimatorDto.email);
+
+
+		return { ...newAnimator, workingHours }; 
 	}
 
 	async getAnimator(email: string): Promise<Animator> {
@@ -268,11 +257,58 @@ export class AnimatorService {
 		return animator;
 	}
 
-	async updateTheme(email: string, updateAnimatorDto: UpdateUserDto) {
+	async updateAnimator(updateAnimatorDto: UpdateAnimatorDto, uid: string) {
+		// check if the animator exists
+		const animator = await this.animatorRepository.getByUid(uid);
+		if (!animator) {
+			throw new Error('animatorDoesntExists');
+		}
+
+		return await this.animatorRepository.updateAnimator(updateAnimatorDto, uid);
+		
+	}
+
+	async deleteAnimator(email: string) {
+		return await this.animatorRepository.deleteAnimator(email);
+	}
+}
+
+@Injectable()
+export class FormatorService {
+	constructor(
+		private readonly formatorRepository: FormatorRepository,
+		private readonly workingHoursManager: WorkingHoursManager,
+	) {}
+
+	async createFormator(createFormatorDto: CreateFormatorDto) {
+		const formator = await this.formatorRepository.getByEmail(createFormatorDto.email);
+
+		if (formator) throw new Error('Formator already exist with this email!');
+
+		const workingHours: CreateWorkingTimeDto[] = createFormatorDto.workingHours;
+
+		await this.workingHoursManager.validateWorkingHours(workingHours, createFormatorDto.email);
+
+		const formatorItem: CreateFormatorItem = {
+			name: createFormatorDto.name,
+			email: createFormatorDto.email,
+			organizationId: createFormatorDto.organizationId,
+		};
+
+		const newFormator = await this.formatorRepository.createFormator(formatorItem);
+
+		await this.workingHoursManager.addWorkingHours(workingHours, createFormatorDto.email);
+
+		return { ...newFormator, workingHours };
+	}
+
+	async getFormator(email: string): Promise<Formator> {
 		if (!email)
 			throw new Error('emailRequired');
-		else if (updateAnimatorDto.email && updateAnimatorDto.email != email && await this.animatorRepository.getByEmail(email))
-			throw new Error('thisEmailAlreadyUsed');
-		await this.animatorRepository.updateAnimator(email, updateAnimatorDto);
+		const formator: Formator | null = await this.formatorRepository.getByEmail(email);
+		if (!formator)
+			throw new Error('There is no formator with the email being given!');
+		return formator;
 	}
+
 }

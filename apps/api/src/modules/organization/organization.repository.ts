@@ -2,16 +2,18 @@ import { Injectable } from "@nestjs/common";
 import { DbConstants } from "src/global/db/db.constants";
 import { DbService } from "src/global/db/db.service";
 import { CreateOrganizationDto } from "./dto/create-organization.dto";
-import { PutCommandInput, QueryCommandInput, ScanCommandInput, UpdateCommandInput } from "@aws-sdk/lib-dynamodb";
+import { DeleteCommandInput, PutCommandInput, QueryCommandInput, ScanCommandInput } from "@aws-sdk/lib-dynamodb";
 import { Organization } from "./model/organization.model";
 import { v4 as uuid } from 'uuid';
 import { DeleteItemCommandInput, PutItemCommandInput, UpdateItemCommandInput } from "@aws-sdk/client-dynamodb";
 import { UpdateOrganizationDto } from "./dto/update-organization.dto";
 import { CreateThemeDto } from "./dto/create-theme.dto";
 import { UpdateThemeDto } from "./dto/update-theme.dto";
-import { CreateAnimaotorItemDto, CreateAnimatorDto, UpdateAnimatorDto } from "./dto/create-animator.dto";
+import { CreateAnimatorItemDto, UpdateAnimatorDto } from "./dto/create-animator.dto";
 import { Animator } from "./model/animator.model";
-import { throwIfEmpty } from "rxjs";
+import { CreateWorkingTimeDto, UpdateWorkingTimeDto, WorkTimeLimit } from "./model/group.model";
+import { WorkerType, WorkingTime } from "./model/working-time.model";
+import { CreateFormatorDto, CreateFormatorItem, Formator } from "./model/formator.model";
 
 /**
  * @module OrganizationRepository
@@ -593,7 +595,7 @@ export class AnimatorRepository {
 		this.animatorTableName = this.dbConstants.getTable(animatorTable);
 		this.animatorPrimaryKey = this.dbConstants.getPrimaryKey(animatorTable);
 	}
-	async createAnimator(createAnimatorDto: CreateAnimaotorItemDto) {
+	async createAnimator(createAnimatorDto: CreateAnimatorItemDto) {
 		const uid = uuid();
 		const Item = {
 			PK: this.animatorPrimaryKey,
@@ -617,33 +619,50 @@ export class AnimatorRepository {
 		const params: QueryCommandInput = {
 			TableName: this.animatorTableName,
 			IndexName: 'EmailIndex',
-			KeyConditionExpression: 'enail = :enail',
+			KeyConditionExpression: 'email = :email',
 			ExpressionAttributeValues: {
-				':enail': email,
+				':email': { S: email },
+			}
+		};
+
+		try {
+			const Items = await this.dbService.query(params);
+			
+			if (!Items || Items.length === 0) {
+				return null;
+			}
+
+			return this.dbService.mapDynamoDBItemToObject(Items[0]) as Animator;
+		} catch (error) {
+			return null;
+		}
+	}
+
+	async getByUid(uid: string): Promise<Animator | null> {
+		const params: QueryCommandInput = {
+			TableName: this.animatorTableName,
+			KeyConditionExpression: 'PK = :PK AND SK = :SK',
+			ExpressionAttributeValues: {
+				':PK': { S: this.dbConstants.getPrimaryKey('Animators') },
+				':SK': { S: this.dbConstants.getSortKey(uid) },
 			}
 		};
 
 		try {
 			const Items = await this.dbService.query(params);
 
-			if (!Items || Items.length  === 0) {
+			if (!Items || Items.length === 0) {
 				return null;
 			}
 
-			return this.dbService.mapDynamoDBItemToObject(Items[0]) as Animator;
+			return this.dbService.mapDynamoDBItemToObject(Items[0]);
 		} catch (error) {
-			if (error instanceof Error) {
-				throw new Error(error.message);
-			} else {
-				throw new Error('An unknown error occurred');
-			}
+			return null;
 		}
 	}
 
-
-
-	async updateAnimator(email: string, updateAnimatorDto: UpdateAnimatorDto): Promise <Animator | null> {
-		const animator: Animator | null = await this.getByEmail(email);
+	async updateAnimator(updateAnimatorDto: UpdateAnimatorDto, uid: string): Promise <Animator | null> {
+		const animator: Animator | null = await this.getByUid(uid);
 
 		if (!animator) {
 			throw new Error('animatorDoesntExists');
@@ -753,5 +772,278 @@ export class AnimatorRepository {
 			page,
 			limit,
 		};
+	}
+}
+
+
+
+@Injectable()
+export class WorkingHoursManager {
+	constructor(
+		private readonly dbService: DbService,
+		private readonly dbConstants: DbConstants,
+		private readonly animatorRepository: AnimatorRepository,
+	) {}
+
+	async validateWorkingHours(workingHoursToValidate: CreateWorkingTimeDto[], email: string) {
+		// get the working hours from the database of the worker to check it against the new working hours
+		const workingHours = await this.getWorkingHours(email);
+
+		// check if the given working hours are valid
+		for (const workingHour of workingHoursToValidate) {
+			if (workingHour.startTime > workingHour.endTime || workingHour.startTime < WorkTimeLimit.MINSTART || workingHour.endTime > WorkTimeLimit.MAXEND) {
+				throw new Error('workingHoursInvalid');
+			}
+		}
+			
+		// check if there is any overlapping between the new working hours and the existing working hours
+		for (const workingHour of workingHoursToValidate) {
+			for (const existingWorkingHour of workingHours) {
+				if (workingHour.day === existingWorkingHour.day && workingHour.startTime < existingWorkingHour.endTime && workingHour.endTime > existingWorkingHour.startTime) {
+					throw new Error('workingHoursOverlapping');
+				}
+			}
+		}
+
+		// check if there is any overlapping between the new working hours themselves
+		const hasOverlap = workingHoursToValidate.some((currentHour, index) => 
+			workingHoursToValidate.slice(index + 1).some(nextHour => 
+				currentHour.day === nextHour.day && 
+				currentHour.startTime < nextHour.endTime && 
+				currentHour.endTime > nextHour.startTime
+			)
+		);
+
+		if (hasOverlap) {
+			throw new Error('workingHoursOverlapping');
+		}
+	}
+
+	async getWorkingHours(email: string): Promise<WorkingTime[]> {
+		const params: QueryCommandInput = {
+			TableName: this.dbConstants.getTable('WorkingTimes'),
+			IndexName: 'EmailIndex',
+			KeyConditionExpression: 'email = :email',
+			ExpressionAttributeValues: {
+				':email': { S: email },
+			}
+		};
+
+		const Items = await this.dbService.query(params);
+
+		return Items.map((item: Record<string, any>) => this.dbService.mapDynamoDBItemToObject(item));
+	}
+
+	async addWorkingHours(workingHours: CreateWorkingTimeDto[], email: string) {
+		const animator = await this.animatorRepository.getByEmail(email);
+		if (!animator) {
+			throw new Error('animatorDoesntExists');
+		}
+		
+		// we must check if the working hours are valid and not overlapping
+		await this.validateWorkingHours(workingHours, email);
+
+
+		// set the new working hours
+		for (const workingHour of workingHours) {
+			const uid = uuid();
+			// check if the worker exists
+			const workingTimeItem = {
+				PK: this.dbConstants.getPrimaryKey('WorkingTimes'),
+				SK: this.dbConstants.getSortKey(uid),
+				uid,
+				email,
+				workerType: WorkerType.Animators,
+				day: workingHour.day,
+				startTime: workingHour.startTime,
+				endTime: workingHour.endTime,
+				createdAt: Date.now()
+			};
+
+			const params: PutCommandInput = {
+				TableName: this.dbConstants.getTable('WorkingTimes'),
+				Item: workingTimeItem
+			};
+
+			await this.dbService.putItem(params);
+			}
+
+		return { message: 'Working hours added successfully' };
+	}
+
+	async getWorkingHoursByUid(uid: string): Promise<WorkingTime | null> {
+		const params: QueryCommandInput = {
+			TableName: this.dbConstants.getTable('WorkingTimes'),
+			IndexName: 'UidIndex',
+			KeyConditionExpression: 'uid = :uid',
+			ExpressionAttributeValues: {
+				':uid': { S: uid },
+			}
+		};
+
+		const Items = await this.dbService.query(params);
+
+		if (!Items || Items.length === 0) {
+			return null;
+		}
+
+		return this.dbService.mapDynamoDBItemToObject(Items[0]);
+	}
+
+	async deleteWorkingHours(uid: string) {
+		// check if the working time exists
+		const workingTime = await this.getWorkingHoursByUid(uid);
+		if (!workingTime) {
+			throw new Error('workingTimeDoesntExists');
+		}
+
+		const params: DeleteItemCommandInput = {
+			TableName: this.dbConstants.getTable('WorkingTimes'),
+			Key: {
+				PK: { S: workingTime.PK },
+				SK: { S: workingTime.SK },
+			},
+		};
+
+		await this.dbService.deleteItem(params);
+
+		return { message: 'Working hours deleted successfully' };
+	}
+
+	async getAllWorkingHours(email: string, groupUid: string, workerType: WorkerType, page: number, limit: number) {
+		page = !page ? 1 : page;
+		limit = !limit ? 10 : limit;
+
+		const params: ScanCommandInput = {
+			TableName: this.dbConstants.getTable('WorkingTimes'),
+			FilterExpression: '',
+			ExpressionAttributeNames: {},
+			ExpressionAttributeValues: {},
+		};
+
+		if (email) {
+			params.FilterExpression += 'email = :email';
+			params.ExpressionAttributeValues![':email'] = { S: email };
+		}
+
+		if (groupUid) {
+			params.FilterExpression += 'groupUid = :groupUid';
+			params.ExpressionAttributeValues![':groupUid'] = { S: groupUid };
+		}
+
+		if (workerType) {
+			params.FilterExpression += 'workerType = :workerType';
+			params.ExpressionAttributeValues![':workerType'] = { S: workerType };
+		}
+
+		// If no filters were set, remove the attributes to simplify the scan
+		if (!params.FilterExpression) {
+			delete params.FilterExpression;
+			delete params.ExpressionAttributeNames;
+			delete params.ExpressionAttributeValues;
+		}
+
+		const Items = await this.dbService.scanItems(params);
+
+		// Apply pagination
+		const startIndex = (page - 1) * limit;
+		const endIndex = startIndex + limit;
+		const paginatedItems = Items.slice(startIndex, endIndex);
+
+		return {
+			items: paginatedItems.map((item: Record<string, any>) => this.dbService.mapDynamoDBItemToObject(item)),
+			total: Items.length,
+			page,
+			limit,
+		};
+	}
+
+	async updateWorkingHours(updateWorkingTimeDto: UpdateWorkingTimeDto, uid: string) {
+		// check if the working time exists
+		const workingTime = await this.getWorkingHoursByUid(uid);
+		if (!workingTime) {
+			throw new Error('workingTimeDoesntExists');
+		}
+
+		// check if the new working hours are valid and not overlapping
+		await this.validateWorkingHours([updateWorkingTimeDto as CreateWorkingTimeDto], workingTime.email);
+
+		// update the working hours
+		let expressionAttributeNames: { [key: string]: string } = {};
+		let expressionAttributeValues: { [key: string]: any } = {};
+
+		// get all keys from the updateWorkingTimeDto object and dynamically create the update expression
+		const updateParts: string[] = [];
+		Object.keys(updateWorkingTimeDto).forEach((key) => {
+			if (updateWorkingTimeDto[key as keyof UpdateWorkingTimeDto] !== undefined) {
+				updateParts.push(`#${key} = :${key}`);
+				expressionAttributeNames[`#${key}`] = key;
+				expressionAttributeValues[`:${key}`] = this.dbService.convertToAttributeValue(updateWorkingTimeDto[key as keyof UpdateWorkingTimeDto]);
+			}
+		});
+
+		const updateExpression = 'SET ' + updateParts.join(', ');
+
+		const params: UpdateItemCommandInput = {
+			TableName: this.dbConstants.getTable('WorkingTimes'),
+			Key: {
+				PK: { S: workingTime.PK },
+				SK: { S: workingTime.SK },
+			},
+			UpdateExpression: updateExpression,
+			ExpressionAttributeNames: expressionAttributeNames,
+			ExpressionAttributeValues: expressionAttributeValues,
+		};
+
+		await this.dbService.updateItem(params);
+
+		return { message: 'Working hours updated successfully' };
+	}
+}
+
+@Injectable()
+export class FormatorRepository {
+	constructor(
+		private readonly dbConstants: DbConstants,
+		private readonly dbService: DbService,
+	) {}
+
+	async createFormator(createFormatorDto: CreateFormatorItem) {
+		const uid = uuid();
+		const Item: Formator = {
+			PK: this.dbConstants.getPrimaryKey('Formators'),
+			SK: this.dbConstants.getSortKey(uid),
+			uid,
+			...createFormatorDto,
+			createdAt: Date.now(),
+		};
+
+		const params: PutCommandInput = {
+			TableName: this.dbConstants.getTable('Formators'),
+			Item: Item as Record<string, any>,
+		};
+
+		await this.dbService.putItem(params);
+
+		return Item;
+	}
+
+	async getByEmail(email: string): Promise<Formator | null> {
+		const params: QueryCommandInput = {
+			TableName: this.dbConstants.getTable('Formators'),
+			IndexName: 'EmailIndex',
+			KeyConditionExpression: 'email = :email',
+			ExpressionAttributeValues: {
+				':email': { S: email },
+			}
+		};
+
+		const Items = await this.dbService.query(params);
+
+		if (!Items || Items.length === 0) {
+			return null;
+		}
+
+		return this.dbService.mapDynamoDBItemToObject(Items[0]);
 	}
 }

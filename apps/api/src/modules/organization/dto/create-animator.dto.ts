@@ -1,6 +1,6 @@
 import { IsArray, IsEmail, IsNotEmpty, IsOptional, IsString, ValidateNested } from "class-validator";
-import { WorkingTime } from "../model/group.model";
 import { Type } from "class-transformer";
+import { CreateWorkingTimeDto } from "../model/group.model";
 
 export class CreateAnimatorDto {
 	@IsNotEmpty()
@@ -13,11 +13,15 @@ export class CreateAnimatorDto {
 
 	@IsArray()
 	@ValidateNested({ each: true })
-	@Type(() => WorkingTime)
-	workingHours!: WorkingTime[];
+	@Type(() => CreateWorkingTimeDto)
+	workingHours!: CreateWorkingTimeDto[];
+
+	@IsNotEmpty()
+	@IsString()
+	organizationId!: string;
 }
 
-export class CreateAnimaotorItemDto {
+export class CreateAnimatorItemDto {
 	@IsNotEmpty()
 	@IsString()
 	name!: string;
@@ -25,6 +29,10 @@ export class CreateAnimaotorItemDto {
 	@IsNotEmpty()
 	@IsEmail()
 	email!: string;
+
+	@IsNotEmpty()
+	@IsString()
+	organizationId!: string;
 }
 
 export class UpdateAnimatorDto {
@@ -38,6 +46,7 @@ export class UpdateAnimatorDto {
 
 	@IsOptional()
 	@IsArray()
-	// @ValidateNested({ each: true })
-	workingHours?: WorkingTime[];
+	@ValidateNested({ each: true })
+	@Type(() => CreateWorkingTimeDto)
+	workingHours?: CreateWorkingTimeDto[];
 }

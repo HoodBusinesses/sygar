@@ -2,19 +2,20 @@ import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, 
 import { JwtGuard } from "src/global/auth/auth.guard";
 import { CreateOrganizationDto } from "./dto/create-organization.dto";
 import { DeleteOrganizationDto } from "./dto/delete-organization-dtro";
-import { AnimatorService, OrganizationService, ThemeService } from "./organization.service";
+import { AnimatorService, FormatorService, OrganizationService, ThemeService } from "./organization.service";
 import { UpdateOrganizationDto } from "./dto/update-organization.dto";
 import { AbilitiesGuard } from "src/global/rbac/rbac.guard";
 import { PutAbilities } from "src/global/rbac/roles.decorators";
 import { Action } from "src/shared/types/roles";
-import { OrganizationRepository, ThemeRepository } from "./organization.repository";
+import { OrganizationRepository, ThemeRepository, WorkingHoursManager } from "./organization.repository";
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LanguageService } from "src/global/language/language.service";
 import { CreateThemeDto, ThemeGroup } from "./dto/create-theme.dto";
 import { UpdateThemeDto } from "./dto/update-theme.dto";
-import { CreateAnimatorDto } from "./dto/create-animator.dto";
-import { Type } from 'class-transformer';
-import { ValidateNested } from 'class-validator';
+import { CreateAnimatorDto, UpdateAnimatorDto } from "./dto/create-animator.dto";
+import { WorkerType } from './model/working-time.model';
+import { CreateWorkingTimeDto, UpdateWorkingTimeDto } from "./model/group.model";
+import { CreateFormatorDto } from "./model/formator.model";
 
 /**
  * @module OrganizationController
@@ -504,7 +505,6 @@ export class AnimatorController {
 				date: new Date().toISOString(),
 			}
 		} catch (error: any) {
-			console.debug('Invalid workingHour or ', error.message);
 			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString()}, HttpStatus.BAD_REQUEST);
 		}
 	}
@@ -523,6 +523,168 @@ export class AnimatorController {
 			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString()}, HttpStatus.BAD_REQUEST);
 		} 
 	}
+
+	@Put('update')
+	async updateAnimator(@Body() updateAnimatorDto: UpdateAnimatorDto, @Query('uid') uid: string, @Req() req: Request) {
+		const header: Record<string, any> = req.headers;
+		const lang = header['accept-language'] ?? 'en';
+
+		try {
+			return {
+				animator: await this.animatorService.updateAnimator(updateAnimatorDto, uid),
+				date: new Date().toISOString(),
+			}
+		} catch (error: any) {
+			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString()}, HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@Delete('delete')
+	async deleteAnimator(@Query('email') email: string, @Req() req: Request) {
+		const header: Record<string, any> = req.headers;
+		const lang = header['accept-language'] ?? 'en';
+
+		try {
+			return {
+				animator: await this.animatorService.deleteAnimator(email),
+				date: new Date().toISOString(),
+			}
+		} catch (error: any) {
+			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString()}, HttpStatus.BAD_REQUEST);
+		}
+	}
+}
+
+
+/////////////////////////////
+
+@Controller('formator')
+export class FormatorController {
+	constructor(
+		private readonly languageService: LanguageService,
+		private readonly formatorService: FormatorService,
+	) {}
+
+	@Post('create')
+	async createFormator(@Body() createFormatorDto: CreateFormatorDto, @Req() req: Request) {
+		const header: Record<string, any> = req.headers;
+		const lang = header['accept-language'] ?? 'en';
+
+		try {
+			return {
+				formator: await this.formatorService.createFormator(createFormatorDto),
+				date: new Date().toISOString(),
+			}
+		} catch (error: any) {
+			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString()}, HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@Get('get')
+	async get(@Query('email') email: string, @Req() req: Request) {
+		const header:Record<string, any> = req.headers;
+		const lang: string = header['accept-language'] ?? 'en';
+
+		try {
+			return {
+				formator: await this.formatorService.getFormator(email),
+				date: new Date().toISOString(),
+			};
+		} catch (error: any){
+			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString()}, HttpStatus.BAD_REQUEST);
+		} 
+	}
 	
 }
 
+/////////////////////////////
+
+
+@Controller('working-hours')
+export class WorkingHoursController {
+	constructor(
+		private readonly workingHoursManager: WorkingHoursManager,
+		private readonly languageService: LanguageService,
+	) {}
+
+	@Post('add')
+	async addWorkingHours(@Body() workingHours: CreateWorkingTimeDto[], @Query('email') email: string, @Req() req: Request) {
+		const header: Record<string, any> = req.headers;
+		const lang = header['accept-language'] ?? 'en';	
+
+		if (!email)
+			throw new Error('emailRequired');
+
+		try {
+			return {
+				workingHours: await this.workingHoursManager.addWorkingHours(workingHours, email),
+				date: new Date().toISOString(),
+			}
+		} catch (error: any) {
+			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString()}, HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@Delete('delete')
+	async deleteWorkingHours(@Query('uid') uid: string, @Req() req: Request) {
+		const header: Record<string, any> = req.headers;
+		const lang = header['accept-language'] ?? 'en';
+
+		try {
+			return {
+				workingHours: await this.workingHoursManager.deleteWorkingHours(uid),
+				date: new Date().toISOString(),
+			}
+		} catch (error: any) {
+			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString()}, HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@Get('get')
+	async getWorkingHours(@Query('email') email: string, @Req() req: Request) {
+		const header: Record<string, any> = req.headers;
+		const lang = header['accept-language'] ?? 'en';
+
+		try {
+			return {
+				workingHours: await this.workingHoursManager.getWorkingHours(email),
+				date: new Date().toISOString(),
+			}
+		} catch (error: any) {
+			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString()}, HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@Get('get-all')
+	async getAllWorkingHours(@Query('email') email: string, @Query('groupUid') groupUid: string, @Query('workerType') workerType: WorkerType, @Query('page') page: number = 1, @Query('limit') limit: number = 10, @Req() req: Request) {
+		const header: Record<string, any> = req.headers;
+		const lang = header['accept-language'] ?? 'en';
+
+		if (!email && !groupUid)
+			throw new Error('emailOrGroupUidRequired');
+
+		try {
+			return {
+				workingHours: await this.workingHoursManager.getAllWorkingHours(email, groupUid, workerType, page, limit),
+				date: new Date().toISOString(),
+			}
+		} catch (error: any) {
+			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString()}, HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@Put('update')
+	async updateWorkingHours(@Body() updateWorkingTimeDto: UpdateWorkingTimeDto, @Query('uid') uid: string, @Req() req: Request) {
+		const header: Record<string, any> = req.headers;
+		const lang = header['accept-language'] ?? 'en';
+
+		try {
+			return {
+				workingHours: await this.workingHoursManager.updateWorkingHours(updateWorkingTimeDto, uid),
+				date: new Date().toISOString(),
+			}
+		} catch (error: any) {
+			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString()}, HttpStatus.BAD_REQUEST);
+		}
+	}
+}

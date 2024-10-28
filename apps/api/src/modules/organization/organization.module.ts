@@ -1,7 +1,7 @@
 import { Global, Module } from "@nestjs/common";
-import { AnimatorController, OrganizationController, ThemeController } from "./organization.controler";
-import { AnimatorRepository, OrganizationRepository, ThemeRepository } from "./organization.repository";
-import { AnimatorService, OrganizationService, ThemeService } from "./organization.service";
+import { AnimatorController, FormatorController, OrganizationController, ThemeController, WorkingHoursController } from "./organization.controler";
+import { AnimatorRepository, FormatorRepository, OrganizationRepository, ThemeRepository, WorkingHoursManager } from "./organization.repository";
+import { AnimatorService, FormatorService, OrganizationService, ThemeService } from "./organization.service";
 
 /**
  * @module OrganizationModule
@@ -15,8 +15,8 @@ import { AnimatorService, OrganizationService, ThemeService } from "./organizati
  */
 @Global()
 @Module({
-	controllers: [OrganizationController, ThemeController, AnimatorController],
-	providers: [OrganizationRepository, OrganizationService, ThemeService, ThemeRepository, AnimatorService, AnimatorRepository],
+	controllers: [OrganizationController, ThemeController, AnimatorController, WorkingHoursController, FormatorController],
+	providers: [OrganizationRepository, OrganizationService, ThemeService, ThemeRepository, AnimatorService, AnimatorRepository, WorkingHoursManager, FormatorService, FormatorRepository],
 	exports: [OrganizationRepository],
 })
 export class OrganizationModule {}

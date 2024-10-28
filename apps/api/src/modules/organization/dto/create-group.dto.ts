@@ -1,6 +1,5 @@
 import { IsArray, IsEnum, isEnum, IsNotEmpty, IsOptional, IsString, ValidateNested } from "class-validator";
 import { Animator } from "../model/animator.model";
-import { Formateur } from "../model/formateur.model";
 import { Type } from "class-transformer";
 import { Participant } from "../model/participant.model";
 import { GroupAction } from "../model/group.model";
@@ -20,13 +19,7 @@ export class CreateGroupDto {
 
 	@IsOptional()
 	@IsString()
-	formateurUid?: string;
-
-	@IsOptional()
-	@ValidateNested({ each: true })
-	@Type(() => Formateur)
-	formateur?: Formateur;
-
+	formatorUid?: string;
 	@IsNotEmpty()
 	@IsString()
 	theme!: string;
