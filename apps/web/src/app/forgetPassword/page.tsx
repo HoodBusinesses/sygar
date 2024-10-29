@@ -1,12 +1,12 @@
 import React from "react";
 import "../../app/globals.css";
-import ResetPassword from "@/components/ResetPassword";
+import ForgetPassword from '@/components/ForgetPassword';
 
 const resetPassword: React.FC = () => {
 
   return (
-    <div className="flex flex-col">
-      <ResetPassword />
+    <div className='flex flex-col'>
+      <ForgetPassword />
     </div>
   );
 };

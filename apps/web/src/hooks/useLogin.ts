@@ -1,30 +1,28 @@
-import { api } from "@/api";
-import { errorToast } from "@/lib/toasts";
-import { LoginParams } from "@repo/exapi";
-import { useMutation } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { api } from '@/api';
+import { errorToast } from '@/lib/toasts';
+import { useMutation } from '@tanstack/react-query';
 
 export const useLogin = () => {
-	const { data, isPending, isError, isSuccess, mutate, error } = useMutation({ mutationKey: ['login'], mutationFn: api.api().auth.login })
+  const { data, isPending, isError, isSuccess, mutate } = useMutation({    
+    mutationKey: ['login'],
 
-	// Open the custom URL when the request is successful
-	useEffect(() => {
-		if (isSuccess) {
-			const token = data.data.token; // Assuming the response contains a token
-			console.log(data)
-			const customUrl = `sygar://anaas?token=${token}`;
+    mutationFn: api.api().auth.login,
 
-			window.location.href = customUrl; // Open the custom scheme URL
-		}
-	}, [isSuccess, data]);
+    onSuccess: () => {
+      // Open the custom URL when the request is successful
+      const token = data; // Assuming the response contains a token
+      console.log('data:: ', data);
+      const customUrl = `sygar://anaas?token=${token}`;
+      window.location.href = customUrl; // Open the custom scheme URL
+    },
 
-	if (isError) {
-		errorToast(error.message);
-	}
+	  onError: (error) => errorToast(error.message),
+  });
 
-	return {
-		data,
-		isSuccess, isError, isPending,
-		mutate
-	}
-}
+  return {
+    isSuccess,
+    isError,
+    isPending,
+    mutate
+  };
+};
