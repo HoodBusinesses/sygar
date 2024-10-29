@@ -134,6 +134,7 @@
     "of": "de",
     "previous": "Précédent",
     "next": "Suivant",
+    "noPermission": "VOUS N'AVEZ PAS ACCÈS",
     "sidebar": {
         "sections": {
             "dashboard": "Tableau de bord",
