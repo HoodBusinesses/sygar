@@ -117,23 +117,6 @@
             }
         }
     },
-    "organizations": "Organisations",
-    "searchPlaceholder": "Rechercher une organisation...",
-    "dateSelect": "Sélectionner la date",
-    "image": "Image",
-    "ss": "S.S",
-    "cms": "CMS",
-    "address": "Adresse",
-    "email": "Email",
-    "responsibleName": "Nom du responsable",
-    "trainingManagerName": "Nom du formator",
-    "edit": "Modifier",
-    "delete": "Supprimer",
-    "export": "Exporter",
-    "page": "Page",
-    "of": "de",
-    "previous": "Précédent",
-    "next": "Suivant",
     "noPermission": "VOUS N'AVEZ PAS ACCÈS",
     "sidebar": {
         "sections": {
