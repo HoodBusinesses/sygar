@@ -33,7 +33,7 @@ export class UserService {
 	 * @description
 	 * This method is used to create a new user.
 	*/
-	async create(user: CreateUserDto, creatorUid: string) {
+	async create(user: CreateUserDto) {
 		// check if the user already exists
 		let userExists = await this.userRepository.findByEmail(user.email);
 
@@ -67,10 +67,10 @@ export class UserService {
 		}
 		const newUser = await this.userRepository.create(user);
 
-		await this.notificationService.createNotification(creatorUid, `User ${newUser.email} has been created.`)
+		await this.notificationService.createNotification(newUser.uid, `User ${newUser.email} has been created.`)
 
 		this.notificationGetWay.server.emit('notification', {
-			userUid: creatorUid,
+			userUid: newUser.uid,
 			message: `User ${newUser.email} has been created.`,
 		});
 

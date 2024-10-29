@@ -33,8 +33,5 @@
     "faildSignJwtToken": "Failed to sign JWT token.",
     "orgIdRequiredForOrgUser": "Organization ID is required for organization user and admin",
     "userDoesNotHaveAbilities": "User does not have the necessary abilities for this organization",
-    "userDoesNotHaveTheNecessaryAbilities": "User does not have the necessary abilities",
-    "invalidDates": "Invalid dates",
-    "uidRequired": "uid is required",
-    "themeDoesntExists": "Theme does not exist"
+    "userDoesNotHaveTheNecessaryAbilities": "User does not have the necessary abilities"
 }

@@ -1,0 +1,282 @@
+{
+  "language": "English",
+  "welcome": "Nice to see you again, please signin to your account",
+  "signin": "Sign In",
+  "paragraph": "We will take you to the browser to log in and then bring you back",
+  "dontHaveAccount": "You don't have an account yet?",
+  "create": "Create your account",
+  "membersTable": {
+    "id": "ID",
+    "fullName": "Full Name",
+    "email": "Email",
+    "role": "Role",
+    "actionType": "Action Type",
+    "actions": "Actions",
+    "editingDocuments": "Editing documents",
+    "viewingOnly": "Viewing only"
+  },
+  "placeholders": {
+    "fullName": "Enter the full name",
+    "email": "Enter the organization email",
+    "selectRole": "Select the role",
+    "selectActionType": "Select the action type"
+  },
+  "roles": {
+    "manager": "Manager",
+    "employee": "Employee"
+  },
+  "actionTypes": {
+    "edit": "Editing documents",
+    "view": "Viewing only"
+  },
+  "registration": {
+    "title": "Organization Members Information",
+    "basicInfo": {
+      "title": "Organization Information",
+      "fields": {
+        "rs": {
+          "label": "R.S",
+          "placeholder": "Enter the organization rs"
+        },
+        "ice": {
+          "label": "ICE",
+          "placeholder": "Enter the organization ICE"
+        },
+        "cnss": {
+          "label": "CNSS",
+          "placeholder": "Enter the organization CNSS"
+        },
+        "address": {
+          "label": "Address",
+          "placeholder": "Enter the address of organization"
+        },
+        "phone": {
+          "label": "Phone",
+          "placeholder": "Enter the phone number of organization"
+        },
+        "email": {
+          "label": "Email",
+          "placeholder": "Enter the email of organization"
+        },
+        "logo": {
+          "label": "Company Logo",
+          "placeholder": "Upload the logo of company"
+        },
+        "responsibleName": {
+          "label": "Responsible Name",
+          "placeholder": "Enter the name of Responsible"
+        },
+        "trainingManagerName": {
+          "label": "Training Manager Name",
+          "placeholder": "Enter the name of training manager"
+        }
+      },
+      "required": "Required field"
+    },
+    "members": {
+      "title": "Members",
+      "table": {
+        "fullName": "Full Name",
+        "email": "Email",
+        "role": "Role",
+        "actions": "Actions"
+      },
+      "roles": {
+        "manager": "Manager",
+        "employee": "Employee"
+      },
+      "actions": {
+        "edit": "Edit",
+        "view": "View",
+        "delete": "Delete"
+      }
+    },
+    "addMember": {
+      "title": "Add New Member",
+      "fullName": "Full Name",
+      "email": "Email Address",
+      "role": "Role",
+      "submit": "Add Member",
+      "update": "Update Member"
+    },
+    "registration": {
+      "title": "Organization Members Information",
+      "basicInfo": {
+        "title": "Organization Information",
+        "fields": {
+          "rs": {
+            "label": "R.S",
+            "placeholder": "Enter the organization rs"
+          },
+          "ice": {
+            "label": "ICE",
+            "placeholder": "Enter the organization ICE"
+          },
+          "cnss": {
+            "label": "CNSS",
+            "placeholder": "Enter the organization CNSS"
+          },
+          "address": {
+            "label": "Address",
+            "placeholder": "Enter the address of organization"
+          },
+          "phone": {
+            "label": "Phone",
+            "placeholder": "Enter the phone number of organization"
+          },
+          "email": {
+            "label": "Email",
+            "placeholder": "Enter the email of organization"
+          },
+          "logo": {
+            "label": "Company Logo",
+            "placeholder": "Upload the logo of company"
+          },
+          "responsibleName": {
+            "label": "Responsible Name",
+            "placeholder": "Enter the name of Responsible"
+          },
+          "trainingManagerName": {
+            "label": "Training Manager Name",
+            "placeholder": "Enter the name of training manager"
+          }
+        },
+        "required": "Required field"
+      },
+      "members": {
+        "title": "Members",
+        "table": {
+          "fullName": "Full Name",
+          "email": "Email",
+          "role": "Role",
+          "actions": "Actions"
+        },
+        "roles": {
+          "manager": "Manager",
+          "employee": "Employee"
+        },
+        "actions": {
+          "edit": "Edit",
+          "view": "View",
+          "delete": "Delete"
+        }
+      },
+      "addMember": {
+        "title": "Add New Member",
+        "fullName": "Full Name",
+        "email": "Email Address",
+        "role": "Role",
+        "submit": "Add Member",
+        "update": "Update Member"
+      },
+      "buttons": {
+        "import": "Import",
+        "save": "Save"
+      },
+      "toast": {
+        "success": {
+          "title": "Success",
+          "description": "Organization information saved successfully"
+        },
+        "error": {
+          "title": "Error",
+          "description": "Failed to save organization information"
+        }
+      }
+    },
+    "noPermission": "YOU DON'T HAVE ACCESS",
+    "sidebar": {
+      "sections": {
+        "dashboard": "Dashboard",
+        "others": "Others"
+      },
+      "items": {
+        "home": "Home",
+        "registration": "Registration",
+        "organizations": "Organizations",
+        "settings": "Settings",
+        "notifications": "Notifications",
+        "reports": "Reports"
+      }
+    },
+    "organization": {
+      "organizations": "Organizations",
+      "searchPlaceholder": "Search for organization...",
+      "dateSelect": "Select Date",
+      "image": "Image",
+      "rs": "R.S",
+      "cnss": "CNSS",
+      "address": "Address",
+      "email": "Email",
+      "responsibleName": "Responsible Name",
+      "trainingManagerName": "Training Manager Name",
+      "enabled": "Enabled",
+      "actions": "Actions",
+      "edit": "Edit",
+      "delete": "Delete",
+      "export": "Export",
+      "page": "Page",
+      "of": "of",
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "toast": {
+      "success": {
+        "title": "Success",
+        "description": "Organization information saved successfully"
+      },
+      "error": {
+        "title": "Error",
+        "description": "Failed to save organization information"
+      }
+    }
+  },
+  "noPermission": "YOU DON'T HAVE ACCESS",
+  "sidebar": {
+    "sections": {
+      "dashboard": "Dashboard",
+      "others": "Others"
+    },
+    "items": {
+      "home": "Home",
+      "registration": "Registration",
+      "organizations": "Organizations",
+      "settings": "Settings",
+      "notifications": "Notifications",
+      "reports": "Reports"
+    }
+  },
+  "organization": {
+    "organizations": "Organizations",
+    "searchPlaceholder": "Search for organization...",
+    "dateSelect": "Select Date",
+    "image": "Image",
+    "rs": "R.S",
+    "cnss": "CNSS",
+    "address": "Address",
+    "email": "Email",
+    "responsibleName": "Responsible Name",
+    "trainingManagerName": "Training Manager Name",
+    "enabled": "Enabled",
+    "actions": "Actions",
+    "edit": "Edit",
+    "delete": "Delete",
+    "export": "Export",
+    "page": "Page",
+    "of": "of",
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "buttons": {
+    "add": "Add",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "export": "Export",
+    "import": "Import",
+    "sortBy": "Sort By",
+    "filter": "Filter"
+  }
+}

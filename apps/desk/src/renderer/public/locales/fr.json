@@ -1,0 +1,294 @@
+{
+  "language": "Français",
+  "welcome": "Ravi de vous revoir, veuillez vous connecter à votre compte",
+  "signin": "Se connecter",
+  "paragraph": "Nous allons vous rediriger vers le navigateur pour vous connecter puis vous ramener",
+  "dontHaveAccount": "Vous n'avez pas encore de compte ?",
+  "create": "Créez votre compte",
+  "membersTable": {
+    "id": "ID",
+    "fullName": "Nom complet",
+    "email": "Email",
+    "role": "Rôle",
+    "actionType": "Type d'action",
+    "actions": "Actions",
+    "editingDocuments": "Modification des documents",
+    "viewingOnly": "Consultation uniquement"
+  },
+  "placeholders": {
+    "fullName": "Entrez le nom complet",
+    "email": "Entrez l'email de l'organisation",
+    "selectRole": "Sélectionnez le rôle",
+    "selectActionType": "Sélectionnez le type d'action"
+  },
+  "roles": {
+    "manager": "Gestionnaire",
+    "employee": "Employé"
+  },
+  "actionTypes": {
+    "edit": "Modification des documents",
+    "view": "Consultation uniquement"
+  },
+  "registration": {
+    "title": "Informations des membres de l'organisation",
+    "basicInfo": {
+      "title": "Informations de l'organisation",
+      "fields": {
+        "rs": {
+          "label": "R.S",
+          "placeholder": "Entrez le R.S de l'organisation"
+        },
+        "ice": {
+          "label": "ICE",
+          "placeholder": "Entrez le ICE de l'organisation"
+        },
+        "cnss": {
+          "label": "CNSS",
+          "placeholder": "Entrez le CNSS de l'organisation"
+        },
+        "address": {
+          "label": "Adresse",
+          "placeholder": "Entrez l'adresse de l'organisation"
+        },
+        "phone": {
+          "label": "Téléphone",
+          "placeholder": "Entrez le numéro de téléphone de l'organisation"
+        },
+        "email": {
+          "label": "Email",
+          "placeholder": "Entrez l'email de l'organisation"
+        },
+        "logo": {
+          "label": "Logo de l'entreprise",
+          "placeholder": "Téléchargez le logo de l'entreprise"
+        },
+        "responsibleName": {
+          "label": "Nom du responsable",
+          "placeholder": "Entrez le nom du responsable"
+        },
+        "trainingManagerName": {
+          "label": "Nom du responsable de formation",
+          "placeholder": "Entrez le nom du responsable de formation"
+        }
+      },
+      "required": "Champ requis"
+    },
+    "members": {
+      "title": "Membres",
+      "table": {
+        "fullName": "Nom complet",
+        "email": "Email",
+        "role": "Rôle",
+        "actions": "Actions"
+      },
+      "roles": {
+        "manager": "Manager",
+        "employee": "Employé"
+      },
+      "actions": {
+        "edit": "Modifier",
+        "view": "Voir",
+        "delete": "Supprimer"
+      }
+    },
+    "addMember": {
+      "title": "Ajouter un nouveau membre",
+      "fullName": "Nom complet",
+      "email": "Adresse e-mail",
+      "role": "Rôle",
+      "submit": "Ajouter membre",
+      "update": "Mettre à jour membre"
+    },
+    "registration": {
+      "title": "Informations des membres de l'organisation",
+      "basicInfo": {
+        "title": "Informations de l'organisation",
+        "fields": {
+          "rs": {
+            "label": "R.S",
+            "placeholder": "Entrez le R.S de l'organisation"
+          },
+          "ice": {
+            "label": "ICE",
+            "placeholder": "Entrez le ICE de l'organisation"
+          },
+          "cnss": {
+            "label": "CNSS",
+            "placeholder": "Entrez le CNSS de l'organisation"
+          },
+          "address": {
+            "label": "Adresse",
+            "placeholder": "Entrez l'adresse de l'organisation"
+          },
+          "phone": {
+            "label": "Téléphone",
+            "placeholder": "Entrez le numéro de téléphone de l'organisation"
+          },
+          "email": {
+            "label": "Email",
+            "placeholder": "Entrez l'email de l'organisation"
+          },
+          "logo": {
+            "label": "Logo de l'entreprise",
+            "placeholder": "Téléchargez le logo de l'entreprise"
+          },
+          "responsibleName": {
+            "label": "Nom du responsable",
+            "placeholder": "Entrez le nom du responsable"
+          },
+          "trainingManagerName": {
+            "label": "Nom du responsable de formation",
+            "placeholder": "Entrez le nom du responsable de formation"
+          }
+        },
+        "required": "Champ requis"
+      },
+      "members": {
+        "title": "Membres",
+        "table": {
+          "fullName": "Nom complet",
+          "email": "Email",
+          "role": "Rôle",
+          "actions": "Actions"
+        },
+        "roles": {
+          "manager": "Manager",
+          "employee": "Employé"
+        },
+        "actions": {
+          "edit": "Modifier",
+          "view": "Voir",
+          "delete": "Supprimer"
+        }
+      },
+      "addMember": {
+        "title": "Ajouter un nouveau membre",
+        "fullName": "Nom complet",
+        "email": "Adresse e-mail",
+        "role": "Rôle",
+        "submit": "Ajouter membre",
+        "update": "Mettre à jour membre"
+      },
+      "buttons": {
+        "import": "Importer",
+        "save": "Enregistrer"
+      },
+      "toast": {
+        "success": {
+          "title": "Succès",
+          "description": "Informations de l'organisation enregistrées avec succès"
+        },
+        "error": {
+          "title": "Erreur",
+          "description": "Échec de l'enregistrement des informations de l'organisation"
+        }
+      }
+    },
+    "noPermission": "VOUS N'AVEZ PAS ACCÈS",
+    "sidebar": {
+      "sections": {
+        "dashboard": "Tableau de bord",
+        "others": "Autres"
+      },
+      "items": {
+        "home": "Accueil",
+        "registration": "Inscription",
+        "organizations": "Organisations",
+        "settings": "Paramètres",
+        "notifications": "Notifications",
+        "reports": "Rapports"
+      }
+    },
+    "organization": {
+      "organizations": "Organisations",
+      "searchPlaceholder": "Rechercher une organisation...",
+      "dateSelect": "Sélectionner la date",
+      "image": "Image",
+      "rs": "R.S",
+      "cnss": "CNSS",
+      "address": "Adresse",
+      "email": "Email",
+      "responsibleName": "Nom du responsable",
+      "trainingManagerName": "Nom du formateur",
+      "enabled": "Activé",
+      "actions": "Actions",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "export": "Exporter",
+      "page": "Page",
+      "of": "de",
+      "previous": "Précédent",
+      "next": "Suivant"
+    },
+    "buttons": {
+      "add": "Ajouter",
+      "save": "Enregistrer",
+      "cancel": "Annuler",
+      "delete": "Supprimer",
+      "edit": "Modifier",
+      "view": "Voir",
+      "export": "Exporter",
+      "import": "Importer",
+      "sortBy": "Trier par",
+      "filter": "Filtrer"
+    },
+    "toast": {
+      "success": {
+        "title": "Succès",
+        "description": "Informations de l'organisation enregistrées avec succès"
+      },
+      "error": {
+        "title": "Erreur",
+        "description": "Échec de l'enregistrement des informations de l'organisation"
+      }
+    }
+  },
+  "noPermission": "VOUS N'AVEZ PAS ACCÈS",
+  "sidebar": {
+    "sections": {
+      "dashboard": "Tableau de bord",
+      "others": "Autres"
+    },
+    "items": {
+      "home": "Accueil",
+      "registration": "Inscription",
+      "organizations": "Organisations",
+      "settings": "Paramètres",
+      "notifications": "Notifications",
+      "reports": "Rapports"
+    }
+  },
+  "organization": {
+    "organizations": "Organisations",
+    "searchPlaceholder": "Rechercher une organisation...",
+    "dateSelect": "Sélectionner la date",
+    "image": "Image",
+    "rs": "R.S",
+    "cnss": "CNSS",
+    "address": "Adresse",
+    "email": "Email",
+    "responsibleName": "Nom du responsable",
+    "trainingManagerName": "Nom du formateur",
+    "enabled": "Activé",
+    "actions": "Actions",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "export": "Exporter",
+    "page": "Page",
+    "of": "de",
+    "previous": "Précédent",
+    "next": "Suivant"
+  },
+  "buttons": {
+    "add": "Ajouter",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "view": "Voir",
+    "export": "Exporter",
+    "import": "Importer",
+    "sortBy": "Trier par",
+    "filter": "Filtrer"
+  }
+}

@@ -21,6 +21,7 @@ import { Input } from "../components/ui/input";
 import { useTranslation } from "react-i18next";
 import { usePermissions } from "../contexts/PermissionsContext";
 import { useRouter } from "next/router";
+import withAuth from "../hoc/with-auth";
 
 const ITEMS_PER_PAGE = 10;
 const DATE_OPTIONS = [
@@ -36,15 +37,15 @@ const applyFilters = (organizations, filters: FilterObject) => {
   return organizations.filter((org) => {
     const matchesSearchQuery = filters.searchQuery
       ? Object.values(org).some((value) =>
-          value
-            .toString()
-            .toLowerCase()
-            .includes(filters.searchQuery.toLowerCase())
-        )
+        value
+          .toString()
+          .toLowerCase()
+          .includes(filters.searchQuery.toLowerCase())
+      )
       : true;
     const matchesSelectedDate = filters.selectedDate
       ? filters.selectedDate === "All" ||
-        org.date.includes(filters.selectedDate)
+      org.date.includes(filters.selectedDate)
       : true;
     return matchesSearchQuery && matchesSelectedDate;
   });
@@ -124,6 +125,9 @@ const OrganizationsPage = () => {
       </div>
     );
   }
+  const token = localStorage.getItem('token');
+
+  console.log(`token is: ${token}`)
 
   return (
     <div className="h-full w-full p-6 space-y-6">
@@ -277,4 +281,4 @@ const OrganizationsPage = () => {
   );
 };
 
-export default OrganizationsPage;
+export default withAuth(OrganizationsPage);

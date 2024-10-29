@@ -26,6 +26,7 @@ import { errorToast, infoToast, putNotification } from "../notifications/Notific
 
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import withAuth from "../hoc/with-auth";
 
 const staticMembers: MemberFormData[] = [
   {
@@ -41,7 +42,7 @@ const staticMembers: MemberFormData[] = [
     actionType: "view",
   },
 ];
-  
+
 const RegistrationPage = () => {
 
   // putNotification('Registration', 'Page rendered successfully');
@@ -71,12 +72,12 @@ const RegistrationPage = () => {
     }
   };
   useEffect(() => {
-    if (router.query.organization){
+    if (router.query.organization) {
       if (typeof router.query.organization === 'string') {
         setOrganization(JSON.parse(router.query.organization));
       }
       console.log("aaaaa : ", organization);
-      
+
       // infoToast('Organization data loaded successfully');
     }
   }, [router.query.organization]);
@@ -99,8 +100,8 @@ const RegistrationPage = () => {
     setMembers(members.filter((_, i) => i !== index));
   };
   // console.log(organization);
-  
-  
+
+
   if (!permissions.registration?.canModify && !permissions.registration.canView) {
     return (
       <div className="flex items-center justify-center h-full">
@@ -114,14 +115,14 @@ const RegistrationPage = () => {
     <div className=" space-y-6 w-full h-full min-h-screen mx-auto">
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)}>
-          {permissions?.registration?.canModify && 
+          {permissions?.registration?.canModify &&
             <OrganizationBasicInfo organization={organization} />}
 
           <Card className="p-6 mb-6">
             <CardContent>
               <div className="flex justify-between items-center mb-6">
                 <p className="text-lg text-gray-950 font-bold  mb-6">
-                {t('registration.title')}
+                  {t('registration.title')}
                 </p>
                 {permissions?.registration?.canModify &&
                   <Button className="btn-blue" type="submit">
@@ -137,14 +138,14 @@ const RegistrationPage = () => {
               <div className="mt-6">
                 {permissions?.registration?.canModify &&
                   <AddMemberForm
-                  onSubmit={handleAddMember}
-                  initialData={editingMember?.data}
-                />}
+                    onSubmit={handleAddMember}
+                    initialData={editingMember?.data}
+                  />}
               </div>
             </CardContent>
           </Card>
 
-          {permissions?.registration?.canModify && <Button 
+          {permissions?.registration?.canModify && <Button
             className="btn-blue"
             type="submit">{t('registration.buttons.save')}
           </Button>}
@@ -154,4 +155,4 @@ const RegistrationPage = () => {
   );
 };
 
-export default RegistrationPage;
+export default withAuth(RegistrationPage);

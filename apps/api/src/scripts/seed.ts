@@ -1,26 +1,72 @@
-import { NestFactory } from '@nestjs/core';
-import { ScriptsModule } from './scripts.module';
-import { ScriptsService } from './scripts.service';
-import { UserRoles } from '../modules/user/model/user.model';
+import { ConfigService } from '@nestjs/config';
+import { CryptService } from '../global/auth/crypt.service';
+import { DbService } from '../global/db/db.service';
+import { ScanCommandInput } from '@aws-sdk/client-dynamodb';
+import { DbConstants } from 'src/global/db/db.constants';
+import { UserRoles } from 'src/modules/user/model/user.model';
+import { PutCommandInput } from '@aws-sdk/lib-dynamodb';
 
-/**
- * Bootstrap function to seed initial users in the database.
- * Creates default SYGAR_ADMIN and SYGAR_USER accounts if they don't exist.
- * 
- * Environment variables used:
- * - SYGAR_ADMIN_EMAIL: Email for admin account
- * - SYGAR_ADMIN_PASSWORD: Password for admin account
- * - SYGAR_USER_EMAIL: Email for user account
- * - SYGAR_USER_PASSWORD: Password for user account
- */
-async function bootstrap() {
-  // Create NestJS application context
-  const app = await NestFactory.createApplicationContext(ScriptsModule);
-  const scriptsService = app.get(ScriptsService);
+
+const configService = new ConfigService();
+const dbConstants = new DbConstants(configService);
+const dbService = new DbService(configService);
+const cryptService = new CryptService();
+
+// Helper function to seed a user
+export  const seedUser = async (role: UserRoles, uid: string, firstName: string, lastName: string, emailKey: string, passwordKey: string) => {
+  const scanRoleParams: ScanCommandInput = {
+    TableName: dbConstants.getTable('Users'),
+    FilterExpression: '#role = :userRole',
+    ExpressionAttributeNames: {
+      '#role': 'role',
+    },
+    ExpressionAttributeValues: {
+      ':userRole': { S: role },
+    },
+  };
 
   try {
-    // Seed SYGAR Admin user
-    await scriptsService.seedUser(
+    // Check if the user with the given role already exists
+    const Items = await dbService.scanItems(scanRoleParams);
+    if (Items.length > 0) {
+      console.log(`${role} already seeded`);
+      return;
+    }
+
+    // Create the user
+    const user = {
+      uid,
+      PK: dbConstants.getPrimaryKey('Users'),
+      SK: dbConstants.getSortKey(uid),
+      firstName,
+      lastName,
+      email: configService.get<string>(emailKey, `${role.toLowerCase()}@hood.com`),
+      password: await cryptService.hash(
+        configService.get<string>(passwordKey, 'password'),
+      ),
+      role,
+      isActive: true,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    };
+
+    // Add the user to the database
+    const putParams: PutCommandInput = {
+      TableName: dbConstants.getTable('Users'),
+      Item: user,
+    };
+    await dbService.putItem(putParams);
+  } catch (error) {
+    console.error(`Error seeding ${role}:`, (error as Error).message);
+    return;
+  }
+  console.log(`Seeded ${role} successfully`);
+}
+
+// Function to seed both SYGAR Admin and User
+export const seedAdmins =  async () => {
+  try {
+    await seedUser(
       UserRoles.SYGAR_ADMIN,
       '1',
       'Sygar',
@@ -28,9 +74,7 @@ async function bootstrap() {
       'SYGAR_ADMIN_EMAIL',
       'SYGAR_ADMIN_PASSWORD',
     );
-
-    // Seed SYGAR regular user
-    await scriptsService.seedUser(
+    await seedUser(
       UserRoles.SYGAR_USER,
       '2',
       'Sygar',
@@ -40,11 +84,8 @@ async function bootstrap() {
     );
   } catch (error) {
     console.error('Error seeding admins:', (error as Error).message);
-  } finally {
-    // Ensure application context is properly closed
-    await app.close();
   }
 }
 
-// Execute the seeding process
-bootstrap();
+
+seedAdmins(); // This will seed the admins when the script is run

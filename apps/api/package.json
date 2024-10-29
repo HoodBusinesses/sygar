@@ -2,8 +2,8 @@
   "name": "api",
   "private": true,
   "scripts": {
-    "script:tables": "ts-node -r tsconfig-paths/register  src/scripts/tables.ts",
-    "script:seed": "ts-node -r tsconfig-paths/register  src/scripts/seed.ts",
+    "db:prepare": "ts-node -r tsconfig-paths/register ./src/scripts/tables.ts",
+    "admins:seed": "ts-node -r tsconfig-paths/register ./src/scripts/seed.ts",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" ",
     "start": "nest start",
@@ -29,7 +29,6 @@
     "bcrypt": "^5.1.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
-    "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "install": "^0.13.0",
     "jsonwebtoken": "^9.0.2",
