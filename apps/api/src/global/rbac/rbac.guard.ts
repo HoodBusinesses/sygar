@@ -37,8 +37,8 @@ export class AbilitiesGuard implements CanActivate {
 
     // Get the request object from the context
     const req = context.switchToHttp().getRequest<Request & { user: User }>();
-    const { organizationId } = req.body; // Dynamic organization ID from request body
     const user: User = req.user; // Get the user object
+    const  organizationId  = req.body.orgamizationId ?? req.body.cnss; // Dynamic organization ID from request body
     const lang = req.headers['accept-language'] ?? 'en';
     
     // Create an ability instance for the current user
