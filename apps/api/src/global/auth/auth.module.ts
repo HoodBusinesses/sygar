@@ -18,7 +18,7 @@ import { LanguageModule } from '../language/language.module';
 @Module({
   imports: [MailModule, LanguageModule],
   controllers: [AuthController],
-  exports: [AuthService, JwtService, JwtGuard],
+  exports: [AuthService, JwtService, JwtGuard, CryptService],
   providers: [AuthService, JwtService, CryptService, JwtGuard, UserService],
 })
 export class AuthModule {}

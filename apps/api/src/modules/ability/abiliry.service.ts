@@ -57,6 +57,10 @@ export class AbilityService {
 				action: 'manage',
 				subject: 'User',
 			});
+			abilities.push({
+				action: 'manage',
+				subject: 'Theme',
+			});
 		}
 		// Add ability to read users
 		else if (role === UserRoles.ORG_USER) {
@@ -72,7 +76,6 @@ export class AbilityService {
 			abilities.push({
 				action: 'read',
 				subject: 'User',
-
 			});
 		}
 
@@ -240,6 +243,7 @@ export class AbilityService {
 				return item.charAt(0).toUpperCase() + item.slice(1); // Capitalize the first letter
 			}
 		});
+		console.debug('action:', action, 'subject:', subject);
 
 		if (!action || !subject) {
 			throw new Error('invalidAbilityType');

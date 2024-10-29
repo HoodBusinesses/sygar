@@ -30,5 +30,8 @@
     "emailIsRequired": "L'email est requis",
     "onlySygarAdminMangeOrgAbilities": "Seul l'administrateur SYGAR peut gérer les capacités des organisations",
     "faildSignJwtToken": "Échec de la signature du jeton JWT.",
-    "orgIdRequiredForOrgUser": "L'ID de l'organisation est requis pour l'utilisateur et l'administrateur de l'organisation"
+    "orgIdRequiredForOrgUser": "L'ID de l'organisation est requis pour l'utilisateur et l'administrateur de l'organisation",
+    "invalidDates": "Dates invalides",
+    "uidRequired": "uid requis",
+    "themeDoesntExists": "Le thème n'existe pas"
 }
