@@ -9,6 +9,11 @@ import { BillSchema } from '../modules/bill/model/bill.model';
 import { CounterSchema } from '../modules/counter/model/counter.model';
 import { NotificationSchema } from '../global/notifactions/model/notifactions.model';
 import { ThemeSchema } from '../modules/organization/model/theme.model';
+import { GroupSchema } from '../modules/organization/model/group.model';
+import { AnimatorSchema } from 'src/modules/organization/model/animator.model';
+import { FormatorSchema } from 'src/modules/organization/model/formator.model';
+import { ParticipantSchema } from 'src/modules/organization/model/participant.model';
+import { WorkingTimeSchema } from 'src/modules/organization/model/working-time.model';
 
 /**
  * Bootstrap function to create all required DynamoDB tables.
@@ -39,6 +44,11 @@ async function bootstrap() {
     CounterSchema,
     NotificationSchema,
     ThemeSchema,
+    GroupSchema,
+    AnimatorSchema,
+    FormatorSchema,
+    ParticipantSchema,
+    WorkingTimeSchema
   ];
 
   try {
