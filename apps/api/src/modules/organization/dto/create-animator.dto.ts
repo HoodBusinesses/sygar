@@ -5,7 +5,11 @@ import { CreateWorkingTimeDto } from "../model/group.model";
 export class CreateAnimatorDto {
 	@IsNotEmpty()
 	@IsString()
-	name!: string;
+	firstName!: string;
+
+	@IsNotEmpty()
+	@IsString()
+	lastName!: string;
 
 	@IsNotEmpty()
 	@IsEmail()
@@ -24,7 +28,11 @@ export class CreateAnimatorDto {
 export class CreateAnimatorItemDto {
 	@IsNotEmpty()
 	@IsString()
-	name!: string;
+	firstName!: string;
+
+	@IsNotEmpty()
+	@IsString()
+	lastName!: string;
 
 	@IsNotEmpty()
 	@IsEmail()
@@ -38,7 +46,11 @@ export class CreateAnimatorItemDto {
 export class UpdateAnimatorDto {
 	@IsOptional()
 	@IsString()
-	name?: string;
+	firstName?: string;
+
+	@IsOptional()
+	@IsString()
+	lastName?: string;
 
 	@IsOptional()
 	@IsEmail()

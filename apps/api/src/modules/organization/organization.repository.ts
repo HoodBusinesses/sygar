@@ -673,7 +673,8 @@ export class AnimatorRepository {
 		const expressionAttributeValues: { [key: string]: any } = {};
 
 		const fieldsToUpdate = {
-			name: updateAnimatorDto.name,
+			firstName: updateAnimatorDto.firstName,
+			lastName: updateAnimatorDto.lastName,
 			workingHours: updateAnimatorDto.workingHours,
 			updatedAt: Date.now().toString(),
 		};

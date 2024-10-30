@@ -5,7 +5,8 @@ export interface Animator {
 	PK: string,
 	SK: string,
     uid: string; // Unique identifier for the animator
-    name: string; // Animator's full name
+    firstName: string;
+    lastName: string;
     email: string; // Contact information (optional)
 	createdAt: number;
 	updatedAt?: number;
@@ -14,7 +15,11 @@ export interface Animator {
 export class UpdateAnimatorDto {
 	@IsOptional()
 	@IsString()
-	name?: string;
+	firstName?: string;
+
+	@IsOptional()
+	@IsString()
+	lastName?: string;
 
 	@IsOptional()
 	@IsString()

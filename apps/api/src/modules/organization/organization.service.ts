@@ -235,7 +235,8 @@ export class AnimatorService {
 		await this.workingHoursManager.validateWorkingHours(workingHours, createAnimatorDto.email);
 
 		const animatorItem: CreateAnimatorItemDto = {
-			name: createAnimatorDto.name,
+			firstName: createAnimatorDto.firstName,
+			lastName: createAnimatorDto.lastName,
 			email: createAnimatorDto.email,
 			organizationId: createAnimatorDto.organizationId,
 		};
@@ -290,7 +291,8 @@ export class FormatorService {
 		await this.workingHoursManager.validateWorkingHours(workingHours, createFormatorDto.email);
 
 		const formatorItem: CreateFormatorItem = {
-			name: createFormatorDto.name,
+			firstName: createFormatorDto.firstName,
+			lastName: createFormatorDto.lastName,
 			email: createFormatorDto.email,
 			organizationId: createFormatorDto.organizationId,
 		};
