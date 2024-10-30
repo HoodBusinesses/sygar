@@ -126,7 +126,9 @@
       "organizations": "المنظمات",
       "settings": "الإعدادات",
       "notifications": "الإشعارات",
-      "reports": "التقارير"
+      "reports": "التقارير",
+      "theme": "Theme",
+      "participants": "Participants"
     }
   },
   "organization": {

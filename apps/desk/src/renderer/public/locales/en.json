@@ -196,7 +196,9 @@
         "organizations": "Organizations",
         "settings": "Settings",
         "notifications": "Notifications",
-        "reports": "Reports"
+        "reports": "Reports",
+        "theme": "Theme",
+        "participants": "Participants"
       }
     },
     "organization": {
@@ -243,7 +245,9 @@
       "organizations": "Organizations",
       "settings": "Settings",
       "notifications": "Notifications",
-      "reports": "Reports"
+      "reports": "Reports",
+      "theme": "Theme",
+      "participants": "Participants"
     }
   },
   "organization": {
