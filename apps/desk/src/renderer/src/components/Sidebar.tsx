@@ -93,7 +93,7 @@ export default function Sidebar() {
         </div>
         <ul className="space-y-2">
           <li>
-            <Link href="/notifications">
+            <Link href="/themes-listing">
               <a
                 className={`flex items-center px-4 py-2 space-x-3 text-sm font-medium ${
                   active === 'notifications' ? 'bg-blue-100 text-blue-500' : 'text-gray-600'
@@ -106,7 +106,7 @@ export default function Sidebar() {
             </Link>
           </li>
           <li>
-            <Link href="/reports">
+            <Link href="/participants-listing">
               <a
                 className={`flex items-center px-4 py-2 space-x-3 text-sm font-medium ${
                   active === 'reports' ? 'bg-blue-100 text-blue-500' : 'text-gray-600'

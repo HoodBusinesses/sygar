@@ -278,5 +278,21 @@
     "import": "Import",
     "sortBy": "Sort By",
     "filter": "Filter"
+  },
+  "participantsTable": {
+    "id": "ID",
+    "name": "Full Name",
+    "email": "Email",
+    "cin": "CIN",
+    "cnss": "CNSS",
+    "status": "Status",
+    "placeholder": "*********"
+  },
+  "themesTable": {
+    "name": "Name",
+    "identifier": "Identifier",
+    "year": "Year",
+    "price": "Price",
+    "placeholder": "--------"
   }
 }
