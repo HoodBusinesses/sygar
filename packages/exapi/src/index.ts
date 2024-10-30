@@ -37,7 +37,7 @@ export class Api {
 				return this.httpClient.post(endpoint, params);
 			},
 			activateAccount: (params: ActivateAccountParams) => {
-				const endpoint = "/auth/activate-acc";
+				const endpoint = "/auth/activate-account";
 				return this.httpClient.post(endpoint, params);
 			}
 		},
