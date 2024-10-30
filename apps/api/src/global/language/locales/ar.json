@@ -32,5 +32,8 @@
     "faildSignJwtToken": "JWT فشل في توقيع رمز",
     "orgIdRequiredForOrgUser": "معرف المنظمة مطلوب لمستخدم المنظمة والمسؤول",
     "userDoesNotHaveAbilities": "المستخدم ليس لديه القدرات اللازمة لهذه المنظمة",
-    "userDoesNotHaveTheNecessaryAbilities": "المستخدم ليس لديه القدرات اللازمة"
+    "userDoesNotHaveTheNecessaryAbilities": "المستخدم ليس لديه القدرات اللازمة",
+    "invalidDates": "التواريخ غير صالحة",
+    "uidRequired": "المعرف مطلوب",
+    "themeDoesntExists": "الموضوع غير موجود"
 }
