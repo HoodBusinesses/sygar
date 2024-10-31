@@ -37,6 +37,7 @@
     "@tanstack/react-router": "^1.76.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "echarts": "^5.5.1",
     "electron-updater": "^6.1.7",
     "i18n": "^0.15.1",
     "i18next": "^23.15.1",
