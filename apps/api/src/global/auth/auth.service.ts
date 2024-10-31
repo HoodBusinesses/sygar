@@ -265,10 +265,25 @@ export class AuthService {
 
 		// Delete the reset password token
 		await this.userService.setResetPasswordToken(user.uid, null, null);
+
+		// Generate a token
+		const token = this.jwtService.sing(
+			{
+				uid: user.uid,
+				email: user.email,
+				cnss: user.cnss,
+				role: user.role,
+			},
+			{
+				expiresIn: this.configService.getOrThrow('JWT_EXPIRATION_TIME'),
+				secret: this.jwtSecretToken,
+			}
+		);
 		
 		// Return a message indicating that the password was reset successfully
 		return {	
-			message: "Password reset successfully"
+			message: "Password reset successfully",
+			token: token
 		}
 	}
 
