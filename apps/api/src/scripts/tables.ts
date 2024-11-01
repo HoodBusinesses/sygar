@@ -13,7 +13,7 @@ import { GroupSchema } from '../modules/organization/model/group.model';
 import { AnimatorSchema } from 'src/modules/organization/model/animator.model';
 import { FormatorSchema } from 'src/modules/organization/model/formator.model';
 import { ParticipantSchema } from 'src/modules/organization/model/participant.model';
-import { WorkingTimeSchema } from 'src/modules/organization/model/working-time.model';
+import { AssigningGroupSchema } from 'src/modules/organization/model/assigning-group.model';
 
 /**
  * Bootstrap function to create all required DynamoDB tables.
@@ -48,7 +48,7 @@ async function bootstrap() {
     AnimatorSchema,
     FormatorSchema,
     ParticipantSchema,
-    WorkingTimeSchema
+    AssigningGroupSchema,
   ];
 
   try {

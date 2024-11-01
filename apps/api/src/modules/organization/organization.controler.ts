@@ -1,21 +1,27 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Query, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Post, Put, Query, Req, UseGuards } from "@nestjs/common";
 import { JwtGuard } from "src/global/auth/auth.guard";
 import { CreateOrganizationDto } from "./dto/create-organization.dto";
 import { DeleteOrganizationDto } from "./dto/delete-organization-dtro";
-import { AnimatorService, FormatorService, OrganizationService, ThemeService } from "./organization.service";
+import { AnimatorService, AssigningGroupService, FormatorService, GroupService, OrganizationService, ParticipantService, ThemeService } from "./organization.service";
 import { UpdateOrganizationDto } from "./dto/update-organization.dto";
 import { AbilitiesGuard } from "src/global/rbac/rbac.guard";
 import { PutAbilities } from "src/global/rbac/roles.decorators";
 import { Action } from "src/shared/types/roles";
-import { OrganizationRepository, ThemeRepository, WorkingHoursManager } from "./organization.repository";
+import { GroupRepository, OrganizationRepository, ThemeRepository } from "./organization.repository";
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LanguageService } from "src/global/language/language.service";
-import { CreateThemeDto, ThemeGroup } from "./dto/create-theme.dto";
+import { CreateThemeDto } from "./dto/create-theme.dto";
 import { UpdateThemeDto } from "./dto/update-theme.dto";
-import { CreateAnimatorDto, UpdateAnimatorDto } from "./dto/create-animator.dto";
-import { WorkerType } from './model/working-time.model';
-import { CreateWorkingTimeDto, UpdateWorkingTimeDto } from "./model/group.model";
-import { CreateFormatorDto } from "./model/formator.model";
+import { CreateAnimatorDto } from "./dto/create-animator.dto";
+import { UpdateAnimatorDto } from "./dto/update-animator.dto";
+import { CreateFormatorDto } from "./dto/create-formator.dto";
+import { UpdateFormatorDto } from "./dto/update-formator.dto";
+import { CreateParticipantDto } from "./dto/create-participant.dto";
+import { UpdateParticipantDto } from "./dto/update-participant.dto";
+import { CreateGroupDto } from "./dto/create-group.dto";
+import { UpdateGroupDto } from "./dto/update-group.dto";
+import { EnrolledType } from "./model/group.model";
+import { AssignToGroupDto } from "./dto/assign-group.dto";
 
 /**
  * @module OrganizationController
@@ -254,6 +260,8 @@ export class ThemeController {
 
 	/**
 	 * Create theme endpoint
+	 * 
+	 * @param createThemeDto - The DTO for creating a new theme
 	 * @returns The theme created
 	 */
 	@Post('create')
@@ -289,22 +297,22 @@ export class ThemeController {
 	})
 	@ApiResponse({ status: 400, description: 'Bad request.' })
 	async create(@Body() createThemeDto: CreateThemeDto, @Req() req: Request) {
-		const header: Record<string, any> = req.headers;
-		const lang = header['accept-language'] ?? 'en';
+		const header: Record<string, any> = req.headers; // Get the headers from the request
+		const lang = header['accept-language'] ?? 'en'; // Get the language from the request headers or default to 'en'
 		try {
 			return {
 				theme:
-					await this.themeService.createTheme(createThemeDto),
-				date: new Date().toISOString()
+					await this.themeService.createTheme(createThemeDto), // Create the theme
+				date: new Date().toISOString() // Return the date
 			};
 		} catch (error: any) {
-			// return { error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }
 			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString() }, 400);
 		}
 	}
 
 	/**
 	 * Get theme endpoint
+	 * @param uid - The UID of the theme to retrieve
 	 * @returns The theme retrieved
 	 */
 	@Get('get')
@@ -358,6 +366,9 @@ export class ThemeController {
 
 	/**
 	 * Update theme endpoint
+	 * 
+	 * @param uid - The UID of the theme to update
+	 * @param updateThemeDto - The DTO for updating the theme
 	 * @returns The theme updated
 	 */
 	@Put('update')
@@ -408,6 +419,7 @@ export class ThemeController {
 
 	/**
 	 * Delete theme endpoint
+	 * @param uid - The UID of the theme to delete
 	 * @returns The theme deleted
 	 */
 	@Delete('delete')
@@ -441,6 +453,10 @@ export class ThemeController {
 
 	/**
 	 * Get all themes endpoint
+	 * @param page - The page number to retrieve (default is 1)
+	 * @param limit - The number of themes to return per page (default is 10)
+	 * @param name - Optional filter to search themes by name
+	 * @param year - Optional filter to search themes by year
 	 * @returns The themes retrieved
 	 */
 	@Get('get-all')
@@ -487,20 +503,242 @@ export class ThemeController {
 	}
 }
 
-@Controller('animator')
-export class AnimatorController {
+/**
+ * @module GroupController
+ * @description
+ * This controller is responsible for handling requests related to groups.
+ * It provides endpoints for creating, retrieving, updating, and deleting groups.
+ */
+@ApiTags('group')
+@Controller('group')
+export class GroupController {
+	/**
+	 * Constructor for the GroupController class.
+	 * 
+	 * @param groupService - The service for group management.
+	 * @param languageService - The service for language management.
+	 */
 	constructor(
+		private readonly groupService: GroupService,
 		private readonly languageService: LanguageService,
-		private readonly animatorService: AnimatorService,
-	) {};
+	) {}
 
+	/**
+	 * Create group endpoint
+	 * @param createGroupDto - The DTO for creating a new group
+	 * @param req - The request object
+	 * @returns The group created
+	 */
 	@Post('create')
-	async createAnimator(@Body() createAnimatorDto: CreateAnimatorDto, @Req() req: Request) {
+	@UseGuards(JwtGuard, AbilitiesGuard)
+	@PutAbilities({ action: Action.Create, subject: 'Theme' })
+	@ApiOperation({ summary: 'Create a new group.' })
+	@ApiResponse({ status: 201, description: 'Group created successfully.',
+		schema: {
+			example: {
+				PK: 'GROUP#group-123',
+				SK: 'GROUP#group-123',
+				uid: 'group-123',
+				themeId: 'theme-123',
+				theme: 'My Theme',
+				location: 'Location',
+				action: 'Planned',
+				startDate: 1633392000000,
+				endDate: 1633392000000,
+			}
+		}
+	})
+	@ApiResponse({ status: 400, description: 'Bad request.' })
+	async createGroup(@Body() createGroupDto: CreateGroupDto, @Req() req: Request) {
 		const header: Record<string, any> = req.headers;
 		const lang = header['accept-language'] ?? 'en';
 
 		try {
 			return {
+				// Create the group and return it
+				group: await this.groupService.createGroup(createGroupDto),
+				date: new Date().toISOString(),
+			}
+		} catch (error: any) {
+			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString()}, HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	/**
+	 * Get group endpoint
+	 * @param uid - The UID of the group to retrieve
+	 * @param req - The request object
+	 * @returns The group retrieved
+	 */
+	@Get('get')
+	@UseGuards(JwtGuard, AbilitiesGuard)
+	@PutAbilities({ action: Action.Read, subject: 'Theme' })
+	@ApiOperation({ summary: 'Get a group by UID.' })
+	@ApiResponse({ status: 200, description: 'Group retrieved successfully.',
+		schema: {
+			example: {
+				PK: 'GROUP#group-123',
+				SK: 'GROUP#group-123',
+				uid: 'group-123',
+				themeId: 'theme-123',
+				theme: 'My Theme',
+				location: 'Location',
+				action: 'Planned',
+				startDate: 1633392000000,
+				endDate: 1633392000000,
+			}
+		}
+	})
+	@ApiResponse({ status: 400, description: 'Bad request.' })
+	async get(@Query('uid') uid: string, @Req() req: Request) {
+		const header: Record<string, any> = req.headers;
+		const lang = header['accept-language'] ?? 'en';
+
+		try {
+			return {
+				group: await this.groupService.getGroup(uid),
+				date: new Date().toISOString(),
+			}
+		} catch (error: any) {
+			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString()}, HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	/**
+	 * Update group endpoint
+	 * @param updateGroupDto - The DTO for updating the group
+	 * @param uid - The UID of the group to update
+	 * @param req - The request object
+	 * @returns The group updated
+	 */
+	@Put('update')
+	@UseGuards(JwtGuard, AbilitiesGuard)
+	@PutAbilities({ action: Action.Update, subject: 'Theme' })
+	@ApiOperation({ summary: 'Update a group by UID.' })
+	@ApiResponse({ status: 200, description: 'Group updated successfully.',
+		schema: {
+			example: {
+				PK: 'GROUP#group-123',
+				SK: 'GROUP#group-123',
+				uid: 'group-123',
+				themeId: 'theme-123',
+				theme: 'My Theme',
+				location: 'Location',
+				action: 'Planned',
+				startDate: 1633392000000,
+				endDate: 1633392000000,
+			}
+		}
+	})
+	@ApiResponse({ status: 400, description: 'Bad request.' })
+	async updateGroup(@Body() updateGroupDto: UpdateGroupDto, @Query('uid') uid: string, @Req() req: Request) {
+		const header: Record<string, any> = req.headers;
+		const lang = header['accept-language'] ?? 'en';
+
+		try {
+			return {
+				group: await this.groupService.updateGroup(uid, updateGroupDto),
+				date: new Date().toISOString(),
+			}
+		} catch (error: any) {
+			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString()}, HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	/**
+	 * Delete group endpoint
+	 * @param uid - The UID of the group to delete
+	 * @param req - The request object
+	 * @returns The group deleted
+	 */
+	@Delete('delete')
+	@UseGuards(JwtGuard, AbilitiesGuard)
+	@PutAbilities({ action: Action.Delete, subject: 'Theme' })
+	@ApiOperation({ summary: 'Delete a group by UID.' })
+	@ApiResponse({ status: 200, description: 'Group deleted successfully.',
+		schema: {
+			example: {
+				message: 'Group deleted successfully',
+				date: new Date().toISOString(),
+			}
+		}
+	})
+	@ApiResponse({ status: 400, description: 'Bad request.' })
+	async deleteGroup(@Query('uid') uid: string, @Req() req: Request) {
+		const header: Record<string, any> = req.headers;
+		const lang = header['accept-language'] ?? 'en';
+
+		try {
+			return {
+				...await this.groupService.deleteGroup(uid),
+				date: new Date().toISOString(),
+			}
+		} catch (error: any) {
+			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString()}, HttpStatus.BAD_REQUEST);
+		}
+	}
+
+
+}
+
+/**
+ * @module AnimatorController
+ * @description
+ * This controller is responsible for handling requests related to animators.
+ * It provides endpoints for creating, retrieving, updating, and deleting animators.
+ */
+@ApiTags('animator')
+@Controller('animator')
+export class AnimatorController {
+	/**
+	 * Constructor for the AnimatorController class.
+	 * 
+	 * @param languageService - The service for language management.
+	 * @param animatorService - The service for animator management.
+	 */
+	constructor(
+		private readonly languageService: LanguageService,
+		private readonly animatorService: AnimatorService,
+	) {};
+
+	/**
+	 * Create animator endpoint
+	 * @param createAnimatorDto - The data for creating the animator.
+	 * @param req - The request object.
+	 * @returns The animator created
+	 */
+	@Post('create')
+	@UseGuards(JwtGuard, AbilitiesGuard)
+	@PutAbilities({ action: Action.Create, subject: 'Theme' })
+	@ApiOperation({ summary: 'Create a new animator.' })
+	@ApiResponse({ status: 201, description: 'Animator created successfully.',
+		schema: {
+			example: {
+				animator: {
+					PK: '123456789',
+					SK: '123456789',
+					uid: '123456789',
+					firstName: 'John',
+					lastName: 'Doe',
+					name: 'John Doe',
+					email: 'john.doe@example.com',
+					organizationId: '123456789',
+					createdAt: 1725000000,
+					updatedAt: 1725000000,
+				},
+				date: new Date().toISOString(),
+			}
+		}
+	})
+	@ApiResponse({ status: 400, description: 'Bad request.' })
+	async createAnimator(@Body() createAnimatorDto: CreateAnimatorDto, @Req() req: Request) {
+		// Get the language from the request header
+		const header: Record<string, any> = req.headers;
+		const lang = header['accept-language'] ?? 'en';
+
+		try {
+			return {
+				// Create the animator and return it
 				animator: await this.animatorService.createAnimator(createAnimatorDto),
 				date: new Date().toISOString(),
 			}
@@ -509,14 +747,45 @@ export class AnimatorController {
 		}
 	}
 
+	/**
+	 * Get animator endpoint
+	 * @param uid - The UID of the animator to retrieve.
+	 * @param req - The request object.
+	 * @returns The animator retrieved
+	 */
 	@Get('get')
-	async get(@Query('email') email: string, @Req() req: Request) {
-		const header:Record<string, any> = req.headers;
-		const lang: string = header['accept-language'] ?? 'en';
+	@UseGuards(JwtGuard, AbilitiesGuard)
+	@PutAbilities({ action: Action.Read, subject: 'Theme' })
+	@ApiOperation({ summary: 'Get an animator by UID.' })
+	@ApiResponse({ status: 200, description: 'Animator retrieved successfully.',
+		schema: {
+			example: {
+				animator: {
+					PK: '123456789',
+					SK: '123456789',
+					uid: '123456789',
+					firstName: 'John',
+					lastName: 'Doe',
+					name: 'John Doe',
+					email: 'john.doe@example.com',
+					organizationId: '123456789',
+					createdAt: 1725000000,
+					updatedAt: 1725000000,
+				},
+				date: new Date().toISOString(),
+			}
+		}
+	})
+	@ApiResponse({ status: 400, description: 'Bad request.' })
+	async get(@Query('uid') uid: string, @Req() req: Request) {
+		// Get the language from the request header
+		const header: Record<string, any> = req.headers;
+		const lang = header['accept-language'] ?? 'en';
 
 		try {
 			return {
-				animator: await this.animatorService.getAnimator(email),
+				// Get the animator by UID and return it
+				animator: await this.animatorService.getAnimator(uid),
 				date: new Date().toISOString(),
 			};
 		} catch (error: any){
@@ -524,13 +793,45 @@ export class AnimatorController {
 		} 
 	}
 
+	/**
+	 * Update animator endpoint
+	 * @param updateAnimatorDto - The data for updating the animator.
+	 * @param uid - The UID of the animator to update.
+	 * @param req - The request object.
+	 * @returns The animator updated
+	 */
 	@Put('update')
-	async updateAnimator(@Body() updateAnimatorDto: UpdateAnimatorDto, @Query('uid') uid: string, @Req() req: Request) {
+	@UseGuards(JwtGuard, AbilitiesGuard)
+	@PutAbilities({ action: Action.Update, subject: 'Theme' })
+	@ApiOperation({ summary: 'Update an animator by UID.' })
+	@ApiResponse({ status: 200, description: 'Animator updated successfully.',
+		schema: {
+			example: {
+				animator: {
+					PK: '123456789',
+					SK: '123456789',
+					uid: '123456789',
+					firstName: 'John',
+					lastName: 'Doe',
+					name: 'John Doe',
+					email: 'john.doe@example.com',
+					organizationId: '123456789',
+					createdAt: 1725000000,
+					updatedAt: 1725000000,
+				},
+				date: new Date().toISOString(),
+			}
+		}
+	})
+	@ApiResponse({ status: 400, description: 'Bad request.' })
+	async update(@Body() updateAnimatorDto: UpdateAnimatorDto, @Query('uid') uid: string, @Req() req: Request) {
+		// Get the language from the request header
 		const header: Record<string, any> = req.headers;
 		const lang = header['accept-language'] ?? 'en';
 
 		try {
 			return {
+				// Update the animator and return it
 				animator: await this.animatorService.updateAnimator(updateAnimatorDto, uid),
 				date: new Date().toISOString(),
 			}
@@ -539,14 +840,32 @@ export class AnimatorController {
 		}
 	}
 
+	/**
+	 * Delete animator endpoint
+	 * @param uid - The UID of the animator to delete.
+	 * @param req - The request object.
+	 * @returns The animator deleted
+	 */
 	@Delete('delete')
-	async deleteAnimator(@Query('email') email: string, @Req() req: Request) {
+	@UseGuards(JwtGuard, AbilitiesGuard)
+	@PutAbilities({ action: Action.Delete, subject: 'Theme' })
+	@ApiOperation({ summary: 'Delete an animator by UID.' })
+	@ApiResponse({ status: 200, description: 'Animator deleted successfully.',
+		schema: {
+			example: {
+				message: 'Animator deleted successfully',
+				date: new Date().toISOString(),
+			}
+		}
+	})
+	@ApiResponse({ status: 400, description: 'Bad request.' })
+	async deleteAnimator(@Query('uid') uid: string, @Req() req: Request) {
 		const header: Record<string, any> = req.headers;
 		const lang = header['accept-language'] ?? 'en';
 
 		try {
 			return {
-				animator: await this.animatorService.deleteAnimator(email),
+				...await this.animatorService.deleteAnimator(uid),
 				date: new Date().toISOString(),
 			}
 		} catch (error: any) {
@@ -555,23 +874,62 @@ export class AnimatorController {
 	}
 }
 
-
-/////////////////////////////
-
+/**
+ * @module FormatorController
+ * @description
+ * This controller is responsible for handling requests related to formators.
+ * It provides endpoints for creating, retrieving, updating, and deleting formators.
+ */
+@ApiTags('formator')
 @Controller('formator')
 export class FormatorController {
+	/**
+	 * Constructor for the FormatorController class.
+	 * 
+	 * @param languageService - The service for language management.
+	 * @param formatorService - The service for formator management.
+	 */
 	constructor(
 		private readonly languageService: LanguageService,
 		private readonly formatorService: FormatorService,
 	) {}
 
+	/**
+	 * Create formator endpoint
+	 * @param createFormatorDto - The data for creating the formator.
+	 * @param req - The request object.
+	 * @returns The formator created
+	 */
 	@Post('create')
+	@UseGuards(JwtGuard, AbilitiesGuard)
+	@PutAbilities({ action: Action.Create, subject: 'Theme' })
+	@ApiOperation({ summary: 'Create a new formator.' })
+	@ApiResponse({ status: 201, description: 'Formator created successfully.',
+		schema: {
+			example: {
+				formator: {
+					PK: '123456789',
+					SK: '123456789',
+					uid: '123456789',
+					firstName: 'John',
+					lastName: 'Doe',
+					email: 'john.doe@example.com',
+					organizationId: '123456789',
+					createdAt: 1725000000,
+					updatedAt: 1725000000,
+				},
+				date: new Date().toISOString(),
+			}
+		}
+	})
+	@ApiResponse({ status: 400, description: 'Bad request.' })
 	async createFormator(@Body() createFormatorDto: CreateFormatorDto, @Req() req: Request) {
 		const header: Record<string, any> = req.headers;
 		const lang = header['accept-language'] ?? 'en';
 
 		try {
 			return {
+				// Create the formator and return it
 				formator: await this.formatorService.createFormator(createFormatorDto),
 				date: new Date().toISOString(),
 			}
@@ -580,61 +938,184 @@ export class FormatorController {
 		}
 	}
 
+	/**
+	 * Get formator endpoint
+	 * @param uid - The UID of the formator to retrieve.
+	 * @param req - The request object.
+	 * @returns The formator retrieved
+	 */
 	@Get('get')
-	async get(@Query('email') email: string, @Req() req: Request) {
+	@ApiOperation({ summary: 'Get a formator by UID.' })
+	@ApiResponse({ status: 200, description: 'Formator retrieved successfully.',
+		schema: {
+			example: {
+				formator: {
+					PK: '123456789',
+					SK: '123456789',
+					uid: '123456789',
+					firstName: 'John',
+					lastName: 'Doe',
+					email: 'john.doe@example.com',
+					organizationId: '123456789',
+					createdAt: 1725000000,
+					updatedAt: 1725000000,
+				},
+				date: new Date().toISOString(),
+			}
+		}
+	})
+	@ApiResponse({ status: 400, description: 'Bad request.' })
+	async get(@Query('uid') uid: string, @Req() req: Request) {
 		const header:Record<string, any> = req.headers;
 		const lang: string = header['accept-language'] ?? 'en';
 
 		try {
 			return {
-				formator: await this.formatorService.getFormator(email),
+				// Get the formator by UID and return it
+				formator: await this.formatorService.getByUid(uid),
 				date: new Date().toISOString(),
 			};
 		} catch (error: any){
 			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString()}, HttpStatus.BAD_REQUEST);
 		} 
 	}
-	
 
-	
+	/**
+	 * Update formator endpoint
+	 * @param updateFormatorDto - The data for updating the formator.
+	 * @param uid - The UID of the formator to update.
+	 * @param req - The request object.
+	 * @returns The formator updated
+	 */
+	@Put('update')
+	@UseGuards(JwtGuard, AbilitiesGuard)
+	@PutAbilities({ action: Action.Update, subject: 'Theme' })
+	@ApiOperation({ summary: 'Update a formator by UID.' })
+	@ApiResponse({ status: 200, description: 'Formator updated successfully.',
+		schema: {
+			example: {
+				formator: {
+					PK: '123456789',
+					SK: '123456789',
+					uid: '123456789',
+					firstName: 'John',
+					lastName: 'Doe',
+					email: 'john.doe@example.com',
+					organizationId: '123456789',
+					createdAt: 1725000000,
+					updatedAt: 1725000000,
+				},
+				date: new Date().toISOString(),
+			}
+		}
+	})
+	@ApiResponse({ status: 400, description: 'Bad request.' })
+	async updateFormator(@Body() updateFormatorDto: UpdateFormatorDto, @Query('uid') uid: string, @Req() req: Request) {
+		const header: Record<string, any> = req.headers;
+		const lang = header['accept-language'] ?? 'en';
+
+		try {
+			return {
+				// Update the formator and return it
+				formator: await this.formatorService.updateFormator(updateFormatorDto, uid),
+				date: new Date().toISOString(),
+			}
+		} catch (error: any) {
+			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString()}, HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	/**
+	 * Delete formator endpoint
+	 * @param uid - The UID of the formator to delete.
+	 * @param req - The request object.
+	 * @returns The formator deleted
+	 */
+	@Delete('delete')
+	@UseGuards(JwtGuard, AbilitiesGuard)
+	@PutAbilities({ action: Action.Delete, subject: 'Theme' })
+	@ApiOperation({ summary: 'Delete a formator by UID.' })
+	@ApiResponse({ status: 200, description: 'Formator deleted successfully.',
+		schema: {
+			example: {
+				success: "Formator deleted successfully.",
+				date: new Date().toISOString(),
+			}
+		}
+	})
+	@ApiResponse({ status: 400, description: 'Bad request.' })
+	async deleteFormator(@Query('uid') uid: string, @Req() req: Request) {
+		const header: Record<string, any> = req.headers;
+		const lang = header['accept-language'] ?? 'en';
+
+		try {
+			return {
+				...await this.formatorService.deleteFormator(uid),
+				date: new Date().toISOString(),
+			}
+		} catch (error: any) {
+			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString()}, HttpStatus.BAD_REQUEST);
+		}
+	}
 }
 
-/////////////////////////////
-
-
-@Controller('working-hours')
-export class WorkingHoursController {
+/**
+ * @module ParticipantController
+ * @description
+ * This controller is responsible for handling requests related to participants.
+ * It provides endpoints for creating, retrieving, updating, and deleting participants.
+ */
+@ApiTags('participant')
+@Controller('participant')
+export class ParticipantController {
+	/**
+	 * Constructor for the ParticipantController class.
+	 * 
+	 * @param languageService - The service for language management.
+	 * @param participantService - The service for participant management.
+	 */
 	constructor(
-		private readonly workingHoursManager: WorkingHoursManager,
 		private readonly languageService: LanguageService,
+		private readonly participantService: ParticipantService,
 	) {}
 
-	@Post('add')
-	async addWorkingHours(@Body() workingHours: CreateWorkingTimeDto[], @Query('email') email: string, @Req() req: Request) {
-		const header: Record<string, any> = req.headers;
-		const lang = header['accept-language'] ?? 'en';	
-
-		if (!email)
-			throw new Error('emailRequired');
-
-		try {
-			return {
-				workingHours: await this.workingHoursManager.addWorkingHours(workingHours, email),
+	/**
+	 * Create participant endpoint
+	 * @param createParticipantDto - The data for creating the participant.
+	 * @param req - The request object.
+	 * @returns The participant created
+	 */
+	@Post('create')
+	@UseGuards(JwtGuard, AbilitiesGuard)
+	@PutAbilities({ action: Action.Create, subject: 'Theme' })
+	@ApiOperation({ summary: 'Create a new participant.' })
+	@ApiResponse({ status: 201, description: 'Participant created successfully.',
+		schema: {
+			example: {
+				participant: {
+					PK: '123456789',
+					SK: '123456789',
+					uid: '123456789',
+					firstName: 'John',
+					lastName: 'Doe',
+					email: 'john.doe@example.com',
+					cnss: '123456789',
+					status: 'active',
+					organizationId: '123456789',
+				},
 				date: new Date().toISOString(),
 			}
-		} catch (error: any) {
-			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString()}, HttpStatus.BAD_REQUEST);
 		}
-	}
-
-	@Delete('delete')
-	async deleteWorkingHours(@Query('uid') uid: string, @Req() req: Request) {
+	})
+	@ApiResponse({ status: 400, description: 'Bad request.' })
+	async createParticipant(@Body() createParticipantDto: CreateParticipantDto, @Req() req: Request) {
 		const header: Record<string, any> = req.headers;
 		const lang = header['accept-language'] ?? 'en';
 
 		try {
 			return {
-				workingHours: await this.workingHoursManager.deleteWorkingHours(uid),
+				// Create the participant and return it
+				participant: await this.participantService.createParticipant(createParticipantDto),
 				date: new Date().toISOString(),
 			}
 		} catch (error: any) {
@@ -642,14 +1123,44 @@ export class WorkingHoursController {
 		}
 	}
 
+	/**
+	 * Get participant endpoint
+	 * @param uid - The UID of the participant to retrieve.
+	 * @param req - The request object.
+	 * @returns The participant retrieved
+	 */
 	@Get('get')
-	async getWorkingHours(@Query('email') email: string, @Req() req: Request) {
+	@UseGuards(JwtGuard, AbilitiesGuard)
+	@PutAbilities({ action: Action.Read, subject: 'Theme' })
+	@ApiOperation({ summary: 'Get a participant by UID.' })
+	@ApiResponse({ status: 200, description: 'Participant retrieved successfully.',
+		schema: {
+			example: {
+				participant: {
+					PK: '123456789',
+					SK: '123456789',
+					uid: '123456789',
+					firstName: 'John',
+					lastName: 'Doe',
+					email: 'john.doe@example.com',
+					cnss: '123456789',
+					status: 'active',
+					organizationId: '123456789',
+					createdAt: 1725000000,
+					updatedAt: 1725000000,
+				},
+				date: new Date().toISOString(),
+			}
+		}
+	})
+	@ApiResponse({ status: 400, description: 'Bad request.' })
+	async getParticipant(@Query('uid') uid: string, @Req() req: Request) {
 		const header: Record<string, any> = req.headers;
 		const lang = header['accept-language'] ?? 'en';
 
 		try {
 			return {
-				workingHours: await this.workingHoursManager.getWorkingHours(email),
+				participant: await this.participantService.getParticipant(uid),
 				date: new Date().toISOString(),
 			}
 		} catch (error: any) {
@@ -657,32 +1168,316 @@ export class WorkingHoursController {
 		}
 	}
 
-	@Get('get-all')
-	async getAllWorkingHours(@Query('email') email: string, @Query('groupUid') groupUid: string, @Query('workerType') workerType: WorkerType, @Query('page') page: number = 1, @Query('limit') limit: number = 10, @Req() req: Request) {
-		const header: Record<string, any> = req.headers;
-		const lang = header['accept-language'] ?? 'en';
-
-		if (!email && !groupUid)
-			throw new Error('emailOrGroupUidRequired');
-
-		try {
-			return {
-				workingHours: await this.workingHoursManager.getAllWorkingHours(email, groupUid, workerType, page, limit),
-				date: new Date().toISOString(),
-			}
-		} catch (error: any) {
-			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString()}, HttpStatus.BAD_REQUEST);
-		}
-	}
-
+	/**
+	 * Update participant endpoint
+	 * @param updateParticipantDto - The data for updating the participant.
+	 * @param uid - The UID of the participant to update.
+	 * @param req - The request object.
+	 * @returns The participant updated
+	 */
 	@Put('update')
-	async updateWorkingHours(@Body() updateWorkingTimeDto: UpdateWorkingTimeDto, @Query('uid') uid: string, @Req() req: Request) {
+	@UseGuards(JwtGuard, AbilitiesGuard)
+	@PutAbilities({ action: Action.Update, subject: 'Theme' })
+	@ApiOperation({ summary: 'Update a participant by UID.' })
+	@ApiResponse({ status: 200, description: 'Participant updated successfully.',
+		schema: {
+			example: {
+				participant: {
+					PK: '123456789',
+					SK: '123456789',
+					uid: '123456789',
+					firstName: 'John',
+					lastName: 'Doe',
+					email: 'john.doe@example.com',
+					cnss: '123456789',
+					status: 'active',
+					organizationId: '123456789',
+					createdAt: 1725000000,
+					updatedAt: 1725000000,
+				},
+				date: new Date().toISOString(),
+			}
+		}
+	})
+	@ApiResponse({ status: 400, description: 'Bad request.' })
+	async updateParticipant(@Body() updateParticipantDto: UpdateParticipantDto, @Query('uid') uid: string, @Req() req: Request) {
 		const header: Record<string, any> = req.headers;
 		const lang = header['accept-language'] ?? 'en';
 
 		try {
 			return {
-				workingHours: await this.workingHoursManager.updateWorkingHours(updateWorkingTimeDto, uid),
+				participant: await this.participantService.updateParticipant(updateParticipantDto, uid),
+				date: new Date().toISOString(),
+			}
+		} catch (error: any) {
+			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString()}, HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	/**
+	 * Delete participant endpoint
+	 * @param uid - The UID of the participant to delete.
+	 * @param req - The request object.
+	 * @returns The participant deleted
+	 */
+	@Delete('delete')
+	@UseGuards(JwtGuard, AbilitiesGuard)
+	@PutAbilities({ action: Action.Delete, subject: 'Theme' })
+	@ApiOperation({ summary: 'Delete a participant by UID.' })
+	@ApiResponse({ status: 200, description: 'Participant deleted successfully.',
+		schema: {
+			example: {
+				success: "Participant deleted successfully.",
+				date: new Date().toISOString(),
+			}
+		}
+	})
+	@ApiResponse({ status: 400, description: 'Bad request.' })
+	async deleteParticipant(@Query('uid') uid: string, @Req() req: Request) {
+		const header: Record<string, any> = req.headers;
+		const lang = header['accept-language'] ?? 'en';
+
+		try {
+			return {
+				...await this.participantService.deleteParticipant(uid),
+				date: new Date().toISOString(),
+			}
+		} catch (error: any) {
+			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString()}, HttpStatus.BAD_REQUEST);
+		}
+	}
+}
+
+/**
+ * @module AssigningGroupController
+ * @description
+ * This controller is responsible for handling requests related to assigning groups.
+ */
+@ApiTags('assigning-group')
+@Controller('assigning-group')
+export class AssigningGroupController {
+	/**
+	 * Constructor for the AssigningGroupController class.
+	 * 
+	 * @param languageService - The service for language management.
+	 * @param assigningGroupService - The service for assigning group management.
+	 */
+	constructor(
+		private readonly languageService: LanguageService,
+		private readonly assigningGroupService: AssigningGroupService,
+	) {}
+
+	/**
+	 * Create assigning group endpoint
+	 * @param assignToGroupDto - The data for creating the assigning group.
+	 * @param req - The request object.
+	 * @returns The assigning group created
+	 */
+	@Post('create')
+	@UseGuards(JwtGuard, AbilitiesGuard)
+	@PutAbilities({ action: Action.Create, subject: 'Theme' })
+	@ApiOperation({ summary: 'Create a new assigning group.' })
+	@ApiResponse({ status: 201, description: 'Assigning group created successfully.',
+		schema: {
+			example: {
+				assigningGroup: {
+					PK: '123456789',
+					SK: '123456789',
+					uid: '123456789',
+					enrolledUid: '123456789',
+					enrolledType: 'Participant',
+					groupUid: '123456789',
+					themeId: '123456789',
+					organizationId: '123456789',
+					startDate: 1725000000,
+					endDate: 1725000000,
+					createdAt: 1725000000,
+				},
+				date: new Date().toISOString(),
+			}
+		}
+	})
+	@ApiResponse({ status: 400, description: 'Bad request.' })
+	async createAssigningGroup(@Body() assignToGroupDto: AssignToGroupDto, @Req() req: Request) {
+		const header: Record<string, any> = req.headers;
+		const lang = header['accept-language'] ?? 'en';
+
+		try {
+			return {
+				assigningGroup: await this.assigningGroupService.createAssigningGroup(assignToGroupDto),
+				date: new Date().toISOString(),
+			}
+		} catch (error: any) {
+			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString()}, HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	/**
+	 * Get assigning group endpoint
+	 * @param uid - The UID of the assigning group to retrieve.
+	 * @param req - The request object.
+	 * @returns The assigning group retrieved
+	 */
+	@Get('get')
+	@UseGuards(JwtGuard, AbilitiesGuard)
+	@PutAbilities({ action: Action.Read, subject: 'Theme' })
+	@ApiOperation({ summary: 'Get an assigning group by UID.' })
+	@ApiResponse({ status: 200, description: 'Assigning group retrieved successfully.',
+		schema: {
+			example: {
+				assigningGroup: {
+					PK: '123456789',
+					SK: '123456789',
+					uid: '123456789',
+					enrolledUid: '123456789',
+					enrolledType: 'Participant',
+					groupUid: '123456789',
+					themeId: '123456789',
+					organizationId: '123456789',
+					startDate: 1725000000,
+					endDate: 1725000000,
+					createdAt: 1725000000,
+				},
+				date: new Date().toISOString(),
+			}
+		}
+	})
+	@ApiResponse({ status: 400, description: 'Bad request.' })
+	async getAssigningGroup(@Query('uid') uid: string, @Req() req: Request) {
+		const header: Record<string, any> = req.headers;
+		const lang = header['accept-language'] ?? 'en';
+
+		try {
+			return {
+				assigningGroup: await this.assigningGroupService.getByUid(uid),
+				date: new Date().toISOString(),
+			}
+		} catch (error: any) {
+			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString()}, HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	/**
+	 * Get assigning groups by enrolled UID and type endpoint
+	 * @param enrolledUid - The UID of the enrolled to retrieve.
+	 * @param enrolledType - The type of the enrolled.
+	 * @param req - The request object.
+	 * @returns The assigning groups retrieved
+	 */
+	@Get('get-by-enrolleds')
+	@UseGuards(JwtGuard, AbilitiesGuard)
+	@PutAbilities({ action: Action.Read, subject: 'Theme' })
+	@ApiOperation({ summary: 'Get assigning groups by enrolled UID and type.' })
+	@ApiResponse({ status: 200, description: 'Assigning groups retrieved successfully.',
+		schema: {
+			example: {
+				assigningGroups: [
+					{
+						PK: '123456789',
+						SK: '123456789',
+						uid: '123456789',
+						enrolledUid: '123456789',
+						enrolledType: 'Participant',
+						groupUid: '123456789',
+						themeId: '123456789',
+						organizationId: '123456789',
+						startDate: 1725000000,
+						endDate: 1725000000,
+						createdAt: 1725000000,
+					}
+				],
+				date: new Date().toISOString(),
+			}
+		}
+	})
+	@ApiResponse({ status: 400, description: 'Bad request.' })
+	async getByEnrolleds(@Query('enrolledUid') enrolledUid: string, @Query('enrolledType') enrolledType: EnrolledType, @Req() req: Request) {
+		const header: Record<string, any> = req.headers;
+		const lang = header['accept-language'] ?? 'en';
+
+		try {
+			return {
+				assigningGroups: await this.assigningGroupService.getByEnrolleds(enrolledUid, enrolledType),
+				date: new Date().toISOString(),
+			}
+		} catch (error: any) {
+			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString()}, HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	/**
+	 * Get assigning groups by group UID endpoint
+	 * @param groupUid - The UID of the group to retrieve.
+	 * @param enrolledType - The type of the enrolled.
+	 * @param req - The request object.
+	 * @returns The assigning groups retrieved
+	 */
+	@Get('get-by-group-uid')
+	@UseGuards(JwtGuard, AbilitiesGuard)
+	@PutAbilities({ action: Action.Read, subject: 'Theme' })
+	@ApiOperation({ summary: 'Get assigning groups by group UID.' })
+	@ApiResponse({ status: 200, description: 'Assigning groups retrieved successfully.',
+		schema: {
+			example: {
+				assigningGroups: [
+					{
+						PK: '123456789',
+						SK: '123456789',
+						uid: '123456789',
+						enrolledUid: '123456789',
+						enrolledType: 'Participant',
+						groupUid: '123456789',
+						themeId: '123456789',
+						organizationId: '123456789',
+						startDate: 1725000000,
+						endDate: 1725000000,
+						createdAt: 1725000000,
+					}
+				],
+				date: new Date().toISOString(),
+			}
+		}
+	})
+	@ApiResponse({ status: 400, description: 'Bad request.' })
+	async getByGroupUid(@Query('groupUid') groupUid: string, @Query('enrolledType') enrolledType: EnrolledType, @Req() req: Request) {
+		const header: Record<string, any> = req.headers;
+		const lang = header['accept-language'] ?? 'en';
+		try {
+			return {
+				assigningGroups: await this.assigningGroupService.getByGroupUid(groupUid, enrolledType),
+				date: new Date().toISOString(),
+			}
+		} catch (error: any) {
+			throw new HttpException({ error: this.languageService.getTranslation(error.message, lang), date: new Date().toISOString()}, HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	/**
+	 * Delete assigning group endpoint
+	 * @param uid - The UID of the assigning group to delete.
+	 * @param req - The request object.
+	 * @returns The assigning group deleted
+	 */
+	@Delete('delete')
+	@UseGuards(JwtGuard, AbilitiesGuard)
+	@PutAbilities({ action: Action.Delete, subject: 'Theme' })
+	@ApiOperation({ summary: 'Delete an assigning group by UID.' })
+	@ApiResponse({ status: 200, description: 'Assigning group deleted successfully.',
+		schema: {
+			example: {
+				success: "Assigning group deleted successfully.",
+				date: new Date().toISOString(),
+			}
+		}
+	})
+	@ApiResponse({ status: 400, description: 'Bad request.' })
+	async deleteAssigningGroup(@Query('uid') uid: string, @Req() req: Request) {
+		const header: Record<string, any> = req.headers;
+		const lang = header['accept-language'] ?? 'en';
+
+		try {
+			return {
+				success: await this.assigningGroupService.deleteAssigningGroup(uid),
 				date: new Date().toISOString(),
 			}
 		} catch (error: any) {

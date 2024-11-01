@@ -1,7 +1,7 @@
 import { Global, Module } from "@nestjs/common";
-import { AnimatorController, FormatorController, OrganizationController, ThemeController, WorkingHoursController } from "./organization.controler";
-import { AnimatorRepository, FormatorRepository, OrganizationRepository, ThemeRepository, WorkingHoursManager } from "./organization.repository";
-import { AnimatorService, FormatorService, OrganizationService, ThemeService } from "./organization.service";
+import { AnimatorController, AssigningGroupController, FormatorController, GroupController, OrganizationController, ParticipantController, ThemeController } from "./organization.controler";
+import { AnimatorRepository, AssigningGroupRepository, FormatorRepository, GroupRepository, OrganizationRepository, ParticipantRepository, ThemeRepository } from "./organization.repository";
+import { AnimatorService, AssigningGroupService, FormatorService, GroupService, OrganizationService, ParticipantService, ThemeService } from "./organization.service";
 
 /**
  * @module OrganizationModule
@@ -15,8 +15,31 @@ import { AnimatorService, FormatorService, OrganizationService, ThemeService } f
  */
 @Global()
 @Module({
-	controllers: [OrganizationController, ThemeController, AnimatorController, WorkingHoursController, FormatorController],
-	providers: [OrganizationRepository, OrganizationService, ThemeService, ThemeRepository, AnimatorService, AnimatorRepository, WorkingHoursManager, FormatorService, FormatorRepository],
+	controllers: [
+		OrganizationController,
+		ThemeController,
+		AnimatorController,
+		FormatorController,
+		ParticipantController,
+		GroupController,
+		AssigningGroupController,
+	],
+	providers: [
+		OrganizationRepository,
+		OrganizationService,
+		ThemeService,
+		ThemeRepository,
+		AnimatorService,
+		AnimatorRepository,
+		FormatorService,
+		FormatorRepository,
+		ParticipantService,
+		ParticipantRepository,
+		GroupService,
+		GroupRepository,
+		AssigningGroupService,
+		AssigningGroupRepository,
+	],
 	exports: [OrganizationRepository],
 })
 export class OrganizationModule {}

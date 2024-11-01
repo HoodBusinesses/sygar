@@ -2,18 +2,27 @@ import { Injectable } from "@nestjs/common";
 import { DbConstants } from "src/global/db/db.constants";
 import { DbService } from "src/global/db/db.service";
 import { CreateOrganizationDto } from "./dto/create-organization.dto";
-import { DeleteCommandInput, PutCommandInput, QueryCommandInput, ScanCommandInput } from "@aws-sdk/lib-dynamodb";
+import { PutCommandInput, QueryCommandInput, ScanCommandInput } from "@aws-sdk/lib-dynamodb";
 import { Organization } from "./model/organization.model";
 import { v4 as uuid } from 'uuid';
 import { DeleteItemCommandInput, PutItemCommandInput, UpdateItemCommandInput } from "@aws-sdk/client-dynamodb";
 import { UpdateOrganizationDto } from "./dto/update-organization.dto";
 import { CreateThemeDto } from "./dto/create-theme.dto";
 import { UpdateThemeDto } from "./dto/update-theme.dto";
-import { CreateAnimatorItemDto, UpdateAnimatorDto } from "./dto/create-animator.dto";
+import { CreateAnimatorDto } from "./dto/create-animator.dto";
+import { UpdateAnimatorDto } from "./dto/update-animator.dto";
 import { Animator } from "./model/animator.model";
-import { CreateWorkingTimeDto, UpdateWorkingTimeDto, WorkTimeLimit } from "./model/group.model";
-import { WorkerType, WorkingTime } from "./model/working-time.model";
-import { CreateFormatorDto, CreateFormatorItem, Formator } from "./model/formator.model";
+import { EnrolledType, GroupAction } from "./model/group.model";
+import { Formator } from "./model/formator.model";
+import { CreateFormatorDto } from "./dto/create-formator.dto";
+import { UpdateFormatorDto } from "./dto/update-formator.dto";
+import { CreateParticipantDto } from "./dto/create-participant.dto";
+import { UpdateParticipantDto } from "./dto/update-participant.dto";
+import { Participant } from "./model/participant.model";
+import { CreateGroupDto } from "./dto/create-group.dto";
+import { UpdateGroupDto } from "./dto/update-group.dto";
+import { AssigningGroup } from "./model/assigning-group.model";
+import { AssignToGroupDto } from "./dto/assign-group.dto";
 
 /**
  * @module OrganizationRepository
@@ -308,10 +317,22 @@ export class OrganizationRepository {
 	}
 }
 
+/**
+ * @module ThemeRepository
+ * @description
+ * This repository is responsible for managing themes in the database.
+ */
 @Injectable()
 export class ThemeRepository {
-	private readonly themeTableName: string;
-	private readonly themePrimaryKey: string;
+	private readonly themeTableName: string; // The name of the theme table
+	private readonly themePrimaryKey: string; // The primary key of the theme table
+
+	/**
+	 * Constructor for the ThemeRepository class.
+	 * 
+	 * @param dbService - The database service.
+	 * @param dbConstants - The database constants.
+	 */
 	constructor(
 		private readonly dbService: DbService,
 		private readonly dbConstants: DbConstants,
@@ -321,6 +342,11 @@ export class ThemeRepository {
 		this.themePrimaryKey = this.dbConstants.getPrimaryKey(themeTable);
 	}
 
+	/**
+	 * This method fetches the next counter value for the theme.
+	 * 
+	 * @returns The next counter value for the theme.
+	 */
 	async getNextCounterValueOfTheme() {
 		const params: ScanCommandInput = {
 			TableName: this.dbConstants.getTable('Counters'),
@@ -336,6 +362,11 @@ export class ThemeRepository {
 		return this.dbService.mapDynamoDBItemToObject(items[0]).counterValue as number;
 	}
 
+	/**
+	 * This method increments the theme counter.
+	 * 
+	 * @param counter - The counter value.
+	 */
 	async incrementThemeCounter(counter: number) {
 		const counterName = 'themeCounter';
 
@@ -386,7 +417,6 @@ export class ThemeRepository {
 			SK: this.dbConstants.getSortKey(uid),
 			...createThemeDto,
 			createdAt: Date.now(),
-			updatedAt: Date.now(),
 		};
 
 		// Add the theme to the database
@@ -458,7 +488,6 @@ export class ThemeRepository {
 		const expressionAttributeValues: { [key: string]: any } = {};
 	
 		const fieldsToUpdate = {
-			groups: updateThemeDto.groups,
 			description: updateThemeDto.description,
 			startDate: updateThemeDto.startDate,
 			endDate: updateThemeDto.endDate,
@@ -540,9 +569,9 @@ export class ThemeRepository {
 	
 		// Add filter expression for name
 		if (name) {
-			params.FilterExpression += 'contains(#name, :name)';
+			params.FilterExpression += 'contains(lower(#name), lower(:name))';
 			params.ExpressionAttributeNames!['#name'] = 'name'; // Use non-null assertion
-			params.ExpressionAttributeValues![':name'] = { S: name }; // Use non-null assertion
+			params.ExpressionAttributeValues![':name'] = { S: name.toLowerCase() }; // Use non-null assertion
 		}
 	
 		// Add filter expression for year based on createdAt timestamp
@@ -582,11 +611,257 @@ export class ThemeRepository {
 	}
 }
 
+/**
+ * @class GroupRepository
+ * @remarks
+ * The repository uses the DbService to interact with the database.
+ */
+@Injectable()
+export class GroupRepository {
+	private readonly groupTableName: string; // The name of the table
+	private readonly groupPrimaryKey: string; // The primary key of the table
+
+	/**
+	 * Constructor for the GroupRepository class.
+	 * 
+	 * @param dbConstants - The constants for the database.
+	 * @param dbService - The service for database operations.
+	 */
+	constructor(
+		private readonly dbConstants: DbConstants,
+		private readonly dbService: DbService,
+	) {
+		const groupTable = 'Groups';
+		this.groupTableName = this.dbConstants.getTable(groupTable);
+		this.groupPrimaryKey = this.dbConstants.getPrimaryKey(groupTable);
+	}
+
+	/**
+	 * Create a new group.
+	 * 
+	 * @param createGroupDto - The data for creating the group.
+	 * @returns The created group.
+	 */
+	async createGroup(createGroupDto: CreateGroupDto) {
+		const uid = uuid();
+
+		const Item = {
+			PK: this.groupPrimaryKey,
+			SK: this.dbConstants.getSortKey(uid),
+			uid,
+			...createGroupDto,
+			createdAt: Date.now(),
+		};
+
+		const params: PutItemCommandInput = {
+			TableName: this.groupTableName,
+			Item: Item as Record<string, any>
+		};
+
+		await this.dbService.putItem(params);
+
+		return Item;
+	}
+
+	/**
+	 * Get a group by UID.
+	 * 
+	 * @param uid - The UID of the group to get.
+	 * @returns The group found or null if not found.
+	 */
+	async getByUid(uid: string) {
+		if (!uid) {
+			throw new Error('uidRequired');
+		}
+
+		const params: QueryCommandInput = {
+			TableName: this.groupTableName,
+			IndexName: 'UidIndex',
+			KeyConditionExpression: 'uid = :uid',
+			ExpressionAttributeValues: {
+				':uid': { S: uid },
+			}
+		};
+
+		try {
+			const Items = await this.dbService.query(params);
+
+			if (!Items || Items.length === 0) {
+				return null;
+			}
+
+			return this.dbService.mapDynamoDBItemToObject(Items[0]);
+		} catch (error) {
+			return null;
+		}
+	}
+
+	/**
+	 * Update an existing group.
+	 * 
+	 * @param uid - The UID of the group to update.
+	 * @param updateGroupDto - The data for updating the group.
+	 * @returns The updated group.
+	 */
+	async updateGroup(uid: string, updateGroupDto: UpdateGroupDto) {
+		if (!uid) {
+			throw new Error('uidRequired');
+		}
+
+		const group = await this.getByUid(uid);
+
+		if (!group) {
+			throw new Error('groupDoesntExists');
+		}
+
+		const updateExpressionParts: string[] = [];
+		const expressionAttributeNames: { [key: string]: string } = {};
+		const expressionAttributeValues: { [key: string]: any } = {};
+
+		const fieldsToUpdate = {
+			location: updateGroupDto.location,
+			action: updateGroupDto.action,
+			updatedAt: Date.now().toString(),
+		};
+
+		for (const [key, value] of Object.entries(fieldsToUpdate)) {
+			if (value !== undefined) {
+				const attributeName = `#${key}`;
+				const attributeValue = `:${key}`;
+				updateExpressionParts.push(`${attributeName} = ${attributeValue}`);
+				expressionAttributeNames[attributeName] = key;
+				expressionAttributeValues[attributeValue] = this.dbService.convertToAttributeValue(value);
+			}
+		}
+
+		const updateExpression = `SET ${updateExpressionParts.join(', ')}`;
+
+		const params: UpdateItemCommandInput = {
+			TableName: this.groupTableName,
+			Key: {
+				PK: { S: group.PK },
+				SK: { S: group.SK },
+			},
+			UpdateExpression: updateExpression,
+			ExpressionAttributeNames: expressionAttributeNames,
+			ExpressionAttributeValues: expressionAttributeValues,
+		};
+
+		await this.dbService.updateItem(params);
+
+		return {
+			...group,
+			location: updateGroupDto.location ?? group.location,
+			action: updateGroupDto.action ?? group.action,
+			updatedAt: fieldsToUpdate.updatedAt
+		};
+	}
+
+	/**
+	 * Delete an existing group.
+	 * 
+	 * @param uid - The UID of the group to delete.
+	 */
+	async deleteGroup(uid: string) {
+		const group = await this.getByUid(uid);
+
+		if (!group) {
+			throw new Error('groupDoesntExists');
+		}
+
+		const params: DeleteItemCommandInput = {
+			TableName: this.groupTableName,
+			Key: {
+				PK: { S: group.PK },
+				SK: { S: group.SK },
+			},
+		};
+
+		await this.dbService.deleteItem(params);
+
+		return { message: 'Group deleted successfully' };
+	}
+
+	/**
+	 * This method fetches all groups from the database.
+	 * 
+	 * @param page - The page number
+	 * @param limit - The number of items per page
+	 * @param themeId - The ID of the theme
+	 * @param location - The location of the group
+	 * @param action - The action of the group
+	 * @returns The list of groups
+	 */
+	async getAllGroups(page: number, limit: number, themeId?: string, location?: string, action?: GroupAction) {
+		page = !page ? 1 : page;
+		limit = !limit ? 10 : limit;
+
+		const params: ScanCommandInput = {
+			TableName: this.groupTableName,
+			FilterExpression: '',
+			ExpressionAttributeNames: {},
+			ExpressionAttributeValues: {},
+		};
+
+		if (themeId) {
+			params.FilterExpression += 'themeId = :themeId';
+			params.ExpressionAttributeValues![':themeId'] = { S: themeId };
+		}
+
+		if (location) {
+			if (params.FilterExpression) {
+				params.FilterExpression += ' AND ';
+			}
+			params.FilterExpression += 'location = :location';
+			params.ExpressionAttributeValues![':location'] = { S: location };
+		}
+
+		if (action) {
+			if (params.FilterExpression) {
+				params.FilterExpression += ' AND ';
+			}
+			params.FilterExpression += 'action = :action';
+			params.ExpressionAttributeValues![':action'] = { S: action };
+		}
+
+		if (!params.FilterExpression) {
+			delete params.FilterExpression;
+			delete params.ExpressionAttributeNames;
+			delete params.ExpressionAttributeValues;
+		}
+
+		try {
+			const Items = await this.dbService.scanItems(params);
+
+			// Implement pagination
+			const startIndex = (page - 1) * limit;
+			const endIndex = page * limit;
+			const paginatedItems = Items.slice(startIndex, endIndex);
+
+			return paginatedItems.map(item => this.dbService.mapDynamoDBItemToObject(item));
+		} catch (error) {
+			return [];
+		}
+
+	}
+}
+
+/**
+ * @class AnimatorRepository
+ * @remarks
+ * The repository uses the DbService to interact with the database.
+ */
 @Injectable()
 export class AnimatorRepository {
 	private readonly animatorTableName: string;
 	private readonly animatorPrimaryKey: string;
 
+	/**
+	 * Constructor for the AnimatorRepository class.
+	 * 
+	 * @param dbConstants - The constants for the database.
+	 * @param dbService - The service for database operations.
+	 */
 	constructor(
 		private readonly dbConstants: DbConstants,
 		private readonly dbService: DbService,
@@ -595,7 +870,14 @@ export class AnimatorRepository {
 		this.animatorTableName = this.dbConstants.getTable(animatorTable);
 		this.animatorPrimaryKey = this.dbConstants.getPrimaryKey(animatorTable);
 	}
-	async createAnimator(createAnimatorDto: CreateAnimatorItemDto) {
+
+	/**
+	 * Create a new animator.
+	 * 
+	 * @param createAnimatorDto - The data for creating the animator.
+	 * @returns The created animator.
+	 */
+	async createAnimator(createAnimatorDto: CreateAnimatorDto) {
 		const uid = uuid();
 		const Item = {
 			PK: this.animatorPrimaryKey,
@@ -615,6 +897,12 @@ export class AnimatorRepository {
 		return Item;
 	}
 
+	/**
+	 * Get an animator by email.
+	 * 
+	 * @param email - The email of the animator to get.
+	 * @returns The animator found or null if not found.
+	 */
 	async getByEmail(email: string): Promise<Animator | null> {
 		const params: QueryCommandInput = {
 			TableName: this.animatorTableName,
@@ -638,6 +926,12 @@ export class AnimatorRepository {
 		}
 	}
 
+	/**
+	 * Get an animator by UID.
+	 * 
+	 * @param uid - The UID of the animator to get.
+	 * @returns The animator found or null if not found.
+	 */
 	async getByUid(uid: string): Promise<Animator | null> {
 		const params: QueryCommandInput = {
 			TableName: this.animatorTableName,
@@ -661,7 +955,14 @@ export class AnimatorRepository {
 		}
 	}
 
-	async updateAnimator(updateAnimatorDto: UpdateAnimatorDto, uid: string): Promise <Animator | null> {
+	/**
+	 * Update an existing animator.
+	 * 
+	 * @param updateAnimatorDto - The data for updating the animator.
+	 * @param uid - The UID of the animator to update.
+	 * @returns The updated animator.
+	 */
+	async updateAnimator(updateAnimatorDto: UpdateAnimatorDto, uid: string): Promise <Animator> {
 		const animator: Animator | null = await this.getByUid(uid);
 
 		if (!animator) {
@@ -672,14 +973,7 @@ export class AnimatorRepository {
 		const expressionAttributeNames: { [key: string]: string } = {};
 		const expressionAttributeValues: { [key: string]: any } = {};
 
-		const fieldsToUpdate = {
-			firstName: updateAnimatorDto.firstName,
-			lastName: updateAnimatorDto.lastName,
-			workingHours: updateAnimatorDto.workingHours,
-			updatedAt: Date.now().toString(),
-		};
-
-		for (const [key, value] of Object.entries(fieldsToUpdate)) {
+		for (const [key, value] of Object.entries(updateAnimatorDto)) {
 			if (value !== undefined) {
 				const attributeName = `#${key}`;
 				const attributeValue = `:${key}`;
@@ -705,11 +999,15 @@ export class AnimatorRepository {
 		await this.dbService.updateItem(params);
 
 		return { ...animator, ...updateAnimatorDto };
-
 	}
 
-	async deleteAnimator(email: string) {
-		const animator = await this.getByEmail(email);
+	/**
+	 * Delete an existing animator.
+	 * 
+	 * @param uid - The UID of the animator to delete.
+	 */
+	async deleteAnimator(uid: string) {
+		const animator = await this.getByUid(uid);
 
 		if (!animator) {
 			throw new Error('animatorDoesntExists');
@@ -725,7 +1023,7 @@ export class AnimatorRepository {
 
 		await this.dbService.deleteItem(params);
 
-		return { message: 'Theme deleted successfully' };
+		return { message: 'Animator deleted successfully' };
 	}
 
 	/**
@@ -776,109 +1074,228 @@ export class AnimatorRepository {
 	}
 }
 
-
-
 @Injectable()
-export class WorkingHoursManager {
+export class AssigningGroupRepository {
+	private readonly assigningGroupTableName: string;
+	private readonly assigningGroupPrimaryKey: string;
+
+	/**
+	 * Constructor for the AssigningGroupRepository class.
+	 * 
+	 * @param dbConstants - The constants for the database.
+	 * @param dbService - The service for database operations.
+	 * @param groupRepository - The repository for the group.
+	 */
 	constructor(
-		private readonly dbService: DbService,
 		private readonly dbConstants: DbConstants,
-		private readonly animatorRepository: AnimatorRepository,
-	) {}
-
-	async validateWorkingHours(workingHoursToValidate: CreateWorkingTimeDto[], email: string) {
-		// get the working hours from the database of the worker to check it against the new working hours
-		const workingHours = await this.getWorkingHours(email);
-
-		// check if the given working hours are valid
-		for (const workingHour of workingHoursToValidate) {
-			if (workingHour.startTime > workingHour.endTime || workingHour.startTime < WorkTimeLimit.MINSTART || workingHour.endTime > WorkTimeLimit.MAXEND) {
-				throw new Error('workingHoursInvalid');
-			}
-		}
-			
-		// check if there is any overlapping between the new working hours and the existing working hours
-		for (const workingHour of workingHoursToValidate) {
-			for (const existingWorkingHour of workingHours) {
-				if (workingHour.day === existingWorkingHour.day && workingHour.startTime < existingWorkingHour.endTime && workingHour.endTime > existingWorkingHour.startTime) {
-					throw new Error('workingHoursOverlapping');
-				}
-			}
-		}
-
-		// check if there is any overlapping between the new working hours themselves
-		const hasOverlap = workingHoursToValidate.some((currentHour, index) => 
-			workingHoursToValidate.slice(index + 1).some(nextHour => 
-				currentHour.day === nextHour.day && 
-				currentHour.startTime < nextHour.endTime && 
-				currentHour.endTime > nextHour.startTime
-			)
-		);
-
-		if (hasOverlap) {
-			throw new Error('workingHoursOverlapping');
-		}
+		private readonly dbService: DbService,
+		private readonly groupRepository: GroupRepository,
+	) {
+		this.assigningGroupTableName = this.dbConstants.getTable('AssigningGroups');
+		this.assigningGroupPrimaryKey = this.dbConstants.getPrimaryKey('AssigningGroups');
 	}
 
-	async getWorkingHours(email: string): Promise<WorkingTime[]> {
-		const params: QueryCommandInput = {
-			TableName: this.dbConstants.getTable('WorkingTimes'),
-			IndexName: 'EmailIndex',
-			KeyConditionExpression: 'email = :email',
-			ExpressionAttributeValues: {
-				':email': { S: email },
-			}
+	/**
+	 * Create a new assigning group.
+	 * 
+	 * @param assignToGroupDto - The data for creating the assigning group.
+	 * @returns The created assigning group.
+	 */
+	async createAssigningGroup(assignToGroupDto: AssignToGroupDto) {
+		const group = await this.groupRepository.getByUid(assignToGroupDto.groupUid);
+		if (!group) {
+			throw new Error('groupDoesntExists');
+		}
+
+		const uid = uuid();
+
+		const Item: AssigningGroup = {
+			PK: this.assigningGroupPrimaryKey,
+			SK: this.dbConstants.getSortKey(uid),
+			uid,
+			themeId: group.themeId,
+			organizationId: group.organizationId,
+			startDate: group.startDate,
+			endDate: group.endDate,
+			...assignToGroupDto,
+			createdAt: Date.now(),
+		}
+
+		const params: PutCommandInput = {
+			TableName: this.assigningGroupTableName,
+			Item: Item as Record<string, any>,
 		};
 
-		const Items = await this.dbService.query(params);
+		await this.dbService.putItem(params);
 
-		return Items.map((item: Record<string, any>) => this.dbService.mapDynamoDBItemToObject(item));
+		return Item;
 	}
 
-	async addWorkingHours(workingHours: CreateWorkingTimeDto[], email: string) {
-		const animator = await this.animatorRepository.getByEmail(email);
-		if (!animator) {
-			throw new Error('animatorDoesntExists');
-		}
-		
-		// we must check if the working hours are valid and not overlapping
-		await this.validateWorkingHours(workingHours, email);
-
-
-		// set the new working hours
-		for (const workingHour of workingHours) {
-			const uid = uuid();
-			// check if the worker exists
-			const workingTimeItem = {
-				PK: this.dbConstants.getPrimaryKey('WorkingTimes'),
-				SK: this.dbConstants.getSortKey(uid),
-				uid,
-				email,
-				workerType: WorkerType.Animators,
-				day: workingHour.day,
-				startTime: workingHour.startTime,
-				endTime: workingHour.endTime,
-				createdAt: Date.now()
-			};
-
-			const params: PutCommandInput = {
-				TableName: this.dbConstants.getTable('WorkingTimes'),
-				Item: workingTimeItem
-			};
-
-			await this.dbService.putItem(params);
-			}
-
-		return { message: 'Working hours added successfully' };
-	}
-
-	async getWorkingHoursByUid(uid: string): Promise<WorkingTime | null> {
+	/**
+	 * Get an assigning group by UID.
+	 * 
+	 * @param uid - The UID of the assigning group to get.
+	 * @returns The assigning group found or null if not found.
+	 */
+	async getByUid(uid: string): Promise<AssigningGroup | null> {
 		const params: QueryCommandInput = {
-			TableName: this.dbConstants.getTable('WorkingTimes'),
+			TableName: this.assigningGroupTableName,
 			IndexName: 'UidIndex',
 			KeyConditionExpression: 'uid = :uid',
 			ExpressionAttributeValues: {
 				':uid': { S: uid },
+			}
+		};
+
+		try {
+			const Items = await this.dbService.query(params);
+
+			if (!Items || Items.length === 0) {
+				return null;
+			}
+
+			return this.dbService.mapDynamoDBItemToObject(Items[0]);
+		} catch (error) {
+			return null;
+		}
+	}
+
+	/**
+	 * Get an assigning group by enrolled UID and enrolled type.
+	 * 
+	 * @param enrolledUid - The UID of the enrolled to get.
+	 * @param enrolledType - The type of the enrolled.
+	 * @returns The assigning group found or null if not found.
+	 */
+	async getByEnrolleds(enrolledUid: string, enrolledType: EnrolledType): Promise<AssigningGroup[]> {
+		const params: QueryCommandInput = {
+			TableName: this.assigningGroupTableName,
+			IndexName: 'EnrolledIndex',
+			KeyConditionExpression: 'enrolledUid = :enrolledUid AND enrolledType = :enrolledType',
+			ExpressionAttributeValues: {
+				':enrolledUid': { S: enrolledUid },
+				':enrolledType': { S: enrolledType },
+			}
+		};
+
+		try {
+			const Items = await this.dbService.query(params);
+			return Items.map((item: Record<string, any>) => this.dbService.mapDynamoDBItemToObject(item));
+		} catch (error) {
+			return [];
+		}
+	}
+
+	/**
+	 * Get an assigning group by group UID and enrolled type.
+	 * 
+	 * @param groupUid - The UID of the group.
+	 * @param enrolledType - The type of the enrolled.
+	 * @returns The assigning group found or null if not found.
+	 */
+	async getByGroupUid(groupUid: string, enrolledType: EnrolledType): Promise<AssigningGroup[]> {
+		const params: QueryCommandInput = {
+			TableName: this.assigningGroupTableName,
+			KeyConditionExpression: 'groupUid = :groupUid AND enrolledType = :enrolledType',
+			ExpressionAttributeValues: {
+				':groupUid': { S: groupUid },
+				':enrolledType': { S: enrolledType },
+			}
+		};
+
+		try {
+			const Items = await this.dbService.query(params);
+
+			return Items.map((item: Record<string, any>) => this.dbService.mapDynamoDBItemToObject(item));
+		} catch (error) {
+			return [];
+		}
+	}
+
+	/**
+	 * Delete an existing assigning group.
+	 * 
+	 * @param uid - The UID of the assigning group to delete.
+	 */
+	async deleteAssigningGroup(uid: string) {
+		const assigningGroup = await this.getByUid(uid);
+		if (!assigningGroup) {
+			throw new Error('assigningGroupDoesntExists');
+		}
+
+		const params: DeleteItemCommandInput = {
+			TableName: this.assigningGroupTableName,
+			Key: {
+				PK: { S: assigningGroup.PK },
+				SK: { S: assigningGroup.SK },
+			},
+		};
+
+		await this.dbService.deleteItem(params);
+
+		return { message: 'Assigning group deleted successfully' };
+	}
+}
+
+
+@Injectable()
+export class FormatorRepository {
+	private readonly formatorTableName: string;
+	private readonly formatorPrimaryKey: string;
+
+	/**
+	 * Constructor for the FormatorRepository class.
+	 * 
+	 * @param dbConstants - The constants for the database.
+	 * @param dbService - The service for database operations.
+	 */
+	constructor(
+		private readonly dbConstants: DbConstants,
+		private readonly dbService: DbService,
+	) {
+		this.formatorTableName = this.dbConstants.getTable('Formators');
+		this.formatorPrimaryKey = this.dbConstants.getPrimaryKey('Formators');
+	}
+
+	/**
+	 * Create a new formator.
+	 * 
+	 * @param createFormatorDto - The data for creating the formator.
+	 * @returns The created formator.
+	 */
+	async createFormator(createFormatorDto: CreateFormatorDto) {
+		const uid = uuid();
+		const Item: Formator = {
+			PK: this.formatorPrimaryKey,
+			SK: this.dbConstants.getSortKey(uid),
+			uid,
+			...createFormatorDto,
+			createdAt: Date.now(),
+		};
+
+		const params: PutCommandInput = {
+			TableName: this.formatorTableName,
+			Item: Item as Record<string, any>,
+		};
+
+		await this.dbService.putItem(params);
+
+		return Item;
+	}
+
+	/**
+	 * Get a formator by email.
+	 * 
+	 * @param email - The email of the formator.
+	 * @returns The formator found or null if not found.
+	 */
+	async getByEmail(email: string): Promise<Formator | null> {
+		const params: QueryCommandInput = {
+			TableName: this.formatorTableName,
+			IndexName: 'EmailIndex',
+			KeyConditionExpression: 'email = :email',
+			ExpressionAttributeValues: {
+				':email': { S: email },
 			}
 		};
 
@@ -891,53 +1308,329 @@ export class WorkingHoursManager {
 		return this.dbService.mapDynamoDBItemToObject(Items[0]);
 	}
 
-	async deleteWorkingHours(uid: string) {
-		// check if the working time exists
-		const workingTime = await this.getWorkingHoursByUid(uid);
-		if (!workingTime) {
-			throw new Error('workingTimeDoesntExists');
+	/**
+	 * Get a formator by UID.
+	 * 
+	 * @param uid - The UID of the formator.
+	 * @returns The formator found or null if not found.
+	 */
+	async getByUid(uid: string): Promise<Formator | null> {
+		const params: QueryCommandInput = {
+			TableName: this.formatorTableName,
+			KeyConditionExpression: 'PK = :PK AND SK = :SK',
+			ExpressionAttributeValues: {
+				':PK': { S: this.formatorPrimaryKey },
+				':SK': { S: this.dbConstants.getSortKey(uid) },
+			}
+		};
+
+		try {
+			const Items = await this.dbService.query(params);
+
+			if (!Items || Items.length === 0) {
+				return null;
+			}
+
+			return this.dbService.mapDynamoDBItemToObject(Items[0]);
+		} catch (error) {
+			return null;
+		}
+	}
+
+	/**
+	 * Update a formator
+	 * @param updateFormatorDto - The data for updating the formator
+	 * @param uid - The UID of the formator to update
+	 * @returns The formator updated
+	 */
+	async updateFormator(updateFormatorDto: UpdateFormatorDto, uid: string): Promise<Formator> {
+		const formator = await this.getByUid(uid);
+		if (!formator) {
+			throw new Error('formatorDoesntExists');
+		}
+
+		const updateExpressionParts: string[] = [];
+		const expressionAttributeNames: { [key: string]: string } = {};
+		const expressionAttributeValues: { [key: string]: any } = {};
+
+		for (const [key, value] of Object.entries(updateFormatorDto)) {
+			if (value !== undefined) {
+				const attributeName = `#${key}`;
+				const attributeValue = `:${key}`;
+				updateExpressionParts.push(`${attributeName} = ${attributeValue}`);
+				expressionAttributeNames[attributeName] = key;
+				expressionAttributeValues[attributeValue] = this.dbService.convertToAttributeValue(value);
+			}
+		}
+
+		const updateExpression = 'SET ' + updateExpressionParts.join(', ');
+
+		const params: UpdateItemCommandInput = {
+			TableName: this.formatorTableName,
+			Key: {
+				PK: { S: formator.PK },
+				SK: { S: formator.SK },
+			},
+			UpdateExpression: updateExpression,
+			ExpressionAttributeNames: expressionAttributeNames,
+			ExpressionAttributeValues: expressionAttributeValues,
+		};
+
+		await this.dbService.updateItem(params);
+
+		return { ...formator, ...updateFormatorDto };
+	}
+
+	/**
+	 * Delete an existing formator.
+	 * 
+	 * @param uid - The UID of the formator to delete.
+	 */
+	async deleteFormator(uid: string) {
+		const formator = await this.getByUid(uid);
+		if (!formator) {
+			throw new Error('formatorDoesntExists');
 		}
 
 		const params: DeleteItemCommandInput = {
-			TableName: this.dbConstants.getTable('WorkingTimes'),
+			TableName: this.formatorTableName,
 			Key: {
-				PK: { S: workingTime.PK },
-				SK: { S: workingTime.SK },
+				PK: { S: formator.PK },
+				SK: { S: formator.SK },
 			},
 		};
 
 		await this.dbService.deleteItem(params);
 
-		return { message: 'Working hours deleted successfully' };
+		return { message: 'Formator deleted successfully' };
+	}
+}
+
+@Injectable()
+export class ParticipantRepository {
+	private readonly participantTableName: string;
+	private readonly participantPrimaryKey: string;
+
+	/**
+	 * Constructor for the ParticipantRepository class.
+	 * 
+	 * @param dbConstants - The constants for the database.
+	 * @param dbService - The service for database operations.
+	 */
+	constructor(
+		private readonly dbConstants: DbConstants,
+		private readonly dbService: DbService,
+	) {
+		this.participantTableName = this.dbConstants.getTable('Participants');
+		this.participantPrimaryKey = this.dbConstants.getPrimaryKey('Participants');
 	}
 
-	async getAllWorkingHours(email: string, groupUid: string, workerType: WorkerType, page: number, limit: number) {
+	/**
+	 * Create a new participant.
+	 * 
+	 * @param createParticipantDto - The data for creating the participant.
+	 * @returns The created participant.
+	 */
+	async createParticipant(createParticipantDto: CreateParticipantDto) {
+		const uid = uuid();
+		const Item: Participant = {
+			PK: this.participantPrimaryKey,
+			SK: this.dbConstants.getSortKey(uid),
+			uid,
+			...createParticipantDto,
+			createdAt: Date.now(),
+		};
+
+		const params: PutCommandInput = {
+			TableName: this.participantTableName,
+			Item: Item as Record<string, any>,
+		};
+
+		await this.dbService.putItem(params);
+
+		return Item;
+	}
+
+	/**
+	 * Get a participant by email.
+	 * 
+	 * @param email - The email of the participant.
+	 * @returns The participant found or null if not found.
+	 */
+	async getByEmail(email: string): Promise<Participant | null> {
+		const params: QueryCommandInput = {
+			TableName: this.participantTableName,
+			IndexName: 'EmailIndex',
+			KeyConditionExpression: 'email = :email',
+			ExpressionAttributeValues: {
+				':email': { S: email },
+			}
+		};
+
+		const Items = await this.dbService.query(params);
+
+		if (!Items || Items.length === 0) {
+			return null;
+		}
+
+		return this.dbService.mapDynamoDBItemToObject(Items[0]);
+	}
+
+	/**
+	 * Get a participant by UID.
+	 * 
+	 * @param uid - The UID of the participant.
+	 * @returns The participant found or null if not found.
+	 */
+	async getByUid(uid: string): Promise<Participant | null> {
+		const params: QueryCommandInput = {
+			TableName: this.participantTableName,
+			KeyConditionExpression: 'PK = :PK AND SK = :SK',
+			ExpressionAttributeValues: {
+				':PK': { S: this.participantPrimaryKey },
+				':SK': { S: this.dbConstants.getSortKey(uid) },
+			}
+		};
+
+		try {
+			const Items = await this.dbService.query(params);
+
+			if (!Items || Items.length === 0) {
+				return null;
+			}
+
+			return this.dbService.mapDynamoDBItemToObject(Items[0]);
+		} catch (error) {
+			return null;
+		}
+	}
+
+	/**
+	 * Get a participant by CNSS.
+	 * 
+	 * @param cnss - The CNSS of the participant.
+	 * @returns The participant found or null if not found.
+	 */
+	async getByCnss(cnss: string): Promise<Participant | null> {
+		const params: QueryCommandInput = {
+			TableName: this.participantTableName,
+			IndexName: 'CnssIndex',
+			KeyConditionExpression: 'cnss = :cnss',
+			ExpressionAttributeValues: {
+				':cnss': { S: cnss },
+			}
+		};
+
+		const Items = await this.dbService.query(params);
+
+		if (!Items || Items.length === 0) {
+			return null;
+		}
+
+		return this.dbService.mapDynamoDBItemToObject(Items[0]);
+	}
+
+	/**
+	 * Update a participant
+	 * @param updateParticipantDto - The data for updating the participant
+	 * @param uid - The UID of the participant to update
+	 * @returns The participant updated
+	 */
+	async updateParticipant(updateParticipantDto: UpdateParticipantDto, uid: string): Promise<Participant> {
+		const participant = await this.getByUid(uid);
+
+		if (!participant) {
+			throw new Error('participantDoesntExists');
+		}
+
+		const updateExpressionParts: string[] = [];
+		const expressionAttributeNames: { [key: string]: string } = {};
+		const expressionAttributeValues: { [key: string]: any } = {};
+
+		const fieldsToUpdate = {
+			firstName: updateParticipantDto.firstName,
+			lastName: updateParticipantDto.lastName,
+			email: updateParticipantDto.email,
+			status: updateParticipantDto.status,
+			updatedAt: Date.now().toString(),
+		};
+
+		for (const [key, value] of Object.entries(fieldsToUpdate)) {
+			if (value !== undefined) {
+				const attributeName = `#${key}`;
+				const attributeValue = `:${key}`;
+				updateExpressionParts.push(`${attributeName} = ${attributeValue}`);
+				expressionAttributeNames[attributeName] = key;
+				expressionAttributeValues[attributeValue] = this.dbService.convertToAttributeValue(value);
+			}
+		}
+
+		const updateExpression = 'SET ' + updateExpressionParts.join(', ');
+
+		const params: UpdateItemCommandInput = {
+			TableName: this.participantTableName,
+			Key: {
+				PK: { S: participant.PK },
+				SK: { S: participant.SK },
+			},
+			UpdateExpression: updateExpression,
+			ExpressionAttributeNames: expressionAttributeNames,
+			ExpressionAttributeValues: expressionAttributeValues,
+		};
+
+		await this.dbService.updateItem(params);
+
+		return { ...participant, ...updateParticipantDto };
+	} 
+
+	/**
+	 * Delete a participant
+	 * @param uid - The UID of the participant to delete
+	 * @returns The participant deleted
+	 */
+	async deleteParticipant(uid: string) {
+		const participant = await this.getByUid(uid);
+
+		if (!participant) {
+			throw new Error('participantDoesntExists');
+		}
+
+		const params: DeleteItemCommandInput = {
+			TableName: this.participantTableName,
+			Key: {
+				PK: { S: participant.PK },
+				SK: { S: participant.SK },
+			},
+		};
+
+		await this.dbService.deleteItem(params);
+
+		return { message: 'Participant deleted successfully' };
+	}
+
+	/**
+	 * Get all participants
+	 * @param page - The page number
+	 * @param limit - The number of items per page
+	 * @param name - The name of the participant
+	 * @returns The list of participants
+	 */
+	async getAllParticipants(page: number, limit: number, name?: string) {
 		page = !page ? 1 : page;
 		limit = !limit ? 10 : limit;
-
 		const params: ScanCommandInput = {
-			TableName: this.dbConstants.getTable('WorkingTimes'),
+			TableName: this.participantTableName,
 			FilterExpression: '',
 			ExpressionAttributeNames: {},
 			ExpressionAttributeValues: {},
 		};
 
-		if (email) {
-			params.FilterExpression += 'email = :email';
-			params.ExpressionAttributeValues![':email'] = { S: email };
+		if (name) {
+			params.FilterExpression += 'contains(#name, :name)';
+			params.ExpressionAttributeNames!['#name'] = 'name';
+			params.ExpressionAttributeValues![':name'] = { S: name };
 		}
 
-		if (groupUid) {
-			params.FilterExpression += 'groupUid = :groupUid';
-			params.ExpressionAttributeValues![':groupUid'] = { S: groupUid };
-		}
-
-		if (workerType) {
-			params.FilterExpression += 'workerType = :workerType';
-			params.ExpressionAttributeValues![':workerType'] = { S: workerType };
-		}
-
-		// If no filters were set, remove the attributes to simplify the scan
 		if (!params.FilterExpression) {
 			delete params.FilterExpression;
 			delete params.ExpressionAttributeNames;
@@ -957,94 +1650,5 @@ export class WorkingHoursManager {
 			page,
 			limit,
 		};
-	}
-
-	async updateWorkingHours(updateWorkingTimeDto: UpdateWorkingTimeDto, uid: string) {
-		// check if the working time exists
-		const workingTime = await this.getWorkingHoursByUid(uid);
-		if (!workingTime) {
-			throw new Error('workingTimeDoesntExists');
-		}
-
-		// check if the new working hours are valid and not overlapping
-		await this.validateWorkingHours([updateWorkingTimeDto as CreateWorkingTimeDto], workingTime.email);
-
-		// update the working hours
-		let expressionAttributeNames: { [key: string]: string } = {};
-		let expressionAttributeValues: { [key: string]: any } = {};
-
-		// get all keys from the updateWorkingTimeDto object and dynamically create the update expression
-		const updateParts: string[] = [];
-		Object.keys(updateWorkingTimeDto).forEach((key) => {
-			if (updateWorkingTimeDto[key as keyof UpdateWorkingTimeDto] !== undefined) {
-				updateParts.push(`#${key} = :${key}`);
-				expressionAttributeNames[`#${key}`] = key;
-				expressionAttributeValues[`:${key}`] = this.dbService.convertToAttributeValue(updateWorkingTimeDto[key as keyof UpdateWorkingTimeDto]);
-			}
-		});
-
-		const updateExpression = 'SET ' + updateParts.join(', ');
-
-		const params: UpdateItemCommandInput = {
-			TableName: this.dbConstants.getTable('WorkingTimes'),
-			Key: {
-				PK: { S: workingTime.PK },
-				SK: { S: workingTime.SK },
-			},
-			UpdateExpression: updateExpression,
-			ExpressionAttributeNames: expressionAttributeNames,
-			ExpressionAttributeValues: expressionAttributeValues,
-		};
-
-		await this.dbService.updateItem(params);
-
-		return { message: 'Working hours updated successfully' };
-	}
-}
-
-@Injectable()
-export class FormatorRepository {
-	constructor(
-		private readonly dbConstants: DbConstants,
-		private readonly dbService: DbService,
-	) {}
-
-	async createFormator(createFormatorDto: CreateFormatorItem) {
-		const uid = uuid();
-		const Item: Formator = {
-			PK: this.dbConstants.getPrimaryKey('Formators'),
-			SK: this.dbConstants.getSortKey(uid),
-			uid,
-			...createFormatorDto,
-			createdAt: Date.now(),
-		};
-
-		const params: PutCommandInput = {
-			TableName: this.dbConstants.getTable('Formators'),
-			Item: Item as Record<string, any>,
-		};
-
-		await this.dbService.putItem(params);
-
-		return Item;
-	}
-
-	async getByEmail(email: string): Promise<Formator | null> {
-		const params: QueryCommandInput = {
-			TableName: this.dbConstants.getTable('Formators'),
-			IndexName: 'EmailIndex',
-			KeyConditionExpression: 'email = :email',
-			ExpressionAttributeValues: {
-				':email': { S: email },
-			}
-		};
-
-		const Items = await this.dbService.query(params);
-
-		if (!Items || Items.length === 0) {
-			return null;
-		}
-
-		return this.dbService.mapDynamoDBItemToObject(Items[0]);
 	}
 }

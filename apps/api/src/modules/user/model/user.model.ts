@@ -35,7 +35,7 @@ export interface User {
 	resetPasswordTokenExpiresAt?: number | null;
 	passwordUpdatedAt?: number | null;
 	createdAt: number;
-	updatedAt: number;
+	updatedAt?: number;
 }
 
 
