@@ -1,14 +1,13 @@
 import { useState } from 'react'
-import { IoNotificationsOutline } from 'react-icons/io5'
+import { FaUserCircle } from 'react-icons/fa'
 import { FiLogOut } from 'react-icons/fi'
 import { HiOutlineChevronDown } from 'react-icons/hi'
-import { FaUserCircle } from 'react-icons/fa'
-import { useTranslate } from '@renderer/hooks/useTranslate'
+import { IoNotificationsOutline } from 'react-icons/io5'
+import notificationLogo from '../assets/images/e500ce5d4441128b7e196000d7afdb72.png'
 import Logo from '../assets/images/logo.png'
 
 export default function Navbar() {
   const [language, setLanguage] = useState('English')
-  const { t, lng, isRtl } = useTranslate()
   const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false)
   const [isNotificationOpen, setNotificationOpen] = useState(false)
   const [isUserMenuOpen, setUserMenuOpen] = useState(false)
@@ -21,11 +20,10 @@ export default function Navbar() {
       time: '2 seconds ago',
       viewed: false,
       clicked: false,
-      icon: '/images/avatar-icon.png'
     },
     {
       id: 2,
-      title: 'quia-voluptatem-doloris',
+      title: 'quia-voluptatem-doloribus',
       message: 'Quia sed inventore non quia reiciendis qui reprehenderit.',
       time: '3 hours ago',
       viewed: false,
@@ -34,7 +32,7 @@ export default function Navbar() {
     },
     {
       id: 3,
-      title: 'quia-voluptatem-doloris',
+      title: 'quia-voluptatem-doloribus',
       message: 'Quia sed inventore non quia reiciendis qui reprehenderit.',
       time: '4 days ago',
       viewed: true,
@@ -51,19 +49,13 @@ export default function Navbar() {
     )
   }
 
-  const languageOptions = ['English(UK)', 'Frensh', 'Spanish']
+  const languageOptions = ['English(UK)', 'French', 'Spanish']
 
   return (
     <nav className="fixed flex w-full justify-between items-center bg-white text-gray-600 px-6 py-4 h-20 border-b shadow-md z-10">
       {/* Logo Section */}
       <div className="flex items-center">
-        <img
-          src={Logo}
-          width={100}
-          height={80}
-          alt="Logo"
-          className="object-contain"
-        />
+        <img src={Logo} width={100} height={80} alt="Logo" className="object-contain" />
       </div>
 
       {/* Right Section: Profile, Language, Notifications */}
@@ -140,46 +132,48 @@ export default function Navbar() {
         {/* Notifications */}
         <div className="relative">
           <IoNotificationsOutline
-            className="text-2xl"
+            className="text-2xl cursor-pointer"
             onClick={() => setNotificationOpen(!isNotificationOpen)}
           />
 
           {isNotificationOpen && (
-            <div className="absolute right-0 top-14 mt-1 w-72 bg-white shadow-lg rounded-lg p-4 z-50 border overflow-y-auto max-h-96">
-              <h3 className="text-sm font-semibold mb-3">Notifications</h3>
+            <div className="absolute right-0 top-14 mt-1 w-96 bg-white shadow-lg rounded-lg p-5 z-50 border overflow-y-auto max-h-[32rem] custom-scrollbar">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">Notifications</h3>
 
               {notifications.length > 0 ? (
-                <ul className="space-y-2">
+                <ul className="space-y-3">
                   {notifications.map((notification) => (
                     <li
                       key={notification.id}
-                      className={`flex justify-between items-start p-3 rounded-md cursor-pointer transition-all ${
+                      className={`flex justify-between items-start p-5 rounded-lg cursor-pointer transition-all shadow-md ${
                         notification.clicked
-                          ? 'bg-white border-l-4 border-transparent'
+                          ? 'bg-white border border-gray-200'
                           : notification.viewed
-                            ? 'bg-[#eff6ff] border-l-4 border-transparent'
-                            : 'bg-blue-50 border-l-4 border-blue-500'
+                            ? 'bg-[#eff6ff] border border-gray-300'
+                            : 'bg-blue-50 border border-blue-300'
                       }`}
                       onClick={() => markAsClicked(notification.id)}
                     >
-                      <div className="flex space-x-3 items-start">
-                        <img
-                          src={notification.icon}
-                          alt="Icon"
-                          className="w-10 h-10 rounded-full object-cover"
-                        />
+                      <div className="flex space-x-4 items-start">
+                        <div className="w-24 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                          <img
+                            src={notificationLogo}
+                            alt="Notification Icon"
+                            className="w-6 h-6"
+                          />
+                        </div>
                         <div>
                           <p
-                            className={`text-sm ${
+                            className={`text-base ${
                               notification.viewed ? 'text-gray-700' : 'font-semibold text-gray-900'
                             }`}
                           >
                             {notification.title}
                           </p>
-                          <p className="text-sm text-gray-500">{notification.message}</p>
+                          <p className="text-base text-gray-500">{notification.message}</p>
                         </div>
                       </div>
-                      <span className="text-xs text-gray-400 whitespace-nowrap">
+                      <span className="text-sm text-gray-400 whitespace-nowrap">
                         {notification.time}
                       </span>
                     </li>
@@ -187,8 +181,8 @@ export default function Navbar() {
                 </ul>
               ) : (
                 <div className="flex flex-col items-center justify-center h-32 text-gray-400">
-                  <IoNotificationsOutline className="h-12 w-12 mb-2" />
-                  <p className="text-sm">No Notifications</p>
+                  <IoNotificationsOutline className="h-14 w-14 mb-2" />
+                  <p className="text-base">No Notifications</p>
                 </div>
               )}
             </div>
