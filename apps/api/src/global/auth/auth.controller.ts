@@ -164,7 +164,7 @@ export class AuthController {
 		const lang = header['accept-language'] ?? 'en';
 
 		try {
-			return { message: 'Password reset successfully', date: new Date().toISOString() };
+			return { ...await this.authService.resetPassword(dto), date: new Date().toISOString() };
 		} catch (error: any) {
 			throw new HttpException(this.languageService.getTranslation(error.message, lang), HttpStatus.UNAUTHORIZED);
 		}
