@@ -196,7 +196,9 @@
         "organizations": "Organizations",
         "settings": "Settings",
         "notifications": "Notifications",
-        "reports": "Reports"
+        "reports": "Reports",
+        "theme": "Theme",
+        "participants": "Participants"
       }
     },
     "organization": {
@@ -243,7 +245,9 @@
       "organizations": "Organizations",
       "settings": "Settings",
       "notifications": "Notifications",
-      "reports": "Reports"
+      "reports": "Reports",
+      "theme": "Theme",
+      "participants": "Participants"
     }
   },
   "organization": {
@@ -278,5 +282,21 @@
     "import": "Import",
     "sortBy": "Sort By",
     "filter": "Filter"
+  },
+  "participantsTable": {
+    "id": "ID",
+    "name": "Full Name",
+    "email": "Email",
+    "cin": "CIN",
+    "cnss": "CNSS",
+    "status": "Status",
+    "placeholder": "*********"
+  },
+  "themesTable": {
+    "name": "Name",
+    "identifier": "Identifier",
+    "year": "Year",
+    "price": "Price",
+    "placeholder": "--------"
   }
 }

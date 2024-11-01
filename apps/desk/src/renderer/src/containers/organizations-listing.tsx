@@ -8,8 +8,8 @@ import OrganizationTable from '@renderer/components/OrganizationTable'
 import { mockOrganizations } from '@renderer/utils/static/organizations'
 import { applyFilters, sortConfig } from '@renderer/utils/filter/filter'
 import OrgModals from '@renderer/components/OrgModals'
-import Navbar from '@renderer/components/Navbar'
 import { useTranslate } from '@renderer/hooks/useTranslate'
+import withAuth from '@renderer/hoc/with-auth'
 
 const ITEMS_PER_PAGE = 10
 
@@ -17,7 +17,7 @@ const OrganizationsPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [sortConfig, setSortConfig] = useState<sortConfig>()
-  const { isRtl} = useTranslate()
+  const { isRtl } = useTranslate()
 
   const [modals, setModals] = useState({
     isDeleteModalOpen: false,
@@ -28,7 +28,7 @@ const OrganizationsPage: React.FC = () => {
   })
 
   const setModalState = (modalName, state): void => {
-    setModals(prevModals => ({
+    setModals((prevModals) => ({
       ...prevModals,
       [modalName]: state
     }))
@@ -80,7 +80,6 @@ const OrganizationsPage: React.FC = () => {
 
           {/* Search and Filters */}
           <div className="flex justify-between items-center mb-6 gap-4">
-
             {/* Left Section: Search Input */}
             <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
@@ -114,4 +113,4 @@ const OrganizationsPage: React.FC = () => {
   )
 }
 
-export default OrganizationsPage
+export default withAuth(OrganizationsPage)
