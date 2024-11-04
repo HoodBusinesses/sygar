@@ -10,6 +10,8 @@ import { AbilityModule } from './modules/ability/ability.module';
 import { RbacModule } from './global/rbac/roles.module';
 import { LanguageModule } from './global/language/language.module';
 import { NotificationsModule } from './global/notifactions/notifications.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { TaskService } from './global/schedule/task.service';
 
 /**
  * @module AppModule
@@ -35,9 +37,11 @@ import { NotificationsModule } from './global/notifactions/notifications.module'
       // validationOptions,
       // load: [appConfig(process.env.NODE_ENV)],
     }),
-    DbModule,
     // NotificationsModule,
+    DbModule,
+    ScheduleModule.forRoot(), // for the cron jobs: { description of how it works: the cron jobs are registered in the service that implements the OnModuleInit interface }
   ],
+  providers: [TaskService],
   controllers: [AppController],
 })
 export class AppModule {}
