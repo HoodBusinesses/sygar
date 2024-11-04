@@ -9,16 +9,12 @@ export default function Sidebar() {
   const [active, setActive] = useState('home')
   const { t } = useTranslation()
 
-  // const { data } = usePersistentStore();
-  const handleSave = () => {
-    // const newData = { ...data, canView: true, canModify: true };
-  }
-
   useEffect(() => {
-    handleSave()
+    // Example: Handle any required logic on mount
   }, [])
+
   return (
-    <div className="h-auto w-64 bg-gray-50 border border-gray-200 p-4">
+    <div className="fixed top-20 left-0 h-screen w-64 bg-gray-50 border-r border-gray-200 p-4 overflow-y-auto z-0">
       {/* Navigation */}
       <nav className="mt-6">
         {/* Dashboard Section */}
@@ -42,7 +38,7 @@ export default function Sidebar() {
           ))}
         </ul>
 
-        {/* Othres Section */}
+        {/* Others Section */}
         <div className="px-4 py-2 mt-8 text-xs font-semibold text-gray-500 uppercase">
           {t('sidebar.sections.others')}
         </div>

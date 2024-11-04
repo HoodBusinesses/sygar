@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { Card } from "@/components/ui/card";
 import { useForgotPassword } from "@/hooks/useForgetPassword";
@@ -14,41 +14,44 @@ export default function ForgetPassword() {
   const { isPending, isError, isSuccess, mutate } = useForgotPassword();
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
-      <Image src={logo} width={120} height={120} alt="logo" className="mb-4 " />
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-4">
+      {/* Logo */}
+      <Image src={logo} width={150} height={150} alt="logo" className="mb-6" />
 
-      {/* Main card for the reset password form */}
-      <Card className="w-full max-w-md p-8 mt-6">
+      {/* Main Card Container */}
+      <Card className="w-full max-w-md p-8 bg-white rounded-lg shadow-md">
         {!isSuccess ? (
           <>
-            <h2 className="text-center text-2xl font-bold text-gray-800 mb-6">
-              Reset your password
+            {/* Title */}
+            <h2 className="text-center text-2xl font-semibold text-gray-900 mb-2">
+              Forget your password
             </h2>
-            <p className="text-center text-gray-600 mb-4">
+
+            {/* Description */}
+            <p className="text-center text-gray-600 text-sm mb-6">
               To reset your password, enter the email address you use to sign in
               to Sygafor.
             </p>
+
+            {/* Reset Password Form */}
             <ResetPassForm
               isPending={isPending}
               isError={isError}
-              emailSent={isSuccess}
               mutate={mutate}
             />
           </>
         ) : (
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">
               Redirecting to the login page
             </h2>
-            <p className="text-gray-600">
+            <p className="text-gray-600 mb-4">
               We will redirect you to the login page
             </p>
-            {/* <div className="w-8 h-8 border-4 border-t-4 border-t-transparent border-gray-800 rounded-full animate-spin mt-4 mx-auto"></div> */}
-            <FiLoader className="animate-spin text-white w-6 h-6" />
+            <FiLoader className="animate-spin text-gray-600 w-8 h-8 mx-auto" />
           </div>
         )}
       </Card>
-      <hr />
     </div>
   );
 }
