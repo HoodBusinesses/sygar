@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Activate Your Account</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f6; 
+      }
+
+      .email-container {
+        max-width: 600px;
+        margin: 50px auto;
+        background-color: white;
+        border-radius: 12px;
+        text-align: left;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); 
+        overflow: hidden; 
+      }
+
+      .logo {
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      .logo img {
+        max-width: 120px;
+      }
+
+      .header-background {
+        background-color: #377dff; 
+        color: white;
+        padding: 40px 20px;
+        text-align: center;
+        position: relative;
+      }
+
+      .header-background .welcome-title {
+        font-size: 28px;
+        font-weight: bold;
+        margin: 0;
+      }
+
+      .header-background .welcome-image {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 80px;
+        height: auto;
+      }
+
+      h2 {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+        margin: 20px;
+      }
+
+      p {
+        font-size: 16px;
+        color: #555;
+        line-height: 1.6;
+        margin: 0 20px 20px;
+      }
+
+      .btn {
+        display: block;
+        background-color: #377dff;
+        color: white;
+        padding: 12px 20px;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: bold;
+        margin: 20px auto;
+        max-width: 200px;
+      }
+
+      .btn:hover {
+        background-color: #285fcf;
+      }
+
+      .footer {
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 0 0 12px 12px;
+        font-size: 14px;
+        color: #888;
+        text-align: center;
+      }
+
+      .footer a {
+        color: #377dff;
+        text-decoration: none;
+      }
+
+      .footer a:hover {
+        text-decoration: underline;
+      }
+
+      .footer p {
+        margin: 5px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-container">
+      <div class="logo">
+        <img
+          src="../../../desktop/renderer/public/images/logo.png"
+          alt="Sygafor Logo"
+        />
+      </div>
+
+      <div class="header-background">
+        <div class="welcome-title">Welcome</div>
+        <img
+          src="https://via.placeholder.com/80"
+          alt="User Icon"
+          class="welcome-image"
+        />
+      </div>
+
+
+      <h2>Activate Your Account</h2>
+      <p>Dear {{username}},</p>
+      <p>
+        Your account has been created by the administrator of {{organizationName}}.
+      </p>
+      <p>
+        To activate your account and complete the registration process, please
+        click the button below:
+      </p>
+
+
+      <a href="{{resetLink}}" class="btn">Activate Your Account</a>
+
+      <p>
+        Once activated, you will be able to access your account and start using
+        our services. If you have any questions or believe this email was sent
+        in error, please contact our support team. Thank you for choosing
+        Sygafor.
+      </p>
+
+
+      <div class="footer">
+        <p>
+          Sent by Sygafor. <a href="https://sygafor.ma">check our website sygafor.ma</a>
+        </p>
+        <p>1673, av du Mont-Royal E, Montréal, Quebec, Canada</p>
+      </div>
+    </div>
+  </body>
+</html>

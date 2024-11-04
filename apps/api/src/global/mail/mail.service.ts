@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as nodemailer from 'nodemailer';
 import { MailOptionsInterface } from '../../shared/types/mail';
+import { readFile } from 'fs/promises';
+import { join } from 'path';
 
 /**
  * Service for sending emails using nodemailer.
@@ -42,5 +44,10 @@ export class MailService {
       // console.error('Error sending email:', error);
       throw new Error('Failed to send email');
     }
+  }
+
+  async getTemplate(template: string): Promise<string> {
+    const templatePath = join(process.cwd(), 'src/templates', `${template}.html`);
+    return readFile(templatePath, 'utf8');
   }
 }

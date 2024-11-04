@@ -9,6 +9,7 @@ import { MailService } from "../mail/mail.service";
 import { UserRoles } from "src/modules/user/model/user.model";
 import { ActivateAccountDto, ValidateTokenDto } from "./dto/activate-account.dto";
 import { error } from "console";
+import { OrganizationService } from "src/modules/organization/organization.service";
 
 @Injectable()
 export class AuthService {
@@ -28,7 +29,8 @@ export class AuthService {
 		@Inject(forwardRef(() => UserService)) private readonly userService: UserService,
 		private readonly cryptService: CryptService,
 		private readonly jwtService: JwtService,
-		private readonly mailService: MailService
+		private readonly mailService: MailService,
+		private readonly organizationService: OrganizationService
 	) {
 		this.jwtSecretToken = configService.getOrThrow('JWT_SECRET_TOKEN');
 	}
@@ -155,19 +157,20 @@ export class AuthService {
 		// Generate the reset link
 		const resetLink = `${this.configService.getOrThrow('APP_URL')}/activate-account?token=${token}`;
 
+		// Load the activation account template
+		const activationAccountTemplate = await this.mailService.getTemplate('activationAccount');
+
+		// Replace the placeholders with the actual values
+		let html = activationAccountTemplate.replace('{{resetLink}}', resetLink);
+		html = html.replace('{{organizationName}}', (await this.organizationService.get(user.organizationId)).name);
+		html = html.replace('{{username}}', `${user.firstName} ${user.lastName}`);
 
 		// send the reset password email
 		const mailOptions = {
 			from: this.configService.getOrThrow('MAILER_FROM_ADDRESS'), // from address
 			to: user.email, // to address
 			subject: 'Activate your account', // subject
-			html: `
-			<h1>Activate your account</h1>
-			<p>You have requested to activate your account. Click the link below to activate it:</p>
-			<a href="${resetLink}">Activate Account</a>
-			<p>If you didn't request this, please ignore this email.</p>
-			<p>This link will expire in 30 minutes.</p>
-			`
+			html: html
 		};
 
 		// Send the reset password email
@@ -209,18 +212,19 @@ export class AuthService {
 		// Generate the reset link
 		const resetLink = `${this.configService.getOrThrow('APP_URL')}/reset-password?token=${token}`;
 
+		// Load the reset password template
+		const resetPasswordTemplate = await this.mailService.getTemplate('resetPassword');
+
+		// Replace the placeholders with the actual values
+		let html = resetPasswordTemplate.replace('{{resetLink}}', resetLink);
+		html = html.replace('{{username}}', `${user.firstName} ${user.lastName}`);
+
 		// send the reset password email
 		const mailOptions = {
 		  from: this.configService.getOrThrow('MAILER_FROM_ADDRESS'),
 		  to: user.email,
 		  subject: 'Password Reset Request',
-		  html: `
-			<h1>Password Reset Request</h1>
-			<p>You have requested to reset your password. Click the link below to reset it:</p>
-			<a href="${resetLink}">Reset Password</a>
-			<p>If you didn't request this, please ignore this email.</p>
-			<p>This link will expire in 30 minutes.</p>
-		  `,
+		  html: html,
 		};
 
 		// Send the reset password email

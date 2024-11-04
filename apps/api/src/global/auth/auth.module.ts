@@ -7,6 +7,7 @@ import { JwtGuard } from './auth.guard';
 import { MailModule } from '../mail/mail.module';
 import { UserService } from 'src/modules/user/user.service';
 import { LanguageModule } from '../language/language.module';
+import { OrganizationModule } from 'src/modules/organization/organization.module';
 
 /**
  * @module AuthModule
@@ -16,7 +17,7 @@ import { LanguageModule } from '../language/language.module';
  */
 @Global()
 @Module({
-  imports: [MailModule, LanguageModule],
+  imports: [MailModule, LanguageModule, OrganizationModule],
   controllers: [AuthController],
   exports: [AuthService, JwtService, JwtGuard, CryptService],
   providers: [AuthService, JwtService, CryptService, JwtGuard, UserService],

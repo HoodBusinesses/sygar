@@ -134,7 +134,7 @@ export class AuthController {
 
 		try {
 			return {
-				message:  await this.authService.requestPasswordReset(dto),
+				...await this.authService.requestPasswordReset(dto),
 				date: new Date().toISOString()
 			};
 		} catch (error: any) {

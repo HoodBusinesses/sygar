@@ -40,6 +40,6 @@ import { AnimatorService, AssigningGroupService, FormatorService, GroupService, 
 		AssigningGroupService,
 		AssigningGroupRepository,
 	],
-	exports: [OrganizationRepository],
+	exports: [OrganizationRepository, OrganizationService],
 })
 export class OrganizationModule {}
