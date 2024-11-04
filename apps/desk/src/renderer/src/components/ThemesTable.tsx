@@ -3,13 +3,16 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 import { cn } from './ui/lib/utils'
 import { useTranslate } from '@renderer/hooks/useTranslate'
 import { Checkbox } from './ui/checkbox'
+import OrgTableButtons from './OrgTableButtons'
+import { Button } from './ui/button'
 
 const ThemeHeaderElements = [
   <Checkbox key="checkbox" />,
   'themesTable.name',
-  'themesTable.identifier',
   'themesTable.year',
-  'themesTable.price'
+  'themesTable.price',
+  'themesTable.groups',
+  'themesTable.options'
 ]
 
 export interface Theme {
@@ -22,9 +25,17 @@ export interface Theme {
 
 interface ThemesTableProps {
   data: Theme[]
+  openEditModal: () => void
+  openGroupsModal: () => void
+  openDeleteModal: () => voids
 }
 
-const ThemesTable: React.FC<ThemesTableProps> = ({ data }): JSX.Element => {
+const ThemesTable: React.FC<ThemesTableProps> = ({
+  data,
+  openDeleteModal,
+  openEditModal,
+  openGroupsModal
+}): JSX.Element => {
   const { t, isRtl } = useTranslate()
   return (
     <div className="border rounded-lg overflow-hidden overflow-x-auto">
@@ -48,15 +59,21 @@ const ThemesTable: React.FC<ThemesTableProps> = ({ data }): JSX.Element => {
                 </div>
               </TableCell>
               <TableCell className="text-gray-950">{theme.name}</TableCell>
-              <TableCell className="">
-                <span className="bg-green-200 text-green-800 text-xs px-2 py-1 uppercase rounded">
-                  {theme.identifier}
-                </span>
+              <TableCell className="text-gray-950">{theme.year}</TableCell>
+              <TableCell className="text-gray-950">
+                {theme.price} <p>{t('themesTable.mad')}</p>
               </TableCell>
-              <TableCell className="text-gray-500">{theme.year}</TableCell>
-              <TableCell className="text-green-500 text-xs flex flex-col">
-                {theme.price}
-                <p>{t('themesTable.mad')}</p>
+              <TableCell className="text-gray-500">
+                <Button className="hover:underline text-blue-500 px-4 py-1">
+                  {t('themesTable.checkGroup')}
+                </Button>
+              </TableCell>
+              <TableCell className="text-gray-500">
+                <OrgTableButtons
+                  subscription={false}
+                  openDeleteModal={openDeleteModal}
+                  openEditModal={openEditModal}
+                />
               </TableCell>
             </TableRow>
           ))}

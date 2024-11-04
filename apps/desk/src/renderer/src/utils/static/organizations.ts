@@ -8,6 +8,7 @@ export interface Organization {
   responsibleName: string
   trainingManagerName: string
   date: string
+  enabled?: boolean
 }
 
 export const mockOrganizations = Array.from({ length: 50 }, (_, index) => {
@@ -52,7 +53,7 @@ export const mockParticipant = Array.from({ length: 50 }, (_, index) => {
 })
 
 export const mockThemes = Array.from({ length: 50 }, (_, index) => {
-  const identifierOptions = [
+  const formationsNames = [
     'FORMATION_ON_PYTHON',
     'FORMATION_ON_C++',
     'FORMATION_ON_C',
@@ -64,8 +65,7 @@ export const mockThemes = Array.from({ length: 50 }, (_, index) => {
 
   return {
     id: index + 1,
-    name: names[index % names.length],
-    identifier: identifierOptions[Math.floor(Math.random() * identifierOptions.length)],
+    name: formationsNames[Math.floor(Math.random() * formationsNames.length)],
     year: year,
     price: parseFloat(price)
   }

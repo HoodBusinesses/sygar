@@ -1,44 +1,34 @@
 import React from 'react'
+import Search from './Search'
+import SortByPopover from './SortBy'
+import Filter from './Filter'
+import { sortConfig } from '@renderer/utils/filter/filter'
 
-interface SearchAndFilterProps {
-  onSearch: (search: string) => void
-  onFilter: (filter: string) => void
+interface SearchAndFiltersProps {
+  searchQuery: string
+  setSearchQuery: (query: string) => void
+  setSortConfig: (sortConfig: sortConfig) => void
+  setFilter: (filters: any) => void
 }
 
-import React from 'react'
-import { Input } from './ui/input'
-import { FiSearch } from 'react-icons/fi'
-import SortByPopover from './SortBy'
-import { Filter } from 'lucide-react'
-
-const SearchAndFilter: React.FC<SearchAndFilterProps> = ({ onFilter, onSearch }) => {
+const SearchAndFilters: React.FC<SearchAndFiltersProps> = ({
+  searchQuery,
+  setSearchQuery,
+  setSortConfig,
+  setFilter
+}) => {
   return (
-    <div className="flex justify-between items-center mb-6">
+    <div className="flex justify-between items-center mb-6 gap-4">
       {/* Left Section: Search Input */}
-      <div className="relative w-1/3">
-        <Input
-          placeholder="Search for organization by email or cnss"
-          className="pl-10 pr-3 py-3 px-20 text-gray-600  border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-400 focus:outline-none w-full"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-      </div>
+      <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} placeholder={'......'} />
 
       {/* Right Section: Buttons and Profile */}
-      <div className="flex items-center gap-6 ml-auto">
-        {/* Buttons Section with Two Rows */}
-        <div className="flex flex-col gap-4">
-          <div className="flex gap-4">
-            {' '}
-            {/* Increased horizontal gap */}
-            <SortByPopover onSort={(sortConfig) => setSortConfig(sortConfig)} />
-            <Filter OnFilter={(filters) => console.log(filters)} />
-          </div>
-        </div>
+      <div className="flex gap-4">
+        <SortByPopover onSort={(sortConfig) => setSortConfig(sortConfig)} />
+        <Filter OnFilter={(filters) => setFilter(filters)} />
       </div>
     </div>
   )
 }
 
-export default SearchAndFilter
+export default SearchAndFilters

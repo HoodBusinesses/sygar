@@ -5,7 +5,7 @@ const OrgTableHeader = (): JSX.Element => {
   const { t, isRtl } = useTranslate()
 
   return (
-    <TableHeader className='text-w'>
+    <TableHeader className=''>
       {/* <TableHeader>
         <TableRow className="border border-gray-200 rounded-t-lg">
           {TableHeadElements.map((element, index) => (

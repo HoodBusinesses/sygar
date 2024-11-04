@@ -18,16 +18,15 @@ import {
   type MemberFormData,
 } from "../utils/schemas/organization";``
 // import { useToast } from "../components/ui/use-toast";
-import { useLanguage } from "../contexts/LanguageContext";
 import { useTranslation } from "react-i18next";
-import { Notification } from "electron";
 import {
   errorToast,
   infoToast,
   putNotification,
 } from "../notifications/Notification";
+import { useToast } from "@renderer/hooks/useToast";
 
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 
 const staticMembers: MemberFormData[] = [
   {
@@ -54,22 +53,21 @@ const RegistrationInfo = () => {
     index: number;
     data: MemberFormData;
   } | null>(null);
-  const { addToast } = useToast();
-  // const router = useRouter();
-  const [organization, setOrganization] = useState(null);
+  const { addToast } = useToast()
+  const [organization, setOrganization] = useState(null)
 
   const methods = useForm<OrganizationFormData>({
     resolver: zodResolver(organizationSchema),
   });
 
   const onSubmit = async (data: OrganizationFormData) => {
-    try {
+    // try {
       // Handle form submission
-      console.log({ ...data, members });
-      addToast("Success", "Organization information saved successfully");
-    } catch (error) {
-      addToast("Error", "Failed to save organization information");
-    }
+    //   console.log({ ...data, members });
+    //   addToast("Success", "Organization information saved successfully");
+    // } catch (error) {
+    //   addToast("Error", "Failed to save organization information");
+    // }
   };
   // useEffect(() => {
   //   if (router.query.organization) {

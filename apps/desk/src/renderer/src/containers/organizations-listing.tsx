@@ -1,8 +1,5 @@
 import { useMemo, useState } from 'react'
-import Search from '../components/Search'
-import SortByPopover from '../components/SortBy'
-import Filter from '../components/Filter'
-import OrgListingHeader from '@renderer/components/OrganizationListingHeader'
+import ListingHeader from '@renderer/components/ListingHeader'
 import Pagination from '@renderer/components/Pagination'
 import OrganizationTable from '@renderer/components/OrganizationTable'
 import { mockOrganizations } from '@renderer/utils/static/organizations'
@@ -10,6 +7,7 @@ import { applyFilters, sortConfig } from '@renderer/utils/filter/filter'
 import OrgModals from '@renderer/components/OrgModals'
 import { useTranslate } from '@renderer/hooks/useTranslate'
 import withAuth from '@renderer/hoc/with-auth'
+import SearchAndFilters from '@renderer/components/SearchAndFilter'
 
 const ITEMS_PER_PAGE = 10
 
@@ -17,13 +15,15 @@ const OrganizationsPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [sortConfig, setSortConfig] = useState<sortConfig>()
+  const [filters, setFilters] = useState<any>({})
   const { isRtl } = useTranslate()
 
   const [modals, setModals] = useState({
-    isDeleteModalOpen: false,
-    isExportModalOpen: false,
     isImportModalOpen: false,
+    isExportModalOpen: false,
+    isDeleteModalOpen: false,
     isSubscriptionModalOpen: false,
+    isGroupsModalOpen: false,
     editModalOpen: false
   })
 
@@ -40,6 +40,7 @@ const OrganizationsPage: React.FC = () => {
       isExportModalOpen: false,
       isImportModalOpen: false,
       isSubscriptionModalOpen: false,
+      isGroupsModalOpen: false,
       editModalOpen: false
     })
   }
@@ -47,10 +48,12 @@ const OrganizationsPage: React.FC = () => {
   const openExportModal = (): void => setModalState('isExportModalOpen', true)
   const openImportModal = (): void => setModalState('isImportModalOpen', true)
   const openSubscriptionModal = (): void => setModalState('isSubscriptionModalOpen', true)
+  const openGroupsModal = (): void => setModalState('editGroupsOpen', true)
   const openEditModal = (): void => setModalState('editModalOpen', true)
 
   // Memoized filtered data
   const filteredOrganizations = useMemo(() => {
+    console.log('filteredOrganizations', filters)
     return applyFilters(mockOrganizations, { searchQuery, sortConfig })
   }, [searchQuery, sortConfig])
 
@@ -76,27 +79,19 @@ const OrganizationsPage: React.FC = () => {
       {!modals.editModalOpen && (
         <>
           {/* Header */}
-          <OrgListingHeader openImportModal={openImportModal} openExportModal={openExportModal} />
+          <ListingHeader headTitle={'organization.organizations'} />
 
           {/* Search and Filters */}
-          <div className="flex justify-between items-center mb-6 gap-4">
-            {/* Left Section: Search Input */}
-            <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-
-            {/* Right Section: Buttons and Profile */}
-            <div className="flex gap-4">
-              <SortByPopover onSort={(sortConfig) => setSortConfig(sortConfig)} />
-              <Filter OnFilter={(filters) => console.log(filters)} />
-            </div>
-          </div>
+          {/* Left Section: Search Input */}
+          <SearchAndFilters
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            setSortConfig={setSortConfig}
+            setFilter={setFilters}
+          />
 
           {/* Organization Table Component */}
-          <OrganizationTable
-            openEditModal={openEditModal}
-            paginatedData={paginatedData}
-            openSubscriptionModal={openSubscriptionModal}
-            openDeleteModal={openDeleteModal}
-          />
+          <OrganizationTable paginatedData={paginatedData} />
 
           {/* Pagination */}
           <Pagination
@@ -106,7 +101,6 @@ const OrganizationsPage: React.FC = () => {
           />
         </>
       )}
-
       {/** MODALS */}
       <OrgModals modals={modals} handleCloseModals={handleCloseModals} />
     </main>

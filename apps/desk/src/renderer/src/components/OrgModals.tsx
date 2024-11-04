@@ -12,6 +12,7 @@ interface ModalsProps {
     isExportModalOpen: boolean
     isImportModalOpen: boolean
     isSubscriptionModalOpen: boolean
+    isGroupsModalOpen: boolean
     editModalOpen: boolean
   }
   handleCloseModals: () => void
@@ -20,10 +21,6 @@ interface ModalsProps {
 const OrgModals: React.FC<ModalsProps> = ({ modals, handleCloseModals }) => {
   return (
     <>
-      {modals.isDeleteModalOpen && <DeleteModal onClose={handleCloseModals} />}
-      {modals.isExportModalOpen && <ExportModal onClose={handleCloseModals} />}
-      {modals.isImportModalOpen && <ImportModal onClose={handleCloseModals} />}
-      {modals.isSubscriptionModalOpen && <SubscriptionModal onClose={handleCloseModals} />}
       {modals.editModalOpen && (
         <>
           <div className="flex flex-row p-5">

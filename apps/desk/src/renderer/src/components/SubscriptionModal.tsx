@@ -1,25 +1,33 @@
-import React, { FC } from 'react'
 import { Input } from './ui/input'
 import { Button } from './ui/button'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from './ui/dialog'
+import { FiCalendar } from 'react-icons/fi'
 
-interface DeleteModalProps {
-  onClose: () => void
-}
-
-const SubscriptionModal: FC<DeleteModalProps> = ({ onClose }) => {
-  const handleSubscription = () => {
-    console.log('Export')
-    onClose()
+const SubscriptionModal = (): JSX.Element => {
+  const handleSubscription = (): void => {
+    console.log('Subscription')
   }
 
   return (
-    <div className="fixed inset-0 flex flex-col items-center backdrop-brightness-75 justify-center bg-black bg-opacity-50">
-      <div className=" bg-white p-4 items-center justify-center rounded-md shadow-md w-1/2">
-        <div className=" p-4">
-          <h2 className="text-xl text-gray-800  font-bold mb-4">Manage Your Subscription</h2>
-          <p className="text-gray-400">Subscription Plan</p>
-        </div>
-
+    <Dialog>
+      <DialogTrigger className="bg-gray-300 text-gray-800 border border-none">
+        {' '}
+        <FiCalendar className="h-4 w-4" />
+      </DialogTrigger>
+      <DialogContent className="bg-white p-4 items-center justify-center rounded-md shadow-md w-1/2">
+        <DialogHeader>
+          <DialogTitle>Manage Your Subscription</DialogTitle>
+          <DialogDescription className="text-gray-400">Subscription Plan</DialogDescription>
+        </DialogHeader>
         <div className="space-y-4">
           <label className="flex flex-col cursor-pointer">
             <Input
@@ -70,25 +78,28 @@ const SubscriptionModal: FC<DeleteModalProps> = ({ onClose }) => {
               // error={errors.name?.message}
             />
           </div>
-          <p className="text-gray-400">By Continuing you agree to our <span className='text-gray-900 font-bold'>terms and conditions.</span></p>
+          <p className="text-gray-400">
+            By Continuing you agree to our{' '}
+            <span className="text-gray-900 font-bold">terms and conditions.</span>
+          </p>
         </div>
-
-        <div className="flex justify-end">
-          <Button
-            onClick={onClose}
-            className="custom-button text-gray-500 hover:bg-gray-200 border border-gray-500 mr-2"
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={handleSubscription}
-            className="custom-button bg-green-500 hover:bg-green-800"
-          >
-            SAVE
-          </Button>
-        </div>
-      </div>
-    </div>
+        <DialogFooter>
+          <div className="flex justify-end">
+            <DialogClose asChild>
+              <Button className="custom-button text-gray-500 hover:bg-gray-200 border border-gray-500 mr-2">
+                Cancel
+              </Button>
+            </DialogClose>
+            <Button
+              onClick={handleSubscription}
+              className="custom-button bg-green-500 hover:bg-green-800"
+            >
+              SAVE
+            </Button>
+          </div>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }
 

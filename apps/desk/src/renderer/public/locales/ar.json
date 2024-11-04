@@ -174,10 +174,15 @@
     "placeholder": "-----------"
   },
   "themesTable": {
+    "title": "المواضيع",
     "name": "الاسم",
     "identifier": "المعرف",
     "year": "السنة",
     "price": "السعر",
-    "placeholder": "***********"
+    "placeholder": "***********",
+    "groups": "المجموعات",
+    "options": "الخيارات",
+    "checkGroup": "تحقق من المجموعة",
+    "mad": "درهم"
   }
 }

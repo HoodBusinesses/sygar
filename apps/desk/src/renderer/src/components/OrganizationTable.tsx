@@ -4,32 +4,16 @@ import Profile_Img from '../assets/images/profile_img.png'
 import OrgTableHeader from './OrgTableHeader'
 import EnableButton from './ui/EnableButton'
 import OrgTableButtons from './OrgTableButtons'
-
-interface Organization {
-  id: string
-  rs: string
-  cnss: string
-  address: string
-  email: string
-  responsibleName: string
-  trainingManagerName: string
-  enabled: boolean
-}
+import { useReactTable } from '@tanstack/react-table'
+import { Organization } from '@renderer/utils/static/organizations'
 
 interface OrganizationTableProps {
   paginatedData: Organization[]
-  openEditModal: () => void
-  openSubscriptionModal: () => void
-  openDeleteModal: () => void
 }
 
-const OrganizationTable: React.FC<OrganizationTableProps> = ({
-  paginatedData,
-  openEditModal,
-  openSubscriptionModal,
-  openDeleteModal
-}) => {
+const OrganizationTable: React.FC<OrganizationTableProps> = ({ paginatedData }) => {
   // const { t, isRtl } = useTranslate()
+  // const table = useReactTable({})
   return (
     <div className="border rounded-lg overflow-hidden overflow-x-auto">
       <Table>
@@ -54,11 +38,7 @@ const OrganizationTable: React.FC<OrganizationTableProps> = ({
               </TableCell>
 
               <TableCell>
-                <OrgTableButtons
-                  openDeleteModal={openDeleteModal}
-                  openEditModal={openEditModal}
-                  openSubscriptionModal={openSubscriptionModal}
-                />
+                <OrgTableButtons subscription={true} />
               </TableCell>
             </TableRow>
           ))}
