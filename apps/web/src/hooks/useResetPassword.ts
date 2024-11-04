@@ -5,20 +5,27 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 export const useResetPassword = () => {
-  const router = useRouter();
+  console.log("0000");
 
+  const router = useRouter();
+  
+  console.log("====================================");
+  console.log("====================================");
   const { data, isPending, isError, isSuccess, mutate } = useMutation({
     mutationKey: ["resetPassword"],
-
+    
     mutationFn: async (params: Omit<ResetPasswordParams, "token">) => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        throw new Error("Token not found");
-      }
-      console.log('====================================');
-      console.log('data', params);
-      console.log('====================================');
-      return api.api().auth.resetPassword({ ...params, token });
+      
+      
+      const url = new URLSearchParams(window.location.search);
+      const token = url.get("token");
+      console.log("====================================");
+      console.log("data data", token);
+      console.log("====================================");
+      console.log("====================================");
+      console.log("params: ", params);
+      console.log("====================================");
+      return api.api().auth.resetPassword({ ...params, token: token! });
     },
 
     onSuccess: () => {

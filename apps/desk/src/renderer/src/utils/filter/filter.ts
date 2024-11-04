@@ -1,14 +1,13 @@
-import { Organization } from "../static/organizations";
+import { Organization } from '../static/organizations'
 
 export interface sortConfig {
   field: string
   direction: 'asc' | 'desc'
 }
 
-
 export interface FilterObject {
   searchQuery: string
-  sortConfig: sortConfig
+  sortConfig: sortConfig | undefined
 }
 
 export const applyFilters = (
@@ -18,15 +17,15 @@ export const applyFilters = (
   const filtered = organizations.filter((org) => {
     const matchesSearchQuery = filters.searchQuery
       ? Object.values(org).some((value) =>
-        value.toString().toLowerCase().includes(filters.searchQuery.toLowerCase())
-      )
+          value.toString().toLowerCase().includes(filters.searchQuery.toLowerCase())
+        )
       : true
     return matchesSearchQuery
   })
 
-  if (filters && filters.sortConfig) {
+  if (filters) {
     filtered.sort((a, b) => {
-      if (filters.sortConfig.field === 'email') {
+      if (filters.sortConfig && filters.sortConfig.field === 'email') {
         return filters.sortConfig.direction === 'asc'
           ? a.email.localeCompare(b.email)
           : b.email.localeCompare(a.email)
@@ -36,4 +35,4 @@ export const applyFilters = (
   }
 
   return filtered
-};
+}

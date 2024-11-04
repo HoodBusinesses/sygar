@@ -1,26 +1,22 @@
 
 import React, { FC } from "react";
+import { DialogClose } from "./ui/dialog";
+import { Button } from "./ui/button";
 
 interface DeleteModalProps {
-  onClose: () => void;
 }
 
-const ImportModal: FC<DeleteModalProps> = ({ onClose }) => {
+const ImportModal: FC<DeleteModalProps> = () => {
   const handleEImport = () => {
     console.log("Import");
-    onClose();
   };
 
   return (
-    <div className="fixed inset-0 flex items-center backdrop-brightness-75 justify-center bg-black p-5 bg-opacity-50">
-      <div className=" bg-white p-4 items-center justify-center rounded-md shadow-md w-1/2">
+      <div className=" bg-white p-4 rounded-md shadow-md">
         <div className="p-4">
-          <h2 className="text-xl text-gray-800  font-bold mb-4">
-            Document upload
-          </h2>
+          <h2 className="text-xl text-gray-800  font-bold mb-4">Document upload</h2>
           <p className="text-gray-400">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit
-            natus
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit natus
           </p>
         </div>
         <div className="flex items-center justify-center p-5">
@@ -45,8 +41,7 @@ const ImportModal: FC<DeleteModalProps> = ({ onClose }) => {
                 />
               </svg>
               <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                <span className="font-semibold">Click to upload</span> or drag
-                and drop
+                <span className="font-semibold">Click to upload</span> or drag and drop
               </p>
             </div>
             <input id="dropzone-file" type="file" className="hidden" />
@@ -54,22 +49,15 @@ const ImportModal: FC<DeleteModalProps> = ({ onClose }) => {
         </div>
         <p className="text-gray-400 ">Only .xml Files</p>
         <div className="flex justify-end">
-          <button
-            onClick={onClose}
-            className="custom-button text-gray-500 hover:bg-gray-200 border border-gray-500 mr-2"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleEImport}
-            className="custom-button bg-blue-500 hover:bg-blue-800"
-          >
+          <DialogClose className="custom-button text-gray-500 hover:bg-gray-200 border border-gray-500 mr-2">
+              Cancel
+          </DialogClose>
+          <Button onClick={handleEImport} className="custom-button bg-blue-500 hover:bg-blue-800">
             Next
-          </button>
+          </Button>
         </div>
       </div>
-    </div>
-  );
+  )
 };
 
 export default ImportModal;

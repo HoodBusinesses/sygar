@@ -32,4 +32,7 @@ body {
 
 .custom-scrollbar::-webkit-scrollbar-track {
   background: #e0e7ff; /* Light blue color for track */
+
+  .debug * {
+	outline: 1px solid tomato;
 }

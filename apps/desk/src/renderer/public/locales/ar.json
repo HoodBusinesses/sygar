@@ -126,7 +126,9 @@
       "organizations": "المنظمات",
       "settings": "الإعدادات",
       "notifications": "الإشعارات",
-      "reports": "التقارير"
+      "reports": "التقارير",
+      "theme": "Theme",
+      "participants": "Participants"
     }
   },
   "organization": {
@@ -161,5 +163,21 @@
     "import": "استيراد",
     "sortBy": "ترتيب حسب",
     "filter": "تصفية"
+  },
+  "participantsTable": {
+    "id": "المعرف",
+    "name": "الاسم الكامل",
+    "email": "البريد الإلكتروني",
+    "cin": "رقم البطاقة الوطنية",
+    "cnss": "رقم الضمان الاجتماعي",
+    "status": "الحالة",
+    "placeholder": "-----------"
+  },
+  "themesTable": {
+    "name": "الاسم",
+    "identifier": "المعرف",
+    "year": "السنة",
+    "price": "السعر",
+    "placeholder": "***********"
   }
 }

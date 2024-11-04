@@ -8,7 +8,6 @@ import { v4 as uuid } from "uuid";
 import { MailService } from "../mail/mail.service";
 import { UserRoles } from "src/modules/user/model/user.model";
 import { ActivateAccountDto, ValidateTokenDto } from "./dto/activate-account.dto";
-import { error } from "console";
 
 @Injectable()
 export class AuthService {
@@ -153,7 +152,7 @@ export class AuthService {
 		await this.userService.setResetPasswordToken(user.uid, token, expiresAt);
 
 		// Generate the reset link
-		const resetLink = `${this.configService.getOrThrow('APP_URL')}/activate-account?token=${token}`;
+		const resetLink = `${this.configService.getOrThrow('APP_URL')}/activateAccount?token=${token}`;
 
 
 		// send the reset password email
@@ -207,7 +206,7 @@ export class AuthService {
 		await this.userService.setResetPasswordToken(user.uid, token, expiresAt);
 
 		// Generate the reset link
-		const resetLink = `${this.configService.getOrThrow('APP_URL')}/reset-password?token=${token}`;
+		const resetLink = `${this.configService.getOrThrow('APP_URL')}/resetPassword?token=${token}`;
 
 		// send the reset password email
 		const mailOptions = {
@@ -266,10 +265,30 @@ export class AuthService {
 		// Delete the reset password token
 		await this.userService.setResetPasswordToken(user.uid, null, null);
 		
-		// Return a message indicating that the password was reset successfully
-		return {	
-			message: "Password reset successfully"
-		}
+		// Generate Jwt Token for the use
+		const token = this.jwtService.sing(
+			{
+				uid: user.uid,
+				email: user.email,
+				cnss: user.cnss,
+				role: user.role,
+			},
+			{
+				expiresIn: this.configService.getOrThrow('JWT_EXPIRATION_TIME'),
+				secret: this.jwtSecretToken,
+			}
+		);
+
+		// Return the token and user information
+		return {
+			token,
+			user: {
+				uid: user.uid,
+				email: user.email,
+				cnss: user.cnss,
+				role: user.role,
+			},
+		};
 	}
 
 	

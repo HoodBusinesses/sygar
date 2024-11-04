@@ -1,11 +1,4 @@
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@radix-ui/react-select'
 import { useTranslate } from '@renderer/hooks/useTranslate'
 import { MemberFormData } from '@renderer/utils/schemas/organization'
 import { Edit, Trash2 } from 'lucide-react'

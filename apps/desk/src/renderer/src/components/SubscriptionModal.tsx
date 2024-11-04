@@ -1,20 +1,18 @@
 import React, { FC } from 'react'
 import { Input } from './ui/input'
 import { Button } from './ui/button'
+import { DialogTrigger } from './ui/dialog'
 
 interface DeleteModalProps {
-  onClose: () => void
 }
 
-const SubscriptionModal: FC<DeleteModalProps> = ({ onClose }) => {
+const SubscriptionModal: FC<DeleteModalProps> = () => {
   const handleSubscription = () => {
     console.log('Export')
-    onClose()
   }
 
   return (
-    <div className="fixed inset-0 flex flex-col items-center backdrop-brightness-75 justify-center bg-black bg-opacity-50">
-      <div className=" bg-white p-4 items-center justify-center rounded-md shadow-md w-1/2">
+      <div className=" bg-white p-4 items-center justify-center rounded-md shadow-md">
         <div className=" p-4">
           <h2 className="text-xl text-gray-800  font-bold mb-4">Manage Your Subscription</h2>
           <p className="text-gray-400">Subscription Plan</p>
@@ -70,16 +68,18 @@ const SubscriptionModal: FC<DeleteModalProps> = ({ onClose }) => {
               // error={errors.name?.message}
             />
           </div>
-          <p className="text-gray-400">By Continuing you agree to our <span className='text-gray-900 font-bold'>terms and conditions.</span></p>
+          <p className="text-gray-400">
+            By Continuing you agree to our{' '}
+            <span className="text-gray-900 font-bold">terms and conditions.</span>
+          </p>
         </div>
 
         <div className="flex justify-end">
-          <Button
-            onClick={onClose}
+          <DialogTrigger
             className="custom-button text-gray-500 hover:bg-gray-200 border border-gray-500 mr-2"
           >
             Cancel
-          </Button>
+          </DialogTrigger>
           <Button
             onClick={handleSubscription}
             className="custom-button bg-green-500 hover:bg-green-800"
@@ -88,7 +88,6 @@ const SubscriptionModal: FC<DeleteModalProps> = ({ onClose }) => {
           </Button>
         </div>
       </div>
-    </div>
   )
 }
 

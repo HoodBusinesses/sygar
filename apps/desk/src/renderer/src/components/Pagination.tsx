@@ -1,21 +1,18 @@
+import { useTranslate } from '@renderer/hooks/useTranslate'
+import { Table } from '@tanstack/react-table'
 import React from 'react'
 import { Button } from './ui/button'
-import { useTranslate } from '@renderer/hooks/useTranslate'
+import { cn } from './ui/lib/utils'
 
-interface PaginationProps {
-  currentPage: number
-  totalPages: number
-  onPageChange: (page: number) => void
+interface PaginationProps<TData> {
+  table: Table<TData>
 }
 
-const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
-  const { t } = useTranslate()
-  const handlePageChange = (page: number | React.ChangeEvent<HTMLSelectElement>): void => {
-    if (typeof page === 'number') {
-      onPageChange(page)
-    } else {
-      onPageChange(Number(page.target.value))
-    }
+function Pagination<TData>({ table }: PaginationProps<TData>) {
+  const { t } = useTranslate();
+  const handlePageChange = (page: React.ChangeEvent<HTMLSelectElement>): void => {
+    const selectedPage = Number(page.target.value)
+    table.setPageIndex(selectedPage - 1);
   }
 
   return (
@@ -23,35 +20,39 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
       <div className="flex items-center gap-2 text-sm text-gray-700">
         <span>{t('organization.page')}</span>
         <select
-          value={currentPage}
+          value={table.getState().pagination.pageIndex + 1}
           onChange={handlePageChange}
           className="border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:ring-1 focus:ring-gray-400"
         >
-          {Array.from({ length: totalPages }, (_, index) => (
+          {Array.from({ length: table.getPageCount() }, (_, index) => (
             <option key={index} value={index + 1}>
               {index + 1}
             </option>
           ))}
         </select>
-        <span>{t('organization.of')} {totalPages}</span>
+        <span>
+          {t('organization.of')} {table.getPageCount()}
+        </span>
       </div>
 
       {/* Back and Next Buttons */}
       <div className="flex gap-2">
         <Button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
+          onClick={table.nextPage}
+          disabled={!table.getCanNextPage()}
           className={`border border-gray-300 px-4 py-2 rounded-md text-gray-700 
-      ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+      ${!table.getCanNextPage() ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
           {t('organization.next')}
         </Button>
 
         <Button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className={`px-4 py-2 rounded-md text-white bg-gray-800
-      ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''}`}
+          onClick={table.previousPage}
+          disabled={!table.getCanPreviousPage()}
+          className={cn(
+            'px-4 py-2 rounded-md text-white bg-gray-800',
+            !table.getCanPreviousPage() && 'opacity-50 cursor-not-allowed'
+          )}
         >
           {t('organization.previous')}
         </Button>

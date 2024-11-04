@@ -34,6 +34,7 @@ const SortOption: React.FC<SortOptionProps> = ({
               />
               <span>{labels.asc}</span>
             </label>
+            
             <label className="flex items-center space-x-2 cursor-pointer">
               <input
                 type="radio"
