@@ -8,7 +8,6 @@ import { v4 as uuid } from "uuid";
 import { MailService } from "../mail/mail.service";
 import { UserRoles } from "src/modules/user/model/user.model";
 import { ActivateAccountDto, ValidateTokenDto } from "./dto/activate-account.dto";
-import { error } from "console";
 import { OrganizationService } from "src/modules/organization/organization.service";
 
 @Injectable()
