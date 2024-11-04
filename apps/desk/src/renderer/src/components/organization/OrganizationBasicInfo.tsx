@@ -1,8 +1,8 @@
 import { useFormContext } from 'react-hook-form'
-import type { OrganizationFormData } from '../utils/schemas/organization'
-import { Card, CardContent } from './ui/card'
+import type { OrganizationFormData } from '../../utils/schemas/organization'
+import { Card, CardContent } from '../ui/card'
 import { useTranslate } from '@renderer/hooks/useTranslate'
-import FormInputItem from './ui/form-input-item'
+import FormInputItem from '../ui/form-input-item'
 import { fields } from '@renderer/data/organinzation-fields-input'
 
 export const OrganizationBasicInfo = (organization): JSX.Element => {
