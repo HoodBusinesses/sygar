@@ -1,39 +1,44 @@
 import { useTranslate } from '@renderer/hooks/useTranslate'
 import { useAppDispatch } from '@renderer/store/hooks'
-import { changeLang, langs } from '@renderer/store/slices/lang.slice'
-import { GrLanguage } from 'react-icons/gr'
+import { changeLang, LangPayloadType, langs } from '@renderer/store/slices/lang.slice'
+import { HiOutlineChevronDown } from 'react-icons/hi'
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 
 export default function SelectLanguage(): JSX.Element {
-  const { lng: Language } = useTranslate();
+  const { lng } = useTranslate()
 
   const dispatcher = useAppDispatch()
 
-  const changeLanguage = (lng: string): void => {
-    const lang = langs.find((lang) => lang.id === lng)
-    dispatcher(
-      changeLang({
-        name: lang?.name!,
-        id: lang?.id!,
-        isRtl: lang?.isRtl!
-      })
-    )
+  const changeLanguage = (lngPayload: LangPayloadType): void => {
+    dispatcher(changeLang(lngPayload))
   }
-
   return (
-    <div className="self-start cursor-pointer  border rounded-md py-1 px-2 mb-4 flex items-center font-poppins space-x-1 text-gray-500 hover:text-gray-700">
-      <GrLanguage className="text-gray-500" />
+    <Popover>
+      <PopoverTrigger className="flex items-center cursor-pointer space-x-2 border rounded-md py-2 px-3">
+        <span className="text-sm text-gray-500">{lng.name}</span>
+        <HiOutlineChevronDown className="text-gray-500" />
+      </PopoverTrigger>
 
-      <select
-        className="border p-1 absolute top-10 right-0 bg-white rounded-lg shadow-md  mt-2 z-50"
-        value={Language.id}
-        onChange={(e) => changeLanguage(e.target.value)} // Directly update the language based on the selected option
-      >
-        {langs.map((lang, index) => (
-          <option key={index} value={lang.id}>
-            {lang.name}
-          </option>
+      <PopoverContent className=" bg-white rounded-lg shadow-md border mt-4 mr-2">
+        {langs.map((option, idx) => (
+          <div
+            key={idx}
+            className={`flex items-center p-3 cursor-pointer hover:bg-gray-100 ${
+              option.id === lng.id ? 'font-semibold' : ''
+            }`}
+            onClick={() => changeLanguage(option)}
+          >
+            <span
+              className={`h-4 w-4 rounded-full border border-gray-400 mr-3 flex items-center justify-center ${
+                option.id === lng.id ? 'bg-gray-400' : ''
+              }`}
+            >
+              {option.id === lng.id && <span className="h-2 w-2 bg-white rounded-full"></span>}
+            </span>
+            <span className="text-sm">{option.name}</span>
+          </div>
         ))}
-      </select>
-    </div>
+      </PopoverContent>
+    </Popover>
   )
 }
