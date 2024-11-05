@@ -14,7 +14,7 @@ export default function Sidebar() {
   }, [])
 
   return (
-    <div className="fixed top-20 left-0 h-screen w-64 bg-gray-50 border-r border-gray-200 p-4 overflow-y-auto z-0">
+    <div className="h-full w-64 bg-gray-50 border-r border-gray-200 p-4 mt-4 overflow-y-auto z-0">
       {/* Navigation */}
       <nav className="mt-6">
         {/* Dashboard Section */}

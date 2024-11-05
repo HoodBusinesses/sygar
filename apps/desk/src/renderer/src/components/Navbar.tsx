@@ -52,7 +52,7 @@ export default function Navbar() {
   const languageOptions = ['English(UK)', 'French', 'Spanish']
 
   return (
-    <nav className="fixed flex w-full justify-between items-center bg-white text-gray-600 px-6 py-4 h-20 border-b shadow-md z-10">
+    <nav className="sticky flex w-full justify-between items-center bg-white text-gray-600 px-6 py-4 h-20 border-b shadow-md z-10">
       {/* Logo Section */}
       <div className="flex items-center">
         <img src={Logo} width={100} height={80} alt="Logo" className="object-contain" />
