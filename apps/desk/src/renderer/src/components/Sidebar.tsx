@@ -14,9 +14,9 @@ export default function Sidebar() {
   }, [])
 
   return (
-    <div className="h-full w-64 bg-gray-50 border-r border-gray-200 p-4 mt-4 overflow-y-auto z-0">
+    <div className="h-[100vdh] w-64 bg-gray-50 border-r border-gray-200 p-4 overflow-y-auto z-0">
       {/* Navigation */}
-      <nav className="mt-6">
+      <nav className="mt-8">
         {/* Dashboard Section */}
         <div className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase">
           {t('sidebar.sections.dashboard')}
