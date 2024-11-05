@@ -1,6 +1,6 @@
 import RegistrationInfo from '@renderer/components/RegistrationInfo'
 import { getColumns } from '@renderer/components/organization/Organization-columns'
-import OrgListingHeader from '@renderer/components/organization/OrganizationListingHeader'
+import ListingHeader from '@renderer/components/ListingHeader'
 import { CustomTable } from '@renderer/components/custom-table'
 import { Button } from '@renderer/components/ui/button'
 import withAuth from '@renderer/hoc/with-auth'
@@ -23,7 +23,7 @@ const OrganizationsPage: React.FC = () => {
       ) : (
         <>
           {/* Header */}
-          <OrgListingHeader />
+          <ListingHeader header={'organization.organizations'} />
 
           {/* Organization Table Component */}
           <CustomTable columns={getColumns(setEditOrg.bind(null, true))} data={mockOrganizations} />

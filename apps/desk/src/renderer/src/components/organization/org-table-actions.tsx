@@ -1,17 +1,15 @@
-import { Edit2, Trash2 } from 'lucide-react'
-import { FiCalendar } from 'react-icons/fi'
+import { Edit2 } from 'lucide-react'
 import DeleteModal from '../DeleteModal'
-import RegistrationInfo from '../RegistrationInfo'
 import SubscriptionModal from '../SubscriptionModal'
-import { Button, buttonVariants } from '../ui/button'
-import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog'
-import { cn } from '../ui/lib/utils'
+import { Button } from '../ui/button'
 
 export default function ButtonsAction({
   rowId,
+  subscription,
   setEditOrg
 }: {
   rowId: number
+  subscription: boolean
   setEditOrg: () => void
 }) {
   return (
@@ -24,36 +22,8 @@ export default function ButtonsAction({
       >
         <Edit2 className="h-4 w-4" />
       </Button>
-
-      <Dialog>
-        <DialogTrigger
-          className={cn(
-            buttonVariants({ variant: 'ghost', size: 'icon' }),
-            'bg-gray-300 text-gray-800 border border-none'
-          )}
-        >
-          <FiCalendar className="h-4 w-4" />
-        </DialogTrigger>
-
-        <DialogContent>
-          <SubscriptionModal />
-        </DialogContent>
-      </Dialog>
-
-      <Dialog>
-        <DialogTrigger
-          className={cn(
-            buttonVariants({ variant: 'ghost', size: 'icon' }),
-            'bg-gray-300 text-red-800 ltr:rounded-r-full rtl:rounded-l-full'
-          )}
-        >
-          <Trash2 className="h-4 w-4" />
-        </DialogTrigger>
-
-        <DialogContent>
-          <DeleteModal onDelete={() => console.log(rowId)} />
-        </DialogContent>
-      </Dialog>
+      {subscription && <SubscriptionModal />}
+      <DeleteModal onDelete={() => console.log(rowId)} />
     </div>
   )
 }

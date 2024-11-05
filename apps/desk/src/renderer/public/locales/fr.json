@@ -305,10 +305,15 @@
     "placeholder": "*******"
   },
   "themesTable": {
+    "title": "Thèmes",
     "name": "Nom",
     "identifier": "Identifiant",
     "year": "Année",
     "price": "Prix",
-    "placeholder": "*******"
+    "placeholder": "*******",
+    "groups": "Groupes",
+    "options": "Options",
+    "checkGroup": "Vérifier le groupe",
+    "mad": "DH"
   }
 }

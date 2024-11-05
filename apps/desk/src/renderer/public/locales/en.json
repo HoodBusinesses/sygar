@@ -293,10 +293,15 @@
     "placeholder": "*********"
   },
   "themesTable": {
+    "title": "Themes",
     "name": "Name",
     "identifier": "Identifier",
     "year": "Year",
     "price": "Price",
-    "placeholder": "--------"
+    "placeholder": "--------",
+    "groups": "Groups",
+    "options": "Options",
+    "checkGroup": "Check Group",
+    "mad": "DH"
   }
 }
