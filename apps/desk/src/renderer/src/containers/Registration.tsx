@@ -28,7 +28,7 @@ const Registration: React.FC = () => {
   if (error) return <div className="text-red-500 p-4">Error loading organization data</div>
 
   return (
-    <div className="ml-64 p-4 mt-12 max-w-7xl mx-auto py-6 space-y-6">
+    <div className="p-4 w-full py-6 space-y-6">
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(handleSubmit)} className="space-y-6">
           <OrganizationBasicInfo organization={organization} />
