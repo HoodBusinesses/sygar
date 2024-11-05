@@ -42,7 +42,7 @@ export const mockParticipant = Array.from({ length: 50 }, (_, index) => {
 })
 
 export const mockThemes = Array.from({ length: 50 }, (_, index) => {
-  const identifierOptions = [
+  const formationsNames = [
     'FORMATION_ON_PYTHON',
     'FORMATION_ON_C++',
     'FORMATION_ON_C',
@@ -54,9 +54,57 @@ export const mockThemes = Array.from({ length: 50 }, (_, index) => {
 
   return {
     id: index + 1,
-    name: names[index % names.length],
-    identifier: identifierOptions[Math.floor(Math.random() * identifierOptions.length)],
+    name: formationsNames[Math.floor(Math.random() * formationsNames.length)],
     year: year,
     price: parseFloat(price)
+  }
+})
+
+const facilitators = [
+  'Alice Johnson',
+  'Bob Smith',
+  'Charlie Brown',
+  'Diana Prince',
+  'Ethan Hunt'
+]
+const trainers = [
+  'Frank Castle',
+  'Grace Hopper',
+  'Hank Pym',
+  'Ivy League',
+  'Jack Sparrow'
+]
+const themes = [
+  'Leadership Training',
+  'Technical Skills',
+  'Soft Skills',
+  'Project Management',
+  'Time Management'
+]
+const locations = [
+  'Room 20',
+  'Room 15',
+  'Room 11',
+  'Room 10',
+  'Room 7'
+]
+
+export const mockGroups = Array.from({ length: 50 }, (_, index) => {
+  const year = 2020 + Math.floor(index / 12)
+  const month = (index % 12) + 1
+  const day = (index % 28) + 1
+
+  const startMonth = new Date(year, month - 1, day).toLocaleString('default', { month: 'short' })
+  const endMonth = new Date(year, month, day).toLocaleString('default', { month: 'short' })
+  const startDate = `${startMonth} ${day}`
+  const endDate = `${endMonth} ${(day % 28) + 1}`
+
+  return {
+    id: index + 1,
+    facilator: facilitators[index % facilitators.length],
+    trainer: trainers[index % trainers.length],
+    theme: themes[index % themes.length],
+    location: locations[index % locations.length],
+    date: `${startDate} to ${endDate}`
   }
 })

@@ -67,6 +67,8 @@ export const getColumns = (setEditOrg: () => void): ColumnDef<Organization>[] =>
   {
     accessorKey: 'actions',
     header: 'organization.actions',
-    cell: ({ row }) => <ButtonsAction rowId={row.original.id} setEditOrg={setEditOrg} />
+    cell: ({ row }) => (
+      <ButtonsAction subscription={true} rowId={row.original.id} setEditOrg={setEditOrg} />
+    )
   }
 ]
