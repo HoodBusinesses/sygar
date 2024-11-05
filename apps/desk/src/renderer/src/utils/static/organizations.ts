@@ -1,22 +1,9 @@
-export interface Organization {
-  id: number
-  image: string
-  rs: string
-  cnss: string
-  address: string
-  email: string
-  responsibleName: string
-  trainingManagerName: string
-  date: string
-  enabled?: boolean
-}
-
 export const mockOrganizations = Array.from({ length: 50 }, (_, index) => {
   const year = 2020 + Math.floor(index / 12)
   const month = (index % 12) + 1
   const formattedMonth = month.toString().padStart(2, '0')
   return {
-    id: index + 1,
+    id: index * 10 + 1,
     image: '/api/placeholder/40/40',
     rs: `Organization ${index + 1}`,
     cnss: `CNSS-${index + 1}`,
@@ -24,9 +11,11 @@ export const mockOrganizations = Array.from({ length: 50 }, (_, index) => {
     email: `org${index + 1}@example.com`,
     responsibleName: `Manager ${index + 1}`,
     trainingManagerName: `Trainer ${index + 1}`,
-    date: `**/${formattedMonth}/${year}`
+    date: `**/${formattedMonth}/${year}`,
+    enabled: index % 2 === 0
   }
 })
+
 const names = [
   'Kadin Herwitz',
   'Courtney Henry',
@@ -68,5 +57,54 @@ export const mockThemes = Array.from({ length: 50 }, (_, index) => {
     name: formationsNames[Math.floor(Math.random() * formationsNames.length)],
     year: year,
     price: parseFloat(price)
+  }
+})
+
+const facilitators = [
+  'Alice Johnson',
+  'Bob Smith',
+  'Charlie Brown',
+  'Diana Prince',
+  'Ethan Hunt'
+]
+const trainers = [
+  'Frank Castle',
+  'Grace Hopper',
+  'Hank Pym',
+  'Ivy League',
+  'Jack Sparrow'
+]
+const themes = [
+  'Leadership Training',
+  'Technical Skills',
+  'Soft Skills',
+  'Project Management',
+  'Time Management'
+]
+const locations = [
+  'Room 20',
+  'Room 15',
+  'Room 11',
+  'Room 10',
+  'Room 7'
+]
+
+export const mockGroups = Array.from({ length: 50 }, (_, index) => {
+  const year = 2020 + Math.floor(index / 12)
+  const month = (index % 12) + 1
+  const day = (index % 28) + 1
+
+  const startMonth = new Date(year, month - 1, day).toLocaleString('default', { month: 'short' })
+  const endMonth = new Date(year, month, day).toLocaleString('default', { month: 'short' })
+  const startDate = `${startMonth} ${day}`
+  const endDate = `${endMonth} ${(day % 28) + 1}`
+
+  return {
+    id: index + 1,
+    facilator: facilitators[index % facilitators.length],
+    trainer: trainers[index % trainers.length],
+    theme: themes[index % themes.length],
+    location: locations[index % locations.length],
+    date: `${startDate} to ${endDate}`
   }
 })

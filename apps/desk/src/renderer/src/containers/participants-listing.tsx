@@ -1,10 +1,8 @@
 import React, { useMemo, useState } from 'react'
 import ParticipantsTable from '@renderer/components/ParticipantsTable'
-import Pagination from '@renderer/components/Pagination'
 import { mockParticipant } from '@renderer/utils/static/organizations'
 // import { sortConfig } from '@renderer/utils/filter/filter'
 import { useTranslate } from '@renderer/hooks/useTranslate'
-import ThemeHeader from '@renderer/components/ThemeHeader'
 import withAuth from '@renderer/hoc/with-auth'
 
 const ITEMS_PER_PAGE = 14
@@ -41,18 +39,8 @@ const ParticipantsListing: React.FC = () => {
 
   return (
     <div dir={isRtl ? 'rtl' : 'ltr'} className="h-full bg-white w-full p-6 space-y-6">
-      <ThemeHeader
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        placeholder={'participantsTable.placeholder'}
-      />
       <div className="flex flex-col">
         <ParticipantsTable data={paginatedData} />
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-        />
       </div>
     </div>
   )
