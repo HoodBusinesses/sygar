@@ -17,11 +17,11 @@ export const Layout = () => {
   useProtocol();
 
   return (
-    <div dir={isRtl ? 'rtl' : 'ltr'} className={cn( DEBUG_UI && 'debug', 'flex flex-col h-full')}>
+    <div dir={isRtl ? 'rtl' : 'ltr'} className={cn( DEBUG_UI && 'debug', 'flex flex-col h-screen')}>
       {auth.isAuth && <Navbar />}
-      <div className="flex-1 flex h-full">
+      <div className="flex-1 flex h-full overflow-hidden">
         {auth.isAuth && <Sidebar />}
-        <main className="flex-1 bg-white p-6">
+        <main className="flex-1 flex overflow-y-auto bg-white p-6">
           <Outlet />
         </main>
       </div>

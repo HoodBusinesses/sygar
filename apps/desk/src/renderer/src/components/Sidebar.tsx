@@ -6,7 +6,8 @@ import { navItems } from '@renderer/data/sidebar-items'
 // import { usePersistentStore } from '../contexts/PersistentStoreContext';
 
 export default function Sidebar() {
-  const [active, setActive] = useState('home')
+  const [active, setActive] = useState('home');
+
   const { t } = useTranslation()
 
   useEffect(() => {
@@ -14,7 +15,7 @@ export default function Sidebar() {
   }, [])
 
   return (
-    <div className="h-[100vdh] w-64 bg-gray-50 border-r border-gray-200 p-4 overflow-y-auto z-0">
+    <div className="h-[100vdh] w-64 bg-gray-50 border-r border-gray-200 p-4">
       {/* Navigation */}
       <nav className="mt-8">
         {/* Dashboard Section */}
