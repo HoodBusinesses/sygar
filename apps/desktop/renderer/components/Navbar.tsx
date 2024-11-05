@@ -7,7 +7,6 @@ import { HiOutlineChevronDown } from "react-icons/hi";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { useLanguage } from '../contexts/LanguageContext';
 import { useTranslation } from 'react-i18next';
-import { useToast } from "../contexts/toastContext";
 
 export default function Navbar() {
   const { language, changeLanguage } = useLanguage();
