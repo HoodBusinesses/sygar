@@ -23,7 +23,7 @@ const OrganizationsPage: React.FC = () => {
       ) : (
         <>
           {/* Header */}
-          <ListingHeader header={'organization.organizations'} />
+          <ListingHeader headTitle={'organization.organizations'} />
 
           {/* Organization Table Component */}
           <CustomTable columns={getColumns(setEditOrg.bind(null, true))} data={mockOrganizations} />

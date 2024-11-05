@@ -50,14 +50,14 @@ export function CustomTable<TData, TValue>({ columns, data }: DataTableProps<TDa
       {/* Search and Filters */}
       <div className="flex justify-between items-center mb-6 gap-4">
         {/* Left Section: Search Input */}
-        <div dir={isRtl ? 'rtl' : 'ltr'} className="relative ml-4">
+        <div dir={isRtl ? 'rtl' : 'ltr'} className="relative">
           <Input
             placeholder={''}
-            className="pl-10 pr-3 py-3 px-20 text-gray-600 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-400 focus:outline-none w-full"
+            className="pl-10 text-gray-600 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-400 focus:outline-none w-64"
             value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
             onChange={(event) => table.getColumn('email')?.setFilterValue(event.target.value)}
           />
-          <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+          <FiSearch className="absolute top-[0.6rem] left-2 text-gray-400 h-5 w-5" />
         </div>
 
         {/* Right Section: Buttons and Profile */}
