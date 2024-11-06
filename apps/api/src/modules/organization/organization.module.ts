@@ -2,6 +2,7 @@ import { Global, Module } from "@nestjs/common";
 import { AnimatorController, AssigningGroupController, FormatorController, GroupController, OrganizationController, ParticipantController, ThemeController } from "./organization.controler";
 import { AnimatorRepository, AssigningGroupRepository, FormatorRepository, GroupRepository, OrganizationRepository, ParticipantRepository, ThemeRepository } from "./organization.repository";
 import { AnimatorService, AssigningGroupService, FormatorService, GroupService, OrganizationService, ParticipantService, ThemeService } from "./organization.service";
+import { TaskService } from "src/global/schedule/task.service";
 
 /**
  * @module OrganizationModule
@@ -39,6 +40,7 @@ import { AnimatorService, AssigningGroupService, FormatorService, GroupService, 
 		GroupRepository,
 		AssigningGroupService,
 		AssigningGroupRepository,
+		TaskService,
 	],
 	exports: [OrganizationRepository, OrganizationService],
 })

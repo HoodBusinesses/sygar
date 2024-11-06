@@ -39,7 +39,6 @@ import { TaskService } from './global/schedule/task.service';
     }),
     // NotificationsModule,
     DbModule,
-    ScheduleModule.forRoot(), // for the cron jobs: { description of how it works: the cron jobs are registered in the service that implements the OnModuleInit interface }
   ],
   providers: [TaskService],
   controllers: [AppController],

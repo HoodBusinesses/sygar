@@ -16,8 +16,10 @@ import { UpdateParticipantDto } from "./dto/update-participant.dto";
 import { Participant } from "./model/participant.model";
 import { CreateGroupDto } from "./dto/create-group.dto";
 import { UpdateGroupDto } from "./dto/update-group.dto";
-import { EnrolledType } from "./model/group.model";
+import { EnrolledType, Group } from "./model/group.model";
 import { AssignToGroupDto } from "./dto/assign-group.dto";
+import { TaskService } from "src/global/schedule/task.service";
+import { MailService } from "src/global/mail/mail.service";
 
 /**
  * @class OrganizationService
@@ -430,6 +432,7 @@ export class AssigningGroupService {
 	 * @param animatorRepository - The repository for animator data.
 	 * @param formatorRepository - The repository for formator data.
 	 * @param participantRepository - The repository for participant data.
+	 * @param taskService - The service for scheduling tasks.
 	 */
 	constructor(
 		private readonly assigningGroupRepository: AssigningGroupRepository,
@@ -437,6 +440,8 @@ export class AssigningGroupService {
 		private readonly animatorRepository: AnimatorRepository,
 		private readonly formatorRepository: FormatorRepository,
 		private readonly participantRepository: ParticipantRepository,
+		private readonly taskService: TaskService,
+		private readonly mailService: MailService,
 	) {}
 
 	/**
@@ -473,6 +478,7 @@ export class AssigningGroupService {
 	 * @returns The created assigning group.
 	 */
 	async createAssigningGroup(assignToGroupDto: AssignToGroupDto) {
+		let resiver: Animator | Formator | Participant;
 		// check if the enrolled exists
 		switch (assignToGroupDto.enrolledType) {
 			case EnrolledType.Animator:
@@ -480,22 +486,25 @@ export class AssigningGroupService {
 				if (!animator) {
 					throw new Error('animatorDoesntExists');
 				}
+				resiver = animator;
 				break;
 			case EnrolledType.Formator:
 				const formator = await this.formatorRepository.getByUid(assignToGroupDto.enrolledUid);
 				if (!formator) {
 					throw new Error('formatorDoesntExists');
 				}
+				resiver = formator;
 				break;
 			case EnrolledType.Participant:
 				const participant = await this.participantRepository.getByUid(assignToGroupDto.enrolledUid);
 				if (!participant) {
 					throw new Error('participantDoesntExists');
 				}
+				resiver = participant;
 				break;
 		}
 		// check if the group exists
-		const group = await this.groupRepository.getByUid(assignToGroupDto.groupUid);
+		const group: Group | null = await this.groupRepository.getByUid(assignToGroupDto.groupUid);
 		if (!group) {
 			throw new Error('groupDoesntExists');
 		}
@@ -507,7 +516,14 @@ export class AssigningGroupService {
 			throw new Error('overlappingDates');
 		}
 
-		return await this.assigningGroupRepository.createAssigningGroup(assignToGroupDto);
+
+		const assigningGroup =	 await this.assigningGroupRepository.createAssigningGroup(assignToGroupDto);
+
+		
+		await this.taskService.scheduleFormationReminder(assignToGroupDto.enrolledType, group, resiver);
+		
+
+		return assigningGroup;
 	}
 
 	/**
