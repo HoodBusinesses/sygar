@@ -25,7 +25,7 @@ export const groupColumn = (setParticipants: () => void): ColumnDef<Group>[] => 
 
         {table.getIsSomeRowsSelected() && (
           <DeleteModal
-            ConfirmDeleteAll={table.getFilteredSelectedRowModel().rows.length}
+            DeleteNumber={table.getFilteredSelectedRowModel().rows.length}
             onDelete={() => {}}
           />
         )}
@@ -67,9 +67,9 @@ export const groupColumn = (setParticipants: () => void): ColumnDef<Group>[] => 
     accessorKey: 'participant',
     header: 'Participant',
     cell: () => (
-        <button onClick={setParticipants} className="hover:underline text-blue-500">
-          Participents
-        </button>
+      <button onClick={setParticipants} className="hover:underline text-blue-500">
+        Participents
+      </button>
     )
   },
   {

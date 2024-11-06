@@ -25,7 +25,7 @@ export const participantColumns = (): ColumnDef<Participant>[] => [
 
         {table.getIsSomeRowsSelected() && (
           <DeleteModal
-            ConfirmDeleteAll={table.getFilteredSelectedRowModel().rows.length}
+            DeleteNumber={table.getFilteredSelectedRowModel().rows.length}
             onDelete={() => {}}
           />
         )}

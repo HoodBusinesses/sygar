@@ -11,10 +11,7 @@ export interface Theme {
   price: number
 }
 
-export const themeColumns = (
-  setEditTheme: () => void,
-  setGroupThemes: () => void
-): ColumnDef<Theme>[] => [
+export const themeColumns = (setEditTheme: () => void, setGroupThemes: () => void): ColumnDef<Theme>[] => [
   {
     accessorKey: 'id',
     header: ({ table }) => (
@@ -27,7 +24,7 @@ export const themeColumns = (
 
         {table.getIsSomeRowsSelected() && (
           <DeleteModal
-            ConfirmDeleteAll={table.getFilteredSelectedRowModel().rows.length}
+            DeleteNumber={table.getFilteredSelectedRowModel().rows.length}
             onDelete={() => {}}
           />
         )}
