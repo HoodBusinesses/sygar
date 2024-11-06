@@ -20,6 +20,7 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
+import { usePermissions } from "../contexts/PermissionsContext";
 
 interface MembersTableProps {
   members: MemberFormData[];
@@ -33,6 +34,7 @@ export const MembersTable = ({
   onDelete,
 }: MembersTableProps) => {
   const { t } = useTranslation();
+  const permissions = usePermissions();
 
   const {
     register,
@@ -70,7 +72,7 @@ export const MembersTable = ({
                 </span>
               </TableCell>
               <TableCell className="text-gray-950">
-                <Select
+                {permissions?.registration?.canModify ? <Select
                   onValueChange={(value) =>
                     register("actionType").onChange({ target: { value } })
                   }
@@ -88,8 +90,9 @@ export const MembersTable = ({
                     <SelectItem value="edit">{t("membersTable.editingDocuments")}</SelectItem>
                     <SelectItem value="view">{t("membersTable.viewingOnly")}</SelectItem>
                   </SelectContent>
-                </Select>
+                </Select> : <TableCell className="bg-blue-100 text-blue-800 rounded-md w-auto" >{member.actionType === "edit" ? t("membersTable.editingDocuments") : t("membersTable.viewingOnly")}</TableCell>}
               </TableCell>
+              {permissions?.registration?.canModify && 
               <TableCell>
                 <Button
                   variant="ghost"
@@ -107,7 +110,7 @@ export const MembersTable = ({
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
-              </TableCell>
+              </TableCell>}
             </TableRow>
           ))}
         </TableBody>

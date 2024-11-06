@@ -8,7 +8,6 @@ import { v4 as uuid } from "uuid";
 import { MailService } from "../mail/mail.service";
 import { UserRoles } from "src/modules/user/model/user.model";
 import { ActivateAccountDto, ValidateTokenDto } from "./dto/activate-account.dto";
-import { error } from "console";
 
 @Injectable()
 export class AuthService {
@@ -153,7 +152,7 @@ export class AuthService {
 		await this.userService.setResetPasswordToken(user.uid, token, expiresAt);
 
 		// Generate the reset link
-		const resetLink = `${this.configService.getOrThrow('APP_URL')}/activate-account?token=${token}`;
+		const resetLink = `${this.configService.getOrThrow('APP_URL')}/activateAccount?token=${token}`;
 
 
 		// send the reset password email
@@ -207,7 +206,7 @@ export class AuthService {
 		await this.userService.setResetPasswordToken(user.uid, token, expiresAt);
 
 		// Generate the reset link
-		const resetLink = `${this.configService.getOrThrow('APP_URL')}/reset-password?token=${token}`;
+		const resetLink = `${this.configService.getOrThrow('APP_URL')}/resetPassword?token=${token}`;
 
 		// send the reset password email
 		const mailOptions = {
