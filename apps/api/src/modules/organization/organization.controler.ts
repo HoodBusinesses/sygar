@@ -667,7 +667,7 @@ export class GroupController {
 	async deleteGroup(@Query('uid') uid: string, @Req() req: Request) {
 		const header: Record<string, any> = req.headers;
 		const lang = header['accept-language'] ?? 'en';
-
+		console.log(uid);
 		try {
 			return {
 				...await this.groupService.deleteGroup(uid),

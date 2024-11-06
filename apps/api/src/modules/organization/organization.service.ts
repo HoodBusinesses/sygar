@@ -20,6 +20,7 @@ import { EnrolledType, Group } from "./model/group.model";
 import { AssignToGroupDto } from "./dto/assign-group.dto";
 import { TaskService } from "src/global/schedule/task.service";
 import { MailService } from "src/global/mail/mail.service";
+import { AssigningGroup } from "./model/assigning-group.model";
 
 /**
  * @class OrganizationService
@@ -236,6 +237,11 @@ export class GroupService {
 	constructor(
 		private readonly groupRepository: GroupRepository,
 		private readonly themeRepository: ThemeRepository,
+		private readonly taskService: TaskService,
+		private readonly assigningGroupRepository: AssigningGroupRepository,
+		private readonly animatorRepository: AnimatorRepository,
+		private readonly formatorRepository: FormatorRepository,
+		private readonly participantRepository: ParticipantRepository,
 	) {}
 
 	/**
@@ -296,7 +302,30 @@ export class GroupService {
 			throw new Error('groupDoesntExists');
 		}
 
-		return await this.groupRepository.updateGroup(uid, updateGroupDto);
+		const updatedGroup =  await this.groupRepository.updateGroup(uid, updateGroupDto);
+
+		if (group.startDate !== updatedGroup.startDate) {
+			// reschedule the formation reminders
+			const assignings: AssigningGroup[] = await this.assigningGroupRepository.getByGroupUid(uid);
+			for (const assigning of assignings) {
+				const resiver = await this.getResiver(assigning.enrolledType, assigning.enrolledUid);
+				if (resiver) {
+					await this.taskService.rescheduleFormationReminder(assigning.enrolledType, updatedGroup, resiver);
+				}
+			}
+		}
+		return updatedGroup;
+	}
+
+	async getResiver(enrolledType: EnrolledType, enrolledUid: string) {
+		switch (enrolledType) {
+			case EnrolledType.Animator:
+				return await this.animatorRepository.getByUid(enrolledUid);
+			case EnrolledType.Formator:
+				return await this.formatorRepository.getByUid(enrolledUid);
+			case EnrolledType.Participant:
+				return await this.participantRepository.getByUid(enrolledUid);
+		}
 	}
 
 	/**
@@ -306,13 +335,24 @@ export class GroupService {
 	 * @returns The deleted group.
 	 */
 	async deleteGroup(uid: string) {
-		const group = await this.groupRepository.getByUid(uid);
+		const group: Group | null = await this.groupRepository.getByUid(uid);
 
 		if (!group) {
 			throw new Error('groupDoesntExists');
 		}
 
-		return await this.groupRepository.deleteGroup(uid);
+		const deletedGroup = await this.groupRepository.deleteGroup(uid);
+
+		// get all assigning groups of the group to cancel the formation reminders
+		const assigningGroups = await this.assigningGroupRepository.getByGroupUid(uid);
+		for (const assigningGroup of assigningGroups) {
+			// cancel the formation reminder
+			this.taskService.cancelFormationReminder(assigningGroup.enrolledType, assigningGroup.enrolledUid, assigningGroup.groupUid);
+			// delete the assigning group
+			await this.assigningGroupRepository.deleteAssigningGroup(assigningGroup.uid);
+		}
+
+		return deletedGroup;
 	}
 }
 
@@ -592,7 +632,7 @@ export class AssigningGroupService {
 			throw new Error('groupDoesntExists');
 		}
 
-		return await this.assigningGroupRepository.getByGroupUid(groupUid, enrolledType);
+		return await this.assigningGroupRepository.getByGroupUidAndEnrolledType(groupUid, enrolledType);
 	}
 
 	/**

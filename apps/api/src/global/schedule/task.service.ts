@@ -45,8 +45,6 @@ export class TaskService {
         const oneDayBefore = new Date(Number(group.startDate) - 24 * 60 * 60 * 1000);
         
         // Schedule one week reminder if it's still in the future
-        console.log("oneWeekBefore", Number(oneWeekBefore), Date.now());
-        console.log("oneWeekBefore > Date.now()", Number(oneWeekBefore) > Date.now());
         if (Number(oneWeekBefore) > Date.now()) {
             const template = {
                 subject: 'Reminder: Formation Reminder',
@@ -58,7 +56,7 @@ export class TaskService {
             template.html = template.html.replace('{{formationStartDate}}', new Date(Number(group.startDate)).toISOString());
 
             await this.scheduleRemainderEmail(
-                `${enrolledType}-${resiver.email}-one-week`, 
+                `${enrolledType}-${resiver.uid}-${group.uid}-one-week`, 
                 oneWeekBefore, 
                 resiver.email, 
                 template
@@ -76,7 +74,7 @@ export class TaskService {
             template.html = template.html.replace('{{formationStartDate}}', new Date(Number(group.startDate)).toISOString());
 
             await this.scheduleRemainderEmail(
-                `${enrolledType}-${resiver.email}-one-day`, 
+                `${enrolledType}-${resiver.uid}-${group.uid}-one-day`, 
                 oneDayBefore, 
                 resiver.email, 
                 template
@@ -95,7 +93,7 @@ export class TaskService {
             const startDate = new Date();
             startDate.setMilliseconds(startDate.getMilliseconds() + 50000);
             await this.scheduleRemainderEmail(
-                `${enrolledType}-${resiver.email}-started`, 
+                `${enrolledType}-${resiver.uid}-${group.uid}-started`, 
                 startDate, 
                 resiver.email, 
                 template
@@ -104,5 +102,17 @@ export class TaskService {
     } catch (error) {
         console.error('Error scheduling formation reminders:', error);
     }
+  }
+
+  cancelFormationReminder(enrolledType: EnrolledType, resiverUid: string, groupUid: string) {
+    this.cancelScheduledEmail(`${enrolledType}-${resiverUid}-${groupUid}-one-week`);
+    this.cancelScheduledEmail(`${enrolledType}-${resiverUid}-${groupUid}-one-day`);
+    this.cancelScheduledEmail(`${enrolledType}-${resiverUid}-${groupUid}-started`);
+    console.log(`Formation reminder cancelled for ${enrolledType}-${resiverUid}-${groupUid}`);
+  }
+
+  async rescheduleFormationReminder(enrolledType: EnrolledType, group: Group, resiver: Animator | Formator | Participant) {
+    this.cancelFormationReminder(enrolledType, resiver.uid, group.uid);
+    this.scheduleFormationReminder(enrolledType, group, resiver);
   }
 }

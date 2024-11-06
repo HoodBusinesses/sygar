@@ -23,6 +23,7 @@ import { CreateGroupDto } from "./dto/create-group.dto";
 import { UpdateGroupDto } from "./dto/update-group.dto";
 import { AssigningGroup } from "./model/assigning-group.model";
 import { AssignToGroupDto } from "./dto/assign-group.dto";
+import { TaskService } from "src/global/schedule/task.service";
 
 /**
  * @module OrganizationRepository
@@ -46,7 +47,7 @@ export class OrganizationRepository {
 		private readonly dbConstants: DbConstants,
 	) {
 		const table = 'Organizations';
-		this.tableName = dbConstants.getTable(table);
+		this.tableName = this.dbConstants.getTable(table);
 		this.primaryKey = this.dbConstants.getPrimaryKey(table);
 	}
 
@@ -1090,6 +1091,7 @@ export class AssigningGroupRepository {
 		private readonly dbConstants: DbConstants,
 		private readonly dbService: DbService,
 		private readonly groupRepository: GroupRepository,
+		private readonly taskService: TaskService,
 	) {
 		this.assigningGroupTableName = this.dbConstants.getTable('AssigningGroups');
 		this.assigningGroupPrimaryKey = this.dbConstants.getPrimaryKey('AssigningGroups');
@@ -1186,6 +1188,21 @@ export class AssigningGroupRepository {
 		}
 	}
 
+	// get all items by groupUid
+	async getByGroupUid(groupUid: string): Promise<AssigningGroup[]> {
+		const params: ScanCommandInput = {
+			TableName: this.assigningGroupTableName,
+			FilterExpression: 'groupUid = :groupUid',
+			ExpressionAttributeValues: {
+				':groupUid': { S: groupUid },
+			}
+		};
+
+		const Items = await this.dbService.scanItems(params);
+		console.log("Items:", Items);
+		return Items.map((item: Record<string, any>) => this.dbService.mapDynamoDBItemToObject(item));
+	}
+
 	/**
 	 * Get an assigning group by group UID and enrolled type.
 	 * 
@@ -1193,7 +1210,7 @@ export class AssigningGroupRepository {
 	 * @param enrolledType - The type of the enrolled.
 	 * @returns The assigning group found or null if not found.
 	 */
-	async getByGroupUid(groupUid: string, enrolledType: EnrolledType): Promise<AssigningGroup[]> {
+	async getByGroupUidAndEnrolledType(groupUid: string, enrolledType: EnrolledType): Promise<AssigningGroup[]> {
 		const params: QueryCommandInput = {
 			TableName: this.assigningGroupTableName,
 			KeyConditionExpression: 'groupUid = :groupUid AND enrolledType = :enrolledType',
@@ -1232,6 +1249,14 @@ export class AssigningGroupRepository {
 		};
 
 		await this.dbService.deleteItem(params);
+
+		const assignings = await this.getByGroupUid(assigningGroup.groupUid);
+
+		// cancelFormationReminder
+		assignings.forEach((assigning: AssigningGroup) => {
+			console.log(assigning);
+			this.taskService.cancelFormationReminder(assigning.enrolledType, assigning.enrolledUid, assigning.groupUid);
+		});
 
 		return { message: 'Assigning group deleted successfully' };
 	}
