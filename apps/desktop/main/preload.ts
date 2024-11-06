@@ -9,6 +9,16 @@ contextBridge.exposeInMainWorld('electron', {
 });
 
 
+// Listen for the token sent from the main process
+ipcRenderer.on('token', (event, data) => {
+  const { eventName, eventData } = data;
+  if (eventName === 'token') {
+
+    // Save the token in localStorage
+    localStorage.setItem('token', eventData);
+  }
+});
+
 const handler = {
   send(channel: string, value: unknown) {
     ipcRenderer.send(channel, value)
@@ -29,10 +39,16 @@ contextBridge.exposeInMainWorld('electron', {
     send: (channel, data) => {
       ipcRenderer.send(channel, data);
     }
-  }
+  },
+  sendNotification: (title, body) => ipcRenderer.send('show-notification', { title, body }),
+  saveFile: (content: string) => ipcRenderer.invoke('save-file', content),
 });
 
 
-contextBridge.exposeInMainWorld('ipc', handler)
+contextBridge.exposeInMainWorld('ipc', handler);
+
+// contextBridge.exposeInMainWorld('electron', {
+//   saveFile: (content) => ipcRenderer.invoke('save-file', content),
+// });
 
 export type IpcHandler = typeof handler

@@ -10,6 +10,7 @@ import { UserRoles } from "src/modules/user/model/user.model";
 import { ActivateAccountDto, ValidateTokenDto } from "./dto/activate-account.dto";
 import { OrganizationService } from "src/modules/organization/organization.service";
 
+
 @Injectable()
 export class AuthService {
 
@@ -154,7 +155,7 @@ export class AuthService {
 		await this.userService.setResetPasswordToken(user.uid, token, expiresAt.getTime());
 
 		// Generate the reset link
-		const resetLink = `${this.configService.getOrThrow('APP_URL')}/activate-account?token=${token}`;
+		const resetLink = `${this.configService.getOrThrow('APP_URL')}/activateAccount?token=${token}`;
 
 		// Load the activation account template
 		const activationAccountTemplate = await this.mailService.getTemplate('activationAccount');
@@ -209,7 +210,7 @@ export class AuthService {
 		await this.userService.setResetPasswordToken(user.uid, token, expiresAt.getTime());
 
 		// Generate the reset link
-		const resetLink = `${this.configService.getOrThrow('APP_URL')}/reset-password?token=${token}`;
+		const resetLink = `${this.configService.getOrThrow('APP_URL')}/resetPassword?token=${token}`;
 
 		// Load the reset password template
 		const resetPasswordTemplate = await this.mailService.getTemplate('resetPassword');
