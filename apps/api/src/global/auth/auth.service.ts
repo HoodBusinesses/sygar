@@ -54,7 +54,7 @@ export class AuthService {
 		}
 
 		// Verify the provided password against the stored hash
-		const isValid = await this.cryptService.compare(user.password, password);
+		const isValid = user.password ? await this.cryptService.compare(user.password, password) : false;
 
 		// If password is incoreect, throw unauthorized exception
 		if (!isValid) {
@@ -147,11 +147,11 @@ export class AuthService {
 		// Generate a token
 		const token = uuid();
 
-		// Set the token expiration time to 30 minutes from now
-		const expiresAt = new Date(Date.now() + 1800000);
+		// Set the token expiration time 7 days from now
+		const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7);
 
 		// Set the reset password token for the user
-		await this.userService.setResetPasswordToken(user.uid, token, expiresAt);
+		await this.userService.setResetPasswordToken(user.uid, token, expiresAt.getTime());
 
 		// Generate the reset link
 		const resetLink = `${this.configService.getOrThrow('APP_URL')}/activate-account?token=${token}`;
@@ -203,10 +203,10 @@ export class AuthService {
 
 		// Generate a token
 		const token = uuid();
-		const expiresAt = new Date(Date.now() + 1800000); // expires after 30 minutes from now
+		const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7); // expires after 7 days from now
 
 		// Set the reset password token for the user
-		await this.userService.setResetPasswordToken(user.uid, token, expiresAt);
+		await this.userService.setResetPasswordToken(user.uid, token, expiresAt.getTime());
 
 		// Generate the reset link
 		const resetLink = `${this.configService.getOrThrow('APP_URL')}/reset-password?token=${token}`;
@@ -252,12 +252,12 @@ export class AuthService {
 
 		// If the user is not found, throw an unauthorized exception
 		if (!user) {
-			throw new UnauthorizedException('Invalid token');
+			throw new UnauthorizedException('invalidToken');
 		}
 
 		// If the token is expired, throw an unauthorized exception
 		if (user.resetPasswordTokenExpiresAt && new Date(user.resetPasswordTokenExpiresAt) < new Date()) {
-			throw new UnauthorizedException('Token expired');
+			throw new UnauthorizedException('tokenExpired');
 		}
 
 		// Hash the new password

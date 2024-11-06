@@ -10,7 +10,6 @@ import { AbilityModule } from './modules/ability/ability.module';
 import { RbacModule } from './global/rbac/roles.module';
 import { LanguageModule } from './global/language/language.module';
 import { NotificationsModule } from './global/notifactions/notifications.module';
-import { ScheduleModule } from '@nestjs/schedule';
 import { TaskService } from './global/schedule/task.service';
 
 /**

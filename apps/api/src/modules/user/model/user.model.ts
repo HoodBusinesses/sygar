@@ -26,7 +26,7 @@ export interface User {
 	firstName: string;
 	lastName: string;
 	email: string;
-	password: string;
+	password: string | null;
 	role: UserRoles;
 	organizationId: string;
 	isActive: boolean;
