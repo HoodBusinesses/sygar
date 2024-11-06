@@ -11,7 +11,10 @@ export interface Theme {
   price: number
 }
 
-export const themeColumns = (setEditTheme: () => void, setGroupThemes: () => void): ColumnDef<Theme>[] => [
+export const themeColumns = (
+  setEditTheme: () => void,
+  setGroupThemes: () => void
+): ColumnDef<Theme>[] => [
   {
     accessorKey: 'id',
     header: ({ table }) => (
