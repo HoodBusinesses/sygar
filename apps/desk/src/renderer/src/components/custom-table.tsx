@@ -17,6 +17,7 @@ import Pagination from './Pagination'
 import SortByPopover from './SortBy'
 import { Input } from './ui/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
+import { cn } from './ui/lib/utils'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -99,7 +100,7 @@ export function CustomTable<TData, TValue>({ columns, data }: DataTableProps<TDa
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow
-                className="hover:bg-gray-50"
+                className={cn(row.getIsSelected() && 'bg-gray-100',"hover:bg-gray-50")}
                 key={row.id}
                 data-state={row.getIsSelected() && 'selected'}
               >
