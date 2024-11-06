@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../components/ui/button";
@@ -20,6 +20,13 @@ import {
 import { useToast } from "../components/ui/use-toast";
 import { useLanguage } from '../contexts/LanguageContext';
 import { useTranslation } from "react-i18next";
+import { usePermissions } from "../contexts/PermissionsContext";
+import { Notification } from "electron";
+import { errorToast, infoToast, putNotification } from "../notifications/Notification";
+
+import { toast } from "react-toastify";
+import { useRouter } from "next/router";
+import withAuth from "../hoc/with-auth";
 
 const staticMembers: MemberFormData[] = [
   {
@@ -37,16 +44,19 @@ const staticMembers: MemberFormData[] = [
 ];
 
 const RegistrationPage = () => {
+
+  // putNotification('Registration', 'Page rendered successfully');
+
   const { t } = useTranslation();
-  const { language } = useLanguage();
-  console.log(language);
-  
+  const permissions = usePermissions();
   const [members, setMembers] = useState<MemberFormData[]>(staticMembers);
   const [editingMember, setEditingMember] = useState<{
     index: number;
     data: MemberFormData;
   } | null>(null);
   const { addToast } = useToast();
+  const router = useRouter();
+  const [organization, setOrganization] = useState(null);
 
   const methods = useForm<OrganizationFormData>({
     resolver: zodResolver(organizationSchema),
@@ -61,7 +71,16 @@ const RegistrationPage = () => {
       addToast("Error", "Failed to save organization information");
     }
   };
+  useEffect(() => {
+    if (router.query.organization) {
+      if (typeof router.query.organization === 'string') {
+        setOrganization(JSON.parse(router.query.organization));
+      }
+      console.log("aaaaa : ", organization);
 
+      // infoToast('Organization data loaded successfully');
+    }
+  }, [router.query.organization]);
   const handleAddMember = (data: MemberFormData) => {
     if (editingMember !== null) {
       setMembers(
@@ -80,22 +99,35 @@ const RegistrationPage = () => {
   const handleDeleteMember = (index: number) => {
     setMembers(members.filter((_, i) => i !== index));
   };
+  // console.log(organization);
 
+
+  if (!permissions.registration?.canModify && !permissions.registration.canView) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <p className="text-gray-950">
+          {t('noPermission')}
+        </p>
+      </div>
+    );
+  }
   return (
     <div className=" space-y-6 w-full h-full min-h-screen mx-auto">
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)}>
-          <OrganizationBasicInfo />
+          {permissions?.registration?.canModify &&
+            <OrganizationBasicInfo organization={organization} />}
 
           <Card className="p-6 mb-6">
             <CardContent>
               <div className="flex justify-between items-center mb-6">
                 <p className="text-lg text-gray-950 font-bold  mb-6">
-                {t('organization.title')}
+                  {t('registration.title')}
                 </p>
-                <Button className="btn-blue" type="submit">
-                  {t('organization.buttons.import')}
-                </Button>
+                {permissions?.registration?.canModify &&
+                  <Button className="btn-blue" type="submit">
+                    {t('registration.buttons.import')}
+                  </Button>}
               </div>
               <MembersTable
                 members={members}
@@ -104,19 +136,23 @@ const RegistrationPage = () => {
               />
 
               <div className="mt-6">
-                <AddMemberForm
-                  onSubmit={handleAddMember}
-                  initialData={editingMember?.data}
-                />
+                {permissions?.registration?.canModify &&
+                  <AddMemberForm
+                    onSubmit={handleAddMember}
+                    initialData={editingMember?.data}
+                  />}
               </div>
             </CardContent>
           </Card>
 
-          <Button className="btn-blue" type="submit">{t('organization.buttons.save')}</Button>
+          {permissions?.registration?.canModify && <Button
+            className="btn-blue"
+            type="submit">{t('registration.buttons.save')}
+          </Button>}
         </form>
       </FormProvider>
     </div>
   );
 };
 
-export default RegistrationPage;
+export default withAuth(RegistrationPage);
