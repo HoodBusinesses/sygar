@@ -4,7 +4,6 @@ import Image from "next/image";
 import { GrLanguage } from "react-icons/gr";
 import { useTranslation } from "react-i18next";
 import i18n from "../public/localization/i18n";
-import OrganizationForm from "../components/OrganizationForm";
 import { Button } from "../components/ui/button";
 import { useRouter } from "next/router";
 
@@ -37,22 +36,24 @@ export default function Signin() {
     // Use the exposed electronAPI to open the URL in the browser
     if (window.electronAPI && window.electronAPI.openExternal) {
       window.electronAPI.openExternal(authUrl);
+      console.log("OPEN EXTERNAL");
+
     } else {
       console.error("Electron API is not available");
     }
-    router.push("/home")
+    router.push("/")
   };
 
   return (
     <div
       className="flex bg-white bg-gradient-to-blue min-h-screen p-6 "
-      // style={{ backgroundImage: 'url("/images/background.png") , linear-gradient(269.56deg, #2563EB -3.3%, #FFFFFF 101.39%)' }}
+    // style={{ backgroundImage: 'url("/images/background.png") , linear-gradient(269.56deg, #2563EB -3.3%, #FFFFFF 101.39%)' }}
     >
       <div className="self-start mb-4 ">
         <div className="flex items-center font-poppins space-x-1 text-gray-500 hover:text-gray-700">
           <GrLanguage className="text-gray-500" />
           <select
-            className="border p-1 rounded borde"
+            className="border p-1 rounded"
             value={language} // Bind select to the current language state
             onChange={(e) => changeLanguage(e.target.value)} // Directly update the language based on the selected option
           >

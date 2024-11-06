@@ -1,5 +1,5 @@
 {
-  "name": "charging-app",
+  "name": "Sygar",
   "private": true,
   "scripts": {
     "build": "turbo build",
@@ -17,7 +17,6 @@
     "node": ">=18"
   },
   "dependencies": {
-    "pnpm": "^9.12.2",
     "react-hook-form": "^7.53.0"
   }
 }
