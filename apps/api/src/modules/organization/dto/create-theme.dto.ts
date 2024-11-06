@@ -1,37 +1,38 @@
-import { IsArray, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
+import { IsArray, IsNotEmpty, IsNumber, IsOptional, IsString, Min } from "class-validator";
 
-// Dto for creating a theme
+/**
+ * DTO for creating a new theme
+ */
 export class CreateThemeDto {
 	@IsNotEmpty()
 	@IsString()
-	name!: string;
+	@ApiProperty({ example: "C++ Advanced", description: "Name of the theme" })
+	name!: string; // Name of the theme
 
 	@IsNotEmpty()
 	@IsNumber()
-	cost!: number;
-
-	@IsOptional()
-	@IsArray({ each: true })
-	groups!: ThemeGroup[];
+	@Min(0)
+	@ApiProperty({ example: 100, description: "Cost of the theme" })
+	cost!: number; // Cost of the theme
 
 	@IsOptional()
 	@IsString()
+	@ApiProperty({ example: "My theme description", description: "Optional description for the group" })
 	description?: string; // Optional description for the group
 
 	@IsNotEmpty()
 	@IsString()
-	organizationId!: string;
+	@ApiProperty({ example: "123456789", description: "Organization ID of the organization creating the theme" })
+	organizationId!: string; // Organization ID of the organization creating the theme the theme belongs to
 
 	@IsNotEmpty()
 	@IsNumber()
-	startDate!: number;
+	@ApiProperty({ example: 1633392000000, description: "Start date for the theme" })
+	startDate!: number; // Start date for the theme
 
 	@IsNotEmpty()
 	@IsNumber()
-	endDate!: number;
-}
-
-export interface ThemeGroup {
-	name: string; // Name of the group
-	validated?: boolean; // Whether the participant list has been validated
+	@ApiProperty({ example: 1633392000000, description: "End date for the theme" })
+	endDate!: number; // End date for the theme
 }

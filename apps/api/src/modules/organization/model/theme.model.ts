@@ -1,6 +1,5 @@
 import { LocalTableInput } from "src/shared/types/db";
-import { ThemeGroup } from "../dto/create-theme.dto";
-
+	
 // Define the Theme interface
 export interface Theme {
 	PK: string; // Primary Key
@@ -8,7 +7,6 @@ export interface Theme {
 	uid: string; // Unique identifier for the theme
 	name: string; // Name of the theme (e.g., "Advanced Leadership Training")
 	cost: number; // Cost of the theme
-	groups?: ThemeGroup[]; // Optional array of groups associated with the theme
 	description?: string; // Optional description for the group
 	organizationId: string; // ID of the organization creating the theme
 	startDate: number; // Start date for the theme (timestamp)

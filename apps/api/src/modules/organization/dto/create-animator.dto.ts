@@ -1,52 +1,27 @@
-import { IsArray, IsEmail, IsNotEmpty, IsOptional, IsString, ValidateNested } from "class-validator";
-import { Type } from "class-transformer";
-import { CreateWorkingTimeDto } from "../model/group.model";
+import { ApiProperty } from "@nestjs/swagger";
+import { IsEmail, IsNotEmpty, IsString } from "class-validator";
 
+/**
+ * DTO for creating a new animator
+ */
 export class CreateAnimatorDto {
 	@IsNotEmpty()
 	@IsString()
-	name!: string;
+	@ApiProperty({ example: 'John', description: 'First name of the animator' })
+	firstName!: string; // the first name of the animator
+
+	@IsNotEmpty()
+	@IsString()
+	@ApiProperty({ example: 'Doe', description: 'Last name of the animator' })
+	lastName!: string; // the last name of the animator
 
 	@IsNotEmpty()
 	@IsEmail()
-	email!: string;
-
-	@IsArray()
-	@ValidateNested({ each: true })
-	@Type(() => CreateWorkingTimeDto)
-	workingHours!: CreateWorkingTimeDto[];
+	@ApiProperty({ example: 'john.doe@example.com', description: 'Email of the animator' })
+	email!: string; // the email of the animator
 
 	@IsNotEmpty()
 	@IsString()
-	organizationId!: string;
-}
-
-export class CreateAnimatorItemDto {
-	@IsNotEmpty()
-	@IsString()
-	name!: string;
-
-	@IsNotEmpty()
-	@IsEmail()
-	email!: string;
-
-	@IsNotEmpty()
-	@IsString()
-	organizationId!: string;
-}
-
-export class UpdateAnimatorDto {
-	@IsOptional()
-	@IsString()
-	name?: string;
-
-	@IsOptional()
-	@IsEmail()
-	email?: string;
-
-	@IsOptional()
-	@IsArray()
-	@ValidateNested({ each: true })
-	@Type(() => CreateWorkingTimeDto)
-	workingHours?: CreateWorkingTimeDto[];
+	@ApiProperty({ example: '123456789', description: 'Organization ID of the animator' })
+	organizationId!: string; // the organization id of the animator the animator belongs to
 }

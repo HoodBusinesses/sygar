@@ -13,5 +13,5 @@ export class DeleteOrganizationDto {
 		description: 'The cnss of the organization to be deleted',
 		example: '123456789',
 	})
-	cnss!: string;
+	cnss!: string; // The cnss of the organization to be deleted
 }

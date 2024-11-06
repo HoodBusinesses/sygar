@@ -49,11 +49,10 @@ export class UserRepository {
 
 		// Create the user
 		const uid = uuid();
-		const hashedPassword = await this.cryptService.hash(user.password);
 		let newUser: User = {
 			...user,
-			password: hashedPassword,
 			uid,
+			password: null,
 			PK: this.dbConstants.getPrimaryKey('Users'),
 			SK: this.dbConstants.getSortKey(uid),
 			createdAt: Date.now(),
