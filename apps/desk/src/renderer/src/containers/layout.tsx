@@ -21,7 +21,7 @@ export const Layout = () => {
       {auth.isAuth && <Navbar />}
       <div className="flex-1 flex h-full overflow-hidden">
         {auth.isAuth && <Sidebar />}
-        <main className="flex-1 flex overflow-y-auto bg-white p-6">
+        <main className="flex-1 flex overflow-y-auto bg-white">
           <Outlet />
         </main>
       </div>

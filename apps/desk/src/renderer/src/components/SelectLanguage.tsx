@@ -3,6 +3,7 @@ import { useAppDispatch } from '@renderer/store/hooks'
 import { changeLang, LangPayloadType, langs } from '@renderer/store/slices/lang.slice'
 import { HiOutlineChevronDown } from 'react-icons/hi'
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
+import { Globe } from 'lucide-react';
 
 export default function SelectLanguage(): JSX.Element {
   const { lng } = useTranslate()
@@ -14,7 +15,10 @@ export default function SelectLanguage(): JSX.Element {
   }
   return (
     <Popover>
-      <PopoverTrigger className="flex items-center cursor-pointer space-x-2 border rounded-md py-2 px-3">
+      <PopoverTrigger className="flex items-center cursor-pointer space-x-2 border border-gray-500 rounded-md py-2 px-3">
+        <span>
+          <Globe size={20} color='gray' />
+        </span>
         <span className="text-sm text-gray-500">{lng.name}</span>
         <HiOutlineChevronDown className="text-gray-500" />
       </PopoverTrigger>
