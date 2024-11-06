@@ -1,4 +1,5 @@
-import { Global, Module } from "@nestjs/common";
+import { forwardRef, Global, Module } from "@nestjs/common";
+import { UserModule } from "../user/user.module";
 import { AnimatorController, AssigningGroupController, FormatorController, GroupController, OrganizationController, ParticipantController, ThemeController } from "./organization.controler";
 import { AnimatorRepository, AssigningGroupRepository, FormatorRepository, GroupRepository, OrganizationRepository, ParticipantRepository, ThemeRepository } from "./organization.repository";
 import { AnimatorService, AssigningGroupService, FormatorService, GroupService, OrganizationService, ParticipantService, ThemeService } from "./organization.service";
@@ -16,6 +17,9 @@ import { TaskService } from "src/global/schedule/task.service";
  */
 @Global()
 @Module({
+	imports: [
+		forwardRef(() => UserModule),
+	],
 	controllers: [
 		OrganizationController,
 		ThemeController,

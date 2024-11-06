@@ -5,6 +5,7 @@ import { CryptService } from "src/global/auth/crypt.service";
 import { UserController } from "./user.controller";
 import { AdminsModule } from "../admins/admins,module";
 import { NotificationsModule } from "src/global/notifactions/notifications.module";
+import { OrganizationModule } from "../organization/organization.module";
 
 /**
  * @module UserModule
@@ -13,7 +14,7 @@ import { NotificationsModule } from "src/global/notifactions/notifications.modul
 */
 @Global()
 @Module({
-	imports: [AdminsModule, NotificationsModule],
+	imports: [AdminsModule, NotificationsModule, forwardRef(() => OrganizationModule)],
 	controllers: [UserController],
 	providers: [UserService, UserRepository, CryptService],
 	exports: [UserService, UserRepository],

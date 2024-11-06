@@ -25,7 +25,7 @@ export class AuthService {
 	 */
 	constructor(
 		private readonly configService: ConfigService,
-		@Inject(forwardRef(() => UserService)) private readonly userService: UserService,
+		private readonly userService: UserService,
 		private readonly cryptService: CryptService,
 		private readonly jwtService: JwtService,
 		private readonly mailService: MailService,
@@ -52,9 +52,15 @@ export class AuthService {
 		if (!user) {
 			throw new UnauthorizedException('invalidCredentials');
 		}
+		
+		// If the user is not active, send an email to the user to activate the account
+		if (!user.isActive) {
+			await this.requestActiveAccount(user.email);
+			throw new UnauthorizedException('accountNotActivated');
+		}
 
 		// Verify the provided password against the stored hash
-		const isValid = await this.cryptService.compare(user.password, password);
+		const isValid = await this.cryptService.compare(user.password ?? '', password);
 
 		// If password is incoreect, throw unauthorized exception
 		if (!isValid) {
@@ -62,11 +68,6 @@ export class AuthService {
 		}
 
 	
-		// If the user is not active, send an email to the user to activate the account
-		if (user.role !== UserRoles.SYGAR_ADMIN && !user.isActive) {
-			await this.requestActiveAccount(user.email);
-			throw new UnauthorizedException('accountNotActivated');
-		}
 
 		// Generate Jwt Token for the use
 		const token = this.jwtService.sing(

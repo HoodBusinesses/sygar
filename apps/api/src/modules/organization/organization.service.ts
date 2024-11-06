@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { forwardRef, Inject, Injectable } from "@nestjs/common";
 import { CreateOrganizationDto } from "./dto/create-organization.dto";
 import { AnimatorRepository, AssigningGroupRepository, FormatorRepository, GroupRepository, OrganizationRepository, ParticipantRepository, ThemeRepository } from "./organization.repository";
 import { UpdateOrganizationDto } from "./dto/update-organization.dto";
@@ -41,6 +41,7 @@ export class OrganizationService {
 	 */
 	constructor(
 		private readonly organizationRepository: OrganizationRepository,
+		@Inject(forwardRef(() => UserService))
 		private readonly userService: UserService,
 	) {}
 

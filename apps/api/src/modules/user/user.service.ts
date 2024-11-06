@@ -1,12 +1,16 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { BadRequestException, Inject, Injectable, UnauthorizedException } from "@nestjs/common";
 import { UserRepository } from "./user.repository";
 import { CreateUserDto } from "./dto/create-user.dto";
-import { OrganizationRepository } from "../organization/organization.repository";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { UserRoles } from "./model/user.model";
 import { AbilityService } from "../ability/abiliry.service";
 import { NotificationService } from "src/global/notifactions/notifications.service";
 import { NotificationsGateway } from "src/global/notifactions/notifications.gateway";
+import { ConfigService } from "@nestjs/config";
+import { MailService } from "src/global/mail/mail.service";
+import { OrganizationService } from "../organization/organization.service";
+import { v4 as uuid } from 'uuid';
+import { forwardRef } from '@nestjs/common';
 
 /**
  * @class UserService
@@ -22,10 +26,13 @@ export class UserService {
 	*/
 	constructor(
 		private readonly userRepository: UserRepository, // Inject the user repository for database operations
-		private readonly organizationRepository: OrganizationRepository, // Inject the organization repository for database operations
 		private readonly abilityService: AbilityService, // Inject the ability service for ability operations
 		private readonly notificationService: NotificationService,
 		private readonly notificationGetWay: NotificationsGateway,
+		private readonly configService: ConfigService,
+		private readonly mailService: MailService,
+		@Inject(forwardRef(() => OrganizationService))
+		private readonly organizationService: OrganizationService,
 	) {}
 
 	/**
@@ -50,7 +57,7 @@ export class UserService {
 
 		// check if the organization exists
 		if (user.role === UserRoles.ORG_ADMIN || user.role === UserRoles.ORG_USER) {
-			const organization = await this.organizationRepository.findByCnss(user.organizationId);
+			const organization = await this.organizationService.get(user.organizationId);
 
 			if (!organization) {
 				throw new Error('orgnNotFoundWithThisOrgId');
@@ -74,8 +81,62 @@ export class UserService {
 			message: `User ${newUser.email} has been created.`,
 		});
 
+		// Send an email to the user to activate the account
+		await this.requestActiveAccount(newUser.email);
 
 		return newUser;
+	}
+
+	async requestActiveAccount(email: string) {
+		// Get the user by the email
+		const user = await this.getByEmail(email);
+
+		// If the user is not found, throw an unauthorized exception
+		if (!user) {
+			throw new UnauthorizedException('Invalid credentials');
+		}
+		
+		// Generate a token
+		const token = uuid();
+
+		// Set the token expiration time to 30 minutes from now
+		const expiresAt = new Date(Date.now() + 1800000);
+
+		// Set the reset password token for the user
+		await this.setResetPasswordToken(user.uid, token, expiresAt);
+
+		// Generate the reset link
+		const resetLink = `${this.configService.getOrThrow('APP_URL')}/activate-account?token=${token}`;
+
+		// Load the activation account template
+		const activationAccountTemplate = await this.mailService.getTemplate('activationAccount');
+
+		// Replace the placeholders with the actual values
+		let html = activationAccountTemplate.replace('{{resetLink}}', resetLink);
+		html = html.replace('{{organizationName}}', (await this.organizationService.get(user.organizationId)).name);
+		html = html.replace('{{username}}', `${user.firstName} ${user.lastName}`);
+
+		// send the reset password email
+		const mailOptions = {
+			from: this.configService.getOrThrow('MAILER_FROM_ADDRESS'), // from address
+			to: user.email, // to address
+			subject: 'Activate your account', // subject
+			html: html
+		};
+
+		// Send the reset password email
+		try {
+			await this.mailService.sendEmail(mailOptions);
+		} catch (error: any) {
+			// Delete the reset password token
+			await this.setResetPasswordToken(user.uid, null, null);
+			return { error: error.message };
+		}
+		
+		// Return a message indicating that the activation email was sent
+		return {
+				message: "Activation email sent"
+			};
 	}
 
 	/**

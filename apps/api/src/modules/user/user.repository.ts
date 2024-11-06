@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { DbConstants } from "src/global/db/db.constants";
 import { DbService } from "src/global/db/db.service";
 import { User, UserRoles } from "./model/user.model";
@@ -10,6 +10,8 @@ import { CryptService } from "src/global/auth/crypt.service";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { AbilityService } from "../ability/abiliry.service";
 import { AdminsService } from "../admins/admins.service";
+import { AuthService } from "src/global/auth/auth.service";
+import { UserService } from "./user.service";
 
 /**
  * @class UserRepository
@@ -30,7 +32,6 @@ export class UserRepository {
 	constructor(
 		private readonly dbService: DbService,
 		private readonly dbConstants: DbConstants,
-		private readonly cryptService: CryptService,
 		private readonly abilityService: AbilityService,
 		private readonly adminsService: AdminsService,
 	) {
@@ -49,10 +50,8 @@ export class UserRepository {
 
 		// Create the user
 		const uid = uuid();
-		const hashedPassword = await this.cryptService.hash(user.password);
 		let newUser: User = {
 			...user,
-			password: hashedPassword,
 			uid,
 			PK: this.dbConstants.getPrimaryKey('Users'),
 			SK: this.dbConstants.getSortKey(uid),
@@ -96,7 +95,7 @@ export class UserRepository {
 		} as User;
 	}
 
-	
+
 	/**
 	 * @method update
 	 * @description
