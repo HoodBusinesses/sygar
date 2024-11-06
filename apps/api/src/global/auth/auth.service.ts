@@ -154,7 +154,7 @@ export class AuthService {
 		await this.userService.setResetPasswordToken(user.uid, token, expiresAt);
 
 		// Generate the reset link
-		const resetLink = `${this.configService.getOrThrow('APP_URL')}/activate-account?token=${token}`;
+		const resetLink = `${this.configService.getOrThrow('APP_URL')}/activateAccount?token=${token}`;
 
 		// Load the activation account template
 		const activationAccountTemplate = await this.mailService.getTemplate('activationAccount');
@@ -209,7 +209,7 @@ export class AuthService {
 		await this.userService.setResetPasswordToken(user.uid, token, expiresAt);
 
 		// Generate the reset link
-		const resetLink = `${this.configService.getOrThrow('APP_URL')}/reset-password?token=${token}`;
+		const resetLink = `${this.configService.getOrThrow('APP_URL')}/resetPassword?token=${token}`;
 
 		// Load the reset password template
 		const resetPasswordTemplate = await this.mailService.getTemplate('resetPassword');

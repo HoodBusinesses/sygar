@@ -32,7 +32,7 @@
   "buttons": {
     "add": "إضافة"
   },
-  "organization": {
+  "registration": {
     "title": "معلومات أعضاء المؤسسة",
     "basicInfo": {
       "title": "معلومات المؤسسة",
@@ -117,35 +117,38 @@
       }
     }
   },
-  "organizations": "المنظمات",
-  "searchPlaceholder": "ابحث عن منظمة...",
-  "dateSelect": "اختر التاريخ",
-  "image": "الصورة",
-  "ss": "المنظمة",
-  "cms": "نظام إدارة المحتوى",
-  "address": "العنوان",
-  "email": "البريد الإلكتروني",
-  "responsibleName": "اسم المسؤول",
-  "trainingManagerName": "اسم المدرب",
-  "edit": "تعديل",
-  "delete": "حذف",
-  "export": "تصدير",
-  "page": "صفحة",
-  "of": "من",
-  "previous": "السابق",
-  "next": "التالي",
+  "noPermission": "لا تملك الصلاحية للوصول إلى هذه الصفحة",
   "sidebar": {
     "sections": {
-      "dashboard": "لوحة التحكم",
+      "dashboard": "لوحة القيادة",
       "others": "أخرى"
     },
     "items": {
-      "home": "الرئيسية",
+      "home": "الصفحة الرئيسية",
       "registration": "التسجيل",
       "organizations": "المنظمات",
       "settings": "الإعدادات",
-      "notifications": "إدارة الإشعارات",
+      "notifications": "الإشعارات",
       "reports": "التقارير"
     }
+  },
+  "organization": {
+    "image": "الصورة",
+    "organizations": "المنظمات",
+    "searchPlaceholder": "ابحث عن منظمة...",
+    "dateSelect": "اختر التاريخ",
+    "rs": "المنظمة",
+    "cnss": "نظام إدارة المحتوى",
+    "address": "العنوان",
+    "email": "البريد الإلكتروني",
+    "responsibleName": "اسم المسؤول",
+    "trainingManagerName": "اسم المدرب",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "export": "تصدير",
+    "page": "صفحة",
+    "of": "من",
+    "previous": "السابق",
+    "next": "التالي"
   }
 }

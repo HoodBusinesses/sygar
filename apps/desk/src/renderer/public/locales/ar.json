@@ -1,0 +1,188 @@
+{
+  "language": "العربية",
+  "welcome": "سعيدون برؤيتك مجددًا، يرجى تسجيل الدخول إلى حسابك",
+  "signin": "تسجيل الدخول",
+  "paragraph": "سنأخذك إلى المتصفح لتسجيل الدخول ثم نعيدك مرة أخرى",
+  "dontHaveAccount": "ليس لديك حساب بعد؟",
+  "create": "أنشئ حسابك",
+  "membersTable": {
+    "id": "المعرف",
+    "fullName": "الاسم الكامل",
+    "email": "البريد الإلكتروني",
+    "role": "الدور",
+    "actionType": "نوع الإجراء",
+    "actions": "الإجراءات",
+    "editingDocuments": "تحرير المستندات",
+    "viewingOnly": "مشاهدة فقط"
+  },
+  "placeholders": {
+    "fullName": "أدخل الاسم الكامل",
+    "email": "أدخل بريد المنظمة",
+    "selectRole": "اختر الدور",
+    "selectActionType": "اختر نوع الإجراء"
+  },
+  "roles": {
+    "manager": "مدير",
+    "employee": "موظف"
+  },
+  "actionTypes": {
+    "edit": "تحرير المستندات",
+    "view": "عرض فقط"
+  },
+  "registration": {
+    "title": "معلومات أعضاء المؤسسة",
+    "basicInfo": {
+      "title": "معلومات المؤسسة",
+      "fields": {
+        "rs": {
+          "label": "السجل التجاري",
+          "placeholder": "أدخل السجل التجاري للمؤسسة"
+        },
+        "ice": {
+          "label": "ICE",
+          "placeholder": "أدخل الرقم التعريفي للمؤسسة"
+        },
+        "cnss": {
+          "label": "CNSS",
+          "placeholder": "أدخل رقم CNSS للمؤسسة"
+        },
+        "address": {
+          "label": "العنوان",
+          "placeholder": "أدخل عنوان المؤسسة"
+        },
+        "phone": {
+          "label": "الهاتف",
+          "placeholder": "أدخل رقم هاتف المؤسسة"
+        },
+        "email": {
+          "label": "البريد الإلكتروني",
+          "placeholder": "أدخل البريد الإلكتروني للمؤسسة"
+        },
+        "logo": {
+          "label": "شعار الشركة",
+          "placeholder": "قم برفع شعار الشركة"
+        },
+        "responsibleName": {
+          "label": "اسم المسؤول",
+          "placeholder": "أدخل اسم المسؤول"
+        },
+        "trainingManagerName": {
+          "label": "اسم مدير التدريب",
+          "placeholder": "أدخل اسم مدير التدريب"
+        }
+      },
+      "required": "حقل مطلوب"
+    },
+    "members": {
+      "title": "الأعضاء",
+      "table": {
+        "fullName": "الاسم الكامل",
+        "email": "البريد الإلكتروني",
+        "role": "الدور",
+        "actions": "الإجراءات"
+      },
+      "roles": {
+        "manager": "مدير",
+        "employee": "موظف"
+      },
+      "actions": {
+        "edit": "تعديل",
+        "view": "عرض",
+        "delete": "حذف"
+      }
+    },
+    "addMember": {
+      "title": "إضافة عضو جديد",
+      "fullName": "الاسم الكامل",
+      "email": "عنوان البريد الإلكتروني",
+      "role": "الدور",
+      "submit": "إضافة عضو",
+      "update": "تحديث العضو"
+    },
+    "buttons": {
+      "import": "استيراد",
+      "save": "حفظ"
+    },
+    "toast": {
+      "success": {
+        "title": "نجاح",
+        "description": "تم حفظ معلومات المؤسسة بنجاح"
+      },
+      "error": {
+        "title": "خطأ",
+        "description": "فشل في حفظ معلومات المؤسسة"
+      }
+    }
+  },
+  "noPermission": "لا تملك الصلاحية للوصول إلى هذه الصفحة",
+  "sidebar": {
+    "sections": {
+      "dashboard": "لوحة القيادة",
+      "others": "أخرى"
+    },
+    "items": {
+      "home": "الصفحة الرئيسية",
+      "registration": "التسجيل",
+      "organizations": "المنظمات",
+      "settings": "الإعدادات",
+      "notifications": "الإشعارات",
+      "reports": "التقارير",
+      "theme": "Theme",
+      "participants": "Participants"
+    }
+  },
+  "organization": {
+    "image": "الصورة",
+    "organizations": "المنظمات",
+    "searchPlaceholder": "ابحث عن منظمة...",
+    "dateSelect": "اختر التاريخ",
+    "rs": "المنظمة",
+    "cnss": "نظام إدارة المحتوى",
+    "address": "العنوان",
+    "email": "البريد الإلكتروني",
+    "responsibleName": "اسم المسؤول",
+    "trainingManagerName": "اسم المدرب",
+    "enabled": "مفعل",
+    "actions": "الإجراءات",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "export": "تصدير",
+    "page": "صفحة",
+    "of": "من",
+    "previous": "السابق",
+    "next": "التالي"
+  },
+  "buttons": {
+    "add": "إضافة",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "view": "عرض",
+    "export": "تصدير",
+    "import": "استيراد",
+    "sortBy": "ترتيب حسب",
+    "filter": "تصفية"
+  },
+  "participantsTable": {
+    "id": "المعرف",
+    "name": "الاسم الكامل",
+    "email": "البريد الإلكتروني",
+    "cin": "رقم البطاقة الوطنية",
+    "cnss": "رقم الضمان الاجتماعي",
+    "status": "الحالة",
+    "placeholder": "-----------"
+  },
+  "themesTable": {
+    "title": "المواضيع",
+    "name": "الاسم",
+    "identifier": "المعرف",
+    "year": "السنة",
+    "price": "السعر",
+    "placeholder": "***********",
+    "groups": "المجموعات",
+    "options": "الخيارات",
+    "checkGroup": "تحقق من المجموعة",
+    "mad": "درهم"
+  }
+}
