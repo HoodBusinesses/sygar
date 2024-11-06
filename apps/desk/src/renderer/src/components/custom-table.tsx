@@ -24,9 +24,11 @@ interface DataTableProps<TData, TValue> {
 }
 
 export function CustomTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<SortingState>([])
+  const [sorting, setSorting] = useState<SortingState>([]);
 
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+
+  const [rowSelection, setRowSelection] = useState({});
 
   const table = useReactTable({
     data,
@@ -37,9 +39,11 @@ export function CustomTable<TData, TValue>({ columns, data }: DataTableProps<TDa
     getFilteredRowModel: getFilteredRowModel(),
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
+    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
-      columnFilters
+      columnFilters,
+      rowSelection
     }
   })
 
@@ -72,6 +76,16 @@ export function CustomTable<TData, TValue>({ columns, data }: DataTableProps<TDa
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
+                if (header.isPlaceholder) {
+                  return null
+                }
+                if (typeof(header.column.columnDef.header) === 'function') {
+                    return (
+                      <TableHead key={header.id} className={'rtl:text-right'}>
+                        {flexRender(header.column.columnDef.header, header.getContext())}
+                      </TableHead>
+                    )
+                }
                 return (
                   <TableHead key={header.id} className={'rtl:text-right'}>
                     {t(header.column.columnDef.header as string)}
