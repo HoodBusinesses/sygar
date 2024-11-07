@@ -82,13 +82,13 @@ export function CustomTable<TData, TValue>({ columns, data }: DataTableProps<TDa
                 }
                 if (typeof(header.column.columnDef.header) === 'function') {
                     return (
-                      <TableHead key={header.id} className={'rtl:text-right'}>
+                      <TableHead key={header.id} className={'text-center px-9 font-semibold'}>
                         {flexRender(header.column.columnDef.header, header.getContext())}
                       </TableHead>
                     )
                 }
                 return (
-                  <TableHead key={header.id} className={'rtl:text-right'}>
+                  <TableHead key={header.id} className={'text-center font-semibold'}>
                     {t(header.column.columnDef.header as string)}
                   </TableHead>
                 )

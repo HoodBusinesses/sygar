@@ -2,7 +2,9 @@ import { Dialog, DialogTrigger, DialogContent, DialogClose } from './ui/dialog'
 import { Button, buttonVariants } from './ui/button'
 import { useTranslate } from '@renderer/hooks/useTranslate'
 import { cn } from './ui/lib/utils'
-import { FiUpload } from 'react-icons/fi'
+// import { FiUpload } from 'react-icons/fi'
+import { FiDownload } from 'react-icons/fi'
+
 
 const ImportModal = (): JSX.Element => {
   const { t } = useTranslate()
@@ -19,7 +21,7 @@ const ImportModal = (): JSX.Element => {
           'flex items-center custom-button gap-2 bg-blue-50 text-blue-600 px-6 py-2 rounded-lg'
         )}
       >
-        <FiUpload className="h-5 w-5" />
+        <FiDownload className="h-5 w-5" />
         {t('buttons.import')}
       </DialogTrigger>
 

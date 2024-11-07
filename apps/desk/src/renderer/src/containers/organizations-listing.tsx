@@ -13,7 +13,7 @@ const OrganizationsPage: React.FC = () => {
   const [EditOrg, setEditOrg] = useState(false)
   // Memoized filtered data
   return (
-    <div dir={isRtl ? 'rtl' : 'ltr'} className="h-full w-full p-6 space-y-6">
+    <div dir={isRtl ? 'rtl' : 'ltr'} className="h-full w-full p-6 gap-y-">
       {EditOrg ? (
         <>
           {/* Header */}

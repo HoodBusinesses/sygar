@@ -13,12 +13,12 @@ export default function ButtonsAction({
   setEditOrg: () => void
 }) {
   return (
-    <div className="flex">
+    <div className="flex justify-center">
       <Button
         onClick={setEditOrg}
         variant="ghost"
         size="icon"
-        className="bg-gray-300 text-blue-800 ltr:rounded-l-full rtl:rounded-r-full"
+        className="bg-blue-800/10 text-blue-800 ltr:rounded-l-full rtl:rounded-r-full hover:bg-blue-400/50"
       >
         <Edit2 className="h-4 w-4" />
       </Button>

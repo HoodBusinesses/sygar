@@ -17,8 +17,8 @@ const DeleteModal: FC<DeleteModalProps> = ({ onDelete, DeleteNumber }: DeleteMod
           buttonVariants({ variant: 'ghost', size: 'icon' }),
           DeleteNumber
             ? 'rounded-full bg-transparent'
-            : 'ltr:rounded-r-full rtl:rounded-l-full bg-gray-300',
-          'text-red-800'
+            : 'ltr:rounded-r-full rtl:rounded-l-full bg-red-800/10',
+          'text-red-800 hover:bg-red-400/50'
         )}
       >
         <Trash2 className="h-4 w-4" />
