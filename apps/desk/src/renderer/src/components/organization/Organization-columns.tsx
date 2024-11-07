@@ -25,7 +25,9 @@ export const getColumns = (setEditOrg: () => void): ColumnDef<Organization>[] =>
         alt="Organization"
         className="w-8 h-8 rounded-full"
       />
-    )
+    ),
+    enableSorting: false,
+    enableGlobalFilter: false
   },
   {
     accessorKey: 'rs',
@@ -45,8 +47,7 @@ export const getColumns = (setEditOrg: () => void): ColumnDef<Organization>[] =>
   {
     accessorKey: 'email',
     header: 'organization.email',
-    cell: ({ row }) => <p className="text-gray-600">{row.getValue('email')}</p>,
-    enableSorting: true
+    cell: ({ row }) => <p className="text-gray-600">{row.getValue('email')}</p>
   },
   {
     accessorKey: 'responsibleName',
@@ -61,14 +62,15 @@ export const getColumns = (setEditOrg: () => void): ColumnDef<Organization>[] =>
   {
     accessorKey: 'enabled',
     header: 'organization.enabled',
-    cell: ({ row }) => <EnableButton onClick={() => {}} value={row.getValue('enabled')} />,
-    enableSorting: true
+    cell: ({ row }) => <EnableButton onClick={() => {}} value={row.getValue('enabled')} />
   },
   {
     accessorKey: 'actions',
     header: 'organization.actions',
     cell: ({ row }) => (
       <ButtonsAction subscription={true} rowId={row.original.id} setEditOrg={setEditOrg} />
-    )
+    ),
+    enableSorting: false,
+    enableGlobalFilter: false
   }
 ]
