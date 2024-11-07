@@ -333,24 +333,24 @@
       }
     }
   },
-  "group": {
-    "groups": "Groupes",
-    "fields": {
-      "groupName": {
-        "label": "Nom du groupe",
-        "placeholder": "Entrez le nom du groupe"
+  "group" : {
+    "group" : "Groupe",
+    "fields" : {
+      "facilator": {
+        "label": "Facilitateur",
+        "placeholder": "Entrez le facilitateur"
       },
-      "formationName": {
-        "label": "Formation",
-        "placeholder": "Sélectionnez la formation"
+      "trainer" : {
+        "label": "Formateur",
+        "placeholder": "Sélectionnez le formateur"
       },
-      "year": {
-        "label": "Année",
-        "placeholder": "Entrez l'année"
+      "them" : {
+        "label": "Thème",
+        "placeholder": "Entrez le thème"
       },
-      "price": {
-        "label": "Prix",
-        "placeholder": "Entrez le prix"
+      "location" : {
+        "label": "Lieu",
+        "placeholder": "Entrez le lieu"
       },
       "date": {
         "label": "Date",

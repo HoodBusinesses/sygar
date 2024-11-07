@@ -23,7 +23,7 @@ export const memberSchema = z.object({
 })
 
 export const formationSchema = z.object({
-  formationName: z.string().min(1, 'Formation name is required'),
+  name: z.string().min(1, 'Formation name is required'),
   year: z.string().min(1, 'Year is required'),
   price: z.string().min(1, 'Price is required')
 })
@@ -39,10 +39,10 @@ export const participantSchema = z.object({
 })
 
 export const groupSchema = z.object({
-  formationName: z.string().min(1, 'Formation name is required'),
-  groupName: z.string().min(1, 'Group name is required'),
-  year: z.string().min(1, 'Year is required'),
-  price: z.string().min(1, 'Price is required'),
+  facilator: z.string().min(1, 'Facilator name is required'),
+  trainer: z.string().min(1, 'trainer name is required'),
+  them: z.string().min(1, 'them is required'),
+  location: z.string().min(1, 'location is required'),
   date: z.string().min(1, 'Date is required')
 })
 

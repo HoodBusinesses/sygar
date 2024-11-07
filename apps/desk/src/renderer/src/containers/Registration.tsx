@@ -58,7 +58,7 @@ const Registration: React.FC = () => {
           </Card>
 
           <div className="flex justify-end">
-            <Button type="submit" className="w-full sm:w-auto">
+            <Button type="submit" className="w-full custom-button bg-blue-500 sm:w-auto">
               {t('registration.buttons.save')}
             </Button>
           </div>
