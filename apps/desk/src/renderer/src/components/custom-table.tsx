@@ -78,15 +78,15 @@ export function CustomTable<TData, TValue>({
                 if (header.isPlaceholder) {
                   return null
                 }
-                if (typeof header.column.columnDef.header === 'function') {
-                  return (
-                    <TableHead key={header.id} className={'rtl:text-right'}>
-                      {flexRender(header.column.columnDef.header, header.getContext())}
-                    </TableHead>
-                  )
+                if (typeof(header.column.columnDef.header) === 'function') {
+                    return (
+                      <TableHead key={header.id} className={'text-center px-9 font-semibold'}>
+                        {flexRender(header.column.columnDef.header, header.getContext())}
+                      </TableHead>
+                    )
                 }
                 return (
-                  <TableHead key={header.id} className={'rtl:text-right'}>
+                  <TableHead key={header.id} className={'text-center font-semibold'}>
                     {t(header.column.columnDef.header as string)}
                   </TableHead>
                 )

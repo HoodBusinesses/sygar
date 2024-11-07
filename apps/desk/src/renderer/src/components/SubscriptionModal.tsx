@@ -14,7 +14,7 @@ const SubscriptionModal = (): JSX.Element => {
       <DialogTrigger
         className={cn(
           buttonVariants({ variant: 'ghost', size: 'icon' }),
-          'flex items-center justify-center text-gray-800 hover:bg-gray-200 hover:scale-105 transition-transform w-8 h-8 rounded-full'
+          'bg-gray-800/10 text-gray-800 border border-none rounded-none hover:bg-gray-400/50'
         )}
       >
         <FiCalendar className="h-4 w-4" />

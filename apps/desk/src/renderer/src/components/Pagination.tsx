@@ -9,14 +9,14 @@ interface PaginationProps<TData> {
 }
 
 function Pagination<TData>({ table }: PaginationProps<TData>) {
-  const { t } = useTranslate();
+  const { t } = useTranslate()
   const handlePageChange = (page: React.ChangeEvent<HTMLSelectElement>): void => {
     const selectedPage = Number(page.target.value)
-    table.setPageIndex(selectedPage - 1);
+    table.setPageIndex(selectedPage - 1)
   }
 
   return (
-    <div className="flex items-center gap-4 mt-4">
+    <div className="flex items-center gap-4 p-4">
       <div className="flex items-center gap-2 text-sm text-gray-700">
         <span>{t('organization.page')}</span>
         <select
@@ -38,15 +38,6 @@ function Pagination<TData>({ table }: PaginationProps<TData>) {
       {/* Back and Next Buttons */}
       <div className="flex gap-2">
         <Button
-          onClick={table.nextPage}
-          disabled={!table.getCanNextPage()}
-          className={`border border-gray-300 px-4 py-2 rounded-md text-gray-700 
-      ${!table.getCanNextPage() ? 'opacity-50 cursor-not-allowed' : ''}`}
-        >
-          {t('organization.next')}
-        </Button>
-
-        <Button
           onClick={table.previousPage}
           disabled={!table.getCanPreviousPage()}
           className={cn(
@@ -55,6 +46,14 @@ function Pagination<TData>({ table }: PaginationProps<TData>) {
           )}
         >
           {t('organization.previous')}
+        </Button>
+        <Button
+          onClick={table.nextPage}
+          disabled={!table.getCanNextPage()}
+          className={`border border-gray-300 px-4 py-2 rounded-md text-gray-700 
+      ${!table.getCanNextPage() ? 'opacity-50 cursor-not-allowed' : ''}`}
+        >
+          {t('organization.next')}
         </Button>
       </div>
     </div>

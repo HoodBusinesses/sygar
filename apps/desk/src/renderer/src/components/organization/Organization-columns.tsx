@@ -20,14 +20,14 @@ export const getColumns = (setEditOrg: () => void): ColumnDef<Organization>[] =>
     accessorKey: 'image',
     header: 'organization.image',
     cell: ({ row }) => (
-      <img
-        src={Profile_Img || row.getValue('image')}
-        alt="Organization"
-        className="w-8 h-8 rounded-full"
-      />
-    ),
-    enableSorting: false,
-    enableGlobalFilter: false
+      <div className="flex justify-center items-center">
+        <img
+          src={Profile_Img || row.getValue('image')}
+          alt="Organization"
+          className="w-8 h-8 rounded-full"
+        />
+      </div>
+    )
   },
   {
     accessorKey: 'rs',

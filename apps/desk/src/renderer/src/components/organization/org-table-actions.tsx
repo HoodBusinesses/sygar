@@ -15,12 +15,12 @@ export default function ButtonsAction({
 }): JSX.Element {
   const navigate = useNavigate()
   return (
-    <div className="inline-flex items-center bg-gray-200 rounded-2xl gap-2 w-auto">
+    <div className="flex justify-center">
       <Button
         variant="ghost"
         onClick={() => navigate({ to: href })}
         size="icon"
-        className="flex items-center justify-center text-blue-800 hover:text-blue-700 hover:scale-105 transition-transform w-8 h-8 rounded-full"
+        className="bg-blue-800/10 text-blue-800 ltr:rounded-l-full rtl:rounded-r-full hover:bg-blue-400/50"
       >
         <Edit2 className="h-4 w-4" />
       </Button>
