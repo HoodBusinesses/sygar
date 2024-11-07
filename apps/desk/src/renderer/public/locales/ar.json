@@ -202,24 +202,24 @@
       }
     }
   },
-  "group": {
-    "groups": "المجموعات",
-    "fields": {
-      "groupName": {
-        "label": "اسم المجموعة",
-        "placeholder": "أدخل اسم المجموعة"
+  "group" : {
+    "group" : "مجموعة",
+    "fields" : {
+      "facilator": {
+        "label": "الميسر",
+        "placeholder": "أدخل الميسر"
       },
-      "formationName": {
-        "label": "التكوين",
-        "placeholder": "اختر التكوين"
+      "trainer" : {
+        "label": "المدرب",
+        "placeholder": "اختر المدرب"
       },
-      "year": {
-        "label": "السنة",
-        "placeholder": "أدخل السنة"
+      "them" : {
+        "label": "الموضوع",
+        "placeholder": "أدخل الموضوع"
       },
-      "price": {
-        "label": "السعر",
-        "placeholder": "أدخل السعر"
+      "location" : {
+        "label": "الموقع",
+        "placeholder": "أدخل الموقع"
       },
       "date": {
         "label": "التاريخ",

@@ -324,21 +324,21 @@
   "group" : {
     "group" : "Group",
     "fields" : {
-      "groupName": {
-        "label": "Groupe Name",
-        "placeholder": "Enter the groupe name"
+      "facilator": {
+        "label": "Facilator",
+        "placeholder": "Enter the facilator"
       },
-      "formationName" : {
-        "label": "Formation",
-        "placeholder": "Select the formation"
+      "trainer" : {
+        "label": "trainer",
+        "placeholder": "Select the trainer"
       },
-      "year" : {
-        "label": "Year",
-        "placeholder": "Enter the year"
+      "them" : {
+        "label": "Them",
+        "placeholder": "Enter the Them"
       },
-      "price" : {
-        "label": "Price",
-        "placeholder": "Enter the price"
+      "location" : {
+        "label": "Location",
+        "placeholder": "Enter the location"
       },
       "date": {
         "label": "Date",

@@ -1,6 +1,7 @@
 import { useTranslate } from '@renderer/hooks/useTranslate'
 import { UseFormRegisterReturn } from 'react-hook-form'
 import { Input } from './input'
+import { cn } from './lib/utils'
 
 interface FormInputProps {
   label: string
@@ -9,6 +10,7 @@ interface FormInputProps {
   value: string
   defaultValue?: string
   error?: string
+  isLargeInput?: boolean
   required?: boolean
   isLogoInput?: boolean
 }
@@ -20,13 +22,14 @@ export default function FormInputItem({
   placeholder,
   register,
   value,
+  isLargeInput,
   isLogoInput
 }: FormInputProps) {
   const { t } = useTranslate()
 
   return (
     <div className="flex flex-col mb-4 gap-1">
-      <p className="text-sm text-gray-950 mb-2">
+      <p className={cn(isLargeInput ? 'text-gray-600' : 'text-gray-950', 'text-sm mb-2')}>
         {t(label)} {required && <span className="text-red-500">*</span>}
       </p>
       {isLogoInput ? (
@@ -41,7 +44,7 @@ export default function FormInputItem({
           {...register}
           defaultValue={t(value)}
           placeholder={t(placeholder)}
-          className="bg-gray-100 text-gray-950 p-2 rounded-md"
+          className={cn(isLargeInput && 'h-14', 'bg-gray-100 text-gray-950 p-2 rounded-md')}
         />
       )}
       {error && <span className="text-sm text-red-500">{t(error)}</span>}
