@@ -12,7 +12,7 @@ export default function Navbar() {
       </div>
 
       {/* Right Section: Profile, Language, Notifications */}
-      <div className="flex items-center space-x-6">
+      <div className="flex items-center gap-6">
         {/* Profile */}
         <ProfilePopover />
         {/* Language Selector */}

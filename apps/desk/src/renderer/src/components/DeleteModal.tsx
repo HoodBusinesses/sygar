@@ -14,7 +14,7 @@ const DeleteModal: FC<DeleteModalProps> = ({ onDelete }: DeleteModalProps) => {
       <DialogTrigger
         className={cn(
           buttonVariants({ variant: 'ghost', size: 'icon' }),
-          'bg-gray-300 text-red-800 ltr:rounded-r-full rtl:rounded-l-full'
+          'flex items-center justify-center text-red-800 hover:bg-gray-200 hover:scale-105 transition-transform w-8 h-8 rounded-full'
         )}
       >
         <Trash2 className="h-4 w-4" />
