@@ -37,7 +37,7 @@ export const navItems = [
     {
         name: 'participants',
         label: 'sidebar.items.participants',
-        href: '/participants-listing',
+        href: '/participant-listing',
         icon: ClipboardDocumentListIcon
     }
     // Add more items as needed
