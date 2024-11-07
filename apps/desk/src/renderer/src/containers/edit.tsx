@@ -26,13 +26,13 @@ function EditPage(): JSX.Element {
       <div className="flex flex-col">
         <p className="">{`${crud} ${type}`}</p>
         {type === 'group' && <EditGroup group={null} />}
-        {type === 'formation' && <EditFormation formation={null} />}
+        {type === 'themes' && <EditFormation formation={null} />}
         {type === 'participant' && <EditParticipant participant={null} />}
         <div className="flex justify-end">
           <Button
             type="button"
             className="w-full custom-button bg-gray-400 sm:w-auto"
-            onClick={() => navigate({ to: '/themes-listing' })}
+            onClick={() => navigate({ to: `/${type}-listing` })}
           >
             {t('buttons.cancel')}
           </Button>

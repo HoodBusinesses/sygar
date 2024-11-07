@@ -3,13 +3,7 @@ import { useTranslate } from '@renderer/hooks/useTranslate'
 import ListingHeader from '@renderer/components/ListingHeader'
 import { CustomTable } from '@renderer/components/custom-table'
 import { themeColumns } from '@renderer/components/formations/themes-columns'
-import { mockGroups, mockParticipant, mockThemes } from '@renderer/utils/static/organizations'
-import { useState } from 'react'
-import { Button } from '@renderer/components/ui/button'
-import RegistrationInfo from '@renderer/components/RegistrationInfo'
-import { groupColumn } from '@renderer/components/formations/groups-columns'
-import { participantColumns } from '@renderer/components/formations/participants-columns'
-import { Outlet } from '@tanstack/react-router'
+import { mockThemes } from '@renderer/utils/static/organizations'
 import { useNavigate } from '@tanstack/react-router'
 
 const ThemesListing: React.FC = () => {
@@ -21,11 +15,11 @@ const ThemesListing: React.FC = () => {
       <ListingHeader headTitle="formation.formation" />
       <CustomTable
         columns={themeColumns(() => {
-          console.log("Navigating to /themes-listing/group-themes")
-          navigate({ to: '/themes-listing/group-themes' })})}
+          console.log('Navigating to /themes-listing/group-themes')
+          navigate({ to: '/group-listing' as string })
+        })}
         data={mockThemes}
       />
-      <Outlet />
     </div>
   )
 }

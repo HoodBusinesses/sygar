@@ -14,7 +14,7 @@ const ListingHeader = ({ headTitle }: ListingHeaderProps): JSX.Element => {
   const navigate = useNavigate()
   const type =
     headTitle === 'formation.formation'
-      ? 'formation'
+      ? 'themes'
       : headTitle === 'group.groups'
         ? 'group'
         : 'participant'

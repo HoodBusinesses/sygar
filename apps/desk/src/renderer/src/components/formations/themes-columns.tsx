@@ -76,7 +76,7 @@ export const themeColumns = (setGroupThemes: () => void): ColumnDef<Theme>[] => 
       <ButtonsAction
         rowId={row.original.id}
         subscription={false}
-        href={`/edit?type=formation&crud=edit`}
+        href={`/edit?type=themes&crud=edit`}
       />
     )
   }
