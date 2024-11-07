@@ -72,7 +72,11 @@ export const participantColumns = (): ColumnDef<Participant>[] => [
     accessorKey: 'options',
     header: 'Options',
     cell: ({ row }) => (
-      <ButtonsAction setEditOrg={() => {}} rowId={row.original.id} subscription={false} />
+      <ButtonsAction
+        href={`/edit?type=participant&crud=edit`}
+        rowId={row.original.id}
+        subscription={false}
+      />
     )
   }
 ]

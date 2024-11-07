@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { memberSchema, type MemberFormData } from '../utils/schemas/organization'
+import { memberSchema, type MemberFormData } from '../utils/schemas/formSchema'
 import { Button } from './ui/button'
 import FormInputItem from './ui/form-input-item'
 import SelectInputItem from './ui/select-input-item'

@@ -11,7 +11,7 @@ import {
   organizationSchema,
   type MemberFormData,
   type OrganizationFormData
-} from '../utils/schemas/organization'
+} from '../utils/schemas/formSchema'
 import { useTranslate } from '@renderer/hooks/useTranslate'
 import { useToast } from '@renderer/hooks/useToast'
 
@@ -49,13 +49,8 @@ const RegistrationInfo = () => {
   })
 
   const onSubmit = async (data: OrganizationFormData) => {
-    try {
-      // Handle form submission
-      console.log({ ...data, members })
-      addToast('Success', 'Organization information saved successfully')
-    } catch (error) {
-      addToast('Error', 'Failed to save organization information')
-    }
+    // Handle form submission
+    console.log({ ...data, members })
   }
   // useEffect(() => {
   //   if (router.query.organization) {
@@ -96,35 +91,35 @@ const RegistrationInfo = () => {
   //   );
   // }
   return (
-      <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(onSubmit)}>
-          <OrganizationBasicInfo organization={organization} />
+    <FormProvider {...methods}>
+      <form onSubmit={methods.handleSubmit(onSubmit)}>
+        <OrganizationBasicInfo organization={organization} />
 
-          <Card className="p-6 mb-6">
-            <CardContent>
-              <div className="flex justify-between items-center mb-6">
-                <p className="text-lg text-gray-950 font-bold  mb-6">{t('registration.title')}</p>
-                <Button className="custom-button bg-blue-600 hover:bg-blue-500" type="submit">
-                  {t('registration.buttons.import')}
-                </Button>
-              </div>
-              <MembersTable
-                members={members}
-                onEdit={handleEditMember}
-                onDelete={handleDeleteMember}
-              />
+        <Card className="p-6 mb-6">
+          <CardContent>
+            <div className="flex justify-between items-center mb-6">
+              <p className="text-lg text-gray-950 font-bold  mb-6">{t('registration.title')}</p>
+              <Button className="custom-button bg-blue-600 hover:bg-blue-500" type="submit">
+                {t('registration.buttons.import')}
+              </Button>
+            </div>
+            <MembersTable
+              members={members}
+              onEdit={handleEditMember}
+              onDelete={handleDeleteMember}
+            />
+              
+            <div className="mt-6">
+              <AddMemberForm onSubmit={handleAddMember} initialData={editingMember?.data} />
+            </div>
+          </CardContent>
+        </Card>
 
-              <div className="mt-6">
-                <AddMemberForm onSubmit={handleAddMember} initialData={editingMember?.data} />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Button className="custom-button bg-blue-600 hover:bg-blue-500" type="submit">
-            {t('registration.buttons.save')}
-          </Button>
-        </form>
-      </FormProvider>
+        <Button className="custom-button bg-blue-600 hover:bg-blue-500" type="submit">
+          {t('registration.buttons.save')}
+        </Button>
+      </form>
+    </FormProvider>
   )
 }
 

@@ -315,5 +315,72 @@
     "options": "Options",
     "checkGroup": "Vérifier le groupe",
     "mad": "DH"
+  },
+  "formation": {
+    "formation": "Formation",
+    "fields": {
+      "formationName": {
+        "label": "Nom de la formation",
+        "placeholder": "Entrez le nom de la formation"
+      },
+      "year": {
+        "label": "Année",
+        "placeholder": "Entrez l'année"
+      },
+      "price": {
+        "label": "Prix",
+        "placeholder": "Entrez le prix"
+      }
+    }
+  },
+  "group": {
+    "groups": "Groupes",
+    "fields": {
+      "groupName": {
+        "label": "Nom du groupe",
+        "placeholder": "Entrez le nom du groupe"
+      },
+      "formationName": {
+        "label": "Formation",
+        "placeholder": "Sélectionnez la formation"
+      },
+      "year": {
+        "label": "Année",
+        "placeholder": "Entrez l'année"
+      },
+      "price": {
+        "label": "Prix",
+        "placeholder": "Entrez le prix"
+      },
+      "date": {
+        "label": "Date",
+        "placeholder": "Entrez la date"
+      }
+    }
+  },
+  "participant": {
+    "participant": "Participant",
+    "fields": {
+      "name": {
+        "label": "Nom complet",
+        "placeholder": "Entrez le nom complet"
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "Entrez l'email"
+      },
+      "cin": {
+        "label": "CIN",
+        "placeholder": "Entrez le CIN"
+      },
+      "cnss": {
+        "label": "CNSS",
+        "placeholder": "Entrez le CNSS"
+      },
+      "status": {
+        "label": "Statut",
+        "placeholder": "Entrez le statut"
+      }
+    }
   }
 }

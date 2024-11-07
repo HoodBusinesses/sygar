@@ -303,5 +303,72 @@
     "options": "Options",
     "checkGroup": "Check Group",
     "mad": "DH"
+  },
+  "formation": {
+    "formation": "Formation",
+    "fields" : {
+      "formationName": {
+        "label": "Formation Name",
+        "placeholder": "Enter the formation name"
+      },
+      "year" : {
+        "label": "Year",
+        "placeholder": "Enter the year"
+      },
+      "price" : {
+        "label": "Price",
+        "placeholder": "Enter the price"
+      }
+    }
+  },
+  "group" : {
+    "group" : "Group",
+    "fields" : {
+      "groupName": {
+        "label": "Groupe Name",
+        "placeholder": "Enter the groupe name"
+      },
+      "formationName" : {
+        "label": "Formation",
+        "placeholder": "Select the formation"
+      },
+      "year" : {
+        "label": "Year",
+        "placeholder": "Enter the year"
+      },
+      "price" : {
+        "label": "Price",
+        "placeholder": "Enter the price"
+      },
+      "date": {
+        "label": "Date",
+        "placeholder": "Enter the date"
+      }
+    }
+  },
+  "participant" : {
+    "participant" : "Participant",
+    "fields" : {
+      "name": {
+        "label": "Full Name",
+        "placeholder": "Enter the full name"
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "Enter the email"
+      },
+      "cin": {
+        "label": "CIN",
+        "placeholder": "Enter the CIN"
+      },
+      "cnss": {
+        "label": "CNSS",
+        "placeholder": "Enter the CNSS"
+      },
+      "status": {
+        "label": "Status",
+        "placeholder": "Enter the status"
+      }
+    }
   }
 }

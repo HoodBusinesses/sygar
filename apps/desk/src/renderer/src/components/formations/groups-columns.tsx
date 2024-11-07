@@ -79,9 +79,7 @@ export const groupColumn = (setParticipants: () => void): ColumnDef<Group>[] => 
       <ButtonsAction
         rowId={row.original.id}
         subscription={false}
-        setEditOrg={() => {
-          console.log('first')
-        }}
+        href={`/edit?type=group&crud=edit`}
       />
     )
   }
