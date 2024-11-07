@@ -6,10 +6,9 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 export default function ProfilePopover() {
   return (
     <Popover>
-      <PopoverTrigger className="flex items-center cursor-pointer space-x-2">
-        <FaUserCircle className="text-3xl" />
-        <span className="text-sm text-gray-600">Sygafor Admin</span>
-        <HiOutlineChevronDown className="text-base text-gray-500" />
+      <PopoverTrigger className="flex items-center cursor-pointer gap-1">
+        <FaUserCircle className="text-2xl text-gray-700" />
+        <HiOutlineChevronDown className="text-sm text-gray-500" />
       </PopoverTrigger>
 
       <PopoverContent className="mt-5 bg-white rounded-lg p-5 border shadow-lg">

@@ -4,10 +4,9 @@ import { Dialog, DialogContent, DialogTrigger } from './ui/dialog'
 import { cn } from './ui/lib/utils'
 import { FiCalendar } from 'react-icons/fi'
 
-
 const SubscriptionModal = (): JSX.Element => {
   const handleSubscription = () => {
-    console.log('Export')
+    console.log('Subscription saved')
   }
 
   return (
@@ -15,84 +14,91 @@ const SubscriptionModal = (): JSX.Element => {
       <DialogTrigger
         className={cn(
           buttonVariants({ variant: 'ghost', size: 'icon' }),
-          'bg-gray-300 text-gray-800 border border-none'
+          'flex items-center justify-center text-gray-800 hover:bg-gray-200 hover:scale-105 transition-transform w-8 h-8 rounded-full'
         )}
       >
         <FiCalendar className="h-4 w-4" />
       </DialogTrigger>
 
-      <DialogContent>
-        <div className=" bg-white p-4 items-center justify-center rounded-md shadow-md">
-          <div className=" p-4">
-            <h2 className="text-xl text-gray-800  font-bold mb-4">Manage Your Subscription</h2>
-            <p className="text-gray-400">Subscription Plan</p>
+      <DialogContent className="max-w-lg p-8 bg-white rounded-lg" style={{ boxShadow: 'none' }}>
+        <div className="p-8">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-6">Manage Your Subscription</h2>
+
+          <div className="mb-6">
+            <p className="text-gray-500 mb-3">Subscription Plan</p>
+
+            <div className="space-y-4">
+              {/* Monthly Plan */}
+              <label className="flex items-center p-4 rounded-lg cursor-pointer transition">
+                <Input
+                  type="radio"
+                  name="subscription"
+                  value="monthly"
+                  className="w-5 h-5 text-blue-600"
+                />
+                <div className="ml-3">
+                  <span className="text-gray-800 font-medium">Pay Monthly</span>
+                  <span className="block text-gray-500 text-sm">$20 / Month Per Member</span>
+                </div>
+              </label>
+
+              {/* Annual Plan */}
+              <label className="flex items-center p-4 rounded-lg cursor-pointer transition">
+                <Input
+                  type="radio"
+                  name="subscription"
+                  value="annually"
+                  className="w-5 h-5 text-blue-600"
+                  defaultChecked
+                />
+                <div className="ml-3">
+                  <span className="text-gray-800 font-medium">Pay Annually</span>
+                  <span className="block text-green-500 text-sm font-medium">Save 20%</span>
+                  <span className="block text-gray-500 text-sm">$18 / Month Per Member</span>
+                </div>
+              </label>
+            </div>
           </div>
 
-          <div className="space-y-4">
-            <label className="flex flex-col cursor-pointer">
-              <Input
-                type="radio"
-                name="subscription"
-                value="monthly"
-                className="w-4 h-4 text-blue-600"
-              />
-              <span className="text-gray-800 font-medium">Pay Monthly</span>
-              <span className="text-gray-500 text-sm">$20 / Month per Member</span>
-              <Input
-                type="radio"
-                name="subscription"
-                value="annually"
-                className="w-4 h-4 text-blue-600"
-              />
-              <span className="text-gray-800 font-medium">Pay Annually</span>
-              <span className="text-green-500 text-sm font-medium">Save 20%</span>
-              <span className="text-gray-500 text-sm">$18 / Month per Member</span>
-            </label>
-          </div>
-
-          <div>
-            <p className="text-gray-400">Add payment method</p>
+          {/* Payment Method Section */}
+          <div className="mb-6">
+            <p className="text-gray-500 mb-3">Add Payment Method</p>
             <Input
-              // value={organization?.organization?.rs || ""}
-              placeholder={'NAME'}
-              className="bg-gray-100 mb-4 text-gray-950"
-              // error={errors.name?.message}
+              placeholder="John Smith"
+              className="w-full mb-4 px-4 py-3 bg-gray-100 rounded-md text-gray-800"
             />
             <Input
-              // value={organization?.organization?.rs || ""}
-              placeholder={'Card Number'}
-              className="bg-gray-100 mb-4 text-gray-950"
-              // error={errors.name?.message}
+              placeholder="Card Number"
+              className="w-full mb-4 px-4 py-3 bg-gray-100 rounded-md text-gray-800"
             />
-            <div className="flex flex-row">
+            <div className="flex space-x-4">
               <Input
-                // value={organization?.organization?.rs || ""}
-                placeholder={'MM / YY'}
-                className="bg-gray-100 mb-4 text-gray-950"
-                // error={errors.name?.message}
+                placeholder="MM / YY"
+                className="w-1/2 px-4 py-3 bg-gray-100 rounded-md text-gray-800"
               />
               <Input
-                // value={organization?.organization?.rs || ""}
-                placeholder={'CVV'}
-                className="bg-gray-100 mb-4 text-gray-950"
-                // error={errors.name?.message}
+                placeholder="CVV"
+                className="w-1/2 px-4 py-3 bg-gray-100 rounded-md text-gray-800"
               />
             </div>
-            <p className="text-gray-400">
-              By Continuing you agree to our{' '}
-              <span className="text-gray-900 font-bold">terms and conditions.</span>
-            </p>
           </div>
 
+          {/* Terms and Conditions */}
+          <p className="text-gray-500 text-sm mb-6">
+            By Continuing you agree to our{' '}
+            <span className="text-gray-900 font-semibold">Terms And Conditions</span>.
+          </p>
+
+          {/* Buttons */}
           <div className="flex justify-end">
-            <DialogTrigger className="custom-button text-gray-500 hover:bg-gray-200 border border-gray-500 mr-2">
+            <DialogTrigger className="px-4 py-2 text-gray-500 bg-gray-100 border border-gray-300 rounded-md mr-2 hover:bg-gray-200">
               Cancel
             </DialogTrigger>
             <Button
               onClick={handleSubscription}
-              className="custom-button bg-green-500 hover:bg-green-800"
+              className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 font-semibold"
             >
-              SAVE
+              Save
             </Button>
           </div>
         </div>

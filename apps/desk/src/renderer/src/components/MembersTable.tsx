@@ -37,7 +37,7 @@ export const MembersTable = ({ members, onEdit, onDelete }: MembersTableProps) =
       <TableHeader>
         <TableRow className="border border-gray-200 rounded-t-lg">
           {TableHeadElements.map((element, index) => (
-            <TableHead key={index} className={cn(isRtl && 'text-right', "text-gray-950")}>
+            <TableHead key={index} className={cn(isRtl && 'text-right', "text-gray-950 bg-gray-200 rounded-t-lg")}>
               {t(element)}
             </TableHead>
           ))}

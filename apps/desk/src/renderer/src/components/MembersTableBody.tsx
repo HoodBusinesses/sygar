@@ -1,4 +1,3 @@
-
 import { useTranslate } from '@renderer/hooks/useTranslate'
 import { MemberFormData } from '@renderer/utils/schemas/formSchema'
 import { Edit, Trash2 } from 'lucide-react'
@@ -24,17 +23,30 @@ export default function MembersTableBody({
   return (
     <TableBody>
       {members.map((member, index) => (
-        <TableRow key={index} className="border-b border-gray-900">
-          <TableCell className="text-gray-950">{String(index + 1).padStart(5, '0')}</TableCell>
-          <TableCell className="text-gray-950">{member.fullName}</TableCell>
-          <TableCell className="text-gray-950">{member.email}</TableCell>
-          <TableCell className="">
-            <span className="bg-green-200 text-green-800 px-4 py-2 uppercase rounded">
+        <TableRow
+          key={index}
+          className="bg-white hover:bg-gray-50 rounded-lg border-b border-gray-200 last:border-0" // Rounded and spaced rows
+        >
+          {/* ID Column */}
+          <TableCell className="text-gray-950 py-3 px-4 text-sm">
+            {String(index + 1).padStart(5, '0')}
+          </TableCell>
+
+          {/* Full Name Column */}
+          <TableCell className="text-gray-950 py-3 px-4 text-sm">{member.fullName}</TableCell>
+
+          {/* Email Column */}
+          <TableCell className="text-gray-950 py-3 px-4 text-sm">{member.email}</TableCell>
+
+          {/* Role Column */}
+          <TableCell className="py-3 px-4">
+            <span className="bg-green-100 text-green-600 px-3 py-1 rounded-full text-xs font-medium">
               {member.role}
             </span>
           </TableCell>
 
-          <TableCell className="text-gray-950">
+          {/* Action Type Column with Select */}
+          <TableCell className="py-3 px-4">
             <SelectInputItem
               label=""
               onValueChange={(value) => register('actionType').onChange({ target: { value } })}
@@ -48,21 +60,20 @@ export default function MembersTableBody({
                   : t('membersTable.viewingOnly')
               }
               classNames={{
-                trigger: 'bg-blue-100 text-blue-800 rounded w-auto',
-                content: 'bg-blue-100 text-gray-700'
+                trigger:
+                  'bg-blue-100 text-blue-800 rounded-full px-3 py-1 text-xs font-medium w-auto',
+                content: 'bg-white text-gray-700'
               }}
             />
           </TableCell>
-          
-          <TableCell>
+
+          {/* Action Buttons Column */}
+          <TableCell className="py-3 px-4 flex gap-2 justify-center">
             <Button
               variant="ghost"
               size="icon"
               onClick={() => onEdit(index)}
-              className={cn(
-                isRtl ? 'rounded-r-full' : 'rounded-l-full',
-                'bg-blue-100 text-blue-800'
-              )}
+              className="bg-blue-100 text-blue-800 rounded-full w-8 h-8 flex items-center justify-center hover:bg-blue-200"
             >
               <Edit className="h-4 w-4" />
             </Button>
@@ -70,7 +81,7 @@ export default function MembersTableBody({
               variant="ghost"
               size="icon"
               onClick={() => onDelete(index)}
-              className={cn(isRtl ? 'rounded-l-full' : 'rounded-r-full', 'bg-red-100 text-red-800')}
+              className="bg-red-100 text-red-800 rounded-full w-8 h-8 flex items-center justify-center hover:bg-red-200"
             >
               <Trash2 className="h-4 w-4" />
             </Button>

@@ -108,7 +108,7 @@ const RegistrationInfo = () => {
               onEdit={handleEditMember}
               onDelete={handleDeleteMember}
             />
-
+              
             <div className="mt-6">
               <AddMemberForm onSubmit={handleAddMember} initialData={editingMember?.data} />
             </div>
