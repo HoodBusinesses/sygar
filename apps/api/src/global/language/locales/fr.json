@@ -33,5 +33,13 @@
     "orgIdRequiredForOrgUser": "L'ID de l'organisation est requis pour l'utilisateur et l'administrateur de l'organisation",
     "invalidDates": "Dates invalides",
     "uidRequired": "uid requis",
-    "themeDoesntExists": "Le thème n'existe pas"
+    "themeDoesntExists": "Le thème n'existe pas",
+    "notificationNotFound": "Notification non trouvée",
+    "noAbilitiesDefinedForThisUser": "Aucune capacité définie pour cet utilisateur.",
+    "orgIdRequiredForOrgAdmin": "L'ID de l'organisation est requis pour l'administrateur de l'organisation",
+    "animatorAlreadyExistWithThisEmail": "Le présentateur existe déjà avec cet email",
+    "animatorNotFound": "Il n'y a pas de présentateur avec l'email fourni !",
+    "formatorAlreadyExistWithThisEmail": "Le formateur existe déjà avec cet email",
+    "formatorNotFound": "Il n'y a pas de formateur avec l'email fourni !",
+    "errorSeedingAbilities": "Erreur lors de l'injection des capacités"
 }

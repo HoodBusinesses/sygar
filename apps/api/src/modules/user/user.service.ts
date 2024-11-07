@@ -130,7 +130,7 @@ export class UserService {
 		const existingUser = await this.userRepository.findByUid(uid);
 
 		if (!existingUser) {
-			throw new Error('User does not exist');
+			throw new Error('userNotFound');
 		}
 
 		const { password, ...userWithOutPassword } = existingUser;
@@ -145,7 +145,7 @@ export class UserService {
 	*/
 	async getByEmail(email: string) {
 		if (!email) {
-			throw new BadRequestException('Email is required');
+			throw new Error('emailIsRequired');
 		}
 		return await this.userRepository.findByEmail(email);
 	}
@@ -174,7 +174,7 @@ export class UserService {
 		const user = await this.userRepository.findByUid(uid);
 
 		if (!user) {
-			throw new Error('User does not exist');
+			throw new Error('userNotFound');
 		}
 
 		return await this.userRepository.update({

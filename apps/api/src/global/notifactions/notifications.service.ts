@@ -84,7 +84,7 @@ export class NotificationService {
 
 		// If no items are found, throw an error
 		if (!items.length) {
-			throw new Error('Notification not found');
+			throw new Error('notificationNotFound');
 		}
 
 		// Return the notification
@@ -125,7 +125,7 @@ export class NotificationService {
 
 		// If the notification is not found, throw an error
 		if (!notification) {
-			throw new Error('Notification not found');
+			throw new Error('notificationNotFound');
 		}
 
 		// Create the update parameters

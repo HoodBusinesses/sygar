@@ -33,7 +33,7 @@ export class AbilityFactory {
     // Organization Admin Permissions
     else if (user.role === UserRoles.ORG_ADMIN) {
       if (!user.organizationId) {
-        throw new Error('Organization ID is required for organization admin');
+        throw new Error('orgIdRequiredForOrgAdmin');
       }
       can(Action.Manage, 'User', { organizationId: user.organizationId });
       can(Action.Manage, 'Ability', { organizationId: user.organizationId });
@@ -47,7 +47,7 @@ export class AbilityFactory {
 
       if (!abilities || abilities.length === 0) {
         // Default no abilities case
-        throw new Error('No abilities defined for this user.');
+        throw new Error('noAbilitiesDefinedForThisUser');
       }
 
       for (const ability of abilities) {

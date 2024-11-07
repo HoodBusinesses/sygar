@@ -50,7 +50,7 @@ export class AbilityService {
 		// Add abilities based on the user's role
 		if (role === UserRoles.ORG_ADMIN) {
 			if (!organizationId) {
-				throw new Error('Organization ID is required for organization admin');
+				throw new Error('orgIdRequiredForOrgAdmin');
 			}
 			// Add ability to manage all users
 			abilities.push({

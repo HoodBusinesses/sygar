@@ -139,7 +139,7 @@ export class AuthService {
 
 		// If the user is not found, throw an unauthorized exception
 		if (!user) {
-			throw new UnauthorizedException('Invalid credentials');
+			throw new UnauthorizedException('userNotFound');
 		}
 		
 		// Generate a token
@@ -248,12 +248,12 @@ export class AuthService {
 
 		// If the user is not found, throw an unauthorized exception
 		if (!user) {
-			throw new UnauthorizedException('Invalid token');
+			throw new UnauthorizedException('invalidToken');
 		}
 
 		// If the token is expired, throw an unauthorized exception
 		if (user.resetPasswordTokenExpiresAt && new Date(user.resetPasswordTokenExpiresAt) < new Date()) {
-			throw new UnauthorizedException('Token expired');
+			throw new UnauthorizedException('invalidToken');
 		}
 
 		// Hash the new password

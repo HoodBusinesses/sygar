@@ -36,5 +36,13 @@
     "userDoesNotHaveTheNecessaryAbilities": "User does not have the necessary abilities",
     "invalidDates": "Invalid dates",
     "uidRequired": "uid is required",
-    "themeDoesntExists": "Theme does not exist"
+    "themeDoesntExists": "Theme does not exist",
+    "notificationNotFound": "Notification not found",
+    "noAbilitiesDefinedForThisUser": "No abilities defined for this user.",
+    "orgIdRequiredForOrgAdmin": "Organization ID is required for organization admin",
+    "animatorAlreadyExistWithThisEmail": "Animator already exist with this email",
+    "animatorNotFound": "There is no animator with the email being given!",
+    "formatorAlreadyExistWithThisEmail": "Formator already exist with this email",
+    "formatorNotFound": "There is no formator with the email being given!",
+    "errorSeedingAbilities": "Error seeding abilities"
 }

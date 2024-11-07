@@ -35,5 +35,13 @@
     "userDoesNotHaveTheNecessaryAbilities": "المستخدم ليس لديه القدرات اللازمة",
     "invalidDates": "التواريخ غير صالحة",
     "uidRequired": "المعرف مطلوب",
-    "themeDoesntExists": "الموضوع غير موجود"
+    "themeDoesntExists": "الموضوع غير موجود",
+    "notificationNotFound": "الإشعار غير موجود",
+    "noAbilitiesDefinedForThisUser": "لا يوجد قدرات محددة لهذا المستخدم.",
+    "orgIdRequiredForOrgAdmin": "معرف المنظمة مطلوب لمسؤول المنظمة",
+    "animatorAlreadyExistWithThisEmail": "المخرج موجود بالفعل بهذا البريد الإلكتروني",
+    "animatorNotFound": "لا يوجد مخرج بهذا البريد الإلكتروني",
+    "formatorAlreadyExistWithThisEmail": "المعلم موجود بالفعل بهذا البريد الإلكتروني",
+    "formatorNotFound": "لا يوجد معلم بهذا البريد الإلكتروني",
+    "errorSeedingAbilities": "فشل إنشاء القدرات"
 }

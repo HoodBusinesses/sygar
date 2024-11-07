@@ -228,7 +228,7 @@ export class AnimatorService {
 	async createAnimator(createAnimatorDto: CreateAnimatorDto) {
 		const animator = await this.animatorRepository.getByEmail(createAnimatorDto.email);
 
-		if (animator) throw new Error('Animator already exist with this email!');
+		if (animator) throw new Error('animatorAlreadyExistWithThisEmail');
 
 		const workingHours: CreateWorkingTimeDto[] = createAnimatorDto.workingHours;
 		
@@ -253,7 +253,7 @@ export class AnimatorService {
 			throw new Error('emailRequired');
 		const animator: Animator | null = await this.animatorRepository.getByEmail(email);
 		if (!animator)
-			throw new Error('There is no animator with the email being given!');
+			throw new Error('animatorNotFound');
 		return animator;
 	}
 
@@ -283,7 +283,7 @@ export class FormatorService {
 	async createFormator(createFormatorDto: CreateFormatorDto) {
 		const formator = await this.formatorRepository.getByEmail(createFormatorDto.email);
 
-		if (formator) throw new Error('Formator already exist with this email!');
+		if (formator) throw new Error('formatorAlreadyExistWithThisEmail');
 
 		const workingHours: CreateWorkingTimeDto[] = createFormatorDto.workingHours;
 
@@ -307,7 +307,7 @@ export class FormatorService {
 			throw new Error('emailRequired');
 		const formator: Formator | null = await this.formatorRepository.getByEmail(email);
 		if (!formator)
-			throw new Error('There is no formator with the email being given!');
+			throw new Error('formatorNotFound');
 		return formator;
 	}
 

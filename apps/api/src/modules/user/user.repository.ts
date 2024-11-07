@@ -76,7 +76,7 @@ export class UserRepository {
 		} catch (error) {
 			// Delete the user if the abilities could not be seeded
 			await this.delete(user.email);
-			throw new Error('Error seeding abilities');
+			throw new Error('errorSeedingAbilities');
 		}
 
 		// Create the admin if the user is an organization admin
@@ -109,7 +109,7 @@ export class UserRepository {
 		const existingUser = await this.findByUid(user.uid);
 
 		if (!existingUser) {
-			throw new Error('User does not exist');
+			throw new Error('userNotFound');
 		}
 
 		// Create the update expression
