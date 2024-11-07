@@ -1,7 +1,8 @@
 import { ColumnDef } from '@tanstack/react-table'
-import DeleteModal from '../DeleteModal'
-import ButtonsAction from '../organization/org-table-actions'
 import { Checkbox } from '../ui/checkbox'
+import { Button } from '../ui/button'
+import ButtonsAction from '../organization/org-table-actions'
+import DeleteModal from '../DeleteModal'
 
 export interface Theme {
   id: number
@@ -9,9 +10,11 @@ export interface Theme {
   identifier: string
   year: string
   price: number
+  groups?: string
+  options?: string
 }
 
-export const themeColumns = (setEditTheme: () => void, setGroupThemes: () => void): ColumnDef<Theme>[] => [
+export const themeColumns = (setGroupThemes: () => void): ColumnDef<Theme>[] => [
   {
     accessorKey: 'id',
     header: ({ table }) => (
@@ -61,18 +64,20 @@ export const themeColumns = (setEditTheme: () => void, setGroupThemes: () => voi
     accessorKey: 'groups',
     header: 'themesTable.groups',
     cell: () => (
-      <>
-        <button onClick={setGroupThemes} className="hover:underline text-blue-500 py-1">
-          Groups
-        </button>
-      </>
+      <button onClick={setGroupThemes} className="hover:underline text-blue-500 px-4 py-1">
+        Groups
+      </button>
     )
   },
   {
     accessorKey: 'options',
     header: 'themesTable.options',
     cell: ({ row }) => (
-      <ButtonsAction rowId={row.original.id} subscription={false} setEditOrg={setEditTheme} />
+      <ButtonsAction
+        rowId={row.original.id}
+        subscription={false}
+        href={`/edit?type=themes&crud=edit`}
+      />
     )
   }
 ]

@@ -1,6 +1,6 @@
 
 import { useTranslate } from '@renderer/hooks/useTranslate'
-import { MemberFormData } from '@renderer/utils/schemas/organization'
+import { MemberFormData } from '@renderer/utils/schemas/formSchema'
 import { Edit, Trash2 } from 'lucide-react'
 import { UseFormRegister } from 'react-hook-form'
 import { Button } from './ui/button'

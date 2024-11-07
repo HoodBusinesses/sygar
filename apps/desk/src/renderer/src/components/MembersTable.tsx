@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslate } from '@renderer/hooks/useTranslate'
 import { useForm } from 'react-hook-form'
-import { memberSchema, type MemberFormData } from '../utils/schemas/organization'
+import { memberSchema, type MemberFormData } from '../utils/schemas/formSchema'
 import MembersTableBody from './MembersTableBody'
 import { Table, TableHead, TableHeader, TableRow } from './ui/table'
 import { cn } from './ui/lib/utils'
@@ -32,6 +32,7 @@ export const MembersTable = ({ members, onEdit, onDelete }: MembersTableProps) =
   ]
 
   return (
+    //refactor to use the Table component
     <Table className="border-2 rounded-lg border-gray-200 border-separate">
       <TableHeader>
         <TableRow className="border border-gray-200 rounded-t-lg">

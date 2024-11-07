@@ -1,5 +1,5 @@
 import { useFormContext } from 'react-hook-form'
-import type { OrganizationFormData } from '../../utils/schemas/organization'
+import type { OrganizationFormData } from '../../utils/schemas/formSchema'
 import { Card, CardContent } from '../ui/card'
 import { useTranslate } from '@renderer/hooks/useTranslate'
 import FormInputItem from '../ui/form-input-item'
