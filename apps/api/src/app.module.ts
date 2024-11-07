@@ -10,6 +10,7 @@ import { AbilityModule } from './modules/ability/ability.module';
 import { RbacModule } from './global/rbac/roles.module';
 import { LanguageModule } from './global/language/language.module';
 import { NotificationsModule } from './global/notifactions/notifications.module';
+import { TaskService } from './global/schedule/task.service';
 
 /**
  * @module AppModule
@@ -35,9 +36,10 @@ import { NotificationsModule } from './global/notifactions/notifications.module'
       // validationOptions,
       // load: [appConfig(process.env.NODE_ENV)],
     }),
-    DbModule,
     // NotificationsModule,
+    DbModule,
   ],
+  providers: [TaskService],
   controllers: [AppController],
 })
 export class AppModule {}

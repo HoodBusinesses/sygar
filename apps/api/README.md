@@ -28,7 +28,7 @@
 4. **Prepare the Database and Seed Admins**
    Run the following commands to prepare the database and seed the admin data:
    ```bash
-   pnpm db:prepare && pnpm admins:seed
+   pnpm script:tables && pnpm script:seed
    ```
 
 5. **Start the Development Server**

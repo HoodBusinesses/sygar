@@ -6,28 +6,14 @@ export class CreateOrganizationDto {
 	@IsNotEmpty()
 	@IsString()
 	@ApiProperty({ example: '123456789', description: 'CNSS of the organization' })
-	cnss!: string;
+	cnss!: string; // CNSS of the organization
 
 	@IsNotEmpty()
 	@IsString()
 	@ApiProperty({ example: 'My Organization', description: 'Name of the organization' })
-	name!: string;
+	name!: string; // Name of the organization
 
 	@IsNumber()
 	@ApiProperty({ example: 30, description: 'Free trial duration in days' })
-	freeTrial!: number;
+	freeTrial!: number; // Free trial duration in days
 }
-
-
-// Table Organization {
-//   // organization have users
-//   // organization have bills
-//   uid uuid pk
-//   cnss text unique
-//   freeTrial datetime
-//   id integer // counter starting from 0
-//   key text // YYYYMMDDCCCC
-//   name text  
-//   createdAt datetime
-//   updateAt datetime
-// }

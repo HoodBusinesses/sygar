@@ -1,64 +1,23 @@
 import { LocalTableInput } from "src/shared/types/db";
-import { IsArray, IsEmail, IsNotEmpty, IsObject, IsOptional, IsString, ValidateNested } from "class-validator";
-import { WorkingTime } from "./working-time.model";
-import { CreateWorkingTimeDto } from "./group.model";
-import { Type } from "class-transformer";
 
+/**
+ * Interface for a formator
+ */
 export interface Formator {
 	PK: string,
 	SK: string,
-    uid: string; // Unique identifier for the animator
-    name: string; // Animator's full name
-    email: string; // Contact information (optional)
-	createdAt: number;
-	updatedAt?: number;
+	uid: string; // Unique identifier for the animator
+	firstName: string; // First name of the animator
+	lastName: string; // Last name of the animator
+	email: string; // Contact information (optional)
+	organizationId: string; // Organization ID of the formator
+	createdAt: number; // Creation date of the formator
+	updatedAt?: number; // Update date of the formator
 }
 
-export class CreateFormatorDto {
-	@IsNotEmpty()
-	@IsString()
-	name!: string;
-
-	@IsNotEmpty()
-	@IsEmail()
-	email!: string;
-
-	@IsNotEmpty()
-	@IsArray()
-	@ValidateNested({ each: true })
-	@Type(() => CreateWorkingTimeDto)
-	workingHours!: CreateWorkingTimeDto[];
-
-	@IsNotEmpty()
-	@IsString()
-	organizationId!: string;
-}
-
-export class CreateFormatorItem {
-	@IsNotEmpty()
-	@IsString()
-	name!: string;
-
-	@IsNotEmpty()
-	@IsEmail()
-	email!: string;
-
-	@IsNotEmpty()
-	@IsString()
-	organizationId!: string;
-}
-
-export class UpdateFormatorDto {
-	@IsOptional()
-	@IsString()
-	name?: string;
-
-	@IsOptional()
-	@IsString()
-	email?: string;
-}
-
-
+/**
+ * Schema for the formator table
+ */
 export const FormatorSchema: LocalTableInput = {
 	TableName: 'Formators',
 	AttributeDefinitions: [

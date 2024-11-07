@@ -134,7 +134,7 @@ export class AuthController {
 
 		try {
 			return {
-				message:  await this.authService.requestPasswordReset(dto),
+				...await this.authService.requestPasswordReset(dto),
 				date: new Date().toISOString()
 			};
 		} catch (error: any) {
@@ -155,6 +155,8 @@ export class AuthController {
 		schema: {
 			example: {
 				message: 'Password reset successfully',
+				token: 'token',
+				date: '2021-09-01T12:00:00.000Z'
 			}
 		}
 	})

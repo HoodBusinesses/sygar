@@ -203,7 +203,7 @@ const OrganizationsPage = () => {
             <TableBody>
               {paginatedData.map((org) => (
                 <TableRow key={org.id} className="hover:bg-gray-50">
-                  <TableCell>
+                  <TableCell className="items-center">
                     <img
                       src="/images/profile_img.png"
                       alt="Organization"

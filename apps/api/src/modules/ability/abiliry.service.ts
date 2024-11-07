@@ -243,7 +243,6 @@ export class AbilityService {
 				return item.charAt(0).toUpperCase() + item.slice(1); // Capitalize the first letter
 			}
 		});
-		console.debug('action:', action, 'subject:', subject);
 
 		if (!action || !subject) {
 			throw new Error('invalidAbilityType');

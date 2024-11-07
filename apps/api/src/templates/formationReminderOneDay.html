@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Email Notification Template</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Arial", sans-serif;
+        background-color: #ffffff;
+        color: #333;
+      }
+
+      .email-container {
+        max-width: 600px;
+        margin: 50px auto;
+        background-color: #f4f4f6; 
+        border-radius: 10px;
+        padding: 40px;
+        text-align: left;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      }
+
+      .logo {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .logo img {
+        max-width: 140px; 
+      }
+
+      h1 {
+        font-size: 20px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      p {
+        font-size: 16px;
+        color: #555;
+        line-height: 1.8;
+        margin-bottom: 20px;
+      }
+
+      .email-content {
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+
+      .footer {
+        margin-top: 40px;
+        font-size: 14px;
+        color: #888;
+        text-align: center;
+      }
+
+      .footer a {
+        color: #377dff;
+        text-decoration: underline; 
+      }
+
+      .footer a:hover {
+        text-decoration: none;
+      }
+
+      .footer p {
+        margin: 5px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-container">
+      <div class="logo">
+        <img src="https://i.imgur.com/xZcqLvI.png" alt="Sygafor Logo" />
+      </div>
+
+      <div class="email-content">
+        <h1>Dear {{name}},</h1>
+        <p>
+          We hope you're excited! This is a friendly reminder that your
+          formation titled <strong>"{{formationName}}"</strong> is starting
+          tomorrow, <strong>{{formationStartDate}}</strong>.
+        </p>
+        <p>
+          Please ensure you're prepared, and we look forward to seeing you
+          there!
+        </p>
+        <p>
+          If you have any questions or need further assistance, feel free to
+          reach out.
+        </p>
+        <p>Best regards,</p>
+      </div>
+
+      <div class="footer">
+        <p>
+          Sent by Sygafor. <a href="https://sygafor.ma">check our website sygafor.ma</a>
+        </p>
+        <p>1673, av du Mont-Royal E, Montréal, Quebec, Canada</p>
+      </div>
+    </div>
+  </body>
+</html>

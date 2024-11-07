@@ -1,14 +1,26 @@
 import { Injectable } from "@nestjs/common";
 import { CreateOrganizationDto } from "./dto/create-organization.dto";
-import { AnimatorRepository, FormatorRepository, OrganizationRepository, ThemeRepository, WorkingHoursManager } from "./organization.repository";
+import { AnimatorRepository, AssigningGroupRepository, FormatorRepository, GroupRepository, OrganizationRepository, ParticipantRepository, ThemeRepository } from "./organization.repository";
 import { UpdateOrganizationDto } from "./dto/update-organization.dto";
 import { UserService } from "../user/user.service";
 import { CreateThemeDto } from "./dto/create-theme.dto";
 import { UpdateThemeDto } from "./dto/update-theme.dto";
-import { CreateAnimatorDto, CreateAnimatorItemDto, UpdateAnimatorDto } from "./dto/create-animator.dto";
+import { CreateAnimatorDto } from "./dto/create-animator.dto";
+import { UpdateAnimatorDto } from "./dto/update-animator.dto";
 import { Animator } from "./model/animator.model";
-import { CreateWorkingTimeDto, WorkTimeLimit } from "./model/group.model";
-import { CreateFormatorDto, CreateFormatorItem, Formator } from "./model/formator.model";
+import { Formator } from "./model/formator.model";
+import { CreateFormatorDto } from "./dto/create-formator.dto";
+import { UpdateFormatorDto } from "./dto/update-formator.dto";
+import { CreateParticipantDto } from "./dto/create-participant.dto";
+import { UpdateParticipantDto } from "./dto/update-participant.dto";
+import { Participant } from "./model/participant.model";
+import { CreateGroupDto } from "./dto/create-group.dto";
+import { UpdateGroupDto } from "./dto/update-group.dto";
+import { EnrolledType, Group } from "./model/group.model";
+import { AssignToGroupDto } from "./dto/assign-group.dto";
+import { TaskService } from "src/global/schedule/task.service";
+import { MailService } from "src/global/mail/mail.service";
+import { AssigningGroup } from "./model/assigning-group.model";
 
 /**
  * @class OrganizationService
@@ -141,6 +153,7 @@ export class ThemeService {
 			throw new Error('organizationDoesntExists');
 		}
 
+		// Create the theme
 		return await this.themeRepository.createTheme(createThemeDto);
 	}
 
@@ -213,96 +226,480 @@ export class ThemeService {
 }
 
 @Injectable()
+export class GroupService {
+
+	/**
+	 * Constructor for the GroupService class.
+	 * 
+	 * @param groupRepository - The repository for group data.
+	 * @param themeRepository - The repository for theme data.
+	 */
+	constructor(
+		private readonly groupRepository: GroupRepository,
+		private readonly themeRepository: ThemeRepository,
+		private readonly taskService: TaskService,
+		private readonly assigningGroupRepository: AssigningGroupRepository,
+		private readonly animatorRepository: AnimatorRepository,
+		private readonly formatorRepository: FormatorRepository,
+		private readonly participantRepository: ParticipantRepository,
+	) {}
+
+	/**
+	 * Create a new group.
+	 * 
+	 * @param createGroupDto - The data for creating the group.
+	 * @returns The created group.
+	 */
+	async createGroup(createGroupDto: CreateGroupDto) {
+		// check if the theme exists
+		const theme = await this.themeRepository.findThemeByUid(createGroupDto.themeId);
+		if (!theme) {
+			throw new Error('themeDoesntExists');
+		}
+
+		if (createGroupDto.startDate > createGroupDto.endDate) {
+			throw new Error('invalidDates');
+		}
+
+		if (createGroupDto.startDate < theme.startDate || createGroupDto.endDate > theme.endDate) {
+			throw new Error('invalidDates');
+		}
+
+		return await this.groupRepository.createGroup(createGroupDto);
+	}
+
+	/**
+	 * Get a group by UID.
+	 * 
+	 * @param uid - The UID of the group to retrieve.
+	 * @returns The group found.
+	 */
+	async getGroup(uid: string) {
+		if (!uid) {
+			throw new Error('uidRequired');
+		}
+
+		const group = await this.groupRepository.getByUid(uid);
+
+		if (!group) {
+			throw new Error('groupDoesntExists');
+		}
+
+		return group;
+	}
+
+	/**
+	 * Update a group by UID.
+	 * 
+	 * @param uid - The UID of the group to update.
+	 * @param updateGroupDto - The data for updating the group.
+	 * @returns The updated group.
+	 */
+	async updateGroup(uid: string, updateGroupDto: UpdateGroupDto) {
+		const group = await this.groupRepository.getByUid(uid);
+
+		if (!group) {
+			throw new Error('groupDoesntExists');
+		}
+
+		const updatedGroup =  await this.groupRepository.updateGroup(uid, updateGroupDto);
+
+		if (group.startDate !== updatedGroup.startDate) {
+			// reschedule the formation reminders
+			const assignings: AssigningGroup[] = await this.assigningGroupRepository.getByGroupUid(uid);
+			for (const assigning of assignings) {
+				const resiver = await this.getResiver(assigning.enrolledType, assigning.enrolledUid);
+				if (resiver) {
+					await this.taskService.rescheduleFormationReminder(assigning.enrolledType, updatedGroup, resiver);
+				}
+			}
+		}
+		return updatedGroup;
+	}
+
+	async getResiver(enrolledType: EnrolledType, enrolledUid: string) {
+		switch (enrolledType) {
+			case EnrolledType.Animator:
+				return await this.animatorRepository.getByUid(enrolledUid);
+			case EnrolledType.Formator:
+				return await this.formatorRepository.getByUid(enrolledUid);
+			case EnrolledType.Participant:
+				return await this.participantRepository.getByUid(enrolledUid);
+		}
+	}
+
+	/**
+	 * Delete a group by UID.
+	 * 
+	 * @param uid - The UID of the group to delete.
+	 * @returns The deleted group.
+	 */
+	async deleteGroup(uid: string) {
+		const group: Group | null = await this.groupRepository.getByUid(uid);
+
+		if (!group) {
+			throw new Error('groupDoesntExists');
+		}
+
+		const deletedGroup = await this.groupRepository.deleteGroup(uid);
+
+		// get all assigning groups of the group to cancel the formation reminders
+		const assigningGroups = await this.assigningGroupRepository.getByGroupUid(uid);
+		for (const assigningGroup of assigningGroups) {
+			// cancel the formation reminder
+			this.taskService.cancelFormationReminder(assigningGroup.enrolledType, assigningGroup.enrolledUid, assigningGroup.groupUid);
+			// delete the assigning group
+			await this.assigningGroupRepository.deleteAssigningGroup(assigningGroup.uid);
+		}
+
+		return deletedGroup;
+	}
+}
+
+/**
+ * @class AnimatorService
+ * @remarks
+ * The service uses the AnimatorRepository to interact with the database.
+ */
+@Injectable()
 export class AnimatorService {
+	/**
+	 * Constructor for the AnimatorService class.
+	 * 
+	 * @param animatorRepository - The repository for animator data.
+	 * @param organizationRepository - The repository for organization data.
+	 */
 	constructor(
 		private readonly animatorRepository: AnimatorRepository,
-		private readonly workingHoursManager: WorkingHoursManager,
+		private readonly organizationRepository: OrganizationRepository,
 	) {}
-	private convertToNumber(dateString: string): number {
-		const date = new Date(dateString);
-		if (isNaN(date.getTime())) {
-			throw new Error('Invalid date string');
-		}
-		return date.getTime();
-	}
+
+	/**
+	 * Create a new animator.
+	 * 
+	 * @param createAnimatorDto - The data for creating the animator.
+	 * @returns The created animator.
+	 */
 	async createAnimator(createAnimatorDto: CreateAnimatorDto) {
+		// check if the organization exists
+		const organization = await this.organizationRepository.findByCnss(createAnimatorDto.organizationId);
+		if (!organization) {
+			throw new Error('organizationDoesntExists');
+		}
+
+		// check if the animator already exists
 		const animator = await this.animatorRepository.getByEmail(createAnimatorDto.email);
 
-		if (animator) throw new Error('Animator already exist with this email!');
+		if (animator) {
+			throw new Error('animatorAlreadyExists');
+		}
 
-		const workingHours: CreateWorkingTimeDto[] = createAnimatorDto.workingHours;
-		
-		await this.workingHoursManager.validateWorkingHours(workingHours, createAnimatorDto.email);
-
-		const animatorItem: CreateAnimatorItemDto = {
-			name: createAnimatorDto.name,
-			email: createAnimatorDto.email,
-			organizationId: createAnimatorDto.organizationId,
-		};
-
-		const newAnimator = await this.animatorRepository.createAnimator(animatorItem);
-		
-		await this.workingHoursManager.addWorkingHours(workingHours, createAnimatorDto.email);
-
-
-		return { ...newAnimator, workingHours }; 
+		// create the animator
+		return await this.animatorRepository.createAnimator(createAnimatorDto);
 	}
 
-	async getAnimator(email: string): Promise<Animator> {
-		if (!email)
-			throw new Error('emailRequired');
-		const animator: Animator | null = await this.animatorRepository.getByEmail(email);
+	/**
+	 * Get an animator by UID.
+	 * 
+	 * @param uid - The UID of the animator to retrieve.
+	 * @returns The animator found.
+	 */
+	async getAnimator(uid: string): Promise<Animator> {
+		if (!uid)
+			throw new Error('uidRequired');
+		const animator: Animator | null = await this.animatorRepository.getByUid(uid);
 		if (!animator)
-			throw new Error('There is no animator with the email being given!');
+			throw new Error('There is no animator with the uid being given!');
 		return animator;
 	}
 
+	/**
+	 * Update an animator by UID.
+	 * 
+	 * @param updateAnimatorDto - The data for updating the animator.
+	 * @param uid - The UID of the animator to update.
+	 * @returns The updated animator.
+	 */
 	async updateAnimator(updateAnimatorDto: UpdateAnimatorDto, uid: string) {
+		if (!uid) {
+			throw new Error('uidRequired');
+		}
 		// check if the animator exists
 		const animator = await this.animatorRepository.getByUid(uid);
 		if (!animator) {
 			throw new Error('animatorDoesntExists');
 		}
 
+		if (updateAnimatorDto.email && updateAnimatorDto.email !== animator.email) {
+			const animatorByEmail = await this.animatorRepository.getByEmail(updateAnimatorDto.email);
+			if (animatorByEmail) {
+				throw new Error('emailAlreadyExists');
+			}
+		}
+
 		return await this.animatorRepository.updateAnimator(updateAnimatorDto, uid);
 		
 	}
 
-	async deleteAnimator(email: string) {
-		return await this.animatorRepository.deleteAnimator(email);
+	/**
+	 * Delete an animator by UID.
+	 * 
+	 * @param uid - The UID of the animator to delete.
+	 * @returns The deleted animator.
+	 */
+	async deleteAnimator(uid: string) {
+		if (!uid) {
+			throw new Error('uidRequired');
+		}
+
+		const animator = await this.animatorRepository.getByUid(uid);
+		if (!animator) {
+			throw new Error('animatorDoesntExists');
+		}
+
+		return await this.animatorRepository.deleteAnimator(uid);
 	}
 }
 
 @Injectable()
-export class FormatorService {
+export class AssigningGroupService {
+
+	/**
+	 * Constructor for the AssigningGroupService class.
+	 * 
+	 * @param assigningGroupRepository - The repository for assigning group data.
+	 * @param groupRepository - The repository for group data.
+	 * @param animatorRepository - The repository for animator data.
+	 * @param formatorRepository - The repository for formator data.
+	 * @param participantRepository - The repository for participant data.
+	 * @param taskService - The service for scheduling tasks.
+	 */
 	constructor(
+		private readonly assigningGroupRepository: AssigningGroupRepository,
+		private readonly groupRepository: GroupRepository,
+		private readonly animatorRepository: AnimatorRepository,
 		private readonly formatorRepository: FormatorRepository,
-		private readonly workingHoursManager: WorkingHoursManager,
+		private readonly participantRepository: ParticipantRepository,
+		private readonly taskService: TaskService,
+		private readonly mailService: MailService,
 	) {}
 
-	async createFormator(createFormatorDto: CreateFormatorDto) {
-		const formator = await this.formatorRepository.getByEmail(createFormatorDto.email);
+	/**
+	 * Check if the dates are overlapping.
+	 * 
+	 * @param enrolledUid - The UID of the enrolled.
+	 * @param enrolledType - The type of the enrolled.
+	 * @param groupUid - The UID of the group.
+	 * @returns True if the dates are not overlapping, false otherwise.
+	 */
+	async checkOverlappingDates(assignToGroupDto: AssignToGroupDto): Promise<boolean> {
+		const enrolledGroups = await this.getByEnrolleds(assignToGroupDto.enrolledUid, assignToGroupDto.enrolledType);
+		if (enrolledGroups.length === 0) return false;
 
-		if (formator) throw new Error('Formator already exist with this email!');
+		const group = await this.groupRepository.getByUid(assignToGroupDto.groupUid);
 
-		const workingHours: CreateWorkingTimeDto[] = createFormatorDto.workingHours;
-
-		await this.workingHoursManager.validateWorkingHours(workingHours, createFormatorDto.email);
-
-		const formatorItem: CreateFormatorItem = {
-			name: createFormatorDto.name,
-			email: createFormatorDto.email,
-			organizationId: createFormatorDto.organizationId,
-		};
-
-		const newFormator = await this.formatorRepository.createFormator(formatorItem);
-
-		await this.workingHoursManager.addWorkingHours(workingHours, createFormatorDto.email);
-
-		return { ...newFormator, workingHours };
+		if (!group) {
+			throw new Error('groupDoesntExists');
+		}
+		// check if the dates are overlapping
+		for (const enrolledGroup of enrolledGroups) {
+			// check if the start date is before the end date of the group and the end date is after the start date of the group
+			if (enrolledGroup.startDate < group.endDate && enrolledGroup.endDate > group.startDate) {
+				return true;
+			}
+		}
+		return false;
 	}
 
-	async getFormator(email: string): Promise<Formator> {
+	/**
+	 * Create a new assigning group.
+	 * 
+	 * @param assignToGroupDto - The data for creating the assigning group.
+	 * @returns The created assigning group.
+	 */
+	async createAssigningGroup(assignToGroupDto: AssignToGroupDto) {
+		let resiver: Animator | Formator | Participant;
+		// check if the enrolled exists
+		switch (assignToGroupDto.enrolledType) {
+			case EnrolledType.Animator:
+				const animator = await this.animatorRepository.getByUid(assignToGroupDto.enrolledUid);
+				if (!animator) {
+					throw new Error('animatorDoesntExists');
+				}
+				resiver = animator;
+				break;
+			case EnrolledType.Formator:
+				const formator = await this.formatorRepository.getByUid(assignToGroupDto.enrolledUid);
+				if (!formator) {
+					throw new Error('formatorDoesntExists');
+				}
+				resiver = formator;
+				break;
+			case EnrolledType.Participant:
+				const participant = await this.participantRepository.getByUid(assignToGroupDto.enrolledUid);
+				if (!participant) {
+					throw new Error('participantDoesntExists');
+				}
+				resiver = participant;
+				break;
+		}
+		// check if the group exists
+		const group: Group | null = await this.groupRepository.getByUid(assignToGroupDto.groupUid);
+		if (!group) {
+			throw new Error('groupDoesntExists');
+		}
+
+		// check if the dates are overlapping
+		const isOverlapping = await this.checkOverlappingDates(assignToGroupDto);
+
+		if (isOverlapping) {
+			throw new Error('overlappingDates');
+		}
+
+
+		const assigningGroup =	 await this.assigningGroupRepository.createAssigningGroup(assignToGroupDto);
+
+		
+		await this.taskService.scheduleFormationReminder(assignToGroupDto.enrolledType, group, resiver);
+		
+
+		return assigningGroup;
+	}
+
+	/**
+	 * Get an assigning group by UID.
+	 * 
+	 * @param uid - The UID of the assigning group to retrieve.
+	 * @returns The assigning group found.
+	 */
+	async getByUid(uid: string) {
+		const assigningGroup = await this.assigningGroupRepository.getByUid(uid);
+		if (!assigningGroup) {
+			throw new Error('assigningGroupDoesntExists');
+		}
+		return assigningGroup;
+	}
+
+	/**
+	 * Get an assigning group by enrolled UID.
+	 * 
+	 * @param enrolledUid - The UID of the enrolled.
+	 * @param enrolledType - The type of the enrolled.
+	 * @returns The assigning group found.
+	 */
+	async getByEnrolleds(enrolledUid: string, enrolledType: EnrolledType) {
+		// check if the enrolled exists
+		switch (enrolledType) {
+			case EnrolledType.Animator:
+				const animator = await this.animatorRepository.getByUid(enrolledUid);
+				if (!animator) {
+					throw new Error('animatorDoesntExists');
+				}
+				break;
+			case EnrolledType.Formator:
+				const formator = await this.formatorRepository.getByUid(enrolledUid);
+				if (!formator) {
+					throw new Error('formatorDoesntExists');
+				}
+				break;
+			case EnrolledType.Participant:
+				const participant = await this.participantRepository.getByUid(enrolledUid);
+				if (!participant) {
+					throw new Error('participantDoesntExists');
+				}
+				break;
+		}
+		return await this.assigningGroupRepository.getByEnrolleds(enrolledUid, enrolledType);
+	}
+
+	/**
+	 * Get an assigning group by group UID.
+	 * 
+	 * @param groupUid - The UID of the group.
+	 * @param enrolledType - The type of the enrolled.
+	 * @returns The assigning group found.
+	 */
+	async getByGroupUid(groupUid: string, enrolledType: EnrolledType) {
+		if (!groupUid) {
+			throw new Error('groupUidRequired');
+		}
+		else if (!enrolledType) {
+			throw new Error('enrolledTypeRequired');
+		}
+
+		const group = await this.groupRepository.getByUid(groupUid);
+		if (!group) {
+			throw new Error('groupDoesntExists');
+		}
+
+		return await this.assigningGroupRepository.getByGroupUidAndEnrolledType(groupUid, enrolledType);
+	}
+
+	/**
+	 * Delete an assigning group by UID.
+	 * 
+	 * @param uid - The UID of the assigning group to delete.
+	 * @returns The deleted assigning group.
+	 */
+	async deleteAssigningGroup(uid: string) {
+		const assigningGroup = await this.assigningGroupRepository.getByUid(uid);
+		if (!assigningGroup) {
+			throw new Error('assigningGroupDoesntExists');
+		}
+
+		return await this.assigningGroupRepository.deleteAssigningGroup(uid);
+	}
+}
+
+/**
+ * @class FormatorService
+ * @remarks
+ * The service uses the FormatorRepository to interact with the database.
+ */
+@Injectable()
+export class FormatorService {
+	/**
+	 * Constructor for the FormatorService class.
+	 * 
+	 * @param formatorRepository - The repository for formator data.
+	 * @param organizationRepository - The repository for organization data.
+	 */
+	constructor(
+		private readonly formatorRepository: FormatorRepository,
+		private readonly organizationRepository: OrganizationRepository,
+	) {}
+
+	/**
+	 * Create a new formator.
+	 * 
+	 * @param createFormatorDto - The data for creating the formator.
+	 * @returns The created formator.
+	 */
+	async createFormator(createFormatorDto: CreateFormatorDto) {
+		// check if the organization exists
+		const organization = await this.organizationRepository.findByCnss(createFormatorDto.organizationId);
+		if (!organization) {
+			throw new Error('organizationDoesntExists');
+		}
+
+		// check if the formator already exists
+		const formator = await this.formatorRepository.getByEmail(createFormatorDto.email);
+
+		if (formator) {
+			throw new Error('formatorAlreadyExists');
+		}
+
+		// create the formator
+		return await this.formatorRepository.createFormator(createFormatorDto);
+	}
+
+	/**
+	 * Get a formator by email.
+	 * 
+	 * @param email - The email of the formator to retrieve.
+	 * @returns The formator found.
+	 */
+	async getByEmail(email: string): Promise<Formator> {
 		if (!email)
 			throw new Error('emailRequired');
 		const formator: Formator | null = await this.formatorRepository.getByEmail(email);
@@ -311,4 +708,160 @@ export class FormatorService {
 		return formator;
 	}
 
+	/**
+	 * Get a formator by UID.
+	 * 
+	 * @param uid - The UID of the formator to retrieve.
+	 * @returns The formator found.
+	 */
+	async getByUid(uid: string): Promise<Formator> {
+		if (!uid)
+			throw new Error('uidRequired');
+		const formator: Formator | null = await this.formatorRepository.getByUid(uid);
+		if (!formator)
+			throw new Error('There is no formator with the uid being given!');
+		return formator;
+	}
+
+	/**
+	 * Update a formator by UID.
+	 * 
+	 * @param updateFormatorDto - The data for updating the formator.
+	 * @param uid - The UID of the formator to update.
+	 * @returns The updated formator.
+	 */
+	async updateFormator(updateFormatorDto: UpdateFormatorDto, uid: string) {
+		if (!uid) {
+			throw new Error('uidRequired');
+		}
+		// check if the formator exists
+		const formator = await this.formatorRepository.getByUid(uid);
+		if (!formator) {
+			throw new Error('formatorDoesntExists');
+		}
+
+		if (updateFormatorDto.email && updateFormatorDto.email !== formator.email) {
+			const formatorByEmail = await this.formatorRepository.getByEmail(updateFormatorDto.email);
+			if (formatorByEmail) {
+				throw new Error('emailAlreadyExists');
+			}
+		}
+
+		return await this.formatorRepository.updateFormator(updateFormatorDto, uid);
+	}
+
+	/**
+	 * Delete a formator by UID.
+	 * 
+	 * @param uid - The UID of the formator to delete.
+	 * @returns The deleted formator.
+	 */
+	async deleteFormator(uid: string) {
+		if (!uid) {
+			throw new Error('uidRequired');
+		}
+		const formator = await this.formatorRepository.getByUid(uid);
+		if (!formator) {
+			throw new Error('formatorDoesntExists');
+		}
+
+		return await this.formatorRepository.deleteFormator(uid);
+	}
+}
+
+@Injectable()
+export class ParticipantService {
+	
+	/**
+	 * Constructor for the ParticipantService class.
+	 * 
+	 * @param participantRepository - The repository for participant data.
+	 */
+	constructor(
+		private readonly participantRepository: ParticipantRepository,
+	) {}
+
+	/**
+	 * Create a new participant.
+	 * 
+	 * @param createParticipantDto - The data for creating the participant.
+	 * @returns The created participant.
+	 */
+	async createParticipant(createParticipantDto: CreateParticipantDto) {
+		const participantByEmail = await this.participantRepository.getByEmail(createParticipantDto.email);
+
+		if (participantByEmail) {
+			throw new Error('Participant already exist with this email!');
+		}
+
+		const participantByCnss = await this.participantRepository.getByCnss(createParticipantDto.cnss);
+
+		if (participantByCnss) {
+			throw new Error('Participant already exist with this CNSS!');
+		}
+
+		const newParticipant = await this.participantRepository.createParticipant(createParticipantDto);
+
+
+		return newParticipant;
+	}
+
+	/**
+	 * Get a participant by UID.
+	 * 
+	 * @param uid - The UID of the participant to retrieve.
+	 * @returns The participant found.
+	 */
+	async getParticipant(uid: string): Promise<Participant> {
+		if (!uid)
+			throw new Error('uidRequired');
+		const participant: Participant | null = await this.participantRepository.getByUid(uid);
+		if (!participant)
+			throw new Error('There is no participant with the uid being given!');
+		return participant;
+	}
+
+	/**
+	 * Update a participant by UID.
+	 * 
+	 * @param updateParticipantDto - The data for updating the participant.
+	 * @param uid - The UID of the participant to update.
+	 * @returns The updated participant.
+	 */
+	async updateParticipant(updateParticipantDto: UpdateParticipantDto, uid: string) {
+		if (!uid) {
+			throw new Error('uidRequired');
+		}
+		// check if the participant exists
+		const participant = await this.participantRepository.getByUid(uid);
+		if (!participant) {
+			throw new Error('participantDoesntExists');
+		}
+
+		if (updateParticipantDto.email && updateParticipantDto.email !== participant.email) {
+			const participantByEmail = await this.participantRepository.getByEmail(updateParticipantDto.email);
+			if (participantByEmail) {
+				throw new Error('emailAlreadyExists');
+			}
+		}
+
+		return await this.participantRepository.updateParticipant(updateParticipantDto, uid);
+	}
+
+	/**
+	 * Delete a participant by UID.
+	 * 
+	 * @param uid - The UID of the participant to delete.
+	 * @returns The deleted participant.
+	 */
+	async deleteParticipant(uid: string) {
+		if (!uid) {
+			throw new Error('uidRequired');
+		}
+		const participant = await this.participantRepository.getByUid(uid);
+		if (!participant) {
+			throw new Error('participantDoesntExists');
+		}
+		return await this.participantRepository.deleteParticipant(uid);
+	}
 }

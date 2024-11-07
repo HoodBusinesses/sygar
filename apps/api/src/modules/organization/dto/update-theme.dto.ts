@@ -1,21 +1,23 @@
-import { IsArray, IsNumber, IsOptional, IsString } from "class-validator";
-import { ThemeGroup } from "./create-theme.dto";
+import { IsNumber, IsOptional, IsString } from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
 
-// Dto for updating theme
+/**
+ * DTO for updating a theme
+ */
 export class UpdateThemeDto {
 	@IsOptional()
-	@IsArray({ each: true })
-	groups?: ThemeGroup[]; // Optional groups for the theme
-
-	@IsOptional()
 	@IsString()
+	@ApiProperty({ example: "My theme description", description: "Optional description for the group" })
 	description?: string; // Optional description for the group
 
 	@IsOptional()
 	@IsNumber()
+	@ApiProperty({ example: 1633392000000, description: "Start date for the theme" })
 	startDate?: number; // Optional start date for the theme
 
 	@IsOptional()
 	@IsNumber()
+	@ApiProperty({ example: 1633392000000, description: "End date for the theme" })
 	endDate?: number; // Optional end date for the theme
 }
+	

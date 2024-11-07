@@ -8,6 +8,8 @@ import { v4 as uuid } from "uuid";
 import { MailService } from "../mail/mail.service";
 import { UserRoles } from "src/modules/user/model/user.model";
 import { ActivateAccountDto, ValidateTokenDto } from "./dto/activate-account.dto";
+import { OrganizationService } from "src/modules/organization/organization.service";
+
 
 @Injectable()
 export class AuthService {
@@ -27,7 +29,8 @@ export class AuthService {
 		@Inject(forwardRef(() => UserService)) private readonly userService: UserService,
 		private readonly cryptService: CryptService,
 		private readonly jwtService: JwtService,
-		private readonly mailService: MailService
+		private readonly mailService: MailService,
+		private readonly organizationService: OrganizationService
 	) {
 		this.jwtSecretToken = configService.getOrThrow('JWT_SECRET_TOKEN');
 	}
@@ -52,7 +55,7 @@ export class AuthService {
 		}
 
 		// Verify the provided password against the stored hash
-		const isValid = await this.cryptService.compare(user.password, password);
+		const isValid = user.password ? await this.cryptService.compare(user.password, password) : false;
 
 		// If password is incoreect, throw unauthorized exception
 		if (!isValid) {
@@ -145,28 +148,29 @@ export class AuthService {
 		// Generate a token
 		const token = uuid();
 
-		// Set the token expiration time to 30 minutes from now
-		const expiresAt = new Date(Date.now() + 1800000);
+		// Set the token expiration time 7 days from now
+		const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7);
 
 		// Set the reset password token for the user
-		await this.userService.setResetPasswordToken(user.uid, token, expiresAt);
+		await this.userService.setResetPasswordToken(user.uid, token, expiresAt.getTime());
 
 		// Generate the reset link
 		const resetLink = `${this.configService.getOrThrow('APP_URL')}/activateAccount?token=${token}`;
 
+		// Load the activation account template
+		const activationAccountTemplate = await this.mailService.getTemplate('activationAccount');
+
+		// Replace the placeholders with the actual values
+		let html = activationAccountTemplate.replace('{{resetLink}}', resetLink);
+		html = html.replace('{{organizationName}}', (await this.organizationService.get(user.organizationId)).name);
+		html = html.replace('{{username}}', `${user.firstName} ${user.lastName}`);
 
 		// send the reset password email
 		const mailOptions = {
 			from: this.configService.getOrThrow('MAILER_FROM_ADDRESS'), // from address
 			to: user.email, // to address
 			subject: 'Activate your account', // subject
-			html: `
-			<h1>Activate your account</h1>
-			<p>You have requested to activate your account. Click the link below to activate it:</p>
-			<a href="${resetLink}">Activate Account</a>
-			<p>If you didn't request this, please ignore this email.</p>
-			<p>This link will expire in 30 minutes.</p>
-			`
+			html: html
 		};
 
 		// Send the reset password email
@@ -200,26 +204,27 @@ export class AuthService {
 
 		// Generate a token
 		const token = uuid();
-		const expiresAt = new Date(Date.now() + 1800000); // expires after 30 minutes from now
+		const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7); // expires after 7 days from now
 
 		// Set the reset password token for the user
-		await this.userService.setResetPasswordToken(user.uid, token, expiresAt);
+		await this.userService.setResetPasswordToken(user.uid, token, expiresAt.getTime());
 
 		// Generate the reset link
 		const resetLink = `${this.configService.getOrThrow('APP_URL')}/resetPassword?token=${token}`;
+
+		// Load the reset password template
+		const resetPasswordTemplate = await this.mailService.getTemplate('resetPassword');
+
+		// Replace the placeholders with the actual values
+		let html = resetPasswordTemplate.replace('{{resetLink}}', resetLink);
+		html = html.replace('{{username}}', `${user.firstName} ${user.lastName}`);
 
 		// send the reset password email
 		const mailOptions = {
 		  from: this.configService.getOrThrow('MAILER_FROM_ADDRESS'),
 		  to: user.email,
 		  subject: 'Password Reset Request',
-		  html: `
-			<h1>Password Reset Request</h1>
-			<p>You have requested to reset your password. Click the link below to reset it:</p>
-			<a href="${resetLink}">Reset Password</a>
-			<p>If you didn't request this, please ignore this email.</p>
-			<p>This link will expire in 30 minutes.</p>
-		  `,
+		  html: html,
 		};
 
 		// Send the reset password email
@@ -248,12 +253,12 @@ export class AuthService {
 
 		// If the user is not found, throw an unauthorized exception
 		if (!user) {
-			throw new UnauthorizedException('Invalid token');
+			throw new UnauthorizedException('invalidToken');
 		}
 
 		// If the token is expired, throw an unauthorized exception
 		if (user.resetPasswordTokenExpiresAt && new Date(user.resetPasswordTokenExpiresAt) < new Date()) {
-			throw new UnauthorizedException('Token expired');
+			throw new UnauthorizedException('tokenExpired');
 		}
 
 		// Hash the new password
@@ -264,8 +269,8 @@ export class AuthService {
 
 		// Delete the reset password token
 		await this.userService.setResetPasswordToken(user.uid, null, null);
-		
-		// Generate Jwt Token for the use
+
+		// Generate a token
 		const token = this.jwtService.sing(
 			{
 				uid: user.uid,
@@ -278,17 +283,12 @@ export class AuthService {
 				secret: this.jwtSecretToken,
 			}
 		);
-
-		// Return the token and user information
-		return {
-			token,
-			user: {
-				uid: user.uid,
-				email: user.email,
-				cnss: user.cnss,
-				role: user.role,
-			},
-		};
+		
+		// Return a message indicating that the password was reset successfully
+		return {	
+			message: "Password reset successfully",
+			token: token
+		}
 	}
 
 	
