@@ -1,7 +1,9 @@
 import { IsNumber, IsOptional, IsString } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
-// DTO for update organization
+/**
+ * DTO for updating an organization
+ */
 export class UpdateOrganizationDto {
 	@IsOptional()
 	@IsString()
@@ -9,7 +11,7 @@ export class UpdateOrganizationDto {
 		description: 'The name of the organization',
 		example: 'My Organization',
 	})
-	name?: string;
+	name?: string; // Name of the organization
 
 	@IsOptional()
 	@IsNumber()
@@ -17,5 +19,5 @@ export class UpdateOrganizationDto {
 		description: 'The number of free trial days available',
 		example: 30,
 	})
-	freeTrial?: number;
+	freeTrial?: number; // Number of free trial days available
 }

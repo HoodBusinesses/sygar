@@ -6,15 +6,19 @@ import { Trash2 } from 'lucide-react'
 
 interface DeleteModalProps {
   onDelete: () => void
+  DeleteNumber?: number
 }
 
-const DeleteModal: FC<DeleteModalProps> = ({ onDelete }: DeleteModalProps) => {
+const DeleteModal: FC<DeleteModalProps> = ({ onDelete, DeleteNumber }: DeleteModalProps) => {
   return (
     <Dialog>
       <DialogTrigger
         className={cn(
           buttonVariants({ variant: 'ghost', size: 'icon' }),
-          'flex items-center justify-center text-red-800 hover:bg-gray-200 hover:scale-105 transition-transform w-8 h-8 rounded-full'
+          DeleteNumber
+            ? 'rounded-full bg-transparent'
+            : 'ltr:rounded-r-full rtl:rounded-l-full bg-gray-300',
+          'text-red-800'
         )}
       >
         <Trash2 className="h-4 w-4" />
@@ -23,7 +27,9 @@ const DeleteModal: FC<DeleteModalProps> = ({ onDelete }: DeleteModalProps) => {
       <DialogContent>
         <div className="bg-white p-4 items-center justify-center rounded-md shadow-md">
           <div className="p-4">
-            <h2 className="text-xl text-gray-800  font-bold mb-4">DELETE Post</h2>
+            <h2 className="text-xl text-gray-800  font-bold mb-4">
+              {DeleteNumber &&DeleteNumber > 1 ? `Delete ${DeleteNumber} Items` : 'Delete item'}
+            </h2>
             <p className="text-gray-400">
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit natus
             </p>
@@ -33,7 +39,7 @@ const DeleteModal: FC<DeleteModalProps> = ({ onDelete }: DeleteModalProps) => {
               Cancel
             </DialogClose>
             <Button onClick={onDelete} className="custom-button bg-red-500 hover:bg-red-800">
-              Delete
+              {'Delete'}
             </Button>
           </div>
         </div>

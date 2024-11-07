@@ -7,6 +7,9 @@ import { UserRoles } from "./model/user.model";
 import { AbilityService } from "../ability/abiliry.service";
 import { NotificationService } from "src/global/notifactions/notifications.service";
 import { NotificationsGateway } from "src/global/notifactions/notifications.gateway";
+import { v4 as uuid } from 'uuid';
+import { ConfigService } from "@nestjs/config";
+import { MailService } from "src/global/mail/mail.service";
 
 /**
  * @class UserService
@@ -26,6 +29,8 @@ export class UserService {
 		private readonly abilityService: AbilityService, // Inject the ability service for ability operations
 		private readonly notificationService: NotificationService,
 		private readonly notificationGetWay: NotificationsGateway,
+		private readonly configService: ConfigService,
+		private readonly mailService: MailService,
 	) {}
 
 	/**
@@ -75,7 +80,48 @@ export class UserService {
 		});
 
 
+		await this.requestActiveAccount(newUser.email);
 		return newUser;
+	}
+
+	async requestActiveAccount(email: string) {
+		const user = await this.userRepository.findByEmail(email);
+
+		if (!user) {
+			throw new Error('userNotFound');
+		}
+
+		const token = uuid();
+		const expiresAt = Date.now() + 1000 * 60 * 60 * 24 * 7; // 7 days
+		
+		// set the reset password token for the user
+		await this.setResetPasswordToken(user.uid, token, expiresAt);
+
+		// generate the activation link
+		const activationLink = `${this.configService.getOrThrow('APP_URL')}/activate-account?token=${token}`;
+
+		// Load the activation account template 
+		const activationAccountTemplate = await this.mailService.getTemplate('activationAccount');
+
+		// Replace the placeholders with the actual values
+		let html = activationAccountTemplate.replace('{{resetLink}}', activationLink);
+		html = html.replace('{{organizationName}}', (await this.organizationRepository.findByCnss(user.organizationId)).name);
+		html = html.replace('{{username}}', `${user.firstName} ${user.lastName}`);
+
+		// send the activation email
+		const mailOptions = {
+			from: this.configService.getOrThrow('MAILER_FROM_ADDRESS'), // from address
+			to: user.email, // to address
+			subject: 'Activate your account', // subject
+			html: html
+		};
+
+		try {
+			await this.mailService.sendEmail(mailOptions);
+		} catch (error: any) {
+			await this.setResetPasswordToken(user.uid, null, null);
+			return { error: error.message };
+		}
 	}
 
 	/**
@@ -170,7 +216,7 @@ export class UserService {
 	 * @description
 	 * This method is used to set the reset password token for a user.
 	*/
-	async setResetPasswordToken(uid: string, token: string | null, expiresAt: Date | null) {
+	async setResetPasswordToken(uid: string, token: string | null, expiresAt:  number | null) {
 		const user = await this.userRepository.findByUid(uid);
 
 		if (!user) {
@@ -180,7 +226,7 @@ export class UserService {
 		return await this.userRepository.update({
 			uid,
 			resetPasswordToken: token ?? null,
-			resetPasswordTokenExpiresAt: expiresAt?.getTime()?.toString() ?? null
+			resetPasswordTokenExpiresAt: expiresAt ? expiresAt.toString() : null
 		})
 	}
 

@@ -4,6 +4,6 @@ import { rootRoute } from './root-route'
 
 export const participantsListingRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/participants-listing',
+  path: '/participant-listing',
   component: ParticipantsListing
 })

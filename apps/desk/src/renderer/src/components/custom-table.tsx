@@ -1,3 +1,4 @@
+import { useTranslate } from '@renderer/hooks/useTranslate'
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -9,13 +10,12 @@ import {
   SortingState,
   useReactTable
 } from '@tanstack/react-table'
-import { useTranslate } from '@renderer/hooks/useTranslate'
 import { useState } from 'react'
-import { FiSearch } from 'react-icons/fi'
+import SearchTableInput from './costum-data/search-table-Input'
 import Filter from './Filter'
 import Pagination from './Pagination'
 import SortByPopover from './SortBy'
-import { Input } from './ui/input'
+import { cn } from './ui/lib/utils'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
 
 interface DataTableProps<TData, TValue> {
@@ -23,10 +23,17 @@ interface DataTableProps<TData, TValue> {
   data: TData[]
 }
 
-export function CustomTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
+export function CustomTable<TData, TValue>({
+  columns,
+  data,
+}: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+
+  const [rowSelection, setRowSelection] = useState({})
+
+  const [globalFilter, setGlobalFilter] = useState('');
 
   const table = useReactTable({
     data,
@@ -37,28 +44,24 @@ export function CustomTable<TData, TValue>({ columns, data }: DataTableProps<TDa
     getFilteredRowModel: getFilteredRowModel(),
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
+    onRowSelectionChange: setRowSelection,
+    onGlobalFilterChange: setGlobalFilter,
     state: {
       sorting,
-      columnFilters
+      columnFilters,
+      rowSelection,
+      globalFilter
     }
   })
 
-  const { t, isRtl } = useTranslate()
+  const { t } = useTranslate()
 
   return (
     <div>
       {/* Search and Filters */}
       <div className="flex justify-between items-center mb-6 gap-4">
         {/* Left Section: Search Input */}
-        <div dir={isRtl ? 'rtl' : 'ltr'} className="relative">
-          <Input
-            placeholder={''}
-            className="pl-10 text-gray-600 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-400 focus:outline-none w-64"
-            value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
-            onChange={(event) => table.getColumn('email')?.setFilterValue(event.target.value)}
-          />
-          <FiSearch className="absolute top-[0.6rem] left-2 text-gray-400 h-5 w-5" />
-        </div>
+        <SearchTableInput onChange={(e) => table.setGlobalFilter(e.target.value)} />
 
         {/* Right Section: Buttons and Profile */}
         <div className="flex gap-4">
@@ -72,6 +75,16 @@ export function CustomTable<TData, TValue>({ columns, data }: DataTableProps<TDa
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
+                if (header.isPlaceholder) {
+                  return null
+                }
+                if (typeof header.column.columnDef.header === 'function') {
+                  return (
+                    <TableHead key={header.id} className={'rtl:text-right'}>
+                      {flexRender(header.column.columnDef.header, header.getContext())}
+                    </TableHead>
+                  )
+                }
                 return (
                   <TableHead key={header.id} className={'rtl:text-right'}>
                     {t(header.column.columnDef.header as string)}
@@ -85,7 +98,7 @@ export function CustomTable<TData, TValue>({ columns, data }: DataTableProps<TDa
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow
-                className="hover:bg-gray-50"
+                className={cn(row.getIsSelected() && 'bg-gray-100', 'hover:bg-gray-50')}
                 key={row.id}
                 data-state={row.getIsSelected() && 'selected'}
               >

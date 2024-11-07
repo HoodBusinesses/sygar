@@ -26,7 +26,7 @@ export interface User {
 	firstName: string;
 	lastName: string;
 	email: string;
-	password: string;
+	password: string | null;
 	role: UserRoles;
 	organizationId: string;
 	isActive: boolean;
@@ -35,7 +35,7 @@ export interface User {
 	resetPasswordTokenExpiresAt?: number | null;
 	passwordUpdatedAt?: number | null;
 	createdAt: number;
-	updatedAt: number;
+	updatedAt?: number;
 }
 
 

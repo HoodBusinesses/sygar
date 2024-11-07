@@ -11,7 +11,7 @@ import {
   organizationSchema,
   type MemberFormData,
   type OrganizationFormData
-} from '../utils/schemas/organization'
+} from '../utils/schemas/formSchema'
 import { useTranslate } from '@renderer/hooks/useTranslate'
 import { useToast } from '@renderer/hooks/useToast'
 
@@ -49,13 +49,8 @@ const RegistrationInfo = () => {
   })
 
   const onSubmit = async (data: OrganizationFormData) => {
-    try {
-      // Handle form submission
-      console.log({ ...data, members })
-      addToast('Success', 'Organization information saved successfully')
-    } catch (error) {
-      addToast('Error', 'Failed to save organization information')
-    }
+    // Handle form submission
+    console.log({ ...data, members })
   }
   // useEffect(() => {
   //   if (router.query.organization) {
@@ -102,72 +97,27 @@ const RegistrationInfo = () => {
 
         <Card className="p-6 mb-6">
           <CardContent>
-            {/* Title and Enhanced Import Button */}
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-lg font-semibold text-gray-800">
-                Organization Members Information
-              </h2>
-              <Button
-                className="flex items-center gap-2 border border-blue-500 text-blue-600 bg-white hover:bg-blue-50 font-semibold py-2 px-4 rounded-lg"
-                type="button"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  className="w-5 h-5"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 4v16m8-8H4"
-                  />
-                </svg>
-                Import
+              <p className="text-lg text-gray-950 font-bold  mb-6">{t('registration.title')}</p>
+              <Button className="custom-button bg-blue-600 hover:bg-blue-500" type="submit">
+                {t('registration.buttons.import')}
               </Button>
             </div>
-
-            {/* Members Table */}
             <MembersTable
               members={members}
               onEdit={handleEditMember}
               onDelete={handleDeleteMember}
             />
-
-            {/* Add Member Form */}
-            <div className="mt-6 flex items-center gap-4">
-              <input
-                className="border border-gray-300 rounded-lg py-2 px-4 text-sm text-gray-700 w-full"
-                placeholder="Enter the full name"
-              />
-              <input
-                className="border border-gray-300 rounded-lg py-2 px-4 text-sm text-gray-700 w-full"
-                placeholder="Enter the email"
-              />
-              <select className="border border-gray-300 rounded-lg py-2 px-4 text-sm text-gray-700">
-                <option>Select the role</option>
-              </select>
-              <select className="border border-gray-300 rounded-lg py-2 px-4 text-sm text-gray-700">
-                <option>Select the action type</option>
-              </select>
-              <Button className="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-6 rounded-lg">
-                Add
-              </Button>
-              <Button className="bg-red-600 hover:bg-red-500 text-white font-semibold py-2 px-6 rounded-lg">
-                Cancel
-              </Button>
-            </div>
-            <div className="mt-4 flex">
-              <Button className="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-16 rounded-lg">
-                Save
-              </Button>
+              
+            <div className="mt-6">
+              <AddMemberForm onSubmit={handleAddMember} initialData={editingMember?.data} />
             </div>
           </CardContent>
         </Card>
 
-        {/* Save Button */}
+        <Button className="custom-button bg-blue-600 hover:bg-blue-500" type="submit">
+          {t('registration.buttons.save')}
+        </Button>
       </form>
     </FormProvider>
   )

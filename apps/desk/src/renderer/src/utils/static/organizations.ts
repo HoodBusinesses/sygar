@@ -1,3 +1,4 @@
+
 export const mockOrganizations = Array.from({ length: 50 }, (_, index) => {
   const year = 2020 + Math.floor(index / 12)
   const month = (index % 12) + 1
@@ -56,7 +57,8 @@ export const mockThemes = Array.from({ length: 50 }, (_, index) => {
     id: index + 1,
     name: formationsNames[Math.floor(Math.random() * formationsNames.length)],
     year: year,
-    price: parseFloat(price)
+    price: parseFloat(price),
+    identifier: ''
   }
 })
 

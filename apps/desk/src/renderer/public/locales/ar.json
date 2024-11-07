@@ -184,5 +184,72 @@
     "options": "الخيارات",
     "checkGroup": "تحقق من المجموعة",
     "mad": "درهم"
+  },
+  "formation": {
+    "formation": "التكوين",
+    "fields": {
+      "formationName": {
+        "label": "اسم التكوين",
+        "placeholder": "أدخل اسم التكوين"
+      },
+      "year": {
+        "label": "السنة",
+        "placeholder": "أدخل السنة"
+      },
+      "price": {
+        "label": "السعر",
+        "placeholder": "أدخل السعر"
+      }
+    }
+  },
+  "group": {
+    "groups": "المجموعات",
+    "fields": {
+      "groupName": {
+        "label": "اسم المجموعة",
+        "placeholder": "أدخل اسم المجموعة"
+      },
+      "formationName": {
+        "label": "التكوين",
+        "placeholder": "اختر التكوين"
+      },
+      "year": {
+        "label": "السنة",
+        "placeholder": "أدخل السنة"
+      },
+      "price": {
+        "label": "السعر",
+        "placeholder": "أدخل السعر"
+      },
+      "date": {
+        "label": "التاريخ",
+        "placeholder": "أدخل التاريخ"
+      }
+    }
+  },
+  "participant": {
+    "participant": "المشارك",
+    "fields": {
+      "name": {
+        "label": "الاسم الكامل",
+        "placeholder": "أدخل الاسم الكامل"
+      },
+      "email": {
+        "label": "البريد الإلكتروني",
+        "placeholder": "أدخل البريد الإلكتروني"
+      },
+      "cin": {
+        "label": "رقم الهوية",
+        "placeholder": "أدخل رقم الهوية"
+      },
+      "cnss": {
+        "label": "رقم الضمان الاجتماعي",
+        "placeholder": "أدخل رقم الضمان الاجتماعي"
+      },
+      "status": {
+        "label": "الحالة",
+        "placeholder": "أدخل الحالة"
+      }
+    }
   }
 }

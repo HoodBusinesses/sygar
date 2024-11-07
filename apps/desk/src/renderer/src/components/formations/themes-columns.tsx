@@ -2,6 +2,7 @@ import { ColumnDef } from '@tanstack/react-table'
 import { Checkbox } from '../ui/checkbox'
 import { Button } from '../ui/button'
 import ButtonsAction from '../organization/org-table-actions'
+import DeleteModal from '../DeleteModal'
 
 export interface Theme {
   id: number
@@ -9,18 +10,37 @@ export interface Theme {
   identifier: string
   year: string
   price: number
+  groups?: string
+  options?: string
 }
 
-export const themeColumns = (
-  setEditTheme: () => void,
-  setGroupThemes: () => void
-): ColumnDef<Theme>[] => [
+export const themeColumns = (setGroupThemes: () => void): ColumnDef<Theme>[] => [
   {
     accessorKey: 'id',
-    header: '',
+    header: ({ table }) => (
+      <div className="flex items-center">
+        <Checkbox
+          checked={table.getIsAllPageRowsSelected()}
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+
+        {table.getIsSomeRowsSelected() && (
+          <DeleteModal
+            DeleteNumber={table.getFilteredSelectedRowModel().rows.length}
+            onDelete={() => {}}
+          />
+        )}
+      </div>
+    ),
     cell: ({ row }) => (
-      <div>
-        <Checkbox key="checkbox" />
+      <div className="flex items-center gap-4">
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+          key="checkbox"
+        />
         <p>{row.getValue('id')}</p>
       </div>
     )
@@ -44,16 +64,20 @@ export const themeColumns = (
     accessorKey: 'groups',
     header: 'themesTable.groups',
     cell: () => (
-      <>
-        <Button onClick={setGroupThemes} className="hover:underline text-blue-500 px-4 py-1">Groups</Button>
-      </>
+      <button onClick={setGroupThemes} className="hover:underline text-blue-500 px-4 py-1">
+        Groups
+      </button>
     )
   },
   {
     accessorKey: 'options',
     header: 'themesTable.options',
     cell: ({ row }) => (
-      <ButtonsAction rowId={row.original.id} subscription={false} setEditOrg={setEditTheme} />
+      <ButtonsAction
+        rowId={row.original.id}
+        subscription={false}
+        href={`/edit?type=themes&crud=edit`}
+      />
     )
   }
 ]
