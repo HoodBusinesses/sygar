@@ -1,58 +1,115 @@
-import { Card, CardTitle, CardDescription, CardContent, CardFooter } from './ui/card'
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar'
 import { Button } from './ui/button'
 import { Label } from './ui/label'
 import { Input } from './ui/input'
 
-export default function EditProfile(): JSX.Element {
+interface EditProfileProps {
+  isRTL: boolean
+}
+
+export default function EditProfile({ isRTL }: EditProfileProps): JSX.Element {
   return (
-    <div className="bg-white p-4 items-center justify-center rounded-md shadow-md">
-      <Card className="w-full max-w-md">
-        <div className="space-y-1 text-center">
-          <CardTitle className="text-2xl">Edit Profile</CardTitle>
-          <CardDescription>Update your personal information</CardDescription>
+    <div
+      className={`w-full px-8 py-12 mx-auto max-w-5xl ${isRTL ? 'rtl' : ''}`}
+      dir={isRTL ? 'rtl' : 'ltr'}
+    >
+      {/* Header */}
+      <div className="text-center mb-12">
+        <h2 className="text-3xl font-semibold text-gray-800">Update your personal information</h2>
+      </div>
+
+      {/* Avatar Section */}
+      <div className="flex flex-col items-center mb-12">
+        <Avatar className="h-24 w-24 border border-gray-300 rounded-full mb-4">
+          <AvatarImage src="/placeholder-user.jpg" alt="Profile Picture" />
+          <AvatarFallback>JP</AvatarFallback>
+        </Avatar>
+        <Button
+          variant="outline"
+          className="text-blue-600 border-blue-500 hover:bg-blue-50 transition-colors"
+        >
+          <UploadIcon className={`mr-2 h-5 w-5 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+          Change Photo
+        </Button>
+      </div>
+
+      {/* Form Fields */}
+      <div className="space-y-8">
+        <h3 className="text-lg font-bold text-gray-700 mb-6">Personal Information</h3>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <Label htmlFor="name" className="text-gray-700 font-medium">
+              Name
+            </Label>
+            <Input
+              id="name"
+              type="text"
+              defaultValue="John Doe"
+              placeholder="Enter your name"
+              className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
+            />
+          </div>
+          <div>
+            <Label htmlFor="email" className="text-gray-700 font-medium">
+              Email
+            </Label>
+            <Input
+              id="email"
+              type="email"
+              defaultValue="john@example.com"
+              placeholder="Enter your email"
+              className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
+            />
+          </div>
+          <div>
+            <Label htmlFor="current-password" className="text-gray-700 font-medium">
+              Current Password
+            </Label>
+            <Input
+              id="current-password"
+              type="password"
+              placeholder="Enter your current password"
+              className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
+            />
+          </div>
+          <div>
+            <Label htmlFor="new-password" className="text-gray-700 font-medium">
+              New Password
+            </Label>
+            <Input
+              id="new-password"
+              type="password"
+              placeholder="Enter a new password"
+              className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
+            />
+          </div>
+          <div>
+            <Label htmlFor="confirm-password" className="text-gray-700 font-medium">
+              Confirm New Password
+            </Label>
+            <Input
+              id="confirm-password"
+              type="password"
+              placeholder="Confirm your new password"
+              className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
+            />
+          </div>
         </div>
-        <CardContent className="grid gap-6">
-          <div className="flex flex-col items-center gap-4">
-            <Avatar className="h-20 w-20 border-2 border-primary">
-              <AvatarImage src="/placeholder-user.jpg" alt="Profile Picture" />
-              <AvatarFallback>JP</AvatarFallback>
-            </Avatar>
-            <Button variant="outline" size="sm">
-              <UploadIcon className="mr-2 h-4 w-4" />
-              Change Photo
-            </Button>
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="name">Name</Label>
-            <Input id="name" type="text" defaultValue="John Doe" />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" defaultValue="john@example.com" />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="current-password">Current Password</Label>
-            <Input id="current-password" type="password" />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="new-password">New Password</Label>
-            <Input id="new-password" type="password" />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="confirm-password">Confirm New Password</Label>
-            <Input id="confirm-password" type="password" />
-          </div>
-        </CardContent>
-        <CardFooter className="flex justify-end gap-2">
-          <>
-            <Button variant="outline" className="custom-button text-gray-700">
-              Cancel
-            </Button>
-          </>
-          <Button className="custom-button bg-blue-500 hover:bg-blue-600">Save Changes</Button>
-        </CardFooter>
-      </Card>
+      </div>
+
+      {/* Footer Buttons */}
+      <div className={`flex ${isRTL ? 'justify-start' : 'justify-end'} mt-12 space-x-4`}>
+        <Button
+          variant="outline"
+          className="text-gray-600 border-gray-300 hover:bg-gray-100 transition-colors rounded-md"
+        >
+          Cancel
+        </Button>
+        <Button className="bg-blue-600 text-white hover:bg-blue-700 transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-md">
+          Save Changes
+        </Button>
+      </div>
     </div>
   )
 }
