@@ -32,7 +32,7 @@ export const participantColumns = (): ColumnDef<Participant>[] => [
       </div>
     ),
     cell: ({ row }) => (
-      <div className="flex items-center gap-4">
+      <div className="flex gap-2 items-center">
         <Checkbox
           checked={row.getIsSelected()}
           onCheckedChange={(value) => row.toggleSelected(!!value)}

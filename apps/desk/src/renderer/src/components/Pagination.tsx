@@ -16,7 +16,7 @@ function Pagination<TData>({ table }: PaginationProps<TData>) {
   }
 
   return (
-    <div className="flex items-center gap-4 p-4">
+    <div className="flex items-center gap-4 pt-4">
       <div className="flex items-center gap-2 text-sm text-gray-700">
         <span>{t('organization.page')}</span>
         <select
