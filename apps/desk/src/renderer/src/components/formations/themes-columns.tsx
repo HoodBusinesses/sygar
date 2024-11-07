@@ -18,7 +18,7 @@ export const themeColumns = (setGroupThemes: () => void): ColumnDef<Theme>[] => 
   {
     accessorKey: 'id',
     header: ({ table }) => (
-      <div className="flex items-center">
+      <div className="flex items-center gap-2">
         <Checkbox
           checked={table.getIsAllPageRowsSelected()}
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
@@ -34,7 +34,7 @@ export const themeColumns = (setGroupThemes: () => void): ColumnDef<Theme>[] => 
       </div>
     ),
     cell: ({ row }) => (
-      <div className="flex items-center gap-4">
+      <div className="flex gap-2 items-center">
         <Checkbox
           checked={row.getIsSelected()}
           onCheckedChange={(value) => row.toggleSelected(!!value)}

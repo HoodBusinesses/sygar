@@ -78,12 +78,18 @@ export function CustomTable<TData, TValue>({
                 if (header.isPlaceholder) {
                   return null
                 }
-                if (typeof(header.column.columnDef.header) === 'function') {
-                    return (
-                      <TableHead key={header.id} className={'text-center px-9 font-semibold'}>
-                        {flexRender(header.column.columnDef.header, header.getContext())}
-                      </TableHead>
-                    )
+                if (typeof header.column.columnDef.header === 'function') {
+                  return (
+                    <TableHead
+                      key={header.id}
+                      className={cn(
+                        headerGroup.id === 'id',
+                        'rtl:!pr-8 ltr:!pl-8 font-semibold'
+                      )}
+                    >
+                      {flexRender(header.column.columnDef.header, header.getContext())}
+                    </TableHead>
+                  )
                 }
                 return (
                   <TableHead key={header.id} className={'text-center font-semibold'}>
@@ -102,8 +108,15 @@ export function CustomTable<TData, TValue>({
                 key={row.id}
                 data-state={row.getIsSelected() && 'selected'}
               >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
+                {row.getVisibleCells().map((cell, index) => (
+                  <TableCell
+                    key={cell.id}
+                    className={cn(
+                      cell.column.id === 'image' && 'p-0',
+                      'px-0',
+                      index === 0 && cell.column.id === 'id' && 'rtl:!pr-3 ltr:!pl-3'
+                    )}
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
