@@ -7,6 +7,7 @@ interface FormInputProps {
   placeholder: string
   register: UseFormRegisterReturn
   value: string
+  defaultValue?: string
   error?: string
   required?: boolean
   isLogoInput?: boolean

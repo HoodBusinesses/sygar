@@ -4,7 +4,7 @@ import {
   MemberFormData,
   OrganizationFormData,
   organizationSchema
-} from '@renderer/utils/schemas/organization'
+} from '@renderer/utils/schemas/formSchema'
 import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslate } from './useTranslate'
