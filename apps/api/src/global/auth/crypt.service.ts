@@ -1,10 +1,9 @@
-import { Injectable } from "@nestjs/common";
-import * as crypto from "bcrypt"
+import { Injectable } from '@nestjs/common';
+import * as crypto from 'bcrypt';
 
 @Injectable()
 export class CryptService {
-
-	/**
+  /**
    * Compares a plaintext string with a hashed value to determine if they match.
    * Uses bcrypt's compare function for secure comparison.
    *
@@ -12,11 +11,11 @@ export class CryptService {
    * @param candidate - The plaintext string (e.g., user-provided password).
    * @returns A promise that resolves to true if the values match, otherwise false.
    */
-	compare(hash: string, candidate: string): Promise<boolean> {
-		return crypto.compare(candidate, hash);
-	}
+  compare(hash: string, candidate: string): Promise<boolean> {
+    return crypto.compare(candidate, hash);
+  }
 
-   /**
+  /**
    * Hashes a plaintext string using bcrypt.
    * A salt factor can be provided; otherwise, it defaults to 12 for good security.
    *
@@ -25,7 +24,7 @@ export class CryptService {
    * @returns A promise that resolves to the hashed string.
    */
   hash(text: string, salt?: number): Promise<string> {
-   // Hash the text with the provided salt rounds or default to 12
-   return crypto.hash(text, salt || 12);
- }
+    // Hash the text with the provided salt rounds or default to 12
+    return crypto.hash(text, salt || 12);
+  }
 }

@@ -306,37 +306,37 @@
   },
   "formation": {
     "formation": "Formation",
-    "fields" : {
+    "fields": {
       "formationName": {
         "label": "Formation Name",
         "placeholder": "Enter the formation name"
       },
-      "year" : {
+      "year": {
         "label": "Year",
         "placeholder": "Enter the year"
       },
-      "price" : {
+      "price": {
         "label": "Price",
         "placeholder": "Enter the price"
       }
     }
   },
-  "group" : {
-    "group" : "Group",
-    "fields" : {
+  "group": {
+    "group": "Group",
+    "fields": {
       "facilator": {
         "label": "Facilator",
         "placeholder": "Enter the facilator"
       },
-      "trainer" : {
+      "trainer": {
         "label": "trainer",
         "placeholder": "Select the trainer"
       },
-      "them" : {
+      "them": {
         "label": "Them",
         "placeholder": "Enter the Them"
       },
-      "location" : {
+      "location": {
         "label": "Location",
         "placeholder": "Enter the location"
       },
@@ -346,9 +346,9 @@
       }
     }
   },
-  "participant" : {
-    "participant" : "Participant",
-    "fields" : {
+  "participant": {
+    "participant": "Participant",
+    "fields": {
       "name": {
         "label": "Full Name",
         "placeholder": "Enter the full name"

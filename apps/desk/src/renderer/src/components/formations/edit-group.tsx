@@ -1,15 +1,15 @@
-import { useFormContext } from 'react-hook-form'
-import { Card, CardContent, CardHeader } from '../ui/card'
-import { GroupFormData } from '@renderer/utils/schemas/formSchema'
-import FormInputItem from '../ui/form-input-item'
-import { groupFields } from '@renderer/data/formation-fields-input'
+import { useFormContext } from 'react-hook-form';
+import { Card, CardContent, CardHeader } from '../ui/card';
+import { GroupFormData } from '@renderer/utils/schemas/formSchema';
+import FormInputItem from '../ui/form-input-item';
+import { groupFields } from '@renderer/data/formation-fields-input';
 
 const EditGroup = (group): JSX.Element => {
   const {
     register,
-    formState: { errors }
-  } = useFormContext<GroupFormData>()
-  console.log('group :::', errors)
+    formState: { errors },
+  } = useFormContext<GroupFormData>();
+  console.log('group :::', errors);
   return (
     <Card className="">
       <CardHeader className="text-gray-700 text-xl">Group Info :</CardHeader>
@@ -31,7 +31,7 @@ const EditGroup = (group): JSX.Element => {
         </div>
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
-export default EditGroup
+export default EditGroup;

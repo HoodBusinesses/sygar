@@ -16,18 +16,17 @@
         "^start"
       ]
     },
+    "check-lint": {},
     "format": {
-      "dependsOn": [
-        "^format"
-      ],
+      "dependsOn": [],
       "outputs": []
     },
     "lint": {
-      "dependsOn": [
-        "^format",
-        "^lint",
-        "format"
-      ],
+      "dependsOn": [],
+      "outputs": []
+    },
+    "check-format": {
+      "dependsOn": [],
       "outputs": []
     },
     "start:dev": {

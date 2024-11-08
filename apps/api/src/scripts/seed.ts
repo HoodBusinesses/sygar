@@ -6,7 +6,7 @@ import { UserRoles } from '../modules/user/model/user.model';
 /**
  * Bootstrap function to seed initial users in the database.
  * Creates default SYGAR_ADMIN and SYGAR_USER accounts if they don't exist.
- * 
+ *
  * Environment variables used:
  * - SYGAR_ADMIN_EMAIL: Email for admin account
  * - SYGAR_ADMIN_PASSWORD: Password for admin account
@@ -26,7 +26,7 @@ async function bootstrap() {
       'Sygar',
       'Admin',
       'SYGAR_ADMIN_EMAIL',
-      'SYGAR_ADMIN_PASSWORD',
+      'SYGAR_ADMIN_PASSWORD'
     );
 
     // Seed SYGAR regular user
@@ -36,7 +36,7 @@ async function bootstrap() {
       'Sygar',
       'User',
       'SYGAR_USER_EMAIL',
-      'SYGAR_USER_PASSWORD',
+      'SYGAR_USER_PASSWORD'
     );
   } catch (error) {
     console.error('Error seeding admins:', (error as Error).message);

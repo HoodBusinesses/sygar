@@ -1,4 +1,4 @@
-import { CreateTableCommandInput } from "@aws-sdk/client-dynamodb";
+import { CreateTableCommandInput } from '@aws-sdk/client-dynamodb';
 
 /**
  * Represents the input for a local table in a database.
@@ -9,4 +9,12 @@ import { CreateTableCommandInput } from "@aws-sdk/client-dynamodb";
  * - `AttributeDefinitions`: The attribute definitions for the table.
  * - `TableName`: The name of the table.
  */
-export type LocalTableInput = Partial<Pick<CreateTableCommandInput, 'LocalSecondaryIndexes' | 'GlobalSecondaryIndexes' | 'AttributeDefinitions' | 'TableName'>>
+export type LocalTableInput = Partial<
+  Pick<
+    CreateTableCommandInput,
+    | 'LocalSecondaryIndexes'
+    | 'GlobalSecondaryIndexes'
+    | 'AttributeDefinitions'
+    | 'TableName'
+  >
+>;

@@ -1,7 +1,7 @@
-import { useState } from 'react'
-import { IoNotificationsOutline } from 'react-icons/io5'
-import notificationLogo from '../../assets/images/e500ce5d4441128b7e196000d7afdb72.png'
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
+import { useState } from 'react';
+import { IoNotificationsOutline } from 'react-icons/io5';
+import notificationLogo from '../../assets/images/e500ce5d4441128b7e196000d7afdb72.png';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 
 export default function Notificatioons() {
   const [notifications, setNotifications] = useState([
@@ -11,7 +11,7 @@ export default function Notificatioons() {
       message: 'Quia sed inventore non quia reiciendis qui reprehenderit.',
       time: '2 seconds ago',
       viewed: false,
-      clicked: false
+      clicked: false,
     },
     {
       id: 2,
@@ -20,7 +20,7 @@ export default function Notificatioons() {
       time: '3 hours ago',
       viewed: false,
       clicked: false,
-      icon: '/images/avatar-icon.png'
+      icon: '/images/avatar-icon.png',
     },
     {
       id: 3,
@@ -29,17 +29,19 @@ export default function Notificatioons() {
       time: '4 days ago',
       viewed: true,
       clicked: false,
-      icon: '/images/avatar-icon.png'
-    }
-  ])
+      icon: '/images/avatar-icon.png',
+    },
+  ]);
 
   const markAsClicked = (id) => {
     setNotifications(
       notifications.map((notification) =>
-        notification.id === id ? { ...notification, clicked: true, viewed: true } : notification
+        notification.id === id
+          ? { ...notification, clicked: true, viewed: true }
+          : notification
       )
-    )
-  }
+    );
+  };
   return (
     <Popover>
       <PopoverTrigger>
@@ -47,7 +49,9 @@ export default function Notificatioons() {
       </PopoverTrigger>
 
       <PopoverContent className="mt-6 w-96 bg-white shadow-lg rounded-lg p-5 border overflow-y-auto max-h-[32rem] custom-scrollbar">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">Notifications</h3>
+        <h3 className="text-lg font-semibold text-gray-800 mb-4">
+          Notifications
+        </h3>
 
         {notifications.length > 0 ? (
           <ul className="space-y-3">
@@ -65,20 +69,30 @@ export default function Notificatioons() {
               >
                 <div className="flex space-x-4 items-start">
                   <div className="w-24 h-10 bg-red-100 rounded-full flex items-center justify-center">
-                    <img src={notificationLogo} alt="Notification Icon" className="w-6 h-6" />
+                    <img
+                      src={notificationLogo}
+                      alt="Notification Icon"
+                      className="w-6 h-6"
+                    />
                   </div>
                   <div>
                     <p
                       className={`text-base ${
-                        notification.viewed ? 'text-gray-700' : 'font-semibold text-gray-900'
+                        notification.viewed
+                          ? 'text-gray-700'
+                          : 'font-semibold text-gray-900'
                       }`}
                     >
                       {notification.title}
                     </p>
-                    <p className="text-base text-gray-500">{notification.message}</p>
+                    <p className="text-base text-gray-500">
+                      {notification.message}
+                    </p>
                   </div>
                 </div>
-                <span className="text-sm text-gray-400 whitespace-nowrap">{notification.time}</span>
+                <span className="text-sm text-gray-400 whitespace-nowrap">
+                  {notification.time}
+                </span>
               </li>
             ))}
           </ul>
@@ -90,5 +104,5 @@ export default function Notificatioons() {
         )}
       </PopoverContent>
     </Popover>
-  )
+  );
 }

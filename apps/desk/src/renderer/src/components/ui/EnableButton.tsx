@@ -1,14 +1,14 @@
-import React from 'react'
+import React from 'react';
 
 interface EnableButtonProps {
-  onClick: () => void
-  value: boolean
+  onClick: () => void;
+  value: boolean;
 }
 
 const EnableButton: React.FC<EnableButtonProps> = ({ onClick, value }) => {
   return (
     <input
-      dir='ltr'
+      dir="ltr"
       className="cursor-pointer ltr:ml-2 h-3.5 w-8 appearance-none rounded-[0.4375rem] 
                     bg-gray-300/100 before:absolute before:h-3.5 before:w-3.5 before:rounded-full
                     before:bg-blue-300 before:content-[''] after:absolute after:z-[2] after:-mt-[0.1875rem]
@@ -21,7 +21,7 @@ const EnableButton: React.FC<EnableButtonProps> = ({ onClick, value }) => {
       defaultChecked={value}
       onClick={onClick}
     />
-  )
-}
+  );
+};
 
-export default EnableButton
+export default EnableButton;

@@ -31,7 +31,7 @@ import { TaskService } from './global/schedule/task.service';
       cache: true,
       isGlobal: true,
       expandVariables: true,
-      envFilePath: path.join(__dirname, "..", ".env"),
+      envFilePath: path.join(__dirname, '..', '.env'),
       // validationSchema,
       // validationOptions,
       // load: [appConfig(process.env.NODE_ENV)],

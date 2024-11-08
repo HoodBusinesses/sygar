@@ -1,18 +1,18 @@
 export interface LoginParams {
-	email: string,
-	password: string,
+  email: string;
+  password: string;
 }
 
 export interface ForgotPasswordParams {
-	email: string
+  email: string;
 }
 
 export interface ResetPasswordParams {
-	newPassword: string,
-	token: string
+  newPassword: string;
+  token: string;
 }
 
 export interface ActivateAccountParams {
-	token: string,
-	password: string
+  token: string;
+  password: string;
 }

@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { Card } from "@/components/ui/card";
-import images from "@/public/images";
-import Image from "next/image";
-import React from "react";
-import SignInForm from "./SignInForm";
+import { Card } from '@/components/ui/card';
+import images from '@/public/images';
+import Image from 'next/image';
+import React from 'react';
+import SignInForm from './SignInForm';
 
 const SignIn: React.FC = () => {
   const logo = images.logo;

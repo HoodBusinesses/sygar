@@ -202,22 +202,22 @@
       }
     }
   },
-  "group" : {
-    "group" : "مجموعة",
-    "fields" : {
+  "group": {
+    "group": "مجموعة",
+    "fields": {
       "facilator": {
         "label": "الميسر",
         "placeholder": "أدخل الميسر"
       },
-      "trainer" : {
+      "trainer": {
         "label": "المدرب",
         "placeholder": "اختر المدرب"
       },
-      "them" : {
+      "them": {
         "label": "الموضوع",
         "placeholder": "أدخل الموضوع"
       },
-      "location" : {
+      "location": {
         "label": "الموقع",
         "placeholder": "أدخل الموقع"
       },

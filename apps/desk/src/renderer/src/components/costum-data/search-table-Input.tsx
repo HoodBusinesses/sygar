@@ -1,10 +1,10 @@
-import { ChangeEventHandler } from 'react'
-import { Input } from '../ui/input'
-import { FiSearch } from 'react-icons/fi'
+import { ChangeEventHandler } from 'react';
+import { Input } from '../ui/input';
+import { FiSearch } from 'react-icons/fi';
 
 type Props = {
-  onChange: ChangeEventHandler<HTMLInputElement>
-}
+  onChange: ChangeEventHandler<HTMLInputElement>;
+};
 export default function SearchTableInput({ onChange }: Props) {
   return (
     <div className="relative">
@@ -16,5 +16,5 @@ export default function SearchTableInput({ onChange }: Props) {
       />
       <FiSearch className="absolute top-[0.6rem] left-2 text-gray-400 h-5 w-5" />
     </div>
-  )
+  );
 }

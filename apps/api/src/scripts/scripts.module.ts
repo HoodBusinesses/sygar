@@ -22,16 +22,14 @@ import { RbacModule } from 'src/global/rbac/roles.module';
     }),
     // Import database functionality
     DbModule,
-	UserModule,
-	NotificationsModule,
-	AuthModule,
-	OrganizationModule,
-	AbilityModule,
-	RbacModule,
+    UserModule,
+    NotificationsModule,
+    AuthModule,
+    OrganizationModule,
+    AbilityModule,
+    RbacModule,
   ],
-  providers: [
-    ScriptsService,
-  ],
+  providers: [ScriptsService],
   exports: [ScriptsService],
 })
-export class ScriptsModule {} 
+export class ScriptsModule {}

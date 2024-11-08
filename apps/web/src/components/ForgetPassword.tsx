@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { Card } from "@/components/ui/card";
-import { useForgotPassword } from "@/hooks/useForgetPassword";
-import images from "@/public/images";
-import Image from "next/image";
-import { FiLoader } from "react-icons/fi";
-import ResetPassForm from "./forget-pass-form";
+import { Card } from '@/components/ui/card';
+import { useForgotPassword } from '@/hooks/useForgetPassword';
+import images from '@/public/images';
+import Image from 'next/image';
+import { FiLoader } from 'react-icons/fi';
+import ResetPassForm from './forget-pass-form';
 
 export default function ForgetPassword() {
   // Get Logo from public images

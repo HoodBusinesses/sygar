@@ -19,7 +19,7 @@ import { AbilityService } from 'src/modules/ability/abiliry.service';
 export class AbilityFactory {
   constructor(
     private readonly abilityService: AbilityService,
-    private readonly dbConstants: DbConstants,
+    private readonly dbConstants: DbConstants
   ) {}
 
   async createForUser(user: User): Promise<Ability> {
@@ -28,7 +28,7 @@ export class AbilityFactory {
     // Full control for Sygar Admin
     if (user.role === UserRoles.SYGAR_ADMIN) {
       can(Action.Manage, 'all');
-    } 
+    }
 
     // Organization Admin Permissions
     else if (user.role === UserRoles.ORG_ADMIN) {
@@ -38,12 +38,15 @@ export class AbilityFactory {
       can(Action.Manage, 'User', { organizationId: user.organizationId });
       can(Action.Manage, 'Ability', { organizationId: user.organizationId });
       can(Action.Manage, 'Theme', { organizationId: user.organizationId });
-    } 
+    }
 
     // Organization User and Sygar User
     else {
       // Fetch abilities for SYGAR_USER and ORG_USER
-      const abilities = await this.abilityService.getAbilities(user.uid, user.organizationId);
+      const abilities = await this.abilityService.getAbilities(
+        user.uid,
+        user.organizationId
+      );
 
       if (!abilities || abilities.length === 0) {
         // Default no abilities case
@@ -53,7 +56,9 @@ export class AbilityFactory {
       for (const ability of abilities) {
         if (user.role === UserRoles.ORG_USER) {
           // Ensure actions are scoped to the user's organization
-          can(ability.action, ability.subject, { organizationId: user.organizationId });
+          can(ability.action, ability.subject, {
+            organizationId: user.organizationId,
+          });
         } else if (user.role === UserRoles.SYGAR_USER) {
           // Sygar User has specific permissions
           can(ability.action, ability.subject);

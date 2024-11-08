@@ -1,16 +1,16 @@
-'use client'
-import { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { Link } from '@tanstack/react-router'
-import { navItems } from '@renderer/data/sidebar-items'
+'use client';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Link } from '@tanstack/react-router';
+import { navItems } from '@renderer/data/sidebar-items';
 
 export default function Sidebar() {
-  const [active, setActive] = useState('home')
-  const { t } = useTranslation()
+  const [active, setActive] = useState('home');
+  const { t } = useTranslation();
 
   useEffect(() => {
     // Example: Handle any required logic on mount
-  }, [])
+  }, []);
 
   return (
     <div className="h-screen w-64 bg-gray-50 border-r border-gray-200 p-4">
@@ -66,5 +66,5 @@ export default function Sidebar() {
         </ul>
       </nav>
     </div>
-  )
+  );
 }

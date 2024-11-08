@@ -1,6 +1,0 @@
-{
-    "resolvedPaths": {
-        "components": "components/ui",
-        "utils": "components/ui/lib/utils.ts"
-    }
-}

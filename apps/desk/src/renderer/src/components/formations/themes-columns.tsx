@@ -1,19 +1,21 @@
-import { ColumnDef } from '@tanstack/react-table'
-import { Checkbox } from '../ui/checkbox'
-import ButtonsAction from '../organization/org-table-actions'
-import DeleteModal from '../DeleteModal'
+import { ColumnDef } from '@tanstack/react-table';
+import { Checkbox } from '../ui/checkbox';
+import ButtonsAction from '../organization/org-table-actions';
+import DeleteModal from '../DeleteModal';
 
 export interface Theme {
-  id: number
-  name: string
-  identifier: string
-  year: string
-  price: number
-  groups?: string
-  options?: string
+  id: number;
+  name: string;
+  identifier: string;
+  year: string;
+  price: number;
+  groups?: string;
+  options?: string;
 }
 
-export const themeColumns = (setGroupThemes: () => void): ColumnDef<Theme>[] => [
+export const themeColumns = (
+  setGroupThemes: () => void
+): ColumnDef<Theme>[] => [
   {
     accessorKey: 'id',
     header: ({ table }) => (
@@ -42,31 +44,34 @@ export const themeColumns = (setGroupThemes: () => void): ColumnDef<Theme>[] => 
         />
         <p>{row.getValue('id')}</p>
       </div>
-    )
+    ),
   },
   {
     accessorKey: 'name',
     header: 'themesTable.name',
-    cell: ({ row }) => <p className="text-gray-600">{row.getValue('name')}</p>
+    cell: ({ row }) => <p className="text-gray-600">{row.getValue('name')}</p>,
   },
   {
     accessorKey: 'year',
     header: 'themesTable.year',
-    cell: ({ row }) => <p>{row.getValue('year')}</p>
+    cell: ({ row }) => <p>{row.getValue('year')}</p>,
   },
   {
     accessorKey: 'price',
     header: 'themesTable.price',
-    cell: ({ row }) => <p>{row.getValue('price')}</p>
+    cell: ({ row }) => <p>{row.getValue('price')}</p>,
   },
   {
     accessorKey: 'groups',
     header: 'themesTable.groups',
     cell: () => (
-      <button onClick={setGroupThemes} className="hover:underline text-blue-500 px-4 py-1">
+      <button
+        onClick={setGroupThemes}
+        className="hover:underline text-blue-500 px-4 py-1"
+      >
         Groups
       </button>
-    )
+    ),
   },
   {
     accessorKey: 'options',
@@ -77,6 +82,6 @@ export const themeColumns = (setGroupThemes: () => void): ColumnDef<Theme>[] => 
         subscription={false}
         href={`/edit?type=themes&crud=edit`}
       />
-    )
-  }
-]
+    ),
+  },
+];

@@ -1,4 +1,4 @@
-import { useTranslate } from '@renderer/hooks/useTranslate'
+import { useTranslate } from '@renderer/hooks/useTranslate';
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -8,30 +8,37 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   SortingState,
-  useReactTable
-} from '@tanstack/react-table'
-import { useState } from 'react'
-import SearchTableInput from './costum-data/search-table-Input'
-import Filter from './Filter'
-import Pagination from './Pagination'
-import SortByPopover from './SortBy'
-import { cn } from './ui/lib/utils'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
+  useReactTable,
+} from '@tanstack/react-table';
+import { useState } from 'react';
+import SearchTableInput from './costum-data/search-table-Input';
+import Filter from './Filter';
+import Pagination from './Pagination';
+import SortByPopover from './SortBy';
+import { cn } from './ui/lib/utils';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from './ui/table';
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
 }
 
 export function CustomTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<SortingState>([])
+  const [sorting, setSorting] = useState<SortingState>([]);
 
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
-  const [rowSelection, setRowSelection] = useState({})
+  const [rowSelection, setRowSelection] = useState({});
 
   const [globalFilter, setGlobalFilter] = useState('');
 
@@ -50,18 +57,20 @@ export function CustomTable<TData, TValue>({
       sorting,
       columnFilters,
       rowSelection,
-      globalFilter
-    }
-  })
+      globalFilter,
+    },
+  });
 
-  const { t } = useTranslate()
+  const { t } = useTranslate();
 
   return (
     <div>
       {/* Search and Filters */}
       <div className="flex justify-between items-center mb-6 gap-4">
         {/* Left Section: Search Input */}
-        <SearchTableInput onChange={(e) => table.setGlobalFilter(e.target.value)} />
+        <SearchTableInput
+          onChange={(e) => table.setGlobalFilter(e.target.value)}
+        />
 
         {/* Right Section: Buttons and Profile */}
         <div className="flex gap-4">
@@ -76,7 +85,7 @@ export function CustomTable<TData, TValue>({
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 if (header.isPlaceholder) {
-                  return null
+                  return null;
                 }
                 if (typeof header.column.columnDef.header === 'function') {
                   return (
@@ -87,15 +96,21 @@ export function CustomTable<TData, TValue>({
                         'rtl:!pr-8 ltr:!pl-8 font-semibold'
                       )}
                     >
-                      {flexRender(header.column.columnDef.header, header.getContext())}
+                      {flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
                     </TableHead>
-                  )
+                  );
                 }
                 return (
-                  <TableHead key={header.id} className={'text-center font-semibold'}>
+                  <TableHead
+                    key={header.id}
+                    className={'text-center font-semibold'}
+                  >
                     {t(header.column.columnDef.header as string)}
                   </TableHead>
-                )
+                );
               })}
             </TableRow>
           ))}
@@ -104,7 +119,10 @@ export function CustomTable<TData, TValue>({
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow
-                className={cn(row.getIsSelected() && 'bg-gray-100', 'hover:bg-gray-50')}
+                className={cn(
+                  row.getIsSelected() && 'bg-gray-100',
+                  'hover:bg-gray-50'
+                )}
                 key={row.id}
                 data-state={row.getIsSelected() && 'selected'}
               >
@@ -114,7 +132,9 @@ export function CustomTable<TData, TValue>({
                     className={cn(
                       cell.column.id === 'image' && 'p-0',
                       'px-0',
-                      index === 0 && cell.column.id === 'id' && 'rtl:!pr-3 ltr:!pl-3'
+                      index === 0 &&
+                        cell.column.id === 'id' &&
+                        'rtl:!pr-3 ltr:!pl-3'
                     )}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -134,5 +154,5 @@ export function CustomTable<TData, TValue>({
 
       <Pagination table={table} />
     </div>
-  )
+  );
 }

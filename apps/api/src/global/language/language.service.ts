@@ -12,6 +12,8 @@ export class LanguageService {
   };
 
   getTranslation(key: string, lang: string): string {
-    return this.translations[lang]?.[key] || this.translations['en']?.[key] || key; // Fallback to English
+    return (
+      this.translations[lang]?.[key] || this.translations['en']?.[key] || key
+    ); // Fallback to English
   }
-} 
+}

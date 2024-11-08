@@ -19,11 +19,11 @@ export default function CostumInputItem({
   register,
   isPending,
   id,
-  type
+  type,
 }: FormInputProps) {
   return (
     <>
-      <Label className='text-gray-600' htmlFor={id}>
+      <Label className="text-gray-600" htmlFor={id}>
         {label}
       </Label>
       <Input
@@ -34,11 +34,7 @@ export default function CostumInputItem({
         className={`mt-1 block w-full ${error ? 'border-red-500' : ''}`}
         disabled={isPending}
       />
-      {error && (
-        <p className='text-sm text-red-600'>
-          {error}
-        </p>
-      )}
+      {error && <p className="text-sm text-red-600">{error}</p>}
     </>
   );
 }

@@ -1,15 +1,15 @@
-import { buttonVariants } from './ui/button'
-import { Dialog, DialogContent, DialogTrigger, DialogClose } from './ui/dialog'
-import { cn } from './ui/lib/utils'
-import { useTranslate } from '@renderer/hooks/useTranslate'
-import { FiUpload } from 'react-icons/fi'
+import { buttonVariants } from './ui/button';
+import { Dialog, DialogContent, DialogTrigger, DialogClose } from './ui/dialog';
+import { cn } from './ui/lib/utils';
+import { useTranslate } from '@renderer/hooks/useTranslate';
+import { FiUpload } from 'react-icons/fi';
 
 const ExportModal = (): JSX.Element => {
-  const { t } = useTranslate()
+  const { t } = useTranslate();
 
   const handleExport = () => {
-    console.log('Export')
-  }
+    console.log('Export');
+  };
 
   return (
     <Dialog>
@@ -24,7 +24,9 @@ const ExportModal = (): JSX.Element => {
       </DialogTrigger>
 
       <DialogContent className="p-4 bg-white items-center justify-center rounded-md shadow-md">
-        <h2 className="text-xl text-gray-800  font-bold mb-4">Export Organizations</h2>
+        <h2 className="text-xl text-gray-800  font-bold mb-4">
+          Export Organizations
+        </h2>
         <p className="text-gray-400">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit natus
         </p>
@@ -41,7 +43,7 @@ const ExportModal = (): JSX.Element => {
         </div>
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};
 
-export default ExportModal
+export default ExportModal;

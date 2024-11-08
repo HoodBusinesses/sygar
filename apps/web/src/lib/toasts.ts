@@ -1,8 +1,8 @@
-import { toast } from 'react-toastify'
+import { toast } from 'react-toastify';
 
 export const putNotification = (title: string, body: string) => {
-  new window.Notification(title, { body: body })
-}
+  new window.Notification(title, { body: body });
+};
 
 export const errorToast = (errorMessage: string) => {
   toast.error(errorMessage, {
@@ -13,9 +13,9 @@ export const errorToast = (errorMessage: string) => {
     pauseOnHover: true,
     draggable: true,
     progress: undefined,
-    theme: 'light'
-  })
-}
+    theme: 'light',
+  });
+};
 
 export const successToast = (message: string) => {
   toast.success(message, {
@@ -26,9 +26,9 @@ export const successToast = (message: string) => {
     pauseOnHover: true,
     draggable: true,
     progress: undefined,
-    theme: 'light'
-  })
-}
+    theme: 'light',
+  });
+};
 
 export const infoToast = (message: string) => {
   toast.info(message, {
@@ -39,9 +39,9 @@ export const infoToast = (message: string) => {
     pauseOnHover: true,
     draggable: true,
     progress: undefined,
-    theme: 'light'
-  })
-}
+    theme: 'light',
+  });
+};
 
 export const warningToast = (message: string) => {
   toast.warning(message, {
@@ -52,6 +52,6 @@ export const warningToast = (message: string) => {
     pauseOnHover: true,
     draggable: true,
     progress: undefined,
-    theme: 'light'
-  })
-}
+    theme: 'light',
+  });
+};

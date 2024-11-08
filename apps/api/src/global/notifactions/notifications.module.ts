@@ -3,7 +3,6 @@ import { NotificationsGateway } from './notifications.gateway';
 import { NotificationService } from './notifications.service';
 import { UserModule } from 'src/modules/user/user.module'; // Import UserModule
 
-
 /**
  * @module NotificationsModule
  * @description
@@ -11,11 +10,8 @@ import { UserModule } from 'src/modules/user/user.module'; // Import UserModule
  */
 @Global()
 @Module({
-  imports: [
-    forwardRef(() => UserModule),
-
-  ],
+  imports: [forwardRef(() => UserModule)],
   providers: [NotificationsGateway, NotificationService],
-  exports: [NotificationsGateway, NotificationService]
+  exports: [NotificationsGateway, NotificationService],
 })
 export class NotificationsModule {}

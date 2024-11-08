@@ -1,10 +1,10 @@
-'use client'
-import React from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { Button } from '../ui/button'
-import { Input } from '../ui/input'
+'use client';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
 
 // Define Zod schema for validation
 const organizationSchema = z.object({
@@ -14,28 +14,31 @@ const organizationSchema = z.object({
   address: z.string().min(1, 'Address is required'),
   email: z.string().email('Invalid email address'),
   responsibleName: z.string().min(1, 'Responsible name is required'),
-  trainingManagerName: z.string().min(1, 'Training manager name is required')
-})
+  trainingManagerName: z.string().min(1, 'Training manager name is required'),
+});
 
-type OrganizationFormInputs = z.infer<typeof organizationSchema>
+type OrganizationFormInputs = z.infer<typeof organizationSchema>;
 
 const OrganizationForm: React.FC = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
   } = useForm<OrganizationFormInputs>({
-    resolver: zodResolver(organizationSchema)
-  })
+    resolver: zodResolver(organizationSchema),
+  });
 
   const onSubmit = (data: OrganizationFormInputs) => {
-    console.log('Form Data:', data)
-  }
+    console.log('Form Data:', data);
+  };
 
   return (
     <div className="p-6 bg-white shadow-md rounded-md">
       <h2 className="text-xl font-semibold mb-4">Organization Informations</h2>
-      <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-2 gap-4">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="grid grid-cols-2 gap-4"
+      >
         <Input
           {...register('rs')}
           placeholder="Enter the organization RS"
@@ -61,7 +64,9 @@ const OrganizationForm: React.FC = () => {
           placeholder="Enter the address of organization"
           className={`border p-2 rounded ${errors.address ? 'border-red-500' : ''}`}
         />
-        {errors.address && <p className="text-red-500">{errors.address.message}</p>}
+        {errors.address && (
+          <p className="text-red-500">{errors.address.message}</p>
+        )}
 
         <Input
           {...register('email')}
@@ -75,7 +80,9 @@ const OrganizationForm: React.FC = () => {
           placeholder="Enter the name of Responsible"
           className={`border p-2 rounded ${errors.responsibleName ? 'border-red-500' : ''}`}
         />
-        {errors.responsibleName && <p className="text-red-500">{errors.responsibleName.message}</p>}
+        {errors.responsibleName && (
+          <p className="text-red-500">{errors.responsibleName.message}</p>
+        )}
 
         <Input
           {...register('trainingManagerName')}
@@ -96,7 +103,7 @@ const OrganizationForm: React.FC = () => {
         </Button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default OrganizationForm
+export default OrganizationForm;

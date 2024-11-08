@@ -333,22 +333,22 @@
       }
     }
   },
-  "group" : {
-    "group" : "Groupe",
-    "fields" : {
+  "group": {
+    "group": "Groupe",
+    "fields": {
       "facilator": {
         "label": "Facilitateur",
         "placeholder": "Entrez le facilitateur"
       },
-      "trainer" : {
+      "trainer": {
         "label": "Formateur",
         "placeholder": "Sélectionnez le formateur"
       },
-      "them" : {
+      "them": {
         "label": "Thème",
         "placeholder": "Entrez le thème"
       },
-      "location" : {
+      "location": {
         "label": "Lieu",
         "placeholder": "Entrez le lieu"
       },

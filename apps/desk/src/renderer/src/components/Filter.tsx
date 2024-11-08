@@ -1,22 +1,22 @@
-import { useTranslate } from '@renderer/hooks/useTranslate'
-import { ArrowDownIcon } from 'lucide-react'
-import { useState } from 'react'
-import { Button } from './ui/button'
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
-import SortOption from './ui/sort-options'
+import { useTranslate } from '@renderer/hooks/useTranslate';
+import { ArrowDownIcon } from 'lucide-react';
+import { useState } from 'react';
+import { Button } from './ui/button';
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
+import SortOption from './ui/sort-options';
 
 const Filter = ({ OnFilter }): JSX.Element => {
-  const { t } = useTranslate()
+  const { t } = useTranslate();
 
-  const [enabled, setEnabled] = useState<string>('true')
+  const [enabled, setEnabled] = useState<string>('true');
 
   const handleReset = (): void => {
-    OnFilter(null)
-  }
+    OnFilter(null);
+  };
 
   const handleApply = (): void => {
-    OnFilter([{ id: 'enabled', desc: enabled === 'true' }])
-  }
+    OnFilter([{ id: 'enabled', desc: enabled === 'true' }]);
+  };
 
   return (
     <Popover>
@@ -52,7 +52,7 @@ const Filter = ({ OnFilter }): JSX.Element => {
         </div>
       </PopoverContent>
     </Popover>
-  )
-}
+  );
+};
 
-export default Filter
+export default Filter;
