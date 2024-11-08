@@ -1,8 +1,9 @@
-name: Check Formatting
+name: Check Linting
 
 on:
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   check-formatting:
