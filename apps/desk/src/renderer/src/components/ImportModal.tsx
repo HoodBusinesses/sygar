@@ -67,9 +67,12 @@ const ImportModal = (): JSX.Element => {
             <DialogClose className="custom-button text-gray-500 hover:bg-gray-200 border border-gray-500 mr-2">
               Cancel
             </DialogClose>
-            <Button onClick={handleEImport} className="custom-button bg-blue-500 hover:bg-blue-800">
+            <DialogClose
+              onClick={handleEImport}
+              className="custom-button bg-blue-500 hover:bg-blue-800"
+            >
               Next
-            </Button>
+            </DialogClose>
           </div>
         </div>
       </DialogContent>

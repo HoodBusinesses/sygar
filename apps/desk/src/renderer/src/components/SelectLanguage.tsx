@@ -3,6 +3,7 @@ import { useAppDispatch } from '@renderer/store/hooks'
 import { changeLang, LangPayloadType, langs } from '@renderer/store/slices/lang.slice'
 import { HiOutlineChevronDown } from 'react-icons/hi'
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
+import { useState } from 'react'
 
 export default function SelectLanguage(): JSX.Element {
   const { lng } = useTranslate()
@@ -12,10 +13,14 @@ export default function SelectLanguage(): JSX.Element {
     dispatcher(changeLang(lngPayload))
   }
 
+  const [isOpen, setIsOpen] = useState(false)
   return (
-    <Popover>
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
       {/* Popover Trigger */}
-      <PopoverTrigger className="flex items-center cursor-pointer gap-2 text-gray-600 hover:text-gray-800">
+      <PopoverTrigger
+        onClick={() => setIsOpen(curr => !curr)}
+        className="flex items-center cursor-pointer gap-2 text-gray-600 hover:text-gray-800"
+      >
         <span className="text-sm">{lng.name}</span>
         <HiOutlineChevronDown className="text-xs text-gray-500" />
       </PopoverTrigger>
@@ -28,7 +33,10 @@ export default function SelectLanguage(): JSX.Element {
             className={`flex items-center p-2 cursor-pointer rounded-md hover:bg-gray-100 ${
               option.id === lng.id ? 'font-semibold text-gray-800' : 'text-gray-600'
             }`}
-            onClick={() => changeLanguage(option)}
+            onClick={() => {
+              changeLanguage(option)
+              setIsOpen(false)
+            }}
           >
             {/* Selection Indicator */}
             <span
