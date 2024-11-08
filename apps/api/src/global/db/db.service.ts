@@ -47,9 +47,7 @@ export class DbService {
    *
    * @param config - The ConfigService instance to access environment variables.
    */
-  public constructor(
-    private readonly config: ConfigService,
-  ) {
+  public constructor(private readonly config: ConfigService) {
     this.client = this.createClient();
   }
 
@@ -73,20 +71,20 @@ export class DbService {
         region: this.config.get<string>('DYNAMODB_REGION', 'us-east-1'),
         endpoint: this.config.get<string>(
           'DYNAMODB_ENDPOINT',
-          'http://localhost:8000',
+          'http://localhost:8000'
         ),
         credentials: {
           accessKeyId: this.config.get<string>(
             'DYNAMODB_ACCESS_KEY_ID',
-            'local',
+            'local'
           ),
           secretAccessKey: this.config.get<string>(
             'DYNAMODB_SECRET_ACCESS_KEY',
-            'local',
+            'local'
           ),
           sessionToken: this.config.get<string>(
             'DYNAMODB_SESSION_TOKEN',
-            'local',
+            'local'
           ),
         },
       };
@@ -187,7 +185,6 @@ export class DbService {
     await this.client.send(new BatchWriteCommand(params));
   }
 
-
   /**
    * Method to query items from a DynamoDB table.
    * @param params - The parameters for the QueryCommand.
@@ -203,66 +200,76 @@ export class DbService {
    * @param item - The DynamoDB item
    * @returns The object
    */
-    mapDynamoDBItemToObject(item: Record<string, AttributeValue>): any {
-      // Create an object to store the mapped values
-      const obj: Record<string, any> = {};
+  mapDynamoDBItemToObject(item: Record<string, AttributeValue>): any {
+    // Create an object to store the mapped values
+    const obj: Record<string, any> = {};
 
-      for (const key in item) {
-        // Skip if the key is not present
-        if (!item[key]) continue;
-      
-        // Get the value of the key
-        const value = item[key][Object.keys(item[key])[0] as keyof AttributeValue];
+    for (const key in item) {
+      // Skip if the key is not present
+      if (!item[key]) continue;
 
-        // Assign the value to the object
-        obj[key] = value;
-      }
+      // Get the value of the key
+      const value =
+        item[key][Object.keys(item[key])[0] as keyof AttributeValue];
 
-      // Return the object
-      return obj;
-    }
-  
-    /**
-     * Method to map an object to a DynamoDB item
-     * @param obj - The object
-     * @returns The DynamoDB item
-     */
-    mapObjectToDynamoDBItem(obj: any): Record<string, AttributeValue> {
-      // Create an object to store the DynamoDB item
-      const item: Record<string, AttributeValue> = {};
-    
-      for (const key in obj) {
-        if (!obj[key]) continue;
-
-        // Get the value of the key
-        const value = obj[key];
-
-        // Assign the value to the item
-        item[key] = 
-          typeof value === 'number' ? { N: String(value) } :
-          typeof value === 'string' ? { S: value } :
-          typeof value === 'boolean' ? { BOOL: value } :
-          value === null ? { NULL: true } :
-          Array.isArray(value) ? { L: value.map(v => this.convertToAttributeValue(v)) } :
-          { M: this.mapObjectToDynamoDBItem(value) };
-      }
-    
-      // Return the DynamoDB item
-      return item;
+      // Assign the value to the object
+      obj[key] = value;
     }
 
-    /**
-     * Method to convert a value to an AttributeValue
-     * @param value  - The value
-     * @returns The AttributeValue
-     */
-    convertToAttributeValue(value: any): AttributeValue {
-      return typeof value === 'number' ? { N: String(value) } :
-             typeof value === 'string' ? { S: value } :
-             typeof value === 'boolean' ? { BOOL: value } :
-             value === null ? { NULL: true } :
-             Array.isArray(value) ? { L: value.map(v => this.convertToAttributeValue(v)) } :
-             { M: this.mapObjectToDynamoDBItem(value) };
+    // Return the object
+    return obj;
+  }
+
+  /**
+   * Method to map an object to a DynamoDB item
+   * @param obj - The object
+   * @returns The DynamoDB item
+   */
+  mapObjectToDynamoDBItem(obj: any): Record<string, AttributeValue> {
+    // Create an object to store the DynamoDB item
+    const item: Record<string, AttributeValue> = {};
+
+    for (const key in obj) {
+      if (!obj[key]) continue;
+
+      // Get the value of the key
+      const value = obj[key];
+
+      // Assign the value to the item
+      item[key] =
+        typeof value === 'number'
+          ? { N: String(value) }
+          : typeof value === 'string'
+            ? { S: value }
+            : typeof value === 'boolean'
+              ? { BOOL: value }
+              : value === null
+                ? { NULL: true }
+                : Array.isArray(value)
+                  ? { L: value.map((v) => this.convertToAttributeValue(v)) }
+                  : { M: this.mapObjectToDynamoDBItem(value) };
     }
+
+    // Return the DynamoDB item
+    return item;
+  }
+
+  /**
+   * Method to convert a value to an AttributeValue
+   * @param value  - The value
+   * @returns The AttributeValue
+   */
+  convertToAttributeValue(value: any): AttributeValue {
+    return typeof value === 'number'
+      ? { N: String(value) }
+      : typeof value === 'string'
+        ? { S: value }
+        : typeof value === 'boolean'
+          ? { BOOL: value }
+          : value === null
+            ? { NULL: true }
+            : Array.isArray(value)
+              ? { L: value.map((v) => this.convertToAttributeValue(v)) }
+              : { M: this.mapObjectToDynamoDBItem(value) };
+  }
 }
-

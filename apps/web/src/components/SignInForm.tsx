@@ -1,14 +1,14 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import { useLogin } from "@/hooks/useLogin";
-import { signInSchema } from "@/lib/schema/schema";
-import { cn } from "@/lib/utils";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { LoginParams } from "@repo/exapi";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import { FiLoader, FiEye, FiEyeOff } from "react-icons/fi"; // Add eye icons for password toggle
-import CostumInputItem from "./ui/custom-input-item";
-import { useState } from "react";
+'use client';
+import { Button } from '@/components/ui/button';
+import { useLogin } from '@/hooks/useLogin';
+import { signInSchema } from '@/lib/schema/schema';
+import { cn } from '@/lib/utils';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { LoginParams } from '@repo/exapi';
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+import { FiLoader, FiEye, FiEyeOff } from 'react-icons/fi'; // Add eye icons for password toggle
+import CostumInputItem from './ui/custom-input-item';
+import { useState } from 'react';
 
 export default function SignInForm() {
   const { mutate, isPending } = useLogin();
@@ -40,9 +40,9 @@ export default function SignInForm() {
       <CostumInputItem
         id="login"
         type="text"
-        label={"Login"}
-        placeholder={"Email or phone number"}
-        register={register("login")}
+        label={'Login'}
+        placeholder={'Email or phone number'}
+        register={register('login')}
         isPending={isPending}
         error={errors.login?.message?.toString()}
       />
@@ -50,10 +50,10 @@ export default function SignInForm() {
       <div className="relative mb-4">
         <CostumInputItem
           id="password"
-          type={showPassword ? "text" : "password"}
-          label={"Password"}
-          placeholder={"Enter password"}
-          register={register("password")}
+          type={showPassword ? 'text' : 'password'}
+          label={'Password'}
+          placeholder={'Enter password'}
+          register={register('password')}
           isPending={isPending}
           error={errors.password?.message?.toString()}
         />
@@ -78,15 +78,15 @@ export default function SignInForm() {
       <Button
         type="submit"
         className={cn(
-          isPending ? "bg-green-600" : "bg-blue-600 hover:bg-blue-700",
-          "w-full text-white py-3 rounded-lg font-semibold transition duration-300 flex justify-center items-center"
+          isPending ? 'bg-green-600' : 'bg-blue-600 hover:bg-blue-700',
+          'w-full text-white py-3 rounded-lg font-semibold transition duration-300 flex justify-center items-center'
         )}
         disabled={isPending}
       >
         {isPending ? (
           <FiLoader className="animate-spin w-5 h-5 mr-2" />
         ) : (
-          "Sign in"
+          'Sign in'
         )}
       </Button>
     </form>

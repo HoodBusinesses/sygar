@@ -1,12 +1,12 @@
-import React from 'react'
+import React from 'react';
 
 interface SortOptionProps {
-  title: string
-  name: string
-  value: string
-  checkedValue: string
-  onChange: (value: string) => void
-  labels: { asc?: string; desc?: string; true?: string; false?: string }
+  title: string;
+  name: string;
+  value: string;
+  checkedValue: string;
+  onChange: (value: string) => void;
+  labels: { asc?: string; desc?: string; true?: string; false?: string };
 }
 
 const SortOption: React.FC<SortOptionProps> = ({
@@ -15,7 +15,7 @@ const SortOption: React.FC<SortOptionProps> = ({
   value,
   checkedValue,
   onChange,
-  labels
+  labels,
 }) => {
   return (
     <div>
@@ -34,7 +34,7 @@ const SortOption: React.FC<SortOptionProps> = ({
               />
               <span>{labels.asc}</span>
             </label>
-            
+
             <label className="flex items-center space-x-2 cursor-pointer">
               <input
                 type="radio"
@@ -76,7 +76,7 @@ const SortOption: React.FC<SortOptionProps> = ({
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SortOption
+export default SortOption;

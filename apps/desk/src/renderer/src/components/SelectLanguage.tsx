@@ -1,24 +1,28 @@
-import { useTranslate } from '@renderer/hooks/useTranslate'
-import { useAppDispatch } from '@renderer/store/hooks'
-import { changeLang, LangPayloadType, langs } from '@renderer/store/slices/lang.slice'
-import { HiOutlineChevronDown } from 'react-icons/hi'
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
-import { useState } from 'react'
+import { useTranslate } from '@renderer/hooks/useTranslate';
+import { useAppDispatch } from '@renderer/store/hooks';
+import {
+  changeLang,
+  LangPayloadType,
+  langs,
+} from '@renderer/store/slices/lang.slice';
+import { HiOutlineChevronDown } from 'react-icons/hi';
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
+import { useState } from 'react';
 
 export default function SelectLanguage(): JSX.Element {
-  const { lng } = useTranslate()
-  const dispatcher = useAppDispatch()
+  const { lng } = useTranslate();
+  const dispatcher = useAppDispatch();
 
   const changeLanguage = (lngPayload: LangPayloadType): void => {
-    dispatcher(changeLang(lngPayload))
-  }
+    dispatcher(changeLang(lngPayload));
+  };
 
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       {/* Popover Trigger */}
       <PopoverTrigger
-        onClick={() => setIsOpen(curr => !curr)}
+        onClick={() => setIsOpen((curr) => !curr)}
         className="flex items-center cursor-pointer gap-2 text-gray-600 hover:text-gray-800"
       >
         <span className="text-sm">{lng.name}</span>
@@ -31,25 +35,31 @@ export default function SelectLanguage(): JSX.Element {
           <div
             key={idx}
             className={`flex items-center p-2 cursor-pointer rounded-md hover:bg-gray-100 ${
-              option.id === lng.id ? 'font-semibold text-gray-800' : 'text-gray-600'
+              option.id === lng.id
+                ? 'font-semibold text-gray-800'
+                : 'text-gray-600'
             }`}
             onClick={() => {
-              changeLanguage(option)
-              setIsOpen(false)
+              changeLanguage(option);
+              setIsOpen(false);
             }}
           >
             {/* Selection Indicator */}
             <span
               className={`h-4 w-4 rounded-full border mr-3 flex items-center justify-center ${
-                option.id === lng.id ? 'border-blue-500 bg-blue-500' : 'border-gray-300'
+                option.id === lng.id
+                  ? 'border-blue-500 bg-blue-500'
+                  : 'border-gray-300'
               }`}
             >
-              {option.id === lng.id && <span className="h-2 w-2 bg-white rounded-full"></span>}
+              {option.id === lng.id && (
+                <span className="h-2 w-2 bg-white rounded-full"></span>
+              )}
             </span>
             <span className="text-sm">{option.name}</span>
           </div>
         ))}
       </PopoverContent>
     </Popover>
-  )
+  );
 }

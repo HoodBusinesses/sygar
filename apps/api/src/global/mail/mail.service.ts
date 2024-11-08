@@ -38,7 +38,8 @@ export class MailService {
    */
   async sendEmail(options: MailOptionsInterface): Promise<void> {
     try {
-      await this.transporter.sendMail(options);``
+      await this.transporter.sendMail(options);
+      ``;
       // console.log('Email sent successfully');
     } catch (error) {
       // console.error('Error sending email:', error);
@@ -47,7 +48,11 @@ export class MailService {
   }
 
   async getTemplate(template: string): Promise<string> {
-    const templatePath = join(process.cwd(), 'src/templates', `${template}.html`);
+    const templatePath = join(
+      process.cwd(),
+      'src/templates',
+      `${template}.html`
+    );
     return readFile(templatePath, 'utf8');
   }
 }

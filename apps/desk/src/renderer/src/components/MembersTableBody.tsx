@@ -1,25 +1,25 @@
-import { useTranslate } from '@renderer/hooks/useTranslate'
-import { MemberFormData } from '@renderer/utils/schemas/formSchema'
-import { Edit, Trash2 } from 'lucide-react'
-import { UseFormRegister } from 'react-hook-form'
-import { Button } from './ui/button'
-import { cn } from './ui/lib/utils'
-import SelectInputItem from './ui/select-input-item'
-import { TableBody, TableCell, TableRow } from './ui/table'
+import { useTranslate } from '@renderer/hooks/useTranslate';
+import { MemberFormData } from '@renderer/utils/schemas/formSchema';
+import { Edit, Trash2 } from 'lucide-react';
+import { UseFormRegister } from 'react-hook-form';
+import { Button } from './ui/button';
+import { cn } from './ui/lib/utils';
+import SelectInputItem from './ui/select-input-item';
+import { TableBody, TableCell, TableRow } from './ui/table';
 
 interface MembersTableBodyProps {
-  register: UseFormRegister<MemberFormData>
-  members: MemberFormData[]
-  onEdit: (index: number) => void
-  onDelete: (index: number) => void
+  register: UseFormRegister<MemberFormData>;
+  members: MemberFormData[];
+  onEdit: (index: number) => void;
+  onDelete: (index: number) => void;
 }
 export default function MembersTableBody({
   register,
   members,
   onEdit,
-  onDelete
+  onDelete,
 }: MembersTableBodyProps): JSX.Element {
-  const { t, isRtl } = useTranslate()
+  const { t, isRtl } = useTranslate();
   return (
     <TableBody>
       {members.map((member, index) => (
@@ -33,10 +33,14 @@ export default function MembersTableBody({
           </TableCell>
 
           {/* Full Name Column */}
-          <TableCell className="text-gray-950 py-3 px-4 text-sm">{member.fullName}</TableCell>
+          <TableCell className="text-gray-950 py-3 px-4 text-sm">
+            {member.fullName}
+          </TableCell>
 
           {/* Email Column */}
-          <TableCell className="text-gray-950 py-3 px-4 text-sm">{member.email}</TableCell>
+          <TableCell className="text-gray-950 py-3 px-4 text-sm">
+            {member.email}
+          </TableCell>
 
           {/* Role Column */}
           <TableCell className="py-3 px-4">
@@ -49,10 +53,15 @@ export default function MembersTableBody({
           <TableCell className="py-3 px-4">
             <SelectInputItem
               label=""
-              onValueChange={(value) => register('actionType').onChange({ target: { value } })}
+              onValueChange={(value) =>
+                register('actionType').onChange({ target: { value } })
+              }
               items={[
-                { value: 'edit', translationKey: 'membersTable.editingDocuments' },
-                { value: 'view', translationKey: 'membersTable.viewingOnly' }
+                {
+                  value: 'edit',
+                  translationKey: 'membersTable.editingDocuments',
+                },
+                { value: 'view', translationKey: 'membersTable.viewingOnly' },
               ]}
               placeholder={
                 member.actionType === 'edit'
@@ -62,7 +71,7 @@ export default function MembersTableBody({
               classNames={{
                 trigger:
                   'bg-blue-100 text-blue-800 rounded-full px-3 py-1 text-xs font-medium w-auto',
-                content: 'bg-white text-gray-700'
+                content: 'bg-white text-gray-700',
               }}
             />
           </TableCell>
@@ -89,5 +98,5 @@ export default function MembersTableBody({
         </TableRow>
       ))}
     </TableBody>
-  )
+  );
 }

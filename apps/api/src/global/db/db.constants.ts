@@ -16,7 +16,7 @@ export class DbConstants {
     // Fetch the project name from environment variables or use a default value
     this.projectName = this.config.get<string>(
       'PROJECT_NAME',
-      'MadraMangaArabic',
+      'MadraMangaArabic'
     );
 
     // Determine if the environment is production based on NODE_ENV

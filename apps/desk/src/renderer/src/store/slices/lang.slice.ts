@@ -1,55 +1,60 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 export type LangPayloadType = {
-  name: string
-  id: string
-  isRtl: boolean
-}
+  name: string;
+  id: string;
+  isRtl: boolean;
+};
 
 export interface LangSliceType {
-  main: LangPayloadType
-  others: Array<LangPayloadType>
+  main: LangPayloadType;
+  others: Array<LangPayloadType>;
 }
 
 export const langs = [
   {
     name: 'English',
     id: 'en',
-    isRtl: false
+    isRtl: false,
   },
   {
     name: 'Français',
     id: 'fr',
-    isRtl: false
+    isRtl: false,
   },
   {
     name: 'العربية',
     id: 'ar',
-    isRtl: true
-  }
-]
+    isRtl: true,
+  },
+];
 
-const main = langs[1]
+const main = langs[1];
 
 const initialState: LangSliceType = {
   main,
-  others: langs.filter((lang) => lang.id !== main.id)
-}
+  others: langs.filter((lang) => lang.id !== main.id),
+};
 
 const langSlice = createSlice({
   name: 'lang',
   initialState,
   reducers: {
-    changeLang: (state: LangSliceType, { payload }: PayloadAction<LangPayloadType>) => {
+    changeLang: (
+      state: LangSliceType,
+      { payload }: PayloadAction<LangPayloadType>
+    ) => {
       return {
-        others: state.others.filter((lang) => lang.id !== payload.id).concat([state.main]),
-        main: payload
-      }
+        others: state.others
+          .filter((lang) => lang.id !== payload.id)
+          .concat([state.main]),
+        main: payload,
+      };
     },
-    reset: () => initialState
-  }
-})
+    reset: () => initialState,
+  },
+});
 
-export const { changeLang, reset: resetLang } = langSlice.actions
+export const { changeLang, reset: resetLang } = langSlice.actions;
 
-export default langSlice.reducer
+export default langSlice.reducer;

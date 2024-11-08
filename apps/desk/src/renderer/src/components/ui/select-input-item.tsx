@@ -1,17 +1,23 @@
-import { cn } from './lib/utils'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './select'
-import { useTranslate } from '@renderer/hooks/useTranslate'
+import { cn } from './lib/utils';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from './select';
+import { useTranslate } from '@renderer/hooks/useTranslate';
 
 interface SelectInputProps {
-  label: string
-  placeholder: string
+  label: string;
+  placeholder: string;
   classNames?: {
-    trigger?: string
-    content?: string
-  }
-  onValueChange: (value: string) => void
-  error?: string
-  items: { value: string; translationKey: string }[]
+    trigger?: string;
+    content?: string;
+  };
+  onValueChange: (value: string) => void;
+  error?: string;
+  items: { value: string; translationKey: string }[];
 }
 
 export default function SelectInputItem({
@@ -20,20 +26,26 @@ export default function SelectInputItem({
   onValueChange,
   classNames,
   placeholder,
-  items
+  items,
 }: SelectInputProps) {
-  const { t } = useTranslate()
+  const { t } = useTranslate();
 
   return (
     <div className="flex flex-col">
       {label !== '' && <p className="text-gray-600 text-sm mb-2">{t(label)}</p>}
       <Select onValueChange={onValueChange}>
-        <SelectTrigger className={cn(classNames?.trigger ? classNames.trigger : 'text-gray-700')}>
+        <SelectTrigger
+          className={cn(
+            classNames?.trigger ? classNames.trigger : 'text-gray-700'
+          )}
+        >
           <SelectValue placeholder={t(placeholder)} />
         </SelectTrigger>
 
         <SelectContent
-          className={cn(classNames?.content ? classNames.content : 'text-gray-700 bg-white')}
+          className={cn(
+            classNames?.content ? classNames.content : 'text-gray-700 bg-white'
+          )}
         >
           {items.map((item) => (
             <SelectItem key={item.value} value={item.value}>
@@ -44,5 +56,5 @@ export default function SelectInputItem({
       </Select>
       {error && <span className="text-sm text-red-500">{error}</span>}
     </div>
-  )
+  );
 }

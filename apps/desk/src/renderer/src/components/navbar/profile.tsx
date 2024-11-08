@@ -1,7 +1,7 @@
-import { FaUserCircle } from 'react-icons/fa'
-import { FiLogOut } from 'react-icons/fi'
-import { HiOutlineChevronDown } from 'react-icons/hi'
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
+import { FaUserCircle } from 'react-icons/fa';
+import { FiLogOut } from 'react-icons/fi';
+import { HiOutlineChevronDown } from 'react-icons/hi';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 
 export default function ProfilePopover() {
   return (
@@ -31,5 +31,5 @@ export default function ProfilePopover() {
         </div>
       </PopoverContent>
     </Popover>
-  )
+  );
 }

@@ -1,9 +1,9 @@
-import ParticipantsListing from '@renderer/containers/participants-listing'
-import { createRoute } from '@tanstack/react-router'
-import { rootRoute } from './root-route'
+import ParticipantsListing from '@renderer/containers/participants-listing';
+import { createRoute } from '@tanstack/react-router';
+import { rootRoute } from './root-route';
 
 export const participantsListingRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/participant-listing',
-  component: ParticipantsListing
-})
+  component: ParticipantsListing,
+});

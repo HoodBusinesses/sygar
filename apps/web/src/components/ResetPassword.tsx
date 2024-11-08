@@ -1,16 +1,15 @@
-'use client'
+'use client';
 
-import { Card } from "@/components/ui/card";
-import { useResetPassword } from "@/hooks/useResetPassword";
-import images from "@/public/images";
-import Image from "next/image";
-import { FiLoader } from "react-icons/fi";
-import ResetPassForm from "./reset-pass-form";
+import { Card } from '@/components/ui/card';
+import { useResetPassword } from '@/hooks/useResetPassword';
+import images from '@/public/images';
+import Image from 'next/image';
+import { FiLoader } from 'react-icons/fi';
+import ResetPassForm from './reset-pass-form';
 
 export default function ResetPassword() {
   const logo = images.logo;
   const { isPending, isError, isSuccess, mutate } = useResetPassword();
-
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">

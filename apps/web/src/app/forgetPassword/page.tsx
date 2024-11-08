@@ -1,6 +1,6 @@
-import React from "react";
-import "../../app/globals.css";
-import ForgetPassword from "@/components/ForgetPassword";
+import React from 'react';
+import '../../app/globals.css';
+import ForgetPassword from '@/components/ForgetPassword';
 
 const forgotPassword: React.FC = () => {
   return (

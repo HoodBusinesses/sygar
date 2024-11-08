@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "check-lint": "next lint",
+    "lint": "next lint --fix",
+    "format": "prettier --write .",
+    "check-format": "prettier --check ."
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -29,7 +32,6 @@
     "shadcn-cli": "^0.0.6",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
-    "web": "link:",
     "zod": "^3.23.8"
   },
   "devDependencies": {

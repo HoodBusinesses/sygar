@@ -1,19 +1,19 @@
-import { Edit2 } from 'lucide-react'
-import DeleteModal from '../DeleteModal'
-import SubscriptionModal from '../SubscriptionModal'
-import { Button } from '../ui/button'
-import { useNavigate } from '@tanstack/react-router'
+import { Edit2 } from 'lucide-react';
+import DeleteModal from '../DeleteModal';
+import SubscriptionModal from '../SubscriptionModal';
+import { Button } from '../ui/button';
+import { useNavigate } from '@tanstack/react-router';
 
 export default function ButtonsAction({
   rowId,
   subscription,
-  href
+  href,
 }: {
-  rowId: number
-  subscription: boolean
-  href: string
+  rowId: number;
+  subscription: boolean;
+  href: string;
 }): JSX.Element {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   return (
     <div className="flex justify-center">
       <Button
@@ -27,5 +27,5 @@ export default function ButtonsAction({
       {subscription && <SubscriptionModal />}
       <DeleteModal onDelete={() => console.log(rowId)} />
     </div>
-  )
+  );
 }

@@ -1,10 +1,10 @@
-import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar'
-import { Button } from './ui/button'
-import { Label } from './ui/label'
-import { Input } from './ui/input'
+import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
+import { Button } from './ui/button';
+import { Label } from './ui/label';
+import { Input } from './ui/input';
 
 interface EditProfileProps {
-  isRTL: boolean
+  isRTL: boolean;
 }
 
 export default function EditProfile({ isRTL }: EditProfileProps): JSX.Element {
@@ -15,7 +15,9 @@ export default function EditProfile({ isRTL }: EditProfileProps): JSX.Element {
     >
       {/* Header */}
       <div className="text-center mb-12">
-        <h2 className="text-3xl font-semibold text-gray-800">Update your personal information</h2>
+        <h2 className="text-3xl font-semibold text-gray-800">
+          Update your personal information
+        </h2>
       </div>
 
       {/* Avatar Section */}
@@ -35,7 +37,9 @@ export default function EditProfile({ isRTL }: EditProfileProps): JSX.Element {
 
       {/* Form Fields */}
       <div className="space-y-8">
-        <h3 className="text-lg font-bold text-gray-700 mb-6">Personal Information</h3>
+        <h3 className="text-lg font-bold text-gray-700 mb-6">
+          Personal Information
+        </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
@@ -63,7 +67,10 @@ export default function EditProfile({ isRTL }: EditProfileProps): JSX.Element {
             />
           </div>
           <div>
-            <Label htmlFor="current-password" className="text-gray-700 font-medium">
+            <Label
+              htmlFor="current-password"
+              className="text-gray-700 font-medium"
+            >
               Current Password
             </Label>
             <Input
@@ -85,7 +92,10 @@ export default function EditProfile({ isRTL }: EditProfileProps): JSX.Element {
             />
           </div>
           <div>
-            <Label htmlFor="confirm-password" className="text-gray-700 font-medium">
+            <Label
+              htmlFor="confirm-password"
+              className="text-gray-700 font-medium"
+            >
               Confirm New Password
             </Label>
             <Input
@@ -99,7 +109,9 @@ export default function EditProfile({ isRTL }: EditProfileProps): JSX.Element {
       </div>
 
       {/* Footer Buttons */}
-      <div className={`flex ${isRTL ? 'justify-start' : 'justify-end'} mt-12 space-x-4`}>
+      <div
+        className={`flex ${isRTL ? 'justify-start' : 'justify-end'} mt-12 space-x-4`}
+      >
         <Button
           variant="outline"
           className="text-gray-600 border-gray-300 hover:bg-gray-100 transition-colors rounded-md"
@@ -111,7 +123,7 @@ export default function EditProfile({ isRTL }: EditProfileProps): JSX.Element {
         </Button>
       </div>
     </div>
-  )
+  );
 }
 
 function UploadIcon(props): JSX.Element {
@@ -132,5 +144,5 @@ function UploadIcon(props): JSX.Element {
       <polyline points="17 8 12 3 7 8" />
       <line x1="12" x2="12" y1="3" y2="15" />
     </svg>
-  )
+  );
 }

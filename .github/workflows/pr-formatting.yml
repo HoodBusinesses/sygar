@@ -1,0 +1,28 @@
+name: Check Formatting
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  check-formatting:
+    name: Run Prettier Formatting Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run Prettier Formatting Check
+        run: npx turbo check-format
+        env:
+          CI: true

@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import React from "react";
-import { Card } from "@/components/ui/card";
-import Image from "next/image";
-import { FiLoader } from "react-icons/fi";
-import images from "@/public/images";
-import { useActivateAccount } from "@/hooks/useActivateAccount";
-import ActivateAccountForm from "./activate-account-form";
+import React from 'react';
+import { Card } from '@/components/ui/card';
+import Image from 'next/image';
+import { FiLoader } from 'react-icons/fi';
+import images from '@/public/images';
+import { useActivateAccount } from '@/hooks/useActivateAccount';
+import ActivateAccountForm from './activate-account-form';
 
 const ActivateAccount = () => {
   const { isPending, isError, isSuccess, mutate } = useActivateAccount();

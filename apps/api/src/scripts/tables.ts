@@ -15,11 +15,10 @@ import { FormatorSchema } from 'src/modules/organization/model/formator.model';
 import { ParticipantSchema } from 'src/modules/organization/model/participant.model';
 import { AssigningGroupSchema } from 'src/modules/organization/model/assigning-group.model';
 
-
 /**
  * Bootstrap function to create all required DynamoDB tables.
  * This script should be run during initial setup or when new tables need to be created.
- * 
+ *
  * Tables created:
  * - Users table
  * - Abilities table

@@ -1,13 +1,15 @@
 type PieItemsType = {
-  label: string
-  value: number
-  color: string
-}[]
+  label: string;
+  value: number;
+  color: string;
+}[];
 
-export const getPieChartOption = (items: PieItemsType): echarts.EChartsOption => ({
+export const getPieChartOption = (
+  items: PieItemsType
+): echarts.EChartsOption => ({
   tooltip: {
     trigger: 'item',
-    show: false
+    show: false,
   },
   series: [
     {
@@ -17,63 +19,65 @@ export const getPieChartOption = (items: PieItemsType): echarts.EChartsOption =>
       avoidLabelOverlap: false,
       label: {
         show: false,
-        position: 'center'
+        position: 'center',
       },
       emphasis: {
         label: {
-          show: false
+          show: false,
         },
-        focus: 'none'
+        focus: 'none',
       },
       labelLine: {
-        show: false
+        show: false,
       },
       data: items.map((item) => ({ value: item.value, name: item.label })),
-      color: items.map((item) => item.color)
-    }
-  ]
-})
+      color: items.map((item) => item.color),
+    },
+  ],
+});
 
 export type LineItemsType = {
   series: {
-    name: string
-    data: number[]
-  }[]
-  yData: string[]
-}
+    name: string;
+    data: number[];
+  }[];
+  yData: string[];
+};
 
-export const getBarsChartOption = (options: LineItemsType): echarts.EChartsOption => ({
+export const getBarsChartOption = (
+  options: LineItemsType
+): echarts.EChartsOption => ({
   tooltip: {
     trigger: 'axis',
     axisPointer: {
       // Use axis to trigger tooltip
-      type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
-    }
+      type: 'shadow', // 'shadow' as default; can also be 'line' or 'shadow'
+    },
   },
   legend: {},
   grid: {
     left: '3%',
     right: '4%',
     bottom: '3%',
-    containLabel: true
+    containLabel: true,
   },
   xAxis: {
-    type: 'value'
+    type: 'value',
   },
   yAxis: {
     type: 'category',
-    data: options.yData
+    data: options.yData,
   },
   series: options.series.map((item) => ({
     name: item.name,
     type: 'bar',
     stack: 'total',
     label: {
-      show: true
+      show: true,
     },
     emphasis: {
-      focus: 'series'
+      focus: 'series',
     },
-    data: item.data
-  }))
-})
+    data: item.data,
+  })),
+});

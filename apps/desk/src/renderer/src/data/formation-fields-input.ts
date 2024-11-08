@@ -1,10 +1,10 @@
 export type FieldsInput = {
-  name: string
-  value: string
-  label: string
-  placeholder: string
-  required?: boolean
-}
+  name: string;
+  value: string;
+  label: string;
+  placeholder: string;
+  required?: boolean;
+};
 
 export const participantFields: FieldsInput[] = [
   {
@@ -12,37 +12,37 @@ export const participantFields: FieldsInput[] = [
     placeholder: 'participant.fields.name.placeholder',
     name: 'name',
     value: 'name',
-    required: true
+    required: true,
   },
   {
     label: 'participant.fields.email.label',
     placeholder: 'participant.fields.email.placeholder',
     name: 'email',
     value: 'email',
-    required: true
+    required: true,
   },
   {
     label: 'participant.fields.cin.label',
     placeholder: 'participant.fields.cin.placeholder',
     name: 'cin',
     value: 'cin',
-    required: true
+    required: true,
   },
   {
     label: 'participant.fields.cnss.label',
     placeholder: 'participant.fields.cnss.placeholder',
     name: 'cnss',
     value: 'cnss',
-    required: true
+    required: true,
   },
   {
     label: 'participant.fields.status.label',
     placeholder: 'participant.fields.status.placeholder',
     name: 'status',
     value: 'status',
-    required: true
-  }
-]
+    required: true,
+  },
+];
 
 export const groupFields: FieldsInput[] = [
   {
@@ -50,37 +50,37 @@ export const groupFields: FieldsInput[] = [
     placeholder: 'group.fields.facilator.placeholder',
     name: 'facilator',
     value: 'facilator',
-    required: true
+    required: true,
   },
   {
     label: 'group.fields.trainer.label',
     placeholder: 'group.fields.trainer.placeholder',
     name: 'trainer',
     value: 'trainer',
-    required: true
+    required: true,
   },
   {
     label: 'group.fields.them.label',
     placeholder: 'group.fields.them.placeholder',
     name: 'them',
     value: 'them',
-    required: true
+    required: true,
   },
   {
     label: 'group.fields.location.label',
     placeholder: 'group.fields.location.placeholder',
     name: 'location',
     value: 'location',
-    required: true
+    required: true,
   },
   {
     label: 'group.fields.date.label',
     placeholder: 'group.fields.date.placeholder',
     name: 'date',
     value: 'date',
-    required: true
-  }
-]
+    required: true,
+  },
+];
 
 export const formationFields: FieldsInput[] = [
   {
@@ -88,20 +88,20 @@ export const formationFields: FieldsInput[] = [
     placeholder: 'formation.fields.formationName.placeholder',
     name: 'name',
     value: 'formationName',
-    required: true
+    required: true,
   },
   {
     label: 'formation.fields.year.label',
     placeholder: 'formation.fields.year.placeholder',
     name: 'year',
     value: 'year',
-    required: true
+    required: true,
   },
   {
     label: 'formation.fields.price.label',
     placeholder: 'formation.fields.price.placeholder',
     name: 'price',
     value: 'price',
-    required: true
-  }
-]
+    required: true,
+  },
+];

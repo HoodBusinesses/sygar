@@ -1,19 +1,21 @@
-import { useTranslate } from '@renderer/hooks/useTranslate'
-import { Table } from '@tanstack/react-table'
-import React from 'react'
-import { Button } from './ui/button'
-import { cn } from './ui/lib/utils'
+import { useTranslate } from '@renderer/hooks/useTranslate';
+import { Table } from '@tanstack/react-table';
+import React from 'react';
+import { Button } from './ui/button';
+import { cn } from './ui/lib/utils';
 
 interface PaginationProps<TData> {
-  table: Table<TData>
+  table: Table<TData>;
 }
 
 function Pagination<TData>({ table }: PaginationProps<TData>) {
-  const { t } = useTranslate()
-  const handlePageChange = (page: React.ChangeEvent<HTMLSelectElement>): void => {
-    const selectedPage = Number(page.target.value)
-    table.setPageIndex(selectedPage - 1)
-  }
+  const { t } = useTranslate();
+  const handlePageChange = (
+    page: React.ChangeEvent<HTMLSelectElement>
+  ): void => {
+    const selectedPage = Number(page.target.value);
+    table.setPageIndex(selectedPage - 1);
+  };
 
   return (
     <div className="flex items-center gap-4 pt-4">
@@ -57,7 +59,7 @@ function Pagination<TData>({ table }: PaginationProps<TData>) {
         </Button>
       </div>
     </div>
-  )
+  );
 }
 
-export default Pagination
+export default Pagination;

@@ -1,6 +1,6 @@
-import { Api } from '@repo/exapi'
+import { Api } from '@repo/exapi';
 
-// TODO: load from env 
-const url = new URL('http://localhost:1337')
+// TODO: load from env
+const url = new URL('http://localhost:1337');
 
-export const api = new Api(url.toString())
+export const api = new Api(url.toString());

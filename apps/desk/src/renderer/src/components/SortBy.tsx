@@ -1,31 +1,31 @@
-import { useTranslate } from '@renderer/hooks/useTranslate'
-import { ArrowDownIcon } from 'lucide-react'
-import { useState } from 'react'
-import { Button } from './ui/button'
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
-import SortOption from './ui/sort-options'
+import { useTranslate } from '@renderer/hooks/useTranslate';
+import { ArrowDownIcon } from 'lucide-react';
+import { useState } from 'react';
+import { Button } from './ui/button';
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
+import SortOption from './ui/sort-options';
 
 const SortByPopover = ({ onSort }) => {
-  const { t } = useTranslate()
-  const [email, setEmail] = useState('asc')
-  const [creationDate, setCreationDate] = useState('asc')
+  const { t } = useTranslate();
+  const [email, setEmail] = useState('asc');
+  const [creationDate, setCreationDate] = useState('asc');
 
   const handleApply = (): void => {
-    console.log({ email, creationDate })
+    console.log({ email, creationDate });
 
     if (email) {
-      onSort([{ id: 'email', desc: email === 'desc' }])
+      onSort([{ id: 'email', desc: email === 'desc' }]);
     }
     // if (creationDate) {
     //   onSort([{ id: 'createdDate', desc: creationDate === 'desc' }])
     // }
-  }
+  };
 
   const handleReset = (): void => {
-    setEmail('')
-    setCreationDate('')
-    onSort(null)
-  }
+    setEmail('');
+    setCreationDate('');
+    onSort(null);
+  };
 
   return (
     <Popover>
@@ -45,7 +45,7 @@ const SortByPopover = ({ onSort }) => {
           onChange={setEmail}
           labels={{ asc: 'A_Z', desc: 'Z_A' }}
         />
-        
+
         <SortOption
           title="Created Date"
           name="sortCreationDate"
@@ -71,7 +71,7 @@ const SortByPopover = ({ onSort }) => {
         </div>
       </PopoverContent>
     </Popover>
-  )
-}
+  );
+};
 
-export default SortByPopover
+export default SortByPopover;

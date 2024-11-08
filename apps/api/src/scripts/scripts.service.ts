@@ -7,7 +7,10 @@ import { UserRoles } from '../modules/user/model/user.model';
 import { ScanCommandInput } from '@aws-sdk/client-dynamodb';
 import { PutCommandInput } from '@aws-sdk/lib-dynamodb';
 import { LocalTableInput } from '../shared/types/db';
-import { CreateTableCommand, CreateTableCommandInput } from '@aws-sdk/client-dynamodb';
+import {
+  CreateTableCommand,
+  CreateTableCommandInput,
+} from '@aws-sdk/client-dynamodb';
 
 /**
  * Service responsible for database initialization and seeding operations.
@@ -19,13 +22,13 @@ export class ScriptsService {
     private readonly configService: ConfigService,
     private readonly dbService: DbService,
     private readonly dbConstants: DbConstants,
-    private readonly cryptService: CryptService,
+    private readonly cryptService: CryptService
   ) {}
 
   /**
    * Seeds a user into the database with specified role and credentials.
    * Checks for existing users with the same role before creating new ones.
-   * 
+   *
    * @param role - The role to assign to the user (e.g., SYGAR_ADMIN, SYGAR_USER)
    * @param uid - Unique identifier for the user
    * @param firstName - User's first name
@@ -39,7 +42,7 @@ export class ScriptsService {
     firstName: string,
     lastName: string,
     emailKey: string,
-    passwordKey: string,
+    passwordKey: string
   ) {
     // Prepare scan parameters to check for existing users with the same role
     const scanRoleParams: ScanCommandInput = {
@@ -68,9 +71,12 @@ export class ScriptsService {
         SK: this.dbConstants.getSortKey(uid),
         firstName,
         lastName,
-        email: this.configService.get<string>(emailKey, `${role.toLowerCase()}@hood.com`),
+        email: this.configService.get<string>(
+          emailKey,
+          `${role.toLowerCase()}@hood.com`
+        ),
         password: await this.cryptService.hash(
-          this.configService.get<string>(passwordKey, 'password'),
+          this.configService.get<string>(passwordKey, 'password')
         ),
         role,
         isActive: true,
@@ -93,7 +99,7 @@ export class ScriptsService {
   /**
    * Creates a new DynamoDB table with the specified schema.
    * Sets up primary key (PK) and sort key (SK) with additional attributes if provided.
-   * 
+   *
    * @param table - Table configuration including name and attribute definitions
    */
   async createTable(table: LocalTableInput) {
@@ -124,8 +130,8 @@ export class ScriptsService {
       console.log(`Table ${schema.TableName} created successfully.`);
     } catch (error) {
       console.error(
-        `Error creating table ${schema.TableName}: ${(error as any).message}`,
+        `Error creating table ${schema.TableName}: ${(error as any).message}`
       );
     }
   }
-} 
+}

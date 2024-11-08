@@ -36,5 +36,5 @@ body {
 
 /* Debug mode */
 .debug * {
-	outline: 1px solid tomato;
+  outline: 1px solid tomato;
 }
