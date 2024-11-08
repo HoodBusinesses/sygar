@@ -10,7 +10,7 @@ type Props = {
   isPending: boolean;
   isError: boolean;
   emailSent: boolean;
-  mutate: ;
+  mutate: (data: { email: string }) => void;
 };
 
 export default function ForgetPassForm({
