@@ -1,10 +1,8 @@
-import { Button, buttonVariants } from './ui/button'
+import { buttonVariants } from './ui/button'
 import { Dialog, DialogContent, DialogTrigger, DialogClose } from './ui/dialog'
 import { cn } from './ui/lib/utils'
-// import { FiDownload } from 'react-icons/fi'
 import { useTranslate } from '@renderer/hooks/useTranslate'
 import { FiUpload } from 'react-icons/fi'
-import { Card, CardDescription, CardFooter, CardHeader } from './ui/card'
 
 const ExportModal = (): JSX.Element => {
   const { t } = useTranslate()

@@ -1,6 +1,5 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { Checkbox } from '../ui/checkbox'
-import { Button } from '../ui/button'
 import ButtonsAction from '../organization/org-table-actions'
 import DeleteModal from '../DeleteModal'
 

@@ -4,7 +4,7 @@ import { FormationFormData } from '@renderer/utils/schemas/formSchema'
 import FormInputItem from '../ui/form-input-item'
 import { formationFields } from '@renderer/data/formation-fields-input'
 
-const EditFormation = (formation): JSX.Element => {
+const EditFormation = (): JSX.Element => {
   const {
     register,
     formState: { errors }
@@ -20,7 +20,7 @@ const EditFormation = (formation): JSX.Element => {
               label={field.label}
               placeholder={field.placeholder}
               register={register(field.name as keyof FormationFormData)}
-              value={formation?.formation?.[field.value] || ''}
+              value={''}
               error={errors[field.name]?.message}
               required={field.required}
               isLargeInput={true}

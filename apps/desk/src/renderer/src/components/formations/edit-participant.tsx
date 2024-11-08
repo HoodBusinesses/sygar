@@ -4,7 +4,7 @@ import { ParticipantFormData } from '@renderer/utils/schemas/formSchema'
 import FormInputItem from '../ui/form-input-item'
 import { participantFields } from '@renderer/data/formation-fields-input'
 
-const EditParticipant = (participant): JSX.Element => {
+const EditParticipant = (): JSX.Element => {
   const {
     register,
     formState: { errors }
@@ -22,7 +22,7 @@ const EditParticipant = (participant): JSX.Element => {
               label={field.label}
               placeholder={field.placeholder}
               register={register(field.name as keyof ParticipantFormData)}
-              value={participant?.participant?.[field.value] || ''}
+              value={''}
               error={errors[field.name]?.message}
               isLargeInput={true}
               required={field.required}
