@@ -1,7 +1,6 @@
 import React from 'react'
 import { mockGroups } from '@renderer/utils/static/organizations'
 import { CustomTable } from '@renderer/components/custom-table'
-import ListingHeader from '@renderer/components/ListingHeader'
 import { useTranslate } from '@renderer/hooks/useTranslate'
 import { useNavigate } from '@tanstack/react-router'
 import withAuth from '@renderer/hoc/with-auth'
@@ -13,8 +12,8 @@ const GroupListing: React.FC = () => {
   console.log('GroupThemes -> navigate', navigate)
   return (
     <div dir={isRtl ? 'rtl' : 'ltr'} className="h-full w-full p-6 space-y-6">
-      <ListingHeader headTitle="group.groups" />
       <CustomTable
+        headTitle="group.groups"
         columns={groupColumn(() => {
           navigate({ to: '/participant-listing' as string })
         })}

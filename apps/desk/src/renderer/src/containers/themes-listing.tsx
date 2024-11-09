@@ -1,6 +1,5 @@
 import withAuth from '@renderer/hoc/with-auth'
 import { useTranslate } from '@renderer/hooks/useTranslate'
-import ListingHeader from '@renderer/components/ListingHeader'
 import { CustomTable } from '@renderer/components/custom-table'
 import { themeColumns } from '@renderer/components/formations/themes-columns'
 import { mockThemes } from '@renderer/utils/static/organizations'
@@ -12,8 +11,8 @@ const ThemesListing: React.FC = () => {
 
   return (
     <div dir={isRtl ? 'rtl' : 'ltr'} className="h-full w-full p-6 space-y-6">
-      <ListingHeader headTitle="formation.formation" />
       <CustomTable
+        headTitle="formation.formation"
         columns={themeColumns(() => {
           console.log('Navigating to /themes-listing/group-themes')
           navigate({ to: '/group-listing' as string })

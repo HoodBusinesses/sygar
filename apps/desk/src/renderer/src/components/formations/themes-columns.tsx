@@ -2,6 +2,7 @@ import { ColumnDef } from '@tanstack/react-table'
 import { Checkbox } from '../ui/checkbox'
 import ButtonsAction from '../organization/org-table-actions'
 import DeleteModal from '../DeleteModal'
+import SortHeader from '../costum-data/sort-header'
 
 export interface Theme {
   id: number
@@ -40,23 +41,50 @@ export const themeColumns = (setGroupThemes: () => void): ColumnDef<Theme>[] => 
           aria-label="Select row"
           key="checkbox"
         />
-        <p>{row.getValue('id')}</p>
+        <p>{row.index + 1}</p>
       </div>
     )
   },
   {
     accessorKey: 'name',
-    header: 'themesTable.name',
+    header: ({ column }) => {
+      return (
+        <SortHeader
+          isSomeSortSeted={!!column.getIsSorted()}
+          resetFn={() => column.clearSorting()}
+          OnClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          label="themesTable.name"
+        />
+      )
+    },
     cell: ({ row }) => <p className="text-gray-600">{row.getValue('name')}</p>
   },
   {
     accessorKey: 'year',
-    header: 'themesTable.year',
+    header: ({ column }) => {
+      return (
+        <SortHeader
+          isSomeSortSeted={!!column.getIsSorted()}
+          resetFn={() => column.clearSorting()}
+          OnClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          label="themesTable.year"
+        />
+      )
+    },
     cell: ({ row }) => <p>{row.getValue('year')}</p>
   },
   {
     accessorKey: 'price',
-    header: 'themesTable.price',
+    header: ({ column }) => {
+      return (
+        <SortHeader
+          isSomeSortSeted={!!column.getIsSorted()}
+          resetFn={() => column.clearSorting()}
+          OnClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          label="themesTable.price"
+        />
+      )
+    },
     cell: ({ row }) => <p>{row.getValue('price')}</p>
   },
   {

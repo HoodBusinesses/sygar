@@ -2,6 +2,7 @@ import { Checkbox } from '../ui/checkbox'
 import { ColumnDef } from '@tanstack/react-table'
 import ButtonsAction from '../organization/org-table-actions'
 import DeleteModal from '../DeleteModal'
+import SortHeader from '../costum-data/sort-header'
 
 export interface Participant {
   id: number
@@ -22,7 +23,6 @@ export const participantColumns = (): ColumnDef<Participant>[] => [
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
           aria-label="Select all"
         />
-
         {table.getIsSomeRowsSelected() && (
           <DeleteModal
             DeleteNumber={table.getFilteredSelectedRowModel().rows.length}
@@ -39,18 +39,36 @@ export const participantColumns = (): ColumnDef<Participant>[] => [
           aria-label="Select row"
           key="checkbox"
         />
-        <p>{row.getValue('id')}</p>
+        <p>{row.index + 1}</p>
       </div>
     )
   },
   {
     accessorKey: 'name',
-    header: 'Name',
+    header: ({ column }) => {
+      return (
+        <SortHeader
+          isSomeSortSeted={!!column.getIsSorted()}
+          resetFn={() => column.clearSorting()}
+          OnClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          label="Name"
+        />
+      )
+    },
     cell: ({ row }) => <p>{row.getValue('name')}</p>
   },
   {
     accessorKey: 'email',
-    header: 'Email',
+    header: ({ column }) => {
+      return (
+        <SortHeader
+          isSomeSortSeted={!!column.getIsSorted()}
+          resetFn={() => column.clearSorting()}
+          OnClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          label="Email"
+        />
+      )
+    },
     cell: ({ row }) => <p>{row.getValue('email')}</p>
   },
   {
