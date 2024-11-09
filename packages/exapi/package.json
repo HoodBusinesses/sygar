@@ -1,6 +1,8 @@
 {
   "name": "@repo/exapi",
   "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "npx tsc",
     "check-lint": "eslint . ",
