@@ -24,12 +24,12 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build specific Next.js app in apps/web
-        run: pnpm turbo run build --filter=apps/web
+        run: pnpm turbo run build --filter=web
 
       - name: Install Vercel CLI
         run: npm install -g vercel
 
-      - name: Deploy to Vercel from apps/web
+      - name: Deploy to Vercel from web
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }} # Add Org ID if necessary
