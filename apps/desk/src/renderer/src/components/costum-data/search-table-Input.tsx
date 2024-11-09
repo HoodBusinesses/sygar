@@ -9,7 +9,7 @@ export default function SearchTableInput({ onChange }: Props) {
   return (
     <div className="relative">
       <Input
-        placeholder={''}
+        placeholder={'Search...'}
         className="pl-10 text-gray-600 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-400 focus:outline-none w-64"
         // value={value}
         onChange={onChange}

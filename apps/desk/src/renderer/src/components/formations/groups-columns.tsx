@@ -2,6 +2,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import DeleteModal from '../DeleteModal';
 import ButtonsAction from '../organization/org-table-actions';
 import { Checkbox } from '../ui/checkbox';
+import SortHeader from '../costum-data/sort-header';
 
 export interface Group {
   id: number;
@@ -41,18 +42,36 @@ export const groupColumn = (
           aria-label="Select row"
           key="checkbox"
         />
-        <p>{row.getValue('id')}</p>
+        <p>{row.index + 1}</p>
       </div>
     ),
   },
   {
     accessorKey: 'facilator',
-    header: 'Facilator',
+    header: ({ column }) => {
+      return (
+        <SortHeader
+          isSomeSortSeted={!!column.getIsSorted()}
+          resetFn={() => column.clearSorting()}
+          OnClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          label="Facilator"
+        />
+      );
+    },
     cell: ({ row }) => <p>{row.getValue('facilator')}</p>,
   },
   {
     accessorKey: 'trainer',
-    header: 'Trainer',
+    header: ({ column }) => {
+      return (
+        <SortHeader
+          isSomeSortSeted={!!column.getIsSorted()}
+          resetFn={() => column.clearSorting()}
+          OnClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          label="Trainer"
+        />
+      );
+    },
     cell: ({ row }) => <p>{row.getValue('trainer')}</p>,
   },
   {
