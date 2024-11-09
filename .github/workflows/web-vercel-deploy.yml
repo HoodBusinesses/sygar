@@ -1,0 +1,37 @@
+name: Deploy to Vercel
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy Next.js App to Vercel
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies in root with pnpm
+        run: pnpm install --frozen-lockfile
+
+      - name: Build specific Next.js app in apps/web
+        run: pnpm turbo run build --filter=web
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+
+      - name: Deploy to Vercel from web
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }} # Add Org ID if necessary
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }} # Add Project ID if necessary
+        run: vercel --prod --token $VERCEL_TOKEN --scope $VERCEL_ORG_ID

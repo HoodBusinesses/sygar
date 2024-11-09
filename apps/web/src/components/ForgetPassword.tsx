@@ -34,7 +34,9 @@ export default function ForgetPassword() {
             </p>
 
             {/* Reset Password Form */}
+            {/* TODO: check email-sent*/}
             <ResetPassForm
+              emailSent={true}
               isPending={isPending}
               isError={isError}
               mutate={mutate}
