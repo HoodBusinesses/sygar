@@ -1,7 +1,10 @@
 import { ColumnDef } from '@tanstack/react-table';
 import Profile_Img from '../../assets/images/profile_img.png';
+import SortHeader from '../costum-data/sort-header';
 import EnableButton from '../ui/EnableButton';
 import ButtonsAction from './org-table-actions';
+import { Checkbox } from '../ui/checkbox';
+import DeleteModal from '../DeleteModal';
 
 export type Organization = {
   id: number;
@@ -15,9 +18,37 @@ export type Organization = {
   date: string;
 };
 
-export const getColumns = (
-  setEditOrg: () => void
-): ColumnDef<Organization>[] => [
+export const Columns: ColumnDef<Organization>[] = [
+  {
+    accessorKey: 'id',
+    header: ({ table }) => (
+      <div className="flex items-center">
+        <Checkbox
+          checked={table.getIsAllPageRowsSelected()}
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+
+        {table.getIsSomeRowsSelected() && (
+          <DeleteModal
+            DeleteNumber={table.getFilteredSelectedRowModel().rows.length}
+            onDelete={() => {}}
+          />
+        )}
+      </div>
+    ),
+    cell: ({ row }) => (
+      <div className="flex items-center gap-2">
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+          key="checkbox"
+        />
+        <p>{row.index + 1}</p>
+      </div>
+    ),
+  },
   {
     accessorKey: 'image',
     header: 'organization.image',
@@ -50,7 +81,16 @@ export const getColumns = (
   },
   {
     accessorKey: 'email',
-    header: 'organization.email',
+    header: ({ column }) => {
+      return (
+        <SortHeader
+          isSomeSortSeted={!!column.getIsSorted()}
+          resetFn={() => column.clearSorting()}
+          OnClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          label="organization.email"
+        />
+      );
+    },
     cell: ({ row }) => <p className="text-gray-600">{row.getValue('email')}</p>,
   },
   {
@@ -69,7 +109,16 @@ export const getColumns = (
   },
   {
     accessorKey: 'enabled',
-    header: 'organization.enabled',
+    header: ({ column }) => {
+      return (
+        <SortHeader
+          isSomeSortSeted={!!column.getIsSorted()}
+          resetFn={() => column.clearSorting()}
+          OnClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          label="organization.enabled"
+        />
+      );
+    },
     cell: ({ row }) => (
       <EnableButton onClick={() => {}} value={row.getValue('enabled')} />
     ),

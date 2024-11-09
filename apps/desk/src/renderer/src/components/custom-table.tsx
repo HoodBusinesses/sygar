@@ -11,10 +11,8 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { useState } from 'react';
-import SearchTableInput from './costum-data/search-table-Input';
-import Filter from './Filter';
+import ListingHeader from './ListingHeader';
 import Pagination from './Pagination';
-import SortByPopover from './SortBy';
 import { cn } from './ui/lib/utils';
 import {
   Table,
@@ -28,11 +26,13 @@ import {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  headTitle: string;
 }
 
 export function CustomTable<TData, TValue>({
   columns,
   data,
+  headTitle,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
 
@@ -65,18 +65,12 @@ export function CustomTable<TData, TValue>({
 
   return (
     <div>
-      {/* Search and Filters */}
+      {/* Search and import export */}
       <div className="flex justify-between items-center mb-6 gap-4">
-        {/* Left Section: Search Input */}
-        <SearchTableInput
-          onChange={(e) => table.setGlobalFilter(e.target.value)}
+        <ListingHeader
+          headTitle={headTitle}
+          onSearchChange={(e) => table.setGlobalFilter(e.target.value)}
         />
-
-        {/* Right Section: Buttons and Profile */}
-        <div className="flex gap-4">
-          <SortByPopover onSort={setSorting} />
-          <Filter OnFilter={setSorting} />
-        </div>
       </div>
 
       <Table className="border rounded-lg overflow-hidden overflow-x-auto">
@@ -92,8 +86,8 @@ export function CustomTable<TData, TValue>({
                     <TableHead
                       key={header.id}
                       className={cn(
-                        headerGroup.id === 'id',
-                        'rtl:!pr-8 ltr:!pl-8 font-semibold'
+                        header.column.id === 'id' && 'rtl:!pr-8 ltr:!pl-8',
+                        'font-semibold'
                       )}
                     >
                       {flexRender(

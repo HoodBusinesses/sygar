@@ -1,5 +1,11 @@
-import { Dialog, DialogClose, DialogContent, DialogTrigger } from './ui/dialog';
-import { Button } from './ui/button';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from './ui/dialog';
+import { DialogDescription } from '@radix-ui/react-dialog';
 
 export default function UnsavedChangeEdit({
   open,
@@ -15,24 +21,23 @@ export default function UnsavedChangeEdit({
       <DialogTrigger asChild></DialogTrigger>
 
       <DialogContent className="p-4 bg-white items-center justify-center rounded-md shadow-md">
-        <h2 className="text-xl text-gray-800  font-bold mb-4">
-          Unsaved changes
-        </h2>
-        <p className="text-gray-400">
+        <DialogTitle className="text-xl text-gray-800  font-bold">
+          Discard Unsaved Changes?
+        </DialogTitle>
+
+        <DialogDescription className="text-gray-400">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit natus
-        </p>
+        </DialogDescription>
+
         <div className="flex justify-end">
-          <Button
+          <DialogClose
             onClick={KeepEditFn}
             className="custom-button text-gray-500 hover:bg-gray-200 border border-gray-500 mr-2"
           >
-            keep editing
-          </Button>
-          <DialogClose
-            onClick={ConfermFn}
-            className="custom-button bg-blue-500 hover:bg-blue-800"
-          >
-            return back to listing
+            Keep Editing
+          </DialogClose>
+          <DialogClose onClick={ConfermFn} className="custom-button bg-red-500">
+            Discard
           </DialogClose>
         </div>
       </DialogContent>
