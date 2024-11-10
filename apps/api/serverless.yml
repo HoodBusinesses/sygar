@@ -22,6 +22,14 @@ provider:
     SYGAR_MAILER_USERNAME: ${env:SYGAR_MAILER_USERNAME}
     SYGAR_MAILER_PASSWORD: ${env:SYGAR_MAILER_PASSWORD}
     SYGAR_MAILER_FROM_ADDRESS: ${env:SYGAR_MAILER_FROM_ADDRESS}
+  
+  # Add IAM role statements to allow full access to DynamoDB
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:*"
+        - "dynamodbstreams:*"
+      Resource: "*"
 
 functions:
   api:
