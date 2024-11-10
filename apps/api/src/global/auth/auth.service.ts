@@ -43,7 +43,7 @@ export class AuthService {
     private readonly mailService: MailService,
     private readonly organizationService: OrganizationService
   ) {
-    this.jwtSecretToken = configService.getOrThrow('JWT_SECRET_TOKEN');
+    this.jwtSecretToken = configService.getOrThrow('SYGAR_JWT_SECRET_TOKEN');
   }
 
   /**
@@ -90,7 +90,7 @@ export class AuthService {
         role: user.role,
       },
       {
-        expiresIn: this.configService.getOrThrow('JWT_EXPIRATION_TIME'),
+        expiresIn: this.configService.getOrThrow('SYGAR_JWT_EXPIRATION_TIME'),
         secret: this.jwtSecretToken,
       }
     );
@@ -174,7 +174,7 @@ export class AuthService {
     );
 
     // Generate the reset link
-    const resetLink = `${this.configService.getOrThrow('APP_URL')}/activateAccount?token=${token}`;
+    const resetLink = `${this.configService.getOrThrow('SYGAR_AUTH_WEB_APP_URL')}/activateAccount?token=${token}`;
 
     // Load the activation account template
     const activationAccountTemplate =
@@ -190,7 +190,7 @@ export class AuthService {
 
     // send the reset password email
     const mailOptions = {
-      from: this.configService.getOrThrow('MAILER_FROM_ADDRESS'), // from address
+      from: this.configService.getOrThrow('SYGAR_MAILER_FROM_ADDRESS'), // from address
       to: user.email, // to address
       subject: 'Activate your account', // subject
       html: html,
@@ -237,7 +237,7 @@ export class AuthService {
     );
 
     // Generate the reset link
-    const resetLink = `${this.configService.getOrThrow('APP_URL')}/resetPassword?token=${token}`;
+    const resetLink = `${this.configService.getOrThrow('SYGAR_AUTH_WEB_APP_URL')}/resetPassword?token=${token}`;
 
     // Load the reset password template
     const resetPasswordTemplate =
@@ -249,7 +249,7 @@ export class AuthService {
 
     // send the reset password email
     const mailOptions = {
-      from: this.configService.getOrThrow('MAILER_FROM_ADDRESS'),
+      from: this.configService.getOrThrow('SYGAR_MAILER_FROM_ADDRESS'),
       to: user.email,
       subject: 'Password Reset Request',
       html: html,
@@ -310,7 +310,7 @@ export class AuthService {
         role: user.role,
       },
       {
-        expiresIn: this.configService.getOrThrow('JWT_EXPIRATION_TIME'),
+        expiresIn: this.configService.getOrThrow('SYGAR_JWT_EXPIRATION_TIME'),
         secret: this.jwtSecretToken,
       }
     );

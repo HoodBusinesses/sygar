@@ -20,11 +20,11 @@ export class MailService {
   constructor(private readonly configService: ConfigService) {
     // Create a transporter for sending emails using nodemailer
     this.transporter = nodemailer.createTransport({
-      host: this.configService.getOrThrow<string>('MAILER_HOST'),
-      port: this.configService.getOrThrow<number>('MAILER_PORT'),
+      host: this.configService.getOrThrow<string>('SYGAR_MAILER_HOST'),
+      port: this.configService.getOrThrow<number>('SYGAR_MAILER_PORT'),
       auth: {
-        user: this.configService.getOrThrow<string>('MAILER_USERNAME'),
-        pass: this.configService.getOrThrow<string>('MAILER_PASSWORD'),
+        user: this.configService.getOrThrow<string>('SYGAR_MAILER_USERNAME'),
+        pass: this.configService.getOrThrow<string>('SYGAR_MAILER_PASSWORD'),
       },
     });
   }

@@ -35,6 +35,7 @@ export default function ForgetPassword() {
 
             {/* Reset Password Form */}
             {/* TODO: check email-sent*/}
+
             <ResetPassForm
               emailSent={true}
               isPending={isPending}

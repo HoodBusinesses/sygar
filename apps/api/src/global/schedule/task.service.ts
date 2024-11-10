@@ -15,7 +15,7 @@ export class TaskService {
   constructor(
     private readonly mailService: MailService,
     private readonly configService: ConfigService
-  ) {}
+  ) { }
 
   async scheduleRemainderEmail(
     id: string,
@@ -27,7 +27,7 @@ export class TaskService {
     scheduleJob(id, date, async () => {
       try {
         await this.mailService.sendEmail({
-          from: this.configService.getOrThrow<string>('MAILER_USERNAME'),
+          from: this.configService.getOrThrow<string>('SYGAR_MAILER_USERNAME'),
           to: email,
           subject: template.subject,
           html: template.html,
