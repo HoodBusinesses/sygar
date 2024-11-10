@@ -1,0 +1,39 @@
+service: my-nestjs-app
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  memorySize: 512
+  timeout: 30
+  environment:
+    SYGAR_DYNAMODB_REGION: ${env:SYGAR_DYNAMODB_REGION}
+    SYGAR_AUTH_WEB_APP_URL: ${env:SYGAR_AUTH_WEB_APP_URL}
+    SYGAR_PROJECT_NAME: ${env:SYGAR_PROJECT_NAME}
+    NODE_ENV: ${env:NODE_ENV}
+    SYGAR_ADMIN_EMAIL: ${env:SYGAR_ADMIN_EMAIL}
+    SYGAR_ADMIN_PASSWORD: ${env:SYGAR_ADMIN_PASSWORD}
+    SYGAR_USER_EMAIL: ${env:SYGAR_USER_EMAIL}
+    SYGAR_USER_PASSWORD: ${env:SYGAR_USER_PASSWORD}
+    SYGAR_JWT_SECRET_TOKEN: ${env:SYGAR_JWT_SECRET_TOKEN}
+    SYGAR_JWT_EXPIRATION_TIME: ${env:SYGAR_JWT_EXPIRATION_TIME}
+    SYGAR_MAILER_HOST: ${env:SYGAR_MAILER_HOST}
+    SYAGR_MAILER_PORT: ${env:SYAGR_MAILER_PORT}
+    SYGAR_MAILER_USERNAME: ${env:SYGAR_MAILER_USERNAME}
+    SYGAR_MAILER_PASSWORD: ${env:SYGAR_MAILER_PASSWORD}
+    SYGAR_MAILER_FROM_ADDRESS: ${env:SYGAR_MAILER_FROM_ADDRESS}
+
+functions:
+  api:
+    handler: dist/main.handler
+    events:
+      - http:
+          path: /
+          method: any
+      - http:
+          path: /{proxy+}
+          method: any
+
+plugins:
+  - serverless-offline
+  - serverless-plugin-optimize

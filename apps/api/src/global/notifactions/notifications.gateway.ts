@@ -24,8 +24,7 @@ import { ConfigService } from '@nestjs/config';
  */
 @WebSocketGateway()
 export class NotificationsGateway
-  implements OnGatewayConnection, OnGatewayDisconnect
-{
+  implements OnGatewayConnection, OnGatewayDisconnect {
   // Inject the necessary services and configuration
   @WebSocketServer() server!: Server;
 
@@ -46,7 +45,7 @@ export class NotificationsGateway
     private readonly notificationService: NotificationService,
     private readonly jwtService: JwtService
   ) {
-    this.jwtSecret = this.configService.getOrThrow<string>('JWT_SECRET_TOKEN'); // Get the JWT secret key from the configuration
+    this.jwtSecret = this.configService.getOrThrow<string>('SYGAR_JWT_SECRET_TOKEN'); // Get the JWT secret key from the configuration
   }
 
   /**

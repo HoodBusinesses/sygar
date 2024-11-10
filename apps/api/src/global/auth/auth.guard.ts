@@ -23,7 +23,7 @@ export class JwtGuard implements CanActivate {
     private readonly userService: UserService,
     private readonly languageService: LanguageService
   ) {
-    this.jwtSecret = this.configService.getOrThrow('JWT_SECRET_TOKEN');
+    this.jwtSecret = this.configService.getOrThrow('SYGAR_JWT_SECRET_TOKEN');
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {

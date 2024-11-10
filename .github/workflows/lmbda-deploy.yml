@@ -1,0 +1,49 @@
+name: Deploy to AWS Lambda
+
+on:
+  push:
+    branches:
+      - main  # Adjust as needed to trigger on specific branches
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build the project
+        run: pnpm turbo run build --filter=api # Builds the project before deployment
+
+      - name: Deploy with Serverless
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          SYGAR_DYNAMODB_REGION: ${{ secrets.SYGAR_DYNAMODB_REGION }}
+          SYGAR_AUTH_WEB_APP_URL: ${{ secrets.SYGAR_AUTH_WEB_APP_URL }}
+          SYGAR_PROJECT_NAME: ${{ secrets.SYGAR_PROJECT_NAME }}
+          NODE_ENV: ${{ secrets.NODE_ENV }}
+          SYGAR_ADMIN_EMAIL: ${{ secrets.SYGAR_ADMIN_EMAIL }}
+          SYGAR_ADMIN_PASSWORD: ${{ secrets.SYGAR_ADMIN_PASSWORD }}
+          SYGAR_USER_EMAIL: ${{ secrets.SYGAR_USER_EMAIL }}
+          SYGAR_USER_PASSWORD: ${{ secrets.SYGAR_USER_PASSWORD }}
+          SYGAR_JWT_SECRET_TOKEN: ${{ secrets.SYGAR_JWT_SECRET_TOKEN }}
+          SYGAR_JWT_EXPIRATION_TIME: ${{ secrets.SYGAR_JWT_EXPIRATION_TIME }}
+          SYGAR_MAILER_HOST: ${{ secrets.SYGAR_MAILER_HOST }}
+          SYAGR_MAILER_PORT: ${{ secrets.SYAGR_MAILER_PORT }}
+          SYGAR_MAILER_USERNAME: ${{ secrets.SYGAR_MAILER_USERNAME }}
+          SYGAR_MAILER_PASSWORD: ${{ secrets.SYGAR_MAILER_PASSWORD }}
+          SYGAR_MAILER_FROM_ADDRESS: ${{ secrets.SYGAR_MAILER_FROM_ADDRESS }}
+        run: cd apps/api && pnpm serverless deploy

@@ -68,7 +68,7 @@ export class DbService {
     if (isLocal) {
       // Local development or testing configuration
       clientConfig = {
-        region: this.config.get<string>('DYNAMODB_REGION', 'us-east-1'),
+        region: this.config.get<string>('SYGAR_DYNAMODB_REGION', 'us-east-1'),
         endpoint: this.config.get<string>(
           'DYNAMODB_ENDPOINT',
           'http://localhost:8000'
@@ -91,7 +91,7 @@ export class DbService {
     } else {
       // Production configuration
       clientConfig = {
-        region: this.config.get<string>('DYNAMODB_REGION', 'eu-west-1'),
+        region: this.config.get<string>('SYGAR_DYNAMODB_REGION', 'eu-west-1'),
       };
     }
 

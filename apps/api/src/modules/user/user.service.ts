@@ -31,7 +31,7 @@ export class UserService {
     private readonly notificationGetWay: NotificationsGateway,
     private readonly configService: ConfigService,
     private readonly mailService: MailService
-  ) {}
+  ) { }
 
   /**
    * @method create
@@ -106,7 +106,7 @@ export class UserService {
     await this.setResetPasswordToken(user.uid, token, expiresAt);
 
     // generate the activation link
-    const activationLink = `${this.configService.getOrThrow('APP_URL')}/activate-account?token=${token}`;
+    const activationLink = `${this.configService.getOrThrow('SYGAR_AUTH_WEB_APP_URL')}/activate-account?token=${token}`;
 
     // Load the activation account template
     const activationAccountTemplate =
@@ -125,7 +125,7 @@ export class UserService {
 
     // send the activation email
     const mailOptions = {
-      from: this.configService.getOrThrow('MAILER_FROM_ADDRESS'), // from address
+      from: this.configService.getOrThrow('SYGAR_MAILER_FROM_ADDRESS'), // from address
       to: user.email, // to address
       subject: 'Activate your account', // subject
       html: html,

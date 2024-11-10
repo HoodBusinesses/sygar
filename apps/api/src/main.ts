@@ -3,7 +3,13 @@ import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
+// src/lambda.ts
+import { Handler, Context, Callback } from 'aws-lambda';
+import serverlessExpress from '@vendia/serverless-express';  // Update this line
 import { ValidationPipe } from '@nestjs/common';
+
+let server: Handler;
+
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -37,6 +43,15 @@ async function bootstrap() {
     })
   );
 
-  await app.listen(1338);
+  return app;
+
 }
-bootstrap();
+
+export const handler: Handler = async (event: any, context: Context, callback: Callback) => {
+  if (!server) {
+    const app = await bootstrap();
+    const expressApp = app.getHttpAdapter().getInstance();
+    server = serverlessExpress({ app: expressApp });  // Update this line
+  }
+  return server(event, context, callback);  // Update this line
+};
