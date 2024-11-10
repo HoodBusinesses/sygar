@@ -1,31 +1,35 @@
 name: Deploy to AWS Lambda
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: {}
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v3
+      - name: Check out code
+        uses: actions/checkout@v2
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v2
         with:
-          node-version: 18
+          node-version: '18'
 
-      - name: Install pnpm
+      - name: Install pnpm and Set Up Global Bin Directory
         run: npm install -g pnpm
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Build the project
-        run: pnpm turbo run build --filter=api # Builds the project before deployment
+        run: pnpm turbo build --filter=api  # Builds the project before deployment
 
       - name: Deploy with Serverless
+        uses: serverless/github-action@v3
+        with:
+          args: -c "cd ./apps/api && serverless deploy"
+          entrypoint: /bin/sh        
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.SYGAR_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.SYGAR_AWS_SECRET_ACCESS_KEY }}
@@ -44,4 +48,3 @@ jobs:
           SYGAR_MAILER_USERNAME: ${{ secrets.SYGAR_MAILER_USERNAME }}
           SYGAR_MAILER_PASSWORD: ${{ secrets.SYGAR_MAILER_PASSWORD }}
           SYGAR_MAILER_FROM_ADDRESS: ${{ secrets.SYGAR_MAILER_FROM_ADDRESS }}
-        run: cd apps/api && pnpm serverless deploy

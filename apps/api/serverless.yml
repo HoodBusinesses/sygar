@@ -6,6 +6,8 @@ provider:
   region: us-east-1
   memorySize: 512
   timeout: 30
+  custom:
+    packageManager: pnpm
   environment:
     SYGAR_DYNAMODB_REGION: ${env:SYGAR_DYNAMODB_REGION}
     SYGAR_AUTH_WEB_APP_URL: ${env:SYGAR_AUTH_WEB_APP_URL}
