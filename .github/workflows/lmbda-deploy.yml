@@ -29,8 +29,8 @@ jobs:
 
       - name: Deploy with Serverless
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.SYGAR_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SYGAR_AWS_SECRET_ACCESS_KEY }}
           SYGAR_DYNAMODB_REGION: ${{ secrets.SYGAR_DYNAMODB_REGION }}
           SYGAR_AUTH_WEB_APP_URL: ${{ secrets.SYGAR_AUTH_WEB_APP_URL }}
           SYGAR_PROJECT_NAME: ${{ secrets.SYGAR_PROJECT_NAME }}
