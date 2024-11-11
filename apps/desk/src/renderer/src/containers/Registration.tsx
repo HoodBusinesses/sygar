@@ -2,13 +2,15 @@ import React, { useMemo } from 'react';
 import { FormProvider } from 'react-hook-form';
 import withAuth from '@renderer/hoc/with-auth';
 import { AddMemberForm } from '@renderer/components/AddMemberForm';
-import { MembersTable } from '@renderer/components/MembersTable';
+import { membersColumn } from '@renderer/components/MembersTable';
 import { OrganizationBasicInfo } from '@renderer/components/organization/OrganizationBasicInfo';
 import { Button } from '@renderer/components/ui/button';
 import { Card, CardContent } from '@renderer/components/ui/card';
 import { useOrganizationData } from '@renderer/hooks/api/get-organization-data';
 import useRegistrations from '@renderer/hooks/useRegistrations';
 import { useTranslate } from '@renderer/hooks/useTranslate';
+import { CustomTable } from '@renderer/components/custom-table';
+import { mockMember } from '@renderer/utils/static/organizations';
 
 const Registration: React.FC = () => {
   const { t } = useTranslate();
@@ -52,20 +54,10 @@ const Registration: React.FC = () => {
           <Card>
             <CardContent className="p-6">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-lg font-bold text-gray-950">
-                  {t('registration.title')}
-                </h2>
-                <Button variant="default">
-                  {t('registration.buttons.import')}
-                </Button>
+                <h2 className="text-lg font-bold text-gray-950">{t('registration.title')}</h2>
+                <Button variant="default">{t('buttons.import')}</Button>
               </div>
-
-              <MembersTable
-                members={members}
-                onEdit={memberOperations.handleEdit}
-                onDelete={memberOperations.handleDelete}
-              />
-
+              <CustomTable headTitle='registration.title'  columns={membersColumn()} data={mockMember} />
               <AddMemberForm
                 onSubmit={
                   editingMember
@@ -83,7 +75,7 @@ const Registration: React.FC = () => {
               type="submit"
               className="w-full custom-button bg-blue-500 sm:w-auto"
             >
-              {t('registration.buttons.save')}
+              {t('buttons.save')}
             </Button>
           </div>
         </form>

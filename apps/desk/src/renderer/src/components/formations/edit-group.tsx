@@ -3,16 +3,24 @@ import { Card, CardContent, CardHeader } from '../ui/card';
 import { GroupFormData } from '@renderer/utils/schemas/formSchema';
 import FormInputItem from '../ui/form-input-item';
 import { groupFields } from '@renderer/data/formation-fields-input';
+import { useTranslate } from '@renderer/hooks/useTranslate';
 
-const EditGroup = (group): JSX.Element => {
+interface EditGroupProps {
+  crud : string;
+}
+
+const EditGroup = ({ crud }: EditGroupProps): JSX.Element => {
   const {
     register,
     formState: { errors },
   } = useFormContext<GroupFormData>();
-  console.log('group :::', errors);
+  const { t } = useTranslate();
+
   return (
     <Card className="">
-      <CardHeader className="text-gray-700 text-xl">Group Info :</CardHeader>
+      <CardHeader className="text-gray-700 text-xl">
+        {t(`group.${crud}Group`)}
+      </CardHeader>
 
       <CardContent className="">
         <div className="grid grid-cols-3 gap-4 mb-6">
@@ -22,7 +30,7 @@ const EditGroup = (group): JSX.Element => {
               label={field.label}
               placeholder={field.placeholder}
               register={register(field.name as keyof GroupFormData)}
-              value={group?.group?.[field.value] || ''}
+              value={''}
               error={errors[field.name]?.message}
               isLargeInput={true}
               required={field.required}

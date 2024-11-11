@@ -1,4 +1,3 @@
-'use client';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from '@tanstack/react-router';
@@ -45,7 +44,7 @@ export default function Sidebar() {
         </div>
         <ul className="space-y-1">
           {/* Assuming navItems has "Others" section items as well */}
-          {navItems
+          {/* {navItems
             .filter((item) => item.section === 'others')
             .map((item) => (
               <li key={item.name}>
@@ -62,7 +61,7 @@ export default function Sidebar() {
                   <span>{t(item.label)}</span>
                 </Link>
               </li>
-            ))}
+            ))} */}
         </ul>
       </nav>
     </div>

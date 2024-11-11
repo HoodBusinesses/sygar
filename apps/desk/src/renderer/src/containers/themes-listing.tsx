@@ -13,10 +13,7 @@ const ThemesListing: React.FC = () => {
     <div dir={isRtl ? 'rtl' : 'ltr'} className="h-full w-full p-6 space-y-6">
       <CustomTable
         headTitle="formation.formation"
-        columns={themeColumns(() => {
-          console.log('Navigating to /themes-listing/group-themes');
-          navigate({ to: '/group-listing' as string });
-        })}
+        columns={themeColumns(() => navigate({ to: '/group-listing' as string }))}
         data={mockThemes}
       />
     </div>

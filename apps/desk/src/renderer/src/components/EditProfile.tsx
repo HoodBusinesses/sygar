@@ -2,67 +2,69 @@ import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
 import { Button } from './ui/button';
 import { Label } from './ui/label';
 import { Input } from './ui/input';
+import { useTranslate } from '@renderer/hooks/useTranslate';
+import Profile_Img from '@renderer/assets/images/profile_img.png';
 
-interface EditProfileProps {
-  isRTL: boolean;
-}
 
-export default function EditProfile({ isRTL }: EditProfileProps): JSX.Element {
+
+export default function EditProfile(): JSX.Element {
+  const { t, isRtl } = useTranslate();
+
   return (
     <div
-      className={`w-full px-8 py-12 mx-auto max-w-5xl ${isRTL ? 'rtl' : ''}`}
-      dir={isRTL ? 'rtl' : 'ltr'}
+      className={`w-full px-8 py-12 mx-auto max-w-5xl ${isRtl ? 'rtl' : ''}`}
+      dir={isRtl ? 'rtl' : 'ltr'}
     >
       {/* Header */}
       <div className="text-center mb-12">
         <h2 className="text-3xl font-semibold text-gray-800">
-          Update your personal information
+          {t('editProfile.updateProfile')}
         </h2>
       </div>
 
       {/* Avatar Section */}
       <div className="flex flex-col items-center mb-12">
         <Avatar className="h-24 w-24 border border-gray-300 rounded-full mb-4">
-          <AvatarImage src="/placeholder-user.jpg" alt="Profile Picture" />
-          <AvatarFallback>JP</AvatarFallback>
+          <AvatarImage src={Profile_Img} alt="Profile Picture" />
+          <AvatarFallback>NOTFOUND</AvatarFallback>
         </Avatar>
         <Button
           variant="outline"
           className="text-blue-600 border-blue-500 hover:bg-blue-50 transition-colors"
         >
-          <UploadIcon className={`mr-2 h-5 w-5 ${isRTL ? 'ml-2' : 'mr-2'}`} />
-          Change Photo
+          <UploadIcon className={`mr-2 h-5 w-5 ${isRtl ? 'ml-2' : 'mr-2'}`} />
+          {t('editProfile.changePhoto')}
         </Button>
       </div>
 
       {/* Form Fields */}
       <div className="space-y-8">
         <h3 className="text-lg font-bold text-gray-700 mb-6">
-          Personal Information
+          {t('editProfile.personalInfo')}
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <Label htmlFor="name" className="text-gray-700 font-medium">
-              Name
+              {t('editProfile.fullName.label')}
             </Label>
             <Input
               id="name"
               type="text"
               defaultValue="John Doe"
-              placeholder="Enter your name"
+              placeholder={t('editProfile.fullName.placeholder')}
               className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
             />
           </div>
           <div>
             <Label htmlFor="email" className="text-gray-700 font-medium">
-              Email
+              {t('editProfile.email.label')}
             </Label>
             <Input
               id="email"
               type="email"
               defaultValue="john@example.com"
-              placeholder="Enter your email"
+              placeholder={t('editProfile.email.placeholder')}
               className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
             />
           </div>
@@ -71,23 +73,24 @@ export default function EditProfile({ isRTL }: EditProfileProps): JSX.Element {
               htmlFor="current-password"
               className="text-gray-700 font-medium"
             >
-              Current Password
+              {t('editProfile.currentPass.label')}
             </Label>
             <Input
               id="current-password"
               type="password"
-              placeholder="Enter your current password"
+              placeholder={t('editProfile.currentPass.placeholder')}
               className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
             />
           </div>
           <div>
             <Label htmlFor="new-password" className="text-gray-700 font-medium">
-              New Password
+              {t('editProfile.newPass.label')}
+
             </Label>
             <Input
               id="new-password"
               type="password"
-              placeholder="Enter a new password"
+              placeholder={t('editProfile.currentPass.placeholder')}
               className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
             />
           </div>
@@ -96,12 +99,13 @@ export default function EditProfile({ isRTL }: EditProfileProps): JSX.Element {
               htmlFor="confirm-password"
               className="text-gray-700 font-medium"
             >
-              Confirm New Password
+              {t('editProfile.confirmPass.label')}
             </Label>
             <Input
               id="confirm-password"
               type="password"
-              placeholder="Confirm your new password"
+              placeholder={t('editProfile.confirmPass.placeholder')}
+
               className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
             />
           </div>
@@ -110,16 +114,16 @@ export default function EditProfile({ isRTL }: EditProfileProps): JSX.Element {
 
       {/* Footer Buttons */}
       <div
-        className={`flex ${isRTL ? 'justify-start' : 'justify-end'} mt-12 space-x-4`}
+        className={`flex ${isRtl ? 'justify-start' : 'justify-end'} mt-12 space-x-4`}
       >
         <Button
           variant="outline"
           className="text-gray-600 border-gray-300 hover:bg-gray-100 transition-colors rounded-md"
         >
-          Cancel
+          {t('buttons.cancel')}
         </Button>
         <Button className="bg-blue-600 text-white hover:bg-blue-700 transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-md">
-          Save Changes
+          {t('buttons.save')}
         </Button>
       </div>
     </div>
