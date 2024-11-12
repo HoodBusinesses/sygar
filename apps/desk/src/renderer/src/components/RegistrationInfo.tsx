@@ -1,32 +1,33 @@
-'use client';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
-import { AddMemberForm } from '../components/AddMemberForm';
-import { MembersTable } from '../components/MembersTable';
-import { OrganizationBasicInfo } from './organization/OrganizationBasicInfo';
-import { Button } from '../components/ui/button';
-import { Card, CardContent } from '../components/ui/card';
+'use client'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useState } from 'react'
+import { FormProvider, useForm } from 'react-hook-form'
+import { AddMemberForm } from '../components/AddMemberForm'
+import { membersColumn } from './membersColumn'
+import { OrganizationBasicInfo } from './organization/OrganizationBasicInfo'
+import { Button } from '../components/ui/button'
+import { Card, CardContent } from '../components/ui/card'
 import {
   organizationSchema,
   type MemberFormData,
-  type OrganizationFormData,
-} from '../utils/schemas/formSchema';
-import { useTranslate } from '@renderer/hooks/useTranslate';
-import { useToast } from '@renderer/hooks/useToast';
+  type OrganizationFormData
+} from '../utils/schemas/formSchema'
+import { useTranslate } from '@renderer/hooks/useTranslate'
+import { CustomTable } from './custom-table'
+import { mockMember } from '@renderer/utils/static/organizations'
 
 const staticMembers: MemberFormData[] = [
   {
     fullName: 'John Doe',
     email: 'john.doe@example.com',
     role: 'manager',
-    actionType: 'edit',
+    actionType: 'edit'
   },
   {
     fullName: 'Jane Smith',
     email: 'jane.smith@example.com',
     role: 'employee',
-    actionType: 'view',
+    actionType: 'view'
   },
 ];
 
@@ -40,7 +41,6 @@ const RegistrationInfo = () => {
     index: number;
     data: MemberFormData;
   } | null>(null);
-  const { addToast } = useToast();
   // const router = useRouter();
   const [organization, setOrganization] = useState(null);
 
@@ -107,15 +107,11 @@ const RegistrationInfo = () => {
                 className="custom-button bg-blue-600 hover:bg-blue-500"
                 type="submit"
               >
-                {t('registration.buttons.import')}
+                {t('buttons.import')}
               </Button>
             </div>
-            <MembersTable
-              members={members}
-              onEdit={handleEditMember}
-              onDelete={handleDeleteMember}
-            />
-
+            <CustomTable headTitle='registration.title' columns={membersColumn()} data={mockMember} />
+              
             <div className="mt-6">
               <AddMemberForm
                 onSubmit={handleAddMember}
@@ -129,7 +125,7 @@ const RegistrationInfo = () => {
           className="custom-button bg-blue-600 hover:bg-blue-500"
           type="submit"
         >
-          {t('registration.buttons.save')}
+          {t('buttons.save')}
         </Button>
       </form>
     </FormProvider>

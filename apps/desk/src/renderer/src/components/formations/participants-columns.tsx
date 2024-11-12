@@ -51,7 +51,7 @@ export const participantColumns = (): ColumnDef<Participant>[] => [
           isSomeSortSeted={!!column.getIsSorted()}
           resetFn={() => column.clearSorting()}
           OnClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          label="Name"
+          label="participant.fields.name.label"
         />
       );
     },
@@ -65,7 +65,7 @@ export const participantColumns = (): ColumnDef<Participant>[] => [
           isSomeSortSeted={!!column.getIsSorted()}
           resetFn={() => column.clearSorting()}
           OnClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          label="Email"
+          label="participant.fields.email.label"
         />
       );
     },
@@ -73,25 +73,25 @@ export const participantColumns = (): ColumnDef<Participant>[] => [
   },
   {
     accessorKey: 'cin',
-    header: 'CIN',
+    header: 'participant.fields.cin.label',
     cell: ({ row }) => <p>{row.getValue('cin')}</p>,
   },
   {
     accessorKey: 'cnss',
-    header: 'CNSS',
+    header: 'participant.fields.cnss.label',
     cell: ({ row }) => <p>{row.getValue('cnss')}</p>,
   },
   {
     accessorKey: 'status',
-    header: 'Status',
+    header: 'participant.fields.status.label',
     cell: ({ row }) => <p>{row.getValue('status')}</p>,
   },
   {
     accessorKey: 'options',
-    header: 'Options',
+    header: 'themesTable.options',
     cell: ({ row }) => (
       <ButtonsAction
-        href={`/edit?type=participant&crud=edit`}
+        href={`/edit?type=participant&crud=edit&rowId=${row.original.id}`}
         rowId={row.original.id}
         subscription={false}
       />

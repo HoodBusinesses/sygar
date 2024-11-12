@@ -33,11 +33,11 @@ export const navItems = [
     href: '/themes-listing',
     icon: BellIcon,
   },
-  {
-    name: 'participants',
-    label: 'sidebar.items.participants',
-    href: '/participant-listing',
-    icon: ClipboardDocumentListIcon,
-  },
+  // {
+  //   name: 'participants',
+  //   label: 'sidebar.items.participants',
+  //   href: '/participant-listing',
+  //   icon: ClipboardDocumentListIcon,
+  // },
   // Add more items as needed
 ];

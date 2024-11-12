@@ -22,6 +22,7 @@ function EditPage(): JSX.Element {
     handleUnsavedChange,
     type,
     crud,
+    defaultValues,
   } = useHandelEditForm();
 
   return (
@@ -32,10 +33,9 @@ function EditPage(): JSX.Element {
           className="space-y-6"
         >
           <div className="flex flex-col p-5 gap-6">
-            <p className="text-2xl uppercase font-semibold text-gray-800">{`${crud} ${type}`}</p>
-            {type === 'themes' && <EditFormation />}
-            {type === 'group' && <EditGroup />}
-            {type === 'participant' && <EditParticipant />}
+            {type === 'themes' && <EditFormation crud={crud as string} defaultValues={defaultValues}/>}
+            {type === 'group' && <EditGroup crud={crud as string} defaultValues={defaultValues}/>}
+            {type === 'participant' && <EditParticipant crud={crud as string} defaultValues={defaultValues}/>}
             <div className="flex self-end gap-8 w-1/2">
               <Button
                 type="button"

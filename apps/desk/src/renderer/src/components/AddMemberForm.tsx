@@ -79,7 +79,7 @@ export const AddMemberForm = ({
       <Button
         type="button"
         onClick={handleSubmit(handleFormSubmit)}
-        className="btn-blue mb-4 w-32 rounded-md self-center "
+        className="custom-button bg-blue-500 mb-4 w-32 rounded-md self-center "
       >
         {t('buttons.add')} {/* Translated button label */}
       </Button>

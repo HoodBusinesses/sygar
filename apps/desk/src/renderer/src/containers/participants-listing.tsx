@@ -14,7 +14,7 @@ const ParticipantsListing: React.FC = () => {
     >
       <div className="flex flex-col">
         <CustomTable
-          headTitle="participants"
+          headTitle="participant.participant"
           columns={participantColumns()}
           data={mockParticipant}
         />

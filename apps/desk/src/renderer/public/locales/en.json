@@ -72,165 +72,6 @@
         }
       },
       "required": "Required field"
-    },
-    "members": {
-      "title": "Members",
-      "table": {
-        "fullName": "Full Name",
-        "email": "Email",
-        "role": "Role",
-        "actions": "Actions"
-      },
-      "roles": {
-        "manager": "Manager",
-        "employee": "Employee"
-      },
-      "actions": {
-        "edit": "Edit",
-        "view": "View",
-        "delete": "Delete"
-      }
-    },
-    "addMember": {
-      "title": "Add New Member",
-      "fullName": "Full Name",
-      "email": "Email Address",
-      "role": "Role",
-      "submit": "Add Member",
-      "update": "Update Member"
-    },
-    "registration": {
-      "title": "Organization Members Information",
-      "basicInfo": {
-        "title": "Organization Information",
-        "fields": {
-          "rs": {
-            "label": "R.S",
-            "placeholder": "Enter the organization rs"
-          },
-          "ice": {
-            "label": "ICE",
-            "placeholder": "Enter the organization ICE"
-          },
-          "cnss": {
-            "label": "CNSS",
-            "placeholder": "Enter the organization CNSS"
-          },
-          "address": {
-            "label": "Address",
-            "placeholder": "Enter the address of organization"
-          },
-          "phone": {
-            "label": "Phone",
-            "placeholder": "Enter the phone number of organization"
-          },
-          "email": {
-            "label": "Email",
-            "placeholder": "Enter the email of organization"
-          },
-          "logo": {
-            "label": "Company Logo",
-            "placeholder": "Upload the logo of company"
-          },
-          "responsibleName": {
-            "label": "Responsible Name",
-            "placeholder": "Enter the name of Responsible"
-          },
-          "trainingManagerName": {
-            "label": "Training Manager Name",
-            "placeholder": "Enter the name of training manager"
-          }
-        },
-        "required": "Required field"
-      },
-      "members": {
-        "title": "Members",
-        "table": {
-          "fullName": "Full Name",
-          "email": "Email",
-          "role": "Role",
-          "actions": "Actions"
-        },
-        "roles": {
-          "manager": "Manager",
-          "employee": "Employee"
-        },
-        "actions": {
-          "edit": "Edit",
-          "view": "View",
-          "delete": "Delete"
-        }
-      },
-      "addMember": {
-        "title": "Add New Member",
-        "fullName": "Full Name",
-        "email": "Email Address",
-        "role": "Role",
-        "submit": "Add Member",
-        "update": "Update Member"
-      },
-      "buttons": {
-        "import": "Import",
-        "save": "Save"
-      },
-      "toast": {
-        "success": {
-          "title": "Success",
-          "description": "Organization information saved successfully"
-        },
-        "error": {
-          "title": "Error",
-          "description": "Failed to save organization information"
-        }
-      }
-    },
-    "noPermission": "YOU DON'T HAVE ACCESS",
-    "sidebar": {
-      "sections": {
-        "dashboard": "Dashboard",
-        "others": "Others"
-      },
-      "items": {
-        "home": "Home",
-        "registration": "Registration",
-        "organizations": "Organizations",
-        "settings": "Settings",
-        "notifications": "Notifications",
-        "reports": "Reports",
-        "theme": "Theme",
-        "participants": "Participants"
-      }
-    },
-    "organization": {
-      "organizations": "Organizations",
-      "searchPlaceholder": "Search for organization...",
-      "dateSelect": "Select Date",
-      "image": "Image",
-      "rs": "R.S",
-      "cnss": "CNSS",
-      "address": "Address",
-      "email": "Email",
-      "responsibleName": "Responsible Name",
-      "trainingManagerName": "Training Manager Name",
-      "enabled": "Enabled",
-      "actions": "Actions",
-      "edit": "Edit",
-      "delete": "Delete",
-      "export": "Export",
-      "page": "Page",
-      "of": "of",
-      "previous": "Previous",
-      "next": "Next"
-    },
-    "toast": {
-      "success": {
-        "title": "Success",
-        "description": "Organization information saved successfully"
-      },
-      "error": {
-        "title": "Error",
-        "description": "Failed to save organization information"
-      }
     }
   },
   "noPermission": "YOU DON'T HAVE ACCESS",
@@ -252,7 +93,7 @@
   },
   "organization": {
     "organizations": "Organizations",
-    "searchPlaceholder": "Search for organization...",
+    "searchPlaceholder": "Search...",
     "dateSelect": "Select Date",
     "image": "Image",
     "rs": "R.S",
@@ -305,7 +146,10 @@
     "mad": "DH"
   },
   "formation": {
-    "formation": "Formation",
+    "formation": "Formation section",
+    "tables": "Tables",
+    "addFormation" : "Add Formations",
+    "editFormation" : "Edit Formations",
     "fields": {
       "formationName": {
         "label": "Formation Name",
@@ -322,7 +166,9 @@
     }
   },
   "group": {
-    "group": "Group",
+    "group": "Group section",
+    "addGroup" : "Add Groups",
+    "editGroup" : "Edit Groups",
     "fields": {
       "facilator": {
         "label": "Facilator",
@@ -332,9 +178,9 @@
         "label": "trainer",
         "placeholder": "Select the trainer"
       },
-      "them": {
-        "label": "Them",
-        "placeholder": "Enter the Them"
+      "theme": {
+        "label": "Theme",
+        "placeholder": "Enter the Theme"
       },
       "location": {
         "label": "Location",
@@ -347,7 +193,9 @@
     }
   },
   "participant": {
-    "participant": "Participant",
+    "participant": "Participant section",
+    "addParticipant": "Add Participants",
+    "editParticipant": "Edit Participants",
     "fields": {
       "name": {
         "label": "Full Name",
@@ -369,6 +217,31 @@
         "label": "Status",
         "placeholder": "Enter the status"
       }
+    }
+  },
+  "editProfile": {
+    "updateProfile": "Update your personal information",
+    "changePhoto": "Change your photo",
+    "personalInfo": "Personal Information",
+    "fullName": {
+      "label": "Full Name",
+      "placeholder": "Enter your full name"
+    },
+    "email": {
+      "label": "Email",
+      "placeholder": "Enter your email"
+    },
+    "currentPass": {
+      "label": "Current Password",
+      "placeholder": "Enter your current password"
+    },
+    "newPass": {
+      "label": "New Password",
+      "placeholder": "Enter your new password"
+    },
+    "confirmPass": {
+      "label": "Confirm Password",
+      "placeholder": "Confirm your new password"
     }
   }
 }

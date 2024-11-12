@@ -3,28 +3,35 @@ import { Card, CardContent, CardHeader } from '../ui/card';
 import { ParticipantFormData } from '@renderer/utils/schemas/formSchema';
 import FormInputItem from '../ui/form-input-item';
 import { participantFields } from '@renderer/data/formation-fields-input';
+import { useTranslate } from '@renderer/hooks/useTranslate';
 
-const EditParticipant = (): JSX.Element => {
+interface EditParticipantProps {
+  crud: string;
+  defaultValues: any;
+}
+
+const EditParticipant = ({ crud , defaultValues }: EditParticipantProps): JSX.Element => {
   const {
     register,
     formState: { errors },
   } = useFormContext<ParticipantFormData>();
-  console.log('PP errors :::', errors);
+  const { t } = useTranslate();
+  
   return (
     <Card className="">
       <CardHeader className="text-gray-700 text-xl">
-        Formation Info :
+        {t(`participant.${crud}Participant`)}
       </CardHeader>
 
       <CardContent className="">
-        <div className="grid grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-3 gap-3 mb-6">
           {participantFields.map((field) => (
             <FormInputItem
               key={field.name}
               label={field.label}
               placeholder={field.placeholder}
               register={register(field.name as keyof ParticipantFormData)}
-              value={''}
+              value={defaultValues[field.name] || ''}
               error={errors[field.name]?.message}
               isLargeInput={true}
               required={field.required}

@@ -3,6 +3,8 @@ import DeleteModal from '../DeleteModal';
 import ButtonsAction from '../organization/org-table-actions';
 import { Checkbox } from '../ui/checkbox';
 import SortHeader from '../costum-data/sort-header';
+import { Button } from '../ui/button';
+import { useTranslate } from '@renderer/hooks/useTranslate';
 
 export interface Group {
   id: number;
@@ -15,7 +17,9 @@ export interface Group {
 
 export const groupColumn = (
   setParticipants: () => void
-): ColumnDef<Group>[] => [
+): ColumnDef<Group>[] => { 
+  const { t } = useTranslate();
+  return [
   {
     accessorKey: 'id',
     header: ({ table }) => (
@@ -54,7 +58,7 @@ export const groupColumn = (
           isSomeSortSeted={!!column.getIsSorted()}
           resetFn={() => column.clearSorting()}
           OnClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          label="Facilator"
+          label="group.fields.facilator.label"
         />
       );
     },
@@ -68,7 +72,7 @@ export const groupColumn = (
           isSomeSortSeted={!!column.getIsSorted()}
           resetFn={() => column.clearSorting()}
           OnClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          label="Trainer"
+          label="group.fields.trainer.label"
         />
       );
     },
@@ -76,24 +80,24 @@ export const groupColumn = (
   },
   {
     accessorKey: 'theme',
-    header: 'Theme',
+    header: 'group.fields.theme.label',
     cell: ({ row }) => <p>{row.getValue('theme')}</p>,
   },
   {
     accessorKey: 'location',
-    header: 'Location',
+    header: 'group.fields.location.label',
     cell: ({ row }) => <p>{row.getValue('location')}</p>,
   },
   {
     accessorKey: 'participant',
-    header: 'Participant',
+    header: 'participant.participant',
     cell: () => (
-      <button
+      <Button
         onClick={setParticipants}
         className="hover:underline text-blue-500"
       >
-        Participents
-      </button>
+        {t("participant.participant")}
+      </Button>
     ),
   },
   {
@@ -103,8 +107,9 @@ export const groupColumn = (
       <ButtonsAction
         rowId={row.original.id}
         subscription={false}
-        href={`/edit?type=group&crud=edit`}
+        href={`/edit?type=group&crud=edit&rowId=${row.original.id}`}
       />
     ),
   },
 ];
+}

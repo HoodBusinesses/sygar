@@ -127,7 +127,7 @@ export const Columns: ColumnDef<Organization>[] = [
     accessorKey: 'actions',
     header: 'organization.actions',
     cell: ({ row }) => (
-      <ButtonsAction subscription={true} rowId={row.original.id} href="" />
+      <ButtonsAction subscription={true} rowId={row.original.id} href="/registration" />
     ),
     enableSorting: false,
     enableGlobalFilter: false,

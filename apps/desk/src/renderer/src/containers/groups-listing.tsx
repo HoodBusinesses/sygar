@@ -13,7 +13,7 @@ const GroupListing: React.FC = () => {
   return (
     <div dir={isRtl ? 'rtl' : 'ltr'} className="h-full w-full p-6 space-y-6">
       <CustomTable
-        headTitle="group.groups"
+        headTitle="group.group"
         columns={groupColumn(() => {
           navigate({ to: '/participant-listing' as string });
         })}

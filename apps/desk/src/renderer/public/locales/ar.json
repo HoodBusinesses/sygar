@@ -1,10 +1,10 @@
 {
   "language": "العربية",
-  "welcome": "سعيدون برؤيتك مجددًا، يرجى تسجيل الدخول إلى حسابك",
+  "welcome": "يسعدنا رؤيتك مرة أخرى، يرجى تسجيل الدخول إلى حسابك",
   "signin": "تسجيل الدخول",
-  "paragraph": "سنأخذك إلى المتصفح لتسجيل الدخول ثم نعيدك مرة أخرى",
+  "paragraph": "سننقلك إلى المتصفح لتسجيل الدخول ثم نعيدك",
   "dontHaveAccount": "ليس لديك حساب بعد؟",
-  "create": "أنشئ حسابك",
+  "create": "إنشاء حسابك",
   "membersTable": {
     "id": "المعرف",
     "fullName": "الاسم الكامل",
@@ -13,11 +13,11 @@
     "actionType": "نوع الإجراء",
     "actions": "الإجراءات",
     "editingDocuments": "تحرير المستندات",
-    "viewingOnly": "مشاهدة فقط"
+    "viewingOnly": "العرض فقط"
   },
   "placeholders": {
     "fullName": "أدخل الاسم الكامل",
-    "email": "أدخل بريد المنظمة",
+    "email": "أدخل البريد الإلكتروني للمؤسسة",
     "selectRole": "اختر الدور",
     "selectActionType": "اختر نوع الإجراء"
   },
@@ -27,7 +27,7 @@
   },
   "actionTypes": {
     "edit": "تحرير المستندات",
-    "view": "عرض فقط"
+    "view": "العرض فقط"
   },
   "registration": {
     "title": "معلومات أعضاء المؤسسة",
@@ -40,11 +40,11 @@
         },
         "ice": {
           "label": "ICE",
-          "placeholder": "أدخل الرقم التعريفي للمؤسسة"
+          "placeholder": "أدخل ICE المؤسسة"
         },
         "cnss": {
-          "label": "CNSS",
-          "placeholder": "أدخل رقم CNSS للمؤسسة"
+          "label": "الضمان الاجتماعي",
+          "placeholder": "أدخل رقم الضمان الاجتماعي للمؤسسة"
         },
         "address": {
           "label": "العنوان",
@@ -60,7 +60,7 @@
         },
         "logo": {
           "label": "شعار الشركة",
-          "placeholder": "قم برفع شعار الشركة"
+          "placeholder": "قم بتحميل شعار الشركة"
         },
         "responsibleName": {
           "label": "اسم المسؤول",
@@ -72,76 +72,36 @@
         }
       },
       "required": "حقل مطلوب"
-    },
-    "members": {
-      "title": "الأعضاء",
-      "table": {
-        "fullName": "الاسم الكامل",
-        "email": "البريد الإلكتروني",
-        "role": "الدور",
-        "actions": "الإجراءات"
-      },
-      "roles": {
-        "manager": "مدير",
-        "employee": "موظف"
-      },
-      "actions": {
-        "edit": "تعديل",
-        "view": "عرض",
-        "delete": "حذف"
-      }
-    },
-    "addMember": {
-      "title": "إضافة عضو جديد",
-      "fullName": "الاسم الكامل",
-      "email": "عنوان البريد الإلكتروني",
-      "role": "الدور",
-      "submit": "إضافة عضو",
-      "update": "تحديث العضو"
-    },
-    "buttons": {
-      "import": "استيراد",
-      "save": "حفظ"
-    },
-    "toast": {
-      "success": {
-        "title": "نجاح",
-        "description": "تم حفظ معلومات المؤسسة بنجاح"
-      },
-      "error": {
-        "title": "خطأ",
-        "description": "فشل في حفظ معلومات المؤسسة"
-      }
     }
   },
-  "noPermission": "لا تملك الصلاحية للوصول إلى هذه الصفحة",
+  "noPermission": "ليس لديك صلاحية الوصول",
   "sidebar": {
     "sections": {
-      "dashboard": "لوحة القيادة",
+      "dashboard": "لوحة التحكم",
       "others": "أخرى"
     },
     "items": {
-      "home": "الصفحة الرئيسية",
+      "home": "الرئيسية",
       "registration": "التسجيل",
-      "organizations": "المنظمات",
+      "organizations": "المؤسسات",
       "settings": "الإعدادات",
       "notifications": "الإشعارات",
       "reports": "التقارير",
-      "theme": "Theme",
-      "participants": "Participants"
+      "theme": "التكوين",
+      "participants": "المشاركون"
     }
   },
   "organization": {
-    "image": "الصورة",
-    "organizations": "المنظمات",
-    "searchPlaceholder": "ابحث عن منظمة...",
+    "organizations": "المؤسسات",
+    "searchPlaceholder": "البحث...",
     "dateSelect": "اختر التاريخ",
-    "rs": "المنظمة",
-    "cnss": "نظام إدارة المحتوى",
+    "image": "الصورة",
+    "rs": "السجل التجاري",
+    "cnss": "الضمان الاجتماعي",
     "address": "العنوان",
     "email": "البريد الإلكتروني",
     "responsibleName": "اسم المسؤول",
-    "trainingManagerName": "اسم المدرب",
+    "trainingManagerName": "اسم مدير التدريب",
     "enabled": "مفعل",
     "actions": "الإجراءات",
     "edit": "تعديل",
@@ -169,9 +129,9 @@
     "name": "الاسم الكامل",
     "email": "البريد الإلكتروني",
     "cin": "رقم البطاقة الوطنية",
-    "cnss": "رقم الضمان الاجتماعي",
+    "cnss": "الضمان الاجتماعي",
     "status": "الحالة",
-    "placeholder": "-----------"
+    "placeholder": "*********"
   },
   "themesTable": {
     "title": "المواضيع",
@@ -179,14 +139,17 @@
     "identifier": "المعرف",
     "year": "السنة",
     "price": "السعر",
-    "placeholder": "***********",
+    "placeholder": "--------",
     "groups": "المجموعات",
     "options": "الخيارات",
-    "checkGroup": "تحقق من المجموعة",
+    "checkGroup": "فحص المجموعة",
     "mad": "درهم"
   },
   "formation": {
-    "formation": "التكوين",
+    "formation": "قسم التكوين",
+    "tables": "الجداول",
+    "addFormation": "إضافة تكوين",
+    "editFormation": "تعديل تكوين",
     "fields": {
       "formationName": {
         "label": "اسم التكوين",
@@ -203,17 +166,19 @@
     }
   },
   "group": {
-    "group": "مجموعة",
+    "group": "قسم المجموعات",
+    "addGroup": "إضافة مجموعة",
+    "editGroup": "تعديل مجموعة",
     "fields": {
       "facilator": {
         "label": "الميسر",
-        "placeholder": "أدخل الميسر"
+        "placeholder": "أدخل اسم الميسر"
       },
       "trainer": {
         "label": "المدرب",
         "placeholder": "اختر المدرب"
       },
-      "them": {
+      "theme": {
         "label": "الموضوع",
         "placeholder": "أدخل الموضوع"
       },
@@ -228,7 +193,9 @@
     }
   },
   "participant": {
-    "participant": "المشارك",
+    "participant": "قسم المشاركين",
+    "addParticipant": "إضافة مشارك",
+    "editParticipant": "تعديل مشارك",
     "fields": {
       "name": {
         "label": "الاسم الكامل",
@@ -239,17 +206,42 @@
         "placeholder": "أدخل البريد الإلكتروني"
       },
       "cin": {
-        "label": "رقم الهوية",
-        "placeholder": "أدخل رقم الهوية"
+        "label": "رقم البطاقة الوطنية",
+        "placeholder": "أدخل رقم البطاقة الوطنية"
       },
       "cnss": {
-        "label": "رقم الضمان الاجتماعي",
+        "label": "الضمان الاجتماعي",
         "placeholder": "أدخل رقم الضمان الاجتماعي"
       },
       "status": {
         "label": "الحالة",
         "placeholder": "أدخل الحالة"
       }
+    }
+  },
+  "editProfile": {
+    "updateProfile": "تحديث معلوماتك الشخصية",
+    "changePhoto": "تغيير صورتك",
+    "personalInfo": "المعلومات الشخصية",
+    "fullName": {
+      "label": "الاسم الكامل",
+      "placeholder": "أدخل اسمك الكامل"
+    },
+    "email": {
+      "label": "البريد الإلكتروني",
+      "placeholder": "أدخل بريدك الإلكتروني"
+    },
+    "currentPass": {
+      "label": "كلمة المرور الحالية",
+      "placeholder": "أدخل كلمة المرور الحالية"
+    },
+    "newPass": {
+      "label": "كلمة المرور الجديدة",
+      "placeholder": "أدخل كلمة المرور الجديدة"
+    },
+    "confirmPass": {
+      "label": "تأكيد كلمة المرور",
+      "placeholder": "تأكيد كلمة المرور الجديدة"
     }
   }
 }

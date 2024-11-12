@@ -1,9 +1,9 @@
-import { useFormContext } from 'react-hook-form';
-import type { OrganizationFormData } from '../../utils/schemas/formSchema';
-import { Card, CardContent } from '../ui/card';
-import { useTranslate } from '@renderer/hooks/useTranslate';
-import FormInputItem from '../ui/form-input-item';
-import { fields } from '@renderer/data/organinzation-fields-input';
+import { useFormContext } from 'react-hook-form'
+import type { OrganizationFormData } from '../../utils/schemas/formSchema'
+import { Card, CardContent, CardHeader } from '../ui/card'
+import { useTranslate } from '@renderer/hooks/useTranslate'
+import FormInputItem from '../ui/form-input-item'
+import { fields } from '@renderer/data/organinzation-fields-input'
 
 export const OrganizationBasicInfo = (organization): JSX.Element => {
   const { t } = useTranslate();
@@ -13,12 +13,11 @@ export const OrganizationBasicInfo = (organization): JSX.Element => {
   } = useFormContext<OrganizationFormData>();
 
   return (
-    <Card className="p-1 mb-6">
-      <CardContent className="p-6">
-        <p className="text-lg text-gray-950 font-bold mb-6">
-          {t('registration.basicInfo.title')}
-        </p>
-
+    <Card className="">
+      <CardHeader className="text-lg text-gray-950 font-bold mb-6">
+        {t('registration.basicInfo.title')}
+      </CardHeader>
+      <CardContent className="">
         <div className="grid grid-cols-3 gap-4 mb-6 ">
           {fields.map((field) => (
             <FormInputItem

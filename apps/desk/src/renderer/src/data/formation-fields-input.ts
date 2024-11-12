@@ -3,6 +3,7 @@ export type FieldsInput = {
   value: string;
   label: string;
   placeholder: string;
+  type?: string;
   required?: boolean;
 };
 
@@ -60,10 +61,10 @@ export const groupFields: FieldsInput[] = [
     required: true,
   },
   {
-    label: 'group.fields.them.label',
-    placeholder: 'group.fields.them.placeholder',
-    name: 'them',
-    value: 'them',
+    label: 'group.fields.theme.label',
+    placeholder: 'group.fields.theme.placeholder',
+    name: 'theme',
+    value: 'theme',
     required: true,
   },
   {
@@ -71,13 +72,6 @@ export const groupFields: FieldsInput[] = [
     placeholder: 'group.fields.location.placeholder',
     name: 'location',
     value: 'location',
-    required: true,
-  },
-  {
-    label: 'group.fields.date.label',
-    placeholder: 'group.fields.date.placeholder',
-    name: 'date',
-    value: 'date',
     required: true,
   },
 ];
@@ -95,6 +89,7 @@ export const formationFields: FieldsInput[] = [
     placeholder: 'formation.fields.year.placeholder',
     name: 'year',
     value: 'year',
+    type: 'number',
     required: true,
   },
   {
@@ -102,6 +97,7 @@ export const formationFields: FieldsInput[] = [
     placeholder: 'formation.fields.price.placeholder',
     name: 'price',
     value: 'price',
+    type: 'number',
     required: true,
   },
 ];
