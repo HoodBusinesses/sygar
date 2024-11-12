@@ -91,7 +91,7 @@ export class DbService {
     } else {
       // Production configuration
       clientConfig = {
-        region: this.config.get<string>('SYGAR_DYNAMODB_REGION', 'eu-west-1'),
+        region: this.config.get<string>('SYGAR_DYNAMODB_REGION', 'us-west-2'),
       };
     }
 
