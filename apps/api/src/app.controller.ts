@@ -3,7 +3,7 @@ import { ApiResponse } from '@nestjs/swagger';
 
 @Controller()
 export class AppController {
-  constructor() {}
+  constructor() { }
 
   @Get('healthcheck')
   @ApiResponse({
