@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { FormProvider } from 'react-hook-form';
 import withAuth from '@renderer/hoc/with-auth';
 import { AddMemberForm } from '@renderer/components/AddMemberForm';
-import { membersColumn } from '@renderer/components/MembersTable';
+import { membersColumn } from '@renderer/components/membersColumn';
 import { OrganizationBasicInfo } from '@renderer/components/organization/OrganizationBasicInfo';
 import { Button } from '@renderer/components/ui/button';
 import { Card, CardContent } from '@renderer/components/ui/card';

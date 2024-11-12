@@ -9,11 +9,11 @@ import { useTranslate } from '@renderer/hooks/useTranslate';
 export interface Theme {
   id: number;
   name: string;
-  identifier: string;
+  // identifier: string;
   year: string;
   price: number;
-  groups?: string;
-  options?: string;
+  // groups?: string;
+  // options?: string;
 }
 
 
@@ -114,7 +114,7 @@ export const themeColumns = (
         <ButtonsAction
           rowId={row.original.id}
           subscription={false}
-          href={`/edit?type=themes&crud=edit`}
+          href={`/edit?type=themes&crud=edit&rowId=${row.original.id}`}
         />
       ),
     },

@@ -7,15 +7,16 @@ import { useTranslate } from '@renderer/hooks/useTranslate';
 
 interface EditGroupProps {
   crud : string;
+  defaultValues: any;
 }
 
-const EditGroup = ({ crud }: EditGroupProps): JSX.Element => {
+const EditGroup = ({ crud , defaultValues }: EditGroupProps): JSX.Element => {
   const {
     register,
     formState: { errors },
   } = useFormContext<GroupFormData>();
   const { t } = useTranslate();
-
+  console.log("defaultValue : ",defaultValues);
   return (
     <Card className="">
       <CardHeader className="text-gray-700 text-xl">
@@ -30,7 +31,7 @@ const EditGroup = ({ crud }: EditGroupProps): JSX.Element => {
               label={field.label}
               placeholder={field.placeholder}
               register={register(field.name as keyof GroupFormData)}
-              value={''}
+              value={defaultValues[field.name] || ''}
               error={errors[field.name]?.message}
               isLargeInput={true}
               required={field.required}

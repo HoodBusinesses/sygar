@@ -6,15 +6,17 @@ import { formationFields } from '@renderer/data/formation-fields-input';
 import { useTranslate } from '@renderer/hooks/useTranslate';
 interface EditFormationProps {
   crud: string;
+  defaultValues: any;
 }
 
 
-const EditFormation = ({ crud }: EditFormationProps): JSX.Element => {
+const EditFormation = ({ crud , defaultValues }: EditFormationProps): JSX.Element => {
   const {
     register,
     formState: { errors },
   } = useFormContext<FormationFormData>();
   const { t } = useTranslate();
+  console.log("defaultValue : ",defaultValues);
   return (
     <Card className="">
       <CardHeader className="text-gray-700 text-lg font-semibold">
@@ -28,7 +30,8 @@ const EditFormation = ({ crud }: EditFormationProps): JSX.Element => {
               label={field.label}
               placeholder={field.placeholder}
               register={register(field.name as keyof FormationFormData)}
-              value={''}
+              type={field.type}
+              value={defaultValues[field.name] || ''}
               error={errors[field.name]?.message}
               required={field.required}
               isLargeInput={true}

@@ -7,9 +7,10 @@ import { useTranslate } from '@renderer/hooks/useTranslate';
 
 interface EditParticipantProps {
   crud: string;
+  defaultValues: any;
 }
 
-const EditParticipant = ({ crud }: EditParticipantProps): JSX.Element => {
+const EditParticipant = ({ crud , defaultValues }: EditParticipantProps): JSX.Element => {
   const {
     register,
     formState: { errors },
@@ -30,7 +31,7 @@ const EditParticipant = ({ crud }: EditParticipantProps): JSX.Element => {
               label={field.label}
               placeholder={field.placeholder}
               register={register(field.name as keyof ParticipantFormData)}
-              value={''}
+              value={defaultValues[field.name] || ''}
               error={errors[field.name]?.message}
               isLargeInput={true}
               required={field.required}

@@ -107,7 +107,7 @@ export const groupColumn = (
       <ButtonsAction
         rowId={row.original.id}
         subscription={false}
-        href={`/edit?type=group&crud=edit`}
+        href={`/edit?type=group&crud=edit&rowId=${row.original.id}`}
       />
     ),
   },

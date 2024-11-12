@@ -91,7 +91,7 @@ export const participantColumns = (): ColumnDef<Participant>[] => [
     header: 'themesTable.options',
     cell: ({ row }) => (
       <ButtonsAction
-        href={`/edit?type=participant&crud=edit`}
+        href={`/edit?type=participant&crud=edit&rowId=${row.original.id}`}
         rowId={row.original.id}
         subscription={false}
       />
