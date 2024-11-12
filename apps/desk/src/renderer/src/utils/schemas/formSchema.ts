@@ -41,7 +41,7 @@ export const participantSchema = z.object({
 export const groupSchema = z.object({
   facilator: z.string().min(1, 'Facilator name is required'),
   trainer: z.string().min(1, 'trainer name is required'),
-  them: z.string().min(1, 'them is required'),
+  theme: z.string().min(1, 'theme is required'),
   location: z.string().min(1, 'location is required'),
   date: z.string().min(1, 'Date is required'),
 });

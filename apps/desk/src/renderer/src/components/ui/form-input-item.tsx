@@ -9,6 +9,7 @@ interface FormInputProps {
   register: UseFormRegisterReturn;
   value: string;
   defaultValue?: string;
+  type?: string;
   error?: string;
   isLargeInput?: boolean;
   required?: boolean;
@@ -21,6 +22,7 @@ export default function FormInputItem({
   required,
   placeholder,
   register,
+  type,
   value,
   isLargeInput,
   isLogoInput,
@@ -50,8 +52,9 @@ export default function FormInputItem({
       ) : (
         <Input
           {...register}
-          defaultValue={t(value)}
+          defaultValue={value}
           placeholder={t(placeholder)}
+          type={type}
           className={cn(
             isLargeInput && 'h-14',
             'bg-gray-100 text-gray-950 p-2 rounded-md'
