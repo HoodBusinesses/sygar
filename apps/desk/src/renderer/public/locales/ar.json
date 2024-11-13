@@ -30,6 +30,7 @@
     "view": "العرض فقط"
   },
   "registration": {
+    "registration": "التسجيل",
     "title": "معلومات أعضاء المؤسسة",
     "basicInfo": {
       "title": "معلومات المؤسسة",
@@ -99,7 +100,12 @@
     "rs": "السجل التجاري",
     "cnss": "الضمان الاجتماعي",
     "address": "العنوان",
+    "fullName": "الاسم الكامل",
     "email": "البريد الإلكتروني",
+    "role": "الدور",
+    "actionType": "نوع الإجراء",
+    "options": "الخيارات",
+    "viewActions": "عرض الإجراءات",
     "responsibleName": "اسم المسؤول",
     "trainingManagerName": "اسم مدير التدريب",
     "enabled": "مفعل",

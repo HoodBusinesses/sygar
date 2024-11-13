@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader } from '../ui/card'
 import { useTranslate } from '@renderer/hooks/useTranslate'
 import FormInputItem from '../ui/form-input-item'
 import { fields } from '@renderer/data/organinzation-fields-input'
+import { Button } from '../ui/button'
 
 export const OrganizationBasicInfo = (organization): JSX.Element => {
   const { t } = useTranslate();
@@ -32,6 +33,9 @@ export const OrganizationBasicInfo = (organization): JSX.Element => {
             />
           ))}
         </div>
+        <Button className="custom-button bg-blue-600">
+          {t('buttons.save')}
+        </Button>
       </CardContent>
     </Card>
   );

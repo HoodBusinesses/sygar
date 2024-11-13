@@ -30,6 +30,7 @@
     "view": "Visualisation uniquement"
   },
   "registration": {
+    "registration": "Registration",
     "title": "Informations sur les membres de l'organisation",
     "basicInfo": {
       "title": "Informations sur l'organisation",
@@ -99,7 +100,12 @@
     "rs": "R.S",
     "cnss": "CNSS",
     "address": "Adresse",
+    "fullName": "Full Name",
     "email": "Email",
+    "role": "Role",
+    "actionType": "Action Type",
+    "options": "Options",
+    "viewActions": "Voir les actions",
     "responsibleName": "Nom du responsable",
     "trainingManagerName": "Nom du responsable de la formation",
     "enabled": "Activé",
