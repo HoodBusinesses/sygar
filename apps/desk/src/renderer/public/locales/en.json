@@ -30,6 +30,7 @@
     "view": "Viewing only"
   },
   "registration": {
+    "registration": "Registration",
     "title": "Organization Members Information",
     "basicInfo": {
       "title": "Organization Information",
@@ -99,7 +100,12 @@
     "rs": "R.S",
     "cnss": "CNSS",
     "address": "Address",
+    "fullName": "Full Name",
     "email": "Email",
+    "role": "Role",
+    "actionType": "Action Type",
+    "options": "Options",
+    "viewActions": "View Action",
     "responsibleName": "Responsible Name",
     "trainingManagerName": "Training Manager Name",
     "enabled": "Enabled",
