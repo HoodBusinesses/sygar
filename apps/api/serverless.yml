@@ -1,14 +1,14 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
 service: my-nestjs-app
 
 provider:
   name: aws
   runtime: nodejs18.x
-  region: us-east-1
+  region: us-east-2
   memorySize: 512
   timeout: 30
-  custom:
-    packageManager: pnpm
   environment:
+    SYGAR_SERVERLESS: ${env:SYGAR_SERVERLESS}
     SYGAR_DYNAMODB_REGION: ${env:SYGAR_DYNAMODB_REGION}
     SYGAR_AUTH_WEB_APP_URL: ${env:SYGAR_AUTH_WEB_APP_URL}
     SYGAR_PROJECT_NAME: ${env:SYGAR_PROJECT_NAME}
@@ -20,10 +20,20 @@ provider:
     SYGAR_JWT_SECRET_TOKEN: ${env:SYGAR_JWT_SECRET_TOKEN}
     SYGAR_JWT_EXPIRATION_TIME: ${env:SYGAR_JWT_EXPIRATION_TIME}
     SYGAR_MAILER_HOST: ${env:SYGAR_MAILER_HOST}
-    SYAGR_MAILER_PORT: ${env:SYAGR_MAILER_PORT}
+    SYGAR_MAILER_PORT: ${env:SYGAR_MAILER_PORT}
     SYGAR_MAILER_USERNAME: ${env:SYGAR_MAILER_USERNAME}
     SYGAR_MAILER_PASSWORD: ${env:SYGAR_MAILER_PASSWORD}
     SYGAR_MAILER_FROM_ADDRESS: ${env:SYGAR_MAILER_FROM_ADDRESS}
+custom:
+  serverless-offline:
+    httpPort: 3001
+    location: . # this is important to make serverless-offline use the current directory
+    functions:
+      main:
+        handler: main.handler # use the local entry point for serverless-offline
+  webpack:
+    includeModules: true
+    packager: 'pnpm'
   
   # Add IAM role statements to allow full access to DynamoDB
   iamRoleStatements:
@@ -34,16 +44,27 @@ provider:
       Resource: "*"
 
 functions:
-  api:
-    handler: dist/main.handler
+  main:
+    handler: main.handler
     events:
       - http:
+          method: ANY
           path: /
-          method: any
       - http:
-          path: /{proxy+}
-          method: any
+          method: ANY
+          path: '{proxy+}'
 
+resources:
+  Resources:
+    GatewayResponseDefault4XX:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
 plugins:
   - serverless-offline
   - serverless-plugin-optimize

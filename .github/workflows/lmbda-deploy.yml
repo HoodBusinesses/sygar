@@ -17,20 +17,24 @@ jobs:
           node-version: '18'
 
       - name: Install pnpm and Set Up Global Bin Directory
-        run: npm install -g pnpm
+        run: npm install -g pnpm turbo
+
+      - name: prune
+        run: turbo prune --scope=api
 
       - name: Install Dependencies
-        run: pnpm install --frozen-lockfile
+        run: cd out && pnpm install --frozen-lockfile
 
       - name: Build the project
-        run: pnpm turbo build --filter=api  # Builds the project before deployment
+        run: cd out && pnpm turbo build --filter=api  # Builds the project before deployment
 
       - name: Deploy with Serverless
         uses: serverless/github-action@v3
         with:
-          args: -c "cd ./apps/api && serverless deploy"
-          entrypoint: /bin/sh        
+          args: -c "cd out/apps/api/dist && serverless deploy"
+          entrypoint: /bin/sh
         env:
+          SYGAR_SERVERLESS: true
           AWS_ACCESS_KEY_ID: ${{ secrets.SYGAR_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.SYGAR_AWS_SECRET_ACCESS_KEY }}
           SYGAR_DYNAMODB_REGION: ${{ secrets.SYGAR_DYNAMODB_REGION }}
@@ -44,7 +48,7 @@ jobs:
           SYGAR_JWT_SECRET_TOKEN: ${{ secrets.SYGAR_JWT_SECRET_TOKEN }}
           SYGAR_JWT_EXPIRATION_TIME: ${{ secrets.SYGAR_JWT_EXPIRATION_TIME }}
           SYGAR_MAILER_HOST: ${{ secrets.SYGAR_MAILER_HOST }}
-          SYAGR_MAILER_PORT: ${{ secrets.SYAGR_MAILER_PORT }}
+          SYGAR_MAILER_PORT: ${{ secrets.SYGAR_MAILER_PORT }}
           SYGAR_MAILER_USERNAME: ${{ secrets.SYGAR_MAILER_USERNAME }}
           SYGAR_MAILER_PASSWORD: ${{ secrets.SYGAR_MAILER_PASSWORD }}
           SYGAR_MAILER_FROM_ADDRESS: ${{ secrets.SYGAR_MAILER_FROM_ADDRESS }}

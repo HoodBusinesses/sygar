@@ -3,12 +3,16 @@ import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
-// src/lambda.ts
 import { Handler, Context, Callback } from 'aws-lambda';
 import serverlessExpress from '@vendia/serverless-express';  // Update this line
 import { ValidationPipe } from '@nestjs/common';
 
 let server: Handler;
+
+const SERVERLESS = (process.env.SYGAR_SERVERLESS ?? false) === 'false' ? false : (process.env.SYGAR_SERVERLESS ?? false) === 'true' ? true : process.env.SYGAR_SERVERLESS ?? false;
+console.log(SERVERLESS)
+
+console.log({ SERVERLESS })
 
 
 async function bootstrap() {
@@ -43,15 +47,28 @@ async function bootstrap() {
     })
   );
 
-  return app;
+  if (SERVERLESS) {
+    return app;
+  } else {
+    console.log('listen')
+    app.listen(1337);
+  }
+}
 
+console.log({ SERVERLESS })
+if (!SERVERLESS) {
+  console.log('bootstrap')
+  bootstrap()
 }
 
 export const handler: Handler = async (event: any, context: Context, callback: Callback) => {
-  if (!server) {
+  if (!server && SERVERLESS) {
+
+    console.log({ SERVERLESS })
     const app = await bootstrap();
-    const expressApp = app.getHttpAdapter().getInstance();
+    const expressApp = app!.getHttpAdapter().getInstance();
     server = serverlessExpress({ app: expressApp });  // Update this line
   }
   return server(event, context, callback);  // Update this line
 };
+

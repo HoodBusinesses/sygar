@@ -91,7 +91,7 @@ export class DbService {
     } else {
       // Production configuration
       clientConfig = {
-        region: this.config.get<string>('SYGAR_DYNAMODB_REGION', 'eu-west-1'),
+        region: this.config.get<string>('SYGAR_DYNAMODB_REGION', 'us-west-2'),
       };
     }
 
@@ -206,14 +206,17 @@ export class DbService {
 
     for (const key in item) {
       // Skip if the key is not present
-      if (!item[key]) continue;
+      if (item[key]) {
 
-      // Get the value of the key
-      const value =
-        item[key][Object.keys(item[key])[0] as keyof AttributeValue];
 
-      // Assign the value to the object
-      obj[key] = value;
+        const outerValue = item[key]!;
+
+        // Get the value of the key
+        const value = outerValue[Object.keys(outerValue)[0] as keyof AttributeValue];
+
+        // Assign the value to the object
+        obj[key] = value;
+      }
     }
 
     // Return the object
