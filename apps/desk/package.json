@@ -5,6 +5,7 @@
   "main": "./out/main/index.js",
   "author": "example.com",
   "homepage": "https://electron-vite.org",
+  "proxy": "http://localhost:1338",
   "scripts": {
     "format": "prettier --write .",
     "check-format": "prettier --check .",
