@@ -22,7 +22,7 @@ const Registration: React.FC = () => {
     isLoading,
   } = useOrganizationData(organizationId);
   // get members , form provider method, and submit handler
-  const { memberOperations, editingMember, members, methods, handleSubmit } =
+  const { methods,test, handleSubmit } =
     useRegistrations();
 
   if (isLoading)
@@ -39,6 +39,7 @@ const Registration: React.FC = () => {
 
   return (
     <div className="p-4 w-full py-6 space-y-6">
+      {/* <button onClick={test} >test</button> */}
       <FormProvider {...methods}>
         <p className="text-2xl text-gray-950 font-semibold mb-6">
           {t('registration.registration')}

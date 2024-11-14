@@ -11,6 +11,7 @@ export const OrganizationBasicInfo = (organization): JSX.Element => {
   const {
     register,
     formState: { errors },
+
   } = useFormContext<OrganizationFormData>();
 
   return (

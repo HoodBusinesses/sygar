@@ -1,19 +1,13 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { INITIAL_MEMBERS } from '@renderer/data/mockData';
 import {
-  MemberFormData,
   OrganizationFormData,
-  organizationSchema,
+  organizationSchema
 } from '@renderer/utils/schemas/formSchema';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import { useTranslate } from './useTranslate';
-import { useToast } from './useToast';
+import useCreateOrg from './api/create-org';
 
 export default function useRegistrations() {
-  const { toast } = useToast();
-
-  const { t } = useTranslate();
 
   const methods = useForm<OrganizationFormData>({
     resolver: zodResolver(organizationSchema),
@@ -25,65 +19,30 @@ export default function useRegistrations() {
     ),
   });
 
-  const [members, setMembers] = useState<MemberFormData[]>(INITIAL_MEMBERS);
+  const muation = useCreateOrg();
 
-  const [editingMember, setEditingMember] = useState<{
-    index: number;
-    data: MemberFormData;
-  } | null>(null);
-
-  const handleSubmit = async (data: OrganizationFormData) => {
-    try {
-      // Assuming you have an API endpoint to save the data
-      const response = await fetch('/api/organizations', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...data, members }),
-      });
-
-      if (!response.ok) throw new Error('Failed to save');
-
-      toast({
-        title: t('success'),
-        description: t('registration.messages.saveSuccess'),
-      });
-    } catch (error) {
-      toast({
-        title: t('error'),
-        description: t('registration.messages.saveError'),
-        variant: 'destructive',
-      });
-    }
+  const handleSubmit = (data: OrganizationFormData) => {
+    // Handle form submission
+    muation.mutate({
+      name: data.name,
+      cnss: data.cnss,
+      freeTrial: 30,
+    });
+    console.log(data)
   };
 
-  const memberOperations = useMemo(
-    () => ({
-      handleAdd: (data: MemberFormData) => {
-        setMembers((prev) => [...prev, data]);
-        setEditingMember(null);
-      },
-      handleUpdate: (data: MemberFormData, index: number) => {
-        setMembers((prev) =>
-          prev.map((member, i) => (i === index ? data : member))
-        );
-        setEditingMember(null);
-      },
-      handleEdit: (index: number) =>
-        setEditingMember({
-          index,
-          data: members[index],
-        }),
-      handleDelete: (index: number) =>
-        setMembers((prev) => prev.filter((_, i) => i !== index)),
-    }),
-    [members]
-  );
 
+    const test = () => {
+      // Handle form submission
+      muation.mutate({
+        name: 'said org',
+        cnss: 'cnss 1324',
+        freeTrial: 30,
+      });
+    };
   return {
-    memberOperations,
-    editingMember,
-    members,
     methods,
+    test,
     handleSubmit,
   };
 }
