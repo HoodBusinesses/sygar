@@ -1,16 +1,11 @@
-import React, { useMemo } from 'react';
-import { FormProvider } from 'react-hook-form';
-import withAuth from '@renderer/hoc/with-auth';
-import { AddMemberForm } from '@renderer/components/AddMemberForm';
-import { membersColumn } from '@renderer/components/membersColumn';
+import { FileUpload } from '@renderer/components/FileUpload';
 import { OrganizationBasicInfo } from '@renderer/components/organization/OrganizationBasicInfo';
-import { Button } from '@renderer/components/ui/button';
-import { Card, CardContent } from '@renderer/components/ui/card';
+import withAuth from '@renderer/hoc/with-auth';
 import { useOrganizationData } from '@renderer/hooks/api/get-organization-data';
 import useRegistrations from '@renderer/hooks/useRegistrations';
 import { useTranslate } from '@renderer/hooks/useTranslate';
-import { CustomTable } from '@renderer/components/custom-table';
-import { mockMember } from '@renderer/utils/static/organizations';
+import React, { useMemo } from 'react';
+import { FormProvider } from 'react-hook-form';
 
 const Registration: React.FC = () => {
   const { t } = useTranslate();
@@ -45,38 +40,21 @@ const Registration: React.FC = () => {
   return (
     <div className="p-4 w-full py-6 space-y-6">
       <FormProvider {...methods}>
+        <p className="text-2xl text-gray-950 font-semibold mb-6">
+          {t('registration.registration')}
+          <span className="text-green-600 bg-green-100 text-sm font-normal px-4">
+            {t('registration.title')}
+          </span>
+        </p>
         <form
           onSubmit={methods.handleSubmit(handleSubmit)}
-          className="space-y-6"
+          className="flex flex-wrap justify-between"
         >
-          <OrganizationBasicInfo organization={organization} />
-
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-lg font-bold text-gray-950">{t('registration.title')}</h2>
-                <Button variant="default">{t('buttons.import')}</Button>
-              </div>
-              <CustomTable headTitle='registration.title'  columns={membersColumn()} data={mockMember} />
-              <AddMemberForm
-                onSubmit={
-                  editingMember
-                    ? (data) =>
-                        memberOperations.handleUpdate(data, editingMember.index)
-                    : memberOperations.handleAdd
-                }
-                initialData={editingMember?.data}
-              />
-            </CardContent>
-          </Card>
-
-          <div className="flex justify-end">
-            <Button
-              type="submit"
-              className="w-full custom-button bg-blue-500 sm:w-auto"
-            >
-              {t('buttons.save')}
-            </Button>
+          <div className="w-2/3 pr-10">
+            <OrganizationBasicInfo organization={organization} />
+          </div>
+          <div className="w-1/3 pl-10 pr-10 ">
+            <FileUpload />
           </div>
         </form>
       </FormProvider>
