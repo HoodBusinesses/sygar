@@ -1,6 +1,6 @@
-import { api } from '@renderer/utils/api'
-import { useMutation } from '@tanstack/react-query'
-
+import { useAppSelector } from '@renderer/store/hooks';
+import { api } from '@renderer/utils/api';
+import { useMutation } from '@tanstack/react-query';
 
 export interface CreateOrganParams {
   cnss: string;
@@ -9,17 +9,24 @@ export interface CreateOrganParams {
 }
 
 export default function useCreateOrg() {
+  const token = useAppSelector((state) => state.auth.auth.token);
+
   return useMutation({
     mutationKey: ['createOrg'],
+
     mutationFn: (params: CreateOrganParams) =>
-      api.post('/organization/create', params),
+      api.post('/organization/create', params, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
 
     onSuccess: () => {
-        console.log('wiwiw success')
+      console.log('wiwiw success');
     },
 
     onError: () => {
-        console.log('ikhan error')
+      console.log('wiwiw error');
     },
   });
 }

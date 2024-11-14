@@ -26,7 +26,7 @@ const storage =
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['lang'],
+  whitelist: ['lang', 'auth'],
 };
 
 const reducers = combineReducers({
