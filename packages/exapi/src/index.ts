@@ -1,4 +1,9 @@
 import {
+  CreateUserParams,
+  DeleteUserParams,
+  UpdateUserParams,
+} from 'Args/user';
+import {
   LoginParams,
   ResetPasswordParams,
   ForgotPasswordParams,
@@ -6,6 +11,17 @@ import {
 } from './Args/auth';
 import type { AxiosInstance } from 'axios';
 import axios from 'axios';
+import {
+  CreateOrganParams,
+  DeleteOrganParams,
+  UpdateOrganParams,
+} from 'Args/org';
+import { CreateThemeParams, UpdateThemeParams } from 'Args/theme';
+import {
+  CreateParticipantParams,
+  UpdateParticipantParams,
+} from 'Args/participant';
+import { CreateGroupParams, UpdateGroupParams } from 'Args/group';
 
 export class Api {
   private httpClient: AxiosInstance;
@@ -50,6 +66,73 @@ export class Api {
         const endpoint = '/auth/profile';
         return this.httpClient.get(endpoint);
       },
+    },
+    user: {
+      create: (params: CreateUserParams) => {
+        const endpoint = '/user/create';
+        return this.httpClient.post(endpoint, params);
+      },
+      update: (params: UpdateUserParams) => {
+        const endpoint = '/user/update';
+        return this.httpClient.put(endpoint, params);
+      },
+      delete: () => {
+        const endpoint = '/user/delete';
+        return this.httpClient.delete(endpoint);
+      },
+    },
+    organization: {
+      create: (params: CreateOrganParams) => {
+        const endpoint = '/organization/create';
+        return this.httpClient.post(endpoint, params);
+      },
+      update: (params: UpdateOrganParams) => {
+        const endpoint = '/organization/update';
+        return this.httpClient.put(endpoint, params);
+      },
+      delete: () => {
+        const endpoint = '/organization/delete';
+        return this.httpClient.delete(endpoint);
+      },
+      get_all: () => {
+        return this.httpClient.get('/organization/gat-all');
+      },
+    },
+    theme: {
+      create: (params: CreateThemeParams) => {
+        const endpoint = '/theme/create';
+        return this.httpClient.post(endpoint, params);
+      },
+      update: (params: UpdateThemeParams) => {
+        const endpoint = '/theme/update';
+        return this.httpClient.put(endpoint, params);
+      },
+      delete: () => {},
+      gat_all: () => {
+        return this.httpClient.get('/theme/get-all');
+      },
+    },
+    participant: {
+      create: (params: CreateParticipantParams) => {
+        const endpoint = '/participant/create';
+        return this.httpClient.post(endpoint, params);
+      },
+      update: (params: UpdateParticipantParams) => {
+        const endpoint = '/participant/update';
+        return this.httpClient.put(endpoint, params);
+      },
+      delete: () => {},
+    },
+    group: {
+      create: (params: CreateGroupParams) => {
+        const endpoint = '/group/create';
+        return this.httpClient.post(endpoint, params);
+      },
+      update: (params: UpdateGroupParams) => {
+        const endpoint = '/group/update';
+        return this.httpClient.put(endpoint, params);
+      },
+      delete: () => {},
     },
   });
 }
