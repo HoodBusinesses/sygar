@@ -3,16 +3,16 @@ import { errorToast } from '@/lib/toasts';
 import { useMutation } from '@tanstack/react-query';
 
 export const useLogin = () => {
-  const { data, isPending, isError, isSuccess, mutate } = useMutation({
+  const { isPending, isError, isSuccess, mutate } = useMutation({
     mutationKey: ['login'],
 
     mutationFn: api.api().auth.login,
 
-    onSuccess: () => {
+    onSuccess: (res) => {
+      const { data } = res;
       // Open the custom URL when the request is successful
-      const token = data; // Assuming the response contains a token
       console.log('data:: ', data);
-      const customUrl = `sygar://anaas?token=${token}`;
+      const customUrl = `sygar://anaas?token=${data.token}`;
       window.location.href = customUrl; // Open the custom scheme URL
     },
 
