@@ -32,7 +32,7 @@ export default function useRegistrations() {
   };
 
 
-    const test = () => {
+    const test = async () => {
       // Handle form submission
       muation.mutate({
         name: 'said org',
