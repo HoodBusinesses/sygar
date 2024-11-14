@@ -25,18 +25,16 @@ jobs:
       - name: Install Dependencies
         run: cd out && pnpm install --frozen-lockfile
 
-      - name: mv serverless config
-        run: mv serverless.yml out
-
       - name: Build the project
         run: cd out && pnpm turbo build --filter=api  # Builds the project before deployment
 
       - name: Deploy with Serverless
         uses: serverless/github-action@v3
         with:
-          args: -c "cd out && serverless deploy"
-          entrypoint: /bin/sh        
+          args: -c "cd out/apps/api/dist && serverless deploy"
+          entrypoint: /bin/sh
         env:
+          SYGAR_SERVERLESS: true
           AWS_ACCESS_KEY_ID: ${{ secrets.SYGAR_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.SYGAR_AWS_SECRET_ACCESS_KEY }}
           SYGAR_DYNAMODB_REGION: ${{ secrets.SYGAR_DYNAMODB_REGION }}
