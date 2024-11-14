@@ -20,7 +20,7 @@ export class DbConstants {
     );
 
     // Determine if the environment is production based on NODE_ENV
-    this.isProduction = this.config.get<string>('NODE_ENV') === 'prod';
+    this.isProduction = this.config.get<string>('NODE_ENV') === 'production';
 
     // Set the table suffix based on the environment
     this.tableSuffix = this.isProduction ? 'Prod' : 'Staging';

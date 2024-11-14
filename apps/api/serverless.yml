@@ -7,9 +7,8 @@ provider:
   region: us-east-2
   memorySize: 512
   timeout: 30
-  custom:
-    packageManager: pnpm
   environment:
+    SYGAR_SERVERLESS: ${env:SYGAR_SERVERLESS}
     SYGAR_DYNAMODB_REGION: ${env:SYGAR_DYNAMODB_REGION}
     SYGAR_AUTH_WEB_APP_URL: ${env:SYGAR_AUTH_WEB_APP_URL}
     SYGAR_PROJECT_NAME: ${env:SYGAR_PROJECT_NAME}
@@ -25,6 +24,16 @@ provider:
     SYGAR_MAILER_USERNAME: ${env:SYGAR_MAILER_USERNAME}
     SYGAR_MAILER_PASSWORD: ${env:SYGAR_MAILER_PASSWORD}
     SYGAR_MAILER_FROM_ADDRESS: ${env:SYGAR_MAILER_FROM_ADDRESS}
+custom:
+  serverless-offline:
+    httpPort: 3001
+    location: . # this is important to make serverless-offline use the current directory
+    functions:
+      main:
+        handler: main.handler # use the local entry point for serverless-offline
+  webpack:
+    includeModules: true
+    packager: 'pnpm'
   
   # Add IAM role statements to allow full access to DynamoDB
   iamRoleStatements:
@@ -35,16 +44,27 @@ provider:
       Resource: "*"
 
 functions:
-  api:
-    handler: app/api/dist/main.handler
+  main:
+    handler: main.handler
     events:
       - http:
+          method: ANY
           path: /
-          method: any
       - http:
-          path: /{proxy+}
-          method: any
+          method: ANY
+          path: '{proxy+}'
 
+resources:
+  Resources:
+    GatewayResponseDefault4XX:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
 plugins:
   - serverless-offline
   - serverless-plugin-optimize

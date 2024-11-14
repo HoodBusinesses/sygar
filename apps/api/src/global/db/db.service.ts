@@ -61,17 +61,17 @@ export class DbService {
 
     const INTERNAL = this.config.get<boolean>('DYNAMODB_INTERNAL'); // GET LOCATION OF DB
 
-    const isLocal = !INTERNAL || ENV === 'test' || ENV === 'dev' || !ENV; // Determine if the environment is local
+    const isLocal = !INTERNAL || ENV === 'test' || ENV === 'development' || !ENV; // Determine if the environment is local
 
     let clientConfig: DbConfig;
 
     if (isLocal) {
       // Local development or testing configuration
       clientConfig = {
-        region: this.config.get<string>('SYGAR_DYNAMODB_REGION', 'us-east-1'),
+        region: this.config.get<string>('SYGAR_DYNAMODB_REGION', 'us-east-2'),
         endpoint: this.config.get<string>(
           'DYNAMODB_ENDPOINT',
-          'http://localhost:8000'
+          'https://dynamodb.us-east-2.amazonaws.com'
         ),
         credentials: {
           accessKeyId: this.config.get<string>(
@@ -206,14 +206,17 @@ export class DbService {
 
     for (const key in item) {
       // Skip if the key is not present
-      if (!item[key]) continue;
+      if (item[key]) {
 
-      // Get the value of the key
-      const value =
-        item[key][Object.keys(item[key])[0] as keyof AttributeValue];
 
-      // Assign the value to the object
-      obj[key] = value;
+        const outerValue = item[key]!;
+
+        // Get the value of the key
+        const value = outerValue[Object.keys(outerValue)[0] as keyof AttributeValue];
+
+        // Assign the value to the object
+        obj[key] = value;
+      }
     }
 
     // Return the object

@@ -1,7 +1,11 @@
 name: Deploy to AWS Lambda
 
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      app_url:
+        description: 'The application URL'
+        required: true
 
 jobs:
   deploy:
@@ -17,7 +21,7 @@ jobs:
           node-version: '18'
 
       - name: Install pnpm and Set Up Global Bin Directory
-        run: npm install -g pnpm turbo
+        run: npm install -g pnpm turbo ts-node
 
       - name: prune
         run: turbo prune --scope=api
@@ -25,8 +29,33 @@ jobs:
       - name: Install Dependencies
         run: cd out && pnpm install --frozen-lockfile
 
-      - name: mv serverless config
-        run: mv serverless.yml out
+      - name: Seed into database
+        env:
+          SYGAR_SERVERLESS: false
+          AWS_ACCESS_KEY_ID: ${{ secrets.SYGAR_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SYGAR_AWS_SECRET_ACCESS_KEY }}
+          SYGAR_DYNAMODB_REGION: ${{ secrets.SYGAR_DYNAMODB_REGION }}
+          SYGAR_AUTH_WEB_APP_URL: ${{ github.event.inputs.app_url }}
+          SYGAR_PROJECT_NAME: ${{ secrets.SYGAR_PROJECT_NAME }}
+          NODE_ENV: ${{ secrets.NODE_ENV }}
+          SYGAR_ADMIN_EMAIL: ${{ secrets.SYGAR_ADMIN_EMAIL }}
+          SYGAR_ADMIN_PASSWORD: ${{ secrets.SYGAR_ADMIN_PASSWORD }}
+          SYGAR_USER_EMAIL: ${{ secrets.SYGAR_USER_EMAIL }}
+          SYGAR_USER_PASSWORD: ${{ secrets.SYGAR_USER_PASSWORD }}
+          SYGAR_JWT_SECRET_TOKEN: ${{ secrets.SYGAR_JWT_SECRET_TOKEN }}
+          SYGAR_JWT_EXPIRATION_TIME: ${{ secrets.SYGAR_JWT_EXPIRATION_TIME }}
+          SYGAR_MAILER_HOST: ${{ secrets.SYGAR_MAILER_HOST }}
+          SYGAR_MAILER_PORT: ${{ secrets.SYGAR_MAILER_PORT }}
+          SYGAR_MAILER_USERNAME: ${{ secrets.SYGAR_MAILER_USERNAME }}
+          SYGAR_MAILER_PASSWORD: ${{ secrets.SYGAR_MAILER_PASSWORD }}
+          SYGAR_MAILER_FROM_ADDRESS: ${{ secrets.SYGAR_MAILER_FROM_ADDRESS }}
+        run: |
+          echo $AWS_ACCESS_KEY_ID
+          echo $AWS_SECRET_ACCESS_KEY 
+          echo $SYGAR_DYNAMODB_REGION
+          cd out/apps/api
+          pnpm script:tables
+          pnpm script:seed
 
       - name: Build the project
         run: cd out && pnpm turbo build --filter=api  # Builds the project before deployment
@@ -34,13 +63,14 @@ jobs:
       - name: Deploy with Serverless
         uses: serverless/github-action@v3
         with:
-          args: -c "cd out && serverless deploy"
-          entrypoint: /bin/sh        
+          args: -c "cd out/apps/api/dist && serverless deploy"
+          entrypoint: /bin/sh
         env:
+          SYGAR_SERVERLESS: true
           AWS_ACCESS_KEY_ID: ${{ secrets.SYGAR_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.SYGAR_AWS_SECRET_ACCESS_KEY }}
           SYGAR_DYNAMODB_REGION: ${{ secrets.SYGAR_DYNAMODB_REGION }}
-          SYGAR_AUTH_WEB_APP_URL: ${{ secrets.SYGAR_AUTH_WEB_APP_URL }}
+          SYGAR_AUTH_WEB_APP_URL: ${{ github.event.inputs.app_url }}
           SYGAR_PROJECT_NAME: ${{ secrets.SYGAR_PROJECT_NAME }}
           NODE_ENV: ${{ secrets.NODE_ENV }}
           SYGAR_ADMIN_EMAIL: ${{ secrets.SYGAR_ADMIN_EMAIL }}
