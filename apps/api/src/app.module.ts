@@ -3,7 +3,7 @@ import { AppController } from './app.controller';
 import { AuthModule } from './global/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { DbModule } from './global/db/db.module';
-import path from 'path';
+import path, { join } from 'path';
 import { UserModule } from './modules/user/user.module';
 import { OrganizationModule } from './modules/organization/organization.module';
 import { AbilityModule } from './modules/ability/ability.module';
@@ -11,6 +11,7 @@ import { RbacModule } from './global/rbac/roles.module';
 import { LanguageModule } from './global/language/language.module';
 import { NotificationsModule } from './global/notifactions/notifications.module';
 import { TaskService } from './global/schedule/task.service';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 /**
  * @module AppModule
@@ -19,6 +20,10 @@ import { TaskService } from './global/schedule/task.service';
  */
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(process.cwd(), 'public/api'), // Path to the `public/api` folder
+      serveRoot: '/api', // Prefix for requests
+    }),
     NotificationsModule,
     LanguageModule,
     AbilityModule,
@@ -42,4 +47,4 @@ import { TaskService } from './global/schedule/task.service';
   providers: [TaskService],
   controllers: [AppController],
 })
-export class AppModule {}
+export class AppModule { }

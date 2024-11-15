@@ -31,10 +31,11 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
 
-  SwaggerModule.setup('api/docs', app, document, {
-    customCssUrl: 'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css',
-    customJs: 'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui-bundle.min.js',
-    customfavIcon: 'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/favicon-32x32.png',
+  SwaggerModule.setup('api', app, document, {
+    customCssUrl: '/static/swagger-ui.css',
+    customJs: '/static/swagger-ui-bundle.js',
+    customfavIcon: '/static/favicon.ico',
+    customSiteTitle: 'My API Docs',
   });
 
   app.useStaticAssets(join(__dirname, '..', 'public'));
