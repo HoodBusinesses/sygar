@@ -2,8 +2,7 @@
   "name": "api",
   "private": true,
   "scripts": {
-    "script:tables": "ts-node -r tsconfig-paths/register  src/scripts/tables.ts",
-    "script:seed": "ts-node -r tsconfig-paths/register  src/scripts/seed.ts",
+    "script:init": "ts-node -r tsconfig-paths/register  src/scripts/init.ts",
     "build": "nest build --webpack",
     "format": "prettier --write .",
     "check-format": "prettier --check .",

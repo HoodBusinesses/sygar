@@ -15,7 +15,7 @@ export class DbConstants {
   constructor(private readonly config: ConfigService) {
     // Fetch the project name from environment variables or use a default value
     this.projectName = this.config.get<string>(
-      'PROJECT_NAME',
+      'SYGAR_PROJECT_NAME',
       'MadraMangaArabic'
     );
 
