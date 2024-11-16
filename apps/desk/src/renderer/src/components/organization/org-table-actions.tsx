@@ -3,17 +3,29 @@ import DeleteModal from '../DeleteModal';
 import SubscriptionModal from '../SubscriptionModal';
 import { Button } from '../ui/button';
 import { useNavigate } from '@tanstack/react-router';
+import useDelete from '@renderer/hooks/api/delete-org';
 
 export default function ButtonsAction({
   rowId,
   subscription,
   href,
+  endpoint,
+  invalidateKeyData,
 }: {
-  rowId: number;
+  rowId: string;
   subscription: boolean;
   href: string;
+  endpoint: string;
+  invalidateKeyData?: string;
 }): JSX.Element {
   const navigate = useNavigate();
+
+  const mutation = useDelete({
+    rowId,
+    endpoint,
+    invalidateKeyData,
+  });
+
   return (
     <div className="flex justify-center">
       <Button
@@ -25,7 +37,7 @@ export default function ButtonsAction({
         <Edit2 className="h-4 w-4" />
       </Button>
       {subscription && <SubscriptionModal />}
-      <DeleteModal onDelete={() => console.log(rowId)} />
+      <DeleteModal onDelete={() => mutation.mutate()} />
     </div>
   );
 }

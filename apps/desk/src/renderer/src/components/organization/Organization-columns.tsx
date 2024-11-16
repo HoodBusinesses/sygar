@@ -7,7 +7,7 @@ import { Checkbox } from '../ui/checkbox';
 import DeleteModal from '../DeleteModal';
 
 export type Organization = {
-  id: number;
+  id: string;
   image: string;
   rs: string;
   cnss: string;
@@ -127,7 +127,13 @@ export const Columns: ColumnDef<Organization>[] = [
     accessorKey: 'actions',
     header: 'organization.actions',
     cell: ({ row }) => (
-      <ButtonsAction subscription={true} rowId={row.original.id} href="/registration" />
+      <ButtonsAction
+        subscription={true}
+        rowId={row.original.cnss}
+        href={`/registration?organizationCnss=${row.original.cnss}`}
+        endpoint={`/organization/delete?cnss=${row.original.cnss}`}
+        invalidateKeyData="organizationsData"
+      />
     ),
     enableSorting: false,
     enableGlobalFilter: false,
