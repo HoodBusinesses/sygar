@@ -1,13 +1,27 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   OrganizationFormData,
-  organizationSchema
+  organizationSchema,
 } from '@renderer/utils/schemas/formSchema';
 import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import useCreateOrg from './api/create-org';
+import useUpdateOrg from './api/update-org';
+import { useOrganizationData } from './api/get-organization-data';
 
 export default function useRegistrations() {
+  const organizationCnss = useMemo(
+    () => new URLSearchParams(window.location.search).get('organizationCnss'),
+    []
+  );
+
+  // get organization data
+
+  const {
+    data: organization,
+    error,
+    isLoading,
+  } = organizationCnss ?useOrganizationData(organizationCnss) : { data: undefined, error: null, isLoading: false };
 
   const methods = useForm<OrganizationFormData>({
     resolver: zodResolver(organizationSchema),
@@ -19,30 +33,32 @@ export default function useRegistrations() {
     ),
   });
 
-  const muation = useCreateOrg();
+  const createMuation = useCreateOrg();
+
+  const updateMuation = useUpdateOrg();
 
   const handleSubmit = (data: OrganizationFormData) => {
     // Handle form submission
-    muation.mutate({
-      name: data.name,
-      cnss: data.cnss,
-      freeTrial: 30,
-    });
-    console.log(data)
+    console.log(data);
+    return organizationCnss
+      ? updateMuation.mutate({
+          cnss: organizationCnss,
+          data: {
+            name: data.name,
+          },
+        })
+      : createMuation.mutate({
+          name: data.name,
+          cnss: data.cnss,
+          freeTrial: 30,
+        });
   };
 
-
-    const test = async () => {
-      // Handle form submission
-      muation.mutate({
-        name: 'said org',
-        cnss: 'cnss 1324',
-        freeTrial: 30,
-      });
-    };
   return {
+    organization,
+    error,
+    isLoading,
     methods,
-    test,
     handleSubmit,
   };
 }

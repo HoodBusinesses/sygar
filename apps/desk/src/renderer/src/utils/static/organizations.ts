@@ -38,7 +38,7 @@ export const mockOrganizations = Array.from({ length: 50 }, (_, index) => {
   const month = (index % 12) + 1
   const formattedMonth = month.toString().padStart(2, '0')
   return {
-    id: index * 10 + 1,
+    id: `${index * 10 + 1}`,
     image: '/api/placeholder/40/40',
     rs: `Organization ${index + 1}`,
     cnss: `CNSS-${index + 1}`,

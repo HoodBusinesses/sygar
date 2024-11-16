@@ -7,7 +7,7 @@ import { Button } from '../ui/button';
 import { useTranslate } from '@renderer/hooks/useTranslate';
 
 export interface Group {
-  id: number;
+  id: string;
   facilator: string;
   trainer: string;
   theme: string;

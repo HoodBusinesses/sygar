@@ -5,13 +5,17 @@ import { useTranslate } from '@renderer/hooks/useTranslate';
 import FormInputItem from '../ui/form-input-item';
 import { fields } from '@renderer/data/organinzation-fields-input';
 import { Button } from '../ui/button';
+import { OrganizationsData } from '@renderer/hooks/api/get-all-organizations';
 
-export const OrganizationBasicInfo = (organization): JSX.Element => {
+export const OrganizationBasicInfo = ({
+  organization,
+}: {
+  organization?: OrganizationsData;
+}): JSX.Element => {
   const { t } = useTranslate();
   const {
     register,
     formState: { errors },
-
   } = useFormContext<OrganizationFormData>();
 
   return (
@@ -27,7 +31,7 @@ export const OrganizationBasicInfo = (organization): JSX.Element => {
               label={field.label}
               placeholder={field.placeholder}
               register={register(field.name as keyof OrganizationFormData)}
-              value={organization?.organization?.[field.value] || ''}
+              value={organization?.[field.name] || ''}
               error={errors[field.name]?.message}
               required={field.required}
               isLogoInput={field.isLogoInput}
