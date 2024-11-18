@@ -8,30 +8,40 @@ import SearchTableInput from './costum-data/search-table-Input'
 import { ChangeEventHandler } from 'react'
 
 interface ListingHeaderProps {
-  headTitle: string
-  onSearchChange: ChangeEventHandler<HTMLInputElement>
+  headTitle: string;
+  onSearchChange: ChangeEventHandler<HTMLInputElement>;
+  goAdd: () => void
 }
 
-const ListingHeader = ({ headTitle, onSearchChange }: ListingHeaderProps): JSX.Element => {
-  const { t } = useTranslate()
-  const navigate = useNavigate()
+const ListingHeader = ({
+  headTitle,
+  onSearchChange,
+  goAdd,
+}: ListingHeaderProps): JSX.Element => {
+  const { t } = useTranslate();
+  const navigate = useNavigate();
   const type =
     headTitle === 'formation.formation'
       ? 'themes'
       : headTitle === 'group.group'
         ? 'group'
-        : 'participant'
-  const href = `/edit?type=${type}&crud=add`
+        : 'participant';
+  const href = `/edit?type=${type}&crud=add`;
 
   return (
     <div className="flex flex-col gap-6 w-full">
-      <p className='text-2xl font-semibold text-gray-800'>{t('formation.tables')}    <span className='text-sm rounded-sm bg-blue-100  text-blue-600'>{t(headTitle)}</span></p>
+      <p className="text-2xl font-semibold text-gray-800">
+        {t('formation.tables')}{' '}
+        <span className="text-sm rounded-sm bg-blue-100  text-blue-600">
+          {t(headTitle)}
+        </span>
+      </p>
       <div className="flex items-center justify-between w-full">
         <SearchTableInput onChange={onSearchChange} />
         <div className="flex gap-4">
           {!(headTitle === 'organization.organizations') && (
             <Button
-              onClick={() => navigate({ to: href })}
+              onClick={goAdd}
               className="flex items-center custom-button gap-2 bg-blue-600 text-blue-50 px-6 py-2 rounded-lg"
             >
               <FiPlus className="h-5 w-5" />

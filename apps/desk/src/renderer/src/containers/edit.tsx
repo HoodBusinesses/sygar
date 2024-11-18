@@ -7,9 +7,16 @@ import withAuth from '@renderer/hoc/with-auth';
 import useHandelEditForm from '@renderer/hooks/useHandelEditForm';
 import { useTranslate } from '@renderer/hooks/useTranslate';
 import { useNavigate } from '@tanstack/react-router';
+import React, { ReactNode } from 'react';
 import { FormProvider } from 'react-hook-form';
 
-function EditPage(): JSX.Element {
+function EditPage({
+  goBack,
+  Form,
+}: {
+  goBack: () => void;
+  Form: ReactNode;
+}): JSX.Element {
   const navigate = useNavigate();
 
   const { t } = useTranslate();
@@ -33,9 +40,9 @@ function EditPage(): JSX.Element {
           className="space-y-6"
         >
           <div className="flex flex-col p-5 gap-6">
-            {type === 'themes' && <EditFormation crud={crud as string} defaultValues={defaultValues}/>}
-            {type === 'group' && <EditGroup crud={crud as string} defaultValues={defaultValues}/>}
-            {type === 'participant' && <EditParticipant crud={crud as string} defaultValues={defaultValues}/>}
+            {Form}
+            {/* {type === 'group' && <EditGroup crud={crud as string} defaultValues={defaultValues}/>} */}
+            {/* {type === 'participant' && <EditParticipant crud={crud as string} defaultValues={defaultValues}/>} */}
             <div className="flex self-end gap-8 w-1/2">
               <Button
                 type="button"
@@ -43,7 +50,7 @@ function EditPage(): JSX.Element {
                 onClick={() =>
                   handleUnsavedChange(methods.getValues())
                     ? setOpenUnsavedChange(true)
-                    : navigate({ to: `/${type}-listing` })
+                    : goBack()
                 }
               >
                 {t('buttons.cancel')}

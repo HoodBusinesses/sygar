@@ -10,7 +10,7 @@ import {
   SortingState,
   useReactTable,
 } from '@tanstack/react-table';
-import { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import ListingHeader from './ListingHeader';
 import Pagination from './Pagination';
 import { cn } from './ui/lib/utils';
@@ -23,17 +23,26 @@ import {
   TableRow,
 } from './ui/table';
 import { FaPlus } from 'react-icons/fa';
+import EditPage from '@renderer/containers/edit';
+import EditFormation from './formations/edit-formation';
+export type Components = 'add' | 'edit' | 'table';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   headTitle: string;
+  component: Components;
+  setComponent: React.Dispatch<React.SetStateAction<Components>>;
+  EditAndAddRow: ReactNode;
 }
 
 export function CustomTable<TData, TValue>({
   columns,
   data,
   headTitle,
+  component,
+  setComponent,
+  EditAndAddRow,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
 
@@ -64,12 +73,19 @@ export function CustomTable<TData, TValue>({
 
   const { t } = useTranslate();
 
+  if (component === 'add' || component === 'edit') {
+    return (
+      <EditPage component={component} goBack={() => setComponent('table')} Form={EditAndAddRow} />
+    );
+  }
+
   return (
     <div>
       {/* Search and import export */}
       <div className="flex justify-between items-center mb-6 gap-4">
         <ListingHeader
           headTitle={headTitle}
+          goAdd={() => setComponent('add')}
           onSearchChange={(e) => table.setGlobalFilter(e.target.value)}
         />
       </div>

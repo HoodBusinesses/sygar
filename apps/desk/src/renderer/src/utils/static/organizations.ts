@@ -56,10 +56,10 @@ export const mockThemes = Array.from({ length: 50 }, (_, index) => {
   const price = (Math.random() * 1000).toFixed(2) // Random price between 0 and 1000 with 2 decimal places
 
   return {
-    id: index + 1,
+    id: (index + 1).toString(),
     name: formationsNames[Math.floor(Math.random() * formationsNames.length)],
     year: year,
-    price: parseFloat(price).toString(),
+    price: parseFloat(price),
   }
 })
 

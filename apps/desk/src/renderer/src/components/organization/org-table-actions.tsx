@@ -11,12 +11,14 @@ export default function ButtonsAction({
   href,
   endpoint,
   invalidateKeyData,
+  saveDefaultData,
 }: {
   rowId: string;
   subscription: boolean;
   href: string;
   endpoint: string;
   invalidateKeyData?: string;
+  saveDefaultData: () => void;
 }): JSX.Element {
   const navigate = useNavigate();
 
@@ -30,7 +32,7 @@ export default function ButtonsAction({
     <div className="flex justify-center">
       <Button
         variant="ghost"
-        onClick={() => navigate({ to: href })}
+        onClick={saveDefaultData}
         size="icon"
         className="bg-blue-800/10 text-blue-800 ltr:rounded-l-full rtl:rounded-r-full hover:bg-blue-400/50"
       >

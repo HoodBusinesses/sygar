@@ -4,19 +4,22 @@ import { FormationFormData } from '@renderer/utils/schemas/formSchema';
 import FormInputItem from '../ui/form-input-item';
 import { formationFields } from '@renderer/data/formation-fields-input';
 import { useTranslate } from '@renderer/hooks/useTranslate';
+
 interface EditFormationProps {
   crud: string;
   defaultValues: any;
 }
-
 
 const EditFormation = ({ crud , defaultValues }: EditFormationProps): JSX.Element => {
   const {
     register,
     formState: { errors },
   } = useFormContext<FormationFormData>();
+
   const { t } = useTranslate();
-  console.log("defaultValue : ",defaultValues);
+
+  console.log("defaultValue : ", defaultValues);
+
   return (
     <Card className="">
       <CardHeader className="text-gray-700 text-lg font-semibold">
@@ -31,7 +34,7 @@ const EditFormation = ({ crud , defaultValues }: EditFormationProps): JSX.Elemen
               placeholder={field.placeholder}
               register={register(field.name as keyof FormationFormData)}
               type={field.type}
-              value={defaultValues[field.name] || ''}
+              value={''}
               error={errors[field.name]?.message}
               required={field.required}
               isLargeInput={true}
