@@ -116,7 +116,6 @@ export const themeColumns = (
           saveDefaultData={setRowData.bind( null, row.original)}
           rowId={row.original.id}
           subscription={false}
-          href={`/edit?type=themes&crud=edit&rowId=${row.original.id}`}
         />
       ),
     },

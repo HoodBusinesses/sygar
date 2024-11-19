@@ -31,7 +31,7 @@ const EditGroup = ({ crud , defaultValues }: EditGroupProps): JSX.Element => {
               label={field.label}
               placeholder={field.placeholder}
               register={register(field.name as keyof GroupFormData)}
-              value={defaultValues[field.name] || ''}
+              value={ ''}
               error={errors[field.name]?.message}
               isLargeInput={true}
               required={field.required}

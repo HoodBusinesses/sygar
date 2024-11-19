@@ -78,7 +78,7 @@ export const mockGroups = Array.from({ length: 50 }, (_, index) => {
 
 
   return {
-    id: index + 1,
+    id: (index + 1).toString(),
     facilator: facilitators[index % facilitators.length],
     trainer: trainers[index % trainers.length],
     theme: themes[index % themes.length],
@@ -90,7 +90,7 @@ export const mockGroups = Array.from({ length: 50 }, (_, index) => {
 export const mockParticipant = Array.from({ length: 50 }, (_, index) => {
 
   return {
-    id: index + 1,
+    id: (index + 1).toString(),
     name: names[index % names.length],
     email: 'PAQUETA@GMAIL.COM',
     cin: 'U208988',

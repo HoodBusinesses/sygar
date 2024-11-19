@@ -1,13 +1,10 @@
-import EditFormation from '@renderer/components/formations/edit-formation';
-import EditGroup from '@renderer/components/formations/edit-group';
-import EditParticipant from '@renderer/components/formations/edit-participant';
 import { Button } from '@renderer/components/ui/button';
 import UnsavedChangeEdit from '@renderer/components/unsaved-change-edit';
 import withAuth from '@renderer/hoc/with-auth';
 import useHandelEditForm from '@renderer/hooks/useHandelEditForm';
 import { useTranslate } from '@renderer/hooks/useTranslate';
 import { useNavigate } from '@tanstack/react-router';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { FormProvider } from 'react-hook-form';
 
 function EditPage({
@@ -41,8 +38,6 @@ function EditPage({
         >
           <div className="flex flex-col p-5 gap-6">
             {Form}
-            {/* {type === 'group' && <EditGroup crud={crud as string} defaultValues={defaultValues}/>} */}
-            {/* {type === 'participant' && <EditParticipant crud={crud as string} defaultValues={defaultValues}/>} */}
             <div className="flex self-end gap-8 w-1/2">
               <Button
                 type="button"
@@ -65,7 +60,9 @@ function EditPage({
 
             <UnsavedChangeEdit
               open={openUnsavedChange}
-              ConfermFn={() => navigate({ to: `/${type}-listing` })}
+              ConfermFn={() => {
+                console.log('ConfermFn type:', type);
+                navigate({ to: `/${type}-listing` })}}
               KeepEditFn={setOpenUnsavedChange.bind(null, false)}
             />
           </div>

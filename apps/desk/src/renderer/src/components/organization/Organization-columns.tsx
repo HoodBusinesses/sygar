@@ -18,7 +18,9 @@ export type Organization = {
   date: string;
 };
 
-export const Columns: ColumnDef<Organization>[] = [
+export const Columns = (setRowData: (rowData: Organization) => void): ColumnDef<Organization>[] => {
+  
+  return [
   {
     accessorKey: 'id',
     header: ({ table }) => (
@@ -129,8 +131,8 @@ export const Columns: ColumnDef<Organization>[] = [
     cell: ({ row }) => (
       <ButtonsAction
         subscription={true}
+        saveDefaultData={setRowData.bind(null, row.original)}
         rowId={row.original.cnss}
-        href={`/registration?organizationCnss=${row.original.cnss}`}
         endpoint={`/organization/delete?cnss=${row.original.cnss}`}
         invalidateKeyData="organizationsData"
       />
@@ -139,3 +141,4 @@ export const Columns: ColumnDef<Organization>[] = [
     enableGlobalFilter: false,
   },
 ];
+}

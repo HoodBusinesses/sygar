@@ -8,19 +8,16 @@ import useDelete from '@renderer/hooks/api/delete-org';
 export default function ButtonsAction({
   rowId,
   subscription,
-  href,
   endpoint,
   invalidateKeyData,
   saveDefaultData,
 }: {
   rowId: string;
   subscription: boolean;
-  href: string;
   endpoint: string;
   invalidateKeyData?: string;
   saveDefaultData: () => void;
 }): JSX.Element {
-  const navigate = useNavigate();
 
   const mutation = useDelete({
     rowId,
