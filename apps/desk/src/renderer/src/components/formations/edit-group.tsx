@@ -14,8 +14,10 @@ const EditGroup = ({ crud , defaultValues }: EditGroupProps): JSX.Element => {
   const {
     register,
     formState: { errors },
+    
   } = useFormContext<GroupFormData>();
   const { t } = useTranslate();
+  
   console.log("defaultValue : ",defaultValues);
   return (
     <Card className="">
@@ -31,7 +33,7 @@ const EditGroup = ({ crud , defaultValues }: EditGroupProps): JSX.Element => {
               label={field.label}
               placeholder={field.placeholder}
               register={register(field.name as keyof GroupFormData)}
-              value={ ''}
+              value={(defaultValues && defaultValues[field.name]) || ''}
               error={errors[field.name]?.message}
               isLargeInput={true}
               required={field.required}

@@ -24,7 +24,7 @@ export const memberSchema = z.object({
 
 export const formationSchema = z.object({
   name: z.string().min(1, 'Formation name is required'),
-  year: z.number().min(1, 'Year is required'),
+  year: z.string().min(1, 'Year is required'),
   price: z.string().min(1, 'Price is required'),
 });
 

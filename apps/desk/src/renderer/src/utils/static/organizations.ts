@@ -58,9 +58,9 @@ export const mockThemes = Array.from({ length: 50 }, (_, index) => {
   return {
     id: (index + 1).toString(),
     name: formationsNames[Math.floor(Math.random() * formationsNames.length)],
-    year: year,
-    price: parseFloat(price),
-  }
+    year: year.toString(),
+    price: parseFloat(price).toString(),
+  };
 })
 
 export const mockGroups = Array.from({ length: 50 }, (_, index) => {

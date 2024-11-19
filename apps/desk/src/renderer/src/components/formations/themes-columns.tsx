@@ -11,7 +11,7 @@ export interface Theme {
   name: string;
   // identifier: string;
   year: string;
-  price: number;
+  price: string;
   // groups?: string;
   // options?: string;
 }

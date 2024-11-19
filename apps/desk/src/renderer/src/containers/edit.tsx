@@ -10,9 +10,15 @@ import { FormProvider } from 'react-hook-form';
 function EditPage({
   goBack,
   Form,
+  defaultValues,
+  type,
+  crud,
 }: {
   goBack: () => void;
   Form: ReactNode;
+  crud: string;
+  type: string;
+  defaultValues?: any;
 }): JSX.Element {
   const navigate = useNavigate();
 
@@ -24,10 +30,7 @@ function EditPage({
     methods,
     handleSubmit,
     handleUnsavedChange,
-    type,
-    crud,
-    defaultValues,
-  } = useHandelEditForm();
+  } = useHandelEditForm(defaultValues, type, crud);
 
   return (
     <div className="p-4 w-full py-6 space-y-6">
@@ -62,7 +65,8 @@ function EditPage({
               open={openUnsavedChange}
               ConfermFn={() => {
                 console.log('ConfermFn type:', type);
-                navigate({ to: `/${type}-listing` })}}
+                navigate({ to: `/${type}-listing` });
+              }}
               KeepEditFn={setOpenUnsavedChange.bind(null, false)}
             />
           </div>

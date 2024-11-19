@@ -19,7 +19,9 @@ const ThemesListing: React.FC = () => {
   return (
     <div dir={isRtl ? 'rtl' : 'ltr'} className="h-full w-full p-6 space-y-6">
       <CustomTable
+        type='themes'
         component={component}
+        defaultValues={defaultValue}
         EditAndAddRow={
           <EditFormation crud={component} defaultValues={defaultValue} />
         }

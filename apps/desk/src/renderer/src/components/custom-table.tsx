@@ -34,6 +34,8 @@ interface DataTableProps<TData, TValue> {
   component: Components;
   setComponent: React.Dispatch<React.SetStateAction<Components>>;
   EditAndAddRow: ReactNode;
+  defaultValues?: any;
+  type: string;
 }
 
 export function CustomTable<TData, TValue>({
@@ -42,7 +44,9 @@ export function CustomTable<TData, TValue>({
   headTitle,
   component,
   setComponent,
+  defaultValues,
   EditAndAddRow,
+  type,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
 
@@ -75,7 +79,13 @@ export function CustomTable<TData, TValue>({
 
   if (component === 'add' || component === 'edit') {
     return (
-      <EditPage component={component} goBack={() => setComponent('table')} Form={EditAndAddRow} />
+      <EditPage
+        type={type}
+        defaultValues={defaultValues}
+        crud={component}
+        goBack={() => setComponent('table')}
+        Form={EditAndAddRow}
+      />
     );
   }
 
