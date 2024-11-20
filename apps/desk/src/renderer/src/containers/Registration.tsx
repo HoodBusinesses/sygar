@@ -7,11 +7,12 @@ import useRegistrations from '@renderer/hooks/useRegistrations';
 import { useTranslate } from '@renderer/hooks/useTranslate';
 import { OrganizationFormData } from '@renderer/utils/schemas/formSchema';
 import React from 'react';
+import { FaSpinner } from "react-icons/fa";
 
 const Registration: React.FC = () => {
   const { t } = useTranslate();
   // get members , form provider method, and submit handler
-  const { methods, handleSubmit} = useRegistrations();
+  const { methods,isSuccess, isError, isPending,  handleSubmit} = useRegistrations();
 
   return (
     <div className="p-4 w-full py-6 space-y-6">
@@ -43,8 +44,9 @@ const Registration: React.FC = () => {
             <Button
               type="submit"
               className="custom-button bg-blue-600"
+              disabled={isPending}
             >
-              {t('ikhan')}
+              {isPending ? <FaSpinner className='' /> : t('buttons.save')}
             </Button>
           </CardContent>
         </Card>

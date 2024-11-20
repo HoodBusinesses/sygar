@@ -49,14 +49,11 @@ const OrganizationsPage: React.FC = () => {
               // data={mockOrganizations}
               data={data.map((org, index) => ({
                 id: org.uid,
-                image: '',
-                name: org.name,
+                logo: '',
+                rs: org.name,
+                ice: `ice_${index}`,
                 cnss: org.cnss,
                 address: `address_${index}`,
-                email: `mock_${index}@gmail.com`,
-                responsibleName: `mock_${index}`,
-                trainingManagerName: `mock_${index}`,
-                date: `date_${index}`,
                 enabled: index % 2 === 0
               }))}
             />

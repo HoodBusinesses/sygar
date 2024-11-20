@@ -45,7 +45,7 @@ export const fields: OrganizationFieldsInput[] = [
   {
     label: 'registration.basicInfo.fields.rs.label',
     placeholder: 'registration.basicInfo.fields.rs.placeholder',
-    name: 'name',
+    name: 'rs',
     value: 'rs',
     required: true,
   },
@@ -71,34 +71,12 @@ export const fields: OrganizationFieldsInput[] = [
     required: true,
   },
   {
-    label: 'registration.basicInfo.fields.email.label',
-    placeholder: 'registration.basicInfo.fields.email.placeholder',
-    name: 'email',
-    value: 'email',
-    required: true,
-  },
-  {
     label: 'registration.basicInfo.fields.logo.label',
     placeholder: 'registration.basicInfo.fields.logo.placeholder',
     name: 'logo',
     value: '',
-    required: true,
+    required: false,
     isLogoInput: true,
-  },
-  {
-    label: 'registration.basicInfo.fields.responsibleName.label',
-    placeholder: 'registration.basicInfo.fields.responsibleName.placeholder',
-    name: 'responsibleName',
-    value: 'responsibleName',
-    required: true,
-  },
-  {
-    label: 'registration.basicInfo.fields.trainingManagerName.label',
-    placeholder:
-      'registration.basicInfo.fields.trainingManagerName.placeholder',
-    name: 'trainingManagerName',
-    value: 'trainingManagerName',
-    required: true,
   },
 ];
 

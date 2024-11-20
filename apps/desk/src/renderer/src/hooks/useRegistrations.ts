@@ -24,7 +24,7 @@ export default function useRegistrations() {
     // Handle form submission
     console.log('ikhan: ', data);
     createMuation.mutate({
-      name: data.name,
+      name: data.rs,
       cnss: data.cnss,
       freeTrial: 30,
     });
@@ -32,6 +32,9 @@ export default function useRegistrations() {
 
   return {
     methods,
+    isSuccess: createMuation.isSuccess,
+    isError: createMuation.isError,
+    isPending: createMuation.isPending,
     handleSubmit,
   };
 }

@@ -29,7 +29,7 @@ export default function useHandelEditOrgs(defaultValues: Organization | null, go
     updateMuation.mutate({
       cnss: data.cnss,
       data: {
-        name: data.name,
+        name: data.rs,
       },
     });
   };
@@ -37,10 +37,11 @@ export default function useHandelEditOrgs(defaultValues: Organization | null, go
   const handleUnsavedChange = (data: FormData) => {
     // check if there is an empty field
     if (defaultValues) {
-      const { id, ...values } = defaultValues;
+      const { id, enabled, logo , ...values } = defaultValues;
+      const { logo: imageData , ...defaultData} = data;
       console.log('data : ', data);
       console.log('defaultValues jjjj: ', values);
-      return JSON.stringify(data) !== JSON.stringify(values);
+      return JSON.stringify(defaultData) !== JSON.stringify(values);
     }
   };
 
