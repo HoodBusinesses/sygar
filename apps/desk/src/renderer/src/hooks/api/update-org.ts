@@ -1,14 +1,17 @@
 import { useAppSelector } from '@renderer/store/hooks';
 import { api } from '@renderer/utils/api';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
 import { OrganizationsData } from './get-all-organizations';
+import { AxiosResponse } from 'axios';
 
 export interface UpdateOrganParams {
   cnss: string;
   data: Partial<OrganizationsData>;
 }
 
-export default function useUpdateOrg() {
+export default function useUpdateOrg(
+  options?: UseMutationOptions<AxiosResponse<any, any>, Error, unknown>
+) {
   const token = useAppSelector((state) => state.auth.auth.token);
   const queryClient = useQueryClient();
 
@@ -33,6 +36,8 @@ export default function useUpdateOrg() {
         console.log(error);
       }
     },
+
+    ...options,
 
     onError: () => {
       console.log('wiwiw error');

@@ -6,15 +6,14 @@ import { fields } from '@renderer/data/organinzation-fields-input';
 import { Button } from '../ui/button';
 import useHandelEditOrgs from '@renderer/hooks/editForms/useHandleEditOrg';
 import UnsavedChangeEdit from '../unsaved-change-edit';
+import { Organization } from './Organization-columns';
 
 interface EditOrgsProps {
-  crud: string;
-  defaultValues: any;
+  defaultValues: Organization | null;
   goBack: () => void;
 }
 
 export const OrganizationBasicInfo = ({
-  crud,
   defaultValues,
   goBack
 }: EditOrgsProps): JSX.Element => {
@@ -26,13 +25,11 @@ export const OrganizationBasicInfo = ({
     methods,
     handleSubmit,
     handleUnsavedChange,
-  } = useHandelEditOrgs(defaultValues, crud)
+  } = useHandelEditOrgs(defaultValues, goBack);
 
   return (
     <div className="p-4 w-full py-6 space-y-6">
-      <form className='space-y-6'
-        onSubmit={methods.handleSubmit(handleSubmit)}
-      >
+      <form className="space-y-6" onSubmit={methods.handleSubmit(handleSubmit)}>
         <Card className="flex flex-col p-5 gap-6">
           <CardHeader className="text-lg text-gray-950 font-bold mb-6">
             {t('registration.basicInfo.title')}
@@ -44,17 +41,16 @@ export const OrganizationBasicInfo = ({
                   key={field.name}
                   label={field.label}
                   placeholder={field.placeholder}
-                  register={methods.register(field.name as keyof OrganizationFormData)}
-                  value={defaultValues && defaultValues[field.name] || ''}
+                  register={methods.register(
+                    field.name as keyof OrganizationFormData
+                  )}
+                  value={(defaultValues && defaultValues[field.name]) || ''}
                   error={methods.formState.errors[field.name]?.message}
                   required={field.required}
                   isLogoInput={field.isLogoInput}
                 />
               ))}
             </div>
-            <Button className="custom-button bg-blue-600">
-              {t('buttons.save')}
-            </Button>
           </CardContent>
           <div className="flex self-end gap-8 w-1/2">
             <Button
@@ -79,7 +75,7 @@ export const OrganizationBasicInfo = ({
           <UnsavedChangeEdit
             open={openUnsavedChange}
             ConfermFn={() => {
-              console.log("first redir")
+              console.log('first redir');
               goBack();
             }}
             KeepEditFn={setOpenUnsavedChange.bind(null, false)}

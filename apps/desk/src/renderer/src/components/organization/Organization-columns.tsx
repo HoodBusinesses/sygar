@@ -9,7 +9,7 @@ import DeleteModal from '../DeleteModal';
 export type Organization = {
   id: string;
   image: string;
-  rs: string;
+  name: string;
   cnss: string;
   address: string;
   email: string;
@@ -65,9 +65,9 @@ export const Columns = (setRowData: (rowData: Organization) => void): ColumnDef<
     ),
   },
   {
-    accessorKey: 'rs',
+    accessorKey: 'name',
     header: 'organization.rs',
-    cell: ({ row }) => <p className="text-gray-600">{row.getValue('rs')}</p>,
+    cell: ({ row }) => <p className="text-gray-600">{row.getValue('name')}</p>,
   },
   {
     accessorKey: 'cnss',

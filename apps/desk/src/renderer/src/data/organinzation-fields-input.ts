@@ -36,7 +36,7 @@ export const registrationFields: OrganizationFieldsInput[] = [
     placeholder: 'registration.basicInfo.fields.logo.placeholder',
     name: 'logo',
     value: '',
-    required: true,
+    required: false,
     isLogoInput: true,
   }
 ]

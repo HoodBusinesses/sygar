@@ -13,7 +13,7 @@ const OrganizationsPage: React.FC = () => {
 
   const [component, setComponent] = useState<Components>('table');
 
-  const [defaultValue, setdefaultValue] = useState<Organization |null>(null);
+  const [defaultValue, setdefaultValue] = useState<Organization | null>(null);
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -44,13 +44,13 @@ const OrganizationsPage: React.FC = () => {
               component={component}
               setComponent={setComponent}
               EditAndAddRowComponent={
-                <OrganizationBasicInfo crud={component} defaultValues={defaultValue} goBack={() => setComponent('table')} />
+                <OrganizationBasicInfo defaultValues={defaultValue} goBack={() => setComponent('table')} />
               }
               // data={mockOrganizations}
               data={data.map((org, index) => ({
                 id: org.uid,
                 image: '',
-                rs: org.name,
+                name: org.name,
                 cnss: org.cnss,
                 address: `address_${index}`,
                 email: `mock_${index}@gmail.com`,
