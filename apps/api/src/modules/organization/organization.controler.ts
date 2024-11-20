@@ -30,6 +30,7 @@ import { Action } from 'src/shared/types/roles';
 import {
   GroupRepository,
   OrganizationRepository,
+  ParticipantRepository,
   ThemeRepository,
 } from './organization.repository';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -46,6 +47,7 @@ import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
 import { EnrolledType } from './model/group.model';
 import { AssignToGroupDto } from './dto/assign-group.dto';
+import { group } from 'console';
 
 /**
  * @module OrganizationController
@@ -232,9 +234,7 @@ export class OrganizationController {
 
     try {
       return {
-        success: await this.organizationService.delete(
-          cnss
-        ),
+        success: await this.organizationService.delete(cnss),
         date: new Date().toISOString(),
       };
     } catch (error: any) {
@@ -639,7 +639,8 @@ export class GroupController {
    */
   constructor(
     private readonly groupService: GroupService,
-    private readonly languageService: LanguageService
+    private readonly languageService: LanguageService,
+    private readonly groupRepository: GroupRepository
   ) {}
 
   /**
@@ -738,6 +739,57 @@ export class GroupController {
           date: new Date().toISOString(),
         },
         HttpStatus.BAD_REQUEST
+      );
+    }
+  }
+
+  @Get('get-all')
+  @UseGuards(JwtGuard, AbilitiesGuard)
+  @PutAbilities({ action: Action.Read, subject: 'Theme' })
+  @ApiOperation({ summary: 'Get All groups' })
+  @ApiResponse({
+    status: 200,
+    description: 'Get all groups',
+    schema: {
+      example: {
+        groups: [
+          {
+            PK: 'GROUP#group-123',
+            SK: 'GROUP#group-123',
+            uid: 'group-123',
+            themeId: 'theme-123',
+            theme: 'My Theme',
+            location: 'Location',
+            action: 'Planned',
+            startDate: 1633392000000,
+            endDate: 1633392000000,
+          },
+        ],
+        date: new Date().toISOString(),
+      },
+    },
+  })
+  @ApiResponse({ status: 400, description: 'Bad request.' })
+  async getAllGroups(
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+    @Query('name') name?: string,
+    @Query('year') year?: number
+  ) {
+    try {
+      const groups = await this.groupRepository.getAllGroups(
+        page,
+        limit,
+        name,
+        year?.toString()
+      );
+
+      return { groups, date: new Date().toISOString() };
+    } catch (error: any) {
+      // return { error: error.message, date: new Date().toISOString() }
+      throw new HttpException(
+        { error: error.message, date: new Date().toISOString() },
+        400
       );
     }
   }
@@ -1316,7 +1368,8 @@ export class ParticipantController {
    */
   constructor(
     private readonly languageService: LanguageService,
-    private readonly participantService: ParticipantService
+    private readonly participantService: ParticipantService,
+    private readonly participantRepository: ParticipantRepository
   ) {}
 
   /**
@@ -1428,6 +1481,53 @@ export class ParticipantController {
     }
   }
 
+  @Get('get-all')
+  @UseGuards(JwtGuard, AbilitiesGuard)
+  @PutAbilities({ action: Action.Read, subject: 'Theme' })
+  @ApiOperation({ summary: 'Get all participant.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Participants retrieved successfully.',
+    schema: {
+      example: {
+        participants: {
+          PK: '123456789',
+          SK: '123456789',
+          uid: '123456789',
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'john.doe@example.com',
+          cnss: '123456789',
+          status: 'active',
+          organizationId: '123456789',
+          createdAt: 1725000000,
+          updatedAt: 1725000000,
+        },
+        date: new Date().toISOString(),
+      },
+    },
+  })
+  @ApiResponse({ status: 400, description: 'Bad request.' })
+  async getAllParticipants(
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+    @Query('name') name?: string,
+  ) {
+    try {
+      const participants = await this.participantRepository.getAllParticipants(
+        page,
+        limit,
+        name
+      );
+      return { participants, date: new Date().toISOString() };
+    } catch (error: any) {
+      // return { error: error.message, date: new Date().toISOString() }
+      throw new HttpException(
+        { error: error.message, date: new Date().toISOString() },
+        400
+      );
+    }
+  }
   /**
    * Update participant endpoint
    * @param updateParticipantDto - The data for updating the participant.
