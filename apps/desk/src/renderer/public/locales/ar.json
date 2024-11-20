@@ -31,6 +31,7 @@
   },
   "registration": {
     "title": "معلومات أعضاء المؤسسة",
+    "registration": "التسجيل",
     "basicInfo": {
       "title": "معلومات المؤسسة",
       "fields": {

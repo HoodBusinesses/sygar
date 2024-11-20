@@ -7,6 +7,40 @@ export type OrganizationFieldsInput = {
   required?: boolean;
   isLogoInput?: boolean;
 };
+
+
+export const registrationFields: OrganizationFieldsInput[] = [
+  {
+    label: 'registration.basicInfo.fields.rs.label',
+    placeholder: 'registration.basicInfo.fields.rs.placeholder',
+    name: 'name',
+    value: 'rs',
+    required: true,
+  },
+  {
+    label: 'registration.basicInfo.fields.ice.label',
+    placeholder: 'registration.basicInfo.fields.ice.placeholder',
+    name: 'ice',
+    value: 'ice',
+    required: true,
+  },
+  {
+    label: 'registration.basicInfo.fields.cnss.label',
+    placeholder: 'registration.basicInfo.fields.cnss.placeholder',
+    name: 'cnss',
+    value: 'cnss',
+    required: true,
+  },
+  {
+    label: 'registration.basicInfo.fields.logo.label',
+    placeholder: 'registration.basicInfo.fields.logo.placeholder',
+    name: 'logo',
+    value: '',
+    required: true,
+    isLogoInput: true,
+  }
+]
+
 export const fields: OrganizationFieldsInput[] = [
   {
     label: 'registration.basicInfo.fields.rs.label',
@@ -67,3 +101,5 @@ export const fields: OrganizationFieldsInput[] = [
     required: true,
   },
 ];
+
+
