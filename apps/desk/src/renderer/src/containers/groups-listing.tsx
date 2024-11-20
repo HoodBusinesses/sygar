@@ -18,8 +18,8 @@ const GroupListing: React.FC = () => {
     <div dir={isRtl ? 'rtl' : 'ltr'} className="h-full w-full p-6 space-y-6">
       <CustomTable
         component={component}
-        EditAndAddRow={
-          <EditGroup crud={component} defaultValues={defaultValue} />
+        EditAndAddRowComponent={
+          <EditGroup crud={component} defaultValues={defaultValue} goBack={()=> setComponent('table')}/>
         }
         setComponent={setComponent}
         headTitle="group.group"

@@ -1,28 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
+  FormationFormData,
   formationSchema,
-  groupSchema,
-  participantSchema,
 } from '@renderer/utils/schemas/formSchema';
-import {
-  mockGroups,
-  mockParticipant,
-  mockThemes,
-  nullMockGroups,
-  nullMockParticipants,
-  nullMockThemes,
-} from '@renderer/utils/static/organizations';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
-export default function useHandelEditForm(defaultValues: any, type: string, crud: string) {
-  const schema =
-    type === 'themes'
-      ? formationSchema
-      : type === 'group'
-        ? groupSchema
-        : participantSchema;
+export default function useHandelEditFormation(defaultValues: FormationFormData, crud: string) {
+  const schema = formationSchema
 
   type SchemaType = typeof schema;
 

@@ -43,8 +43,8 @@ const OrganizationsPage: React.FC = () => {
               )}
               component={component}
               setComponent={setComponent}
-              EditAndAddRow={
-                <OrganizationBasicInfo />
+              EditAndAddRowComponent={
+                <OrganizationBasicInfo crud={component} defaultValues={defaultValue} goBack={() => setComponent('table')} />
               }
               // data={mockOrganizations}
               data={data.map((org, index) => ({

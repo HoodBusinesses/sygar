@@ -19,11 +19,10 @@ const ParticipantsListing: React.FC = () => {
       dir={isRtl ? 'rtl' : 'ltr'}
       className="h-full bg-white w-full p-6 space-y-6"
     >
-      <div className="flex flex-col">
         <CustomTable
           component={component}
-          EditAndAddRow={
-            <EditParticipant crud={component} defaultValues={defaultValue} />
+          EditAndAddRowComponent={
+            <EditParticipant crud={component} defaultValues={defaultValue} goBack={() => setComponent('table')} />
           }
           setComponent={setComponent}
           headTitle="participant.participant"
@@ -35,7 +34,6 @@ const ParticipantsListing: React.FC = () => {
           )}
           data={mockParticipant}
         />
-      </div>
     </div>
   );
 };

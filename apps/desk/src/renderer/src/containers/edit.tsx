@@ -1,7 +1,7 @@
 import { Button } from '@renderer/components/ui/button';
 import UnsavedChangeEdit from '@renderer/components/unsaved-change-edit';
 import withAuth from '@renderer/hoc/with-auth';
-import useHandelEditForm from '@renderer/hooks/useHandelEditForm';
+import useHandelEditForm from '@renderer/hooks/editForms/useHandelEditFormation';
 import { useTranslate } from '@renderer/hooks/useTranslate';
 import { useNavigate } from '@tanstack/react-router';
 import { ReactNode } from 'react';
@@ -30,7 +30,7 @@ function EditPage({
     methods,
     handleSubmit,
     handleUnsavedChange,
-  } = useHandelEditForm(defaultValues, type, crud);
+  } = useHandelEditForm(defaultValues, crud);
 
   return (
     <div className="p-4 w-full py-6 space-y-6">

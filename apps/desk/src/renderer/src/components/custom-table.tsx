@@ -23,8 +23,6 @@ import {
   TableRow,
 } from './ui/table';
 import { FaPlus } from 'react-icons/fa';
-import EditPage from '@renderer/containers/edit';
-import EditFormation from './formations/edit-formation';
 export type Components = 'add' | 'edit' | 'table';
 
 interface DataTableProps<TData, TValue> {
@@ -33,9 +31,7 @@ interface DataTableProps<TData, TValue> {
   headTitle: string;
   component: Components;
   setComponent: React.Dispatch<React.SetStateAction<Components>>;
-  EditAndAddRow: ReactNode;
-  defaultValues?: any;
-  type: string;
+  EditAndAddRowComponent: ReactNode;
 }
 
 export function CustomTable<TData, TValue>({
@@ -44,10 +40,8 @@ export function CustomTable<TData, TValue>({
   headTitle,
   component,
   setComponent,
-  defaultValues,
-  EditAndAddRow,
-  type,
-}: DataTableProps<TData, TValue>) {
+  EditAndAddRowComponent,
+}: DataTableProps<TData, TValue>): JSX.Element {
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -77,16 +71,9 @@ export function CustomTable<TData, TValue>({
 
   const { t } = useTranslate();
 
-  if (component === 'add' || component === 'edit') {
-    return (
-      <EditPage
-        type={type}
-        defaultValues={defaultValues}
-        crud={component}
-        goBack={() => setComponent('table')}
-        Form={EditAndAddRow}
-      />
-    );
+  if (component === 'add' || component === 'edit'){
+    return <> {EditAndAddRowComponent} </>
+    // return <p className='text-xl text-gray-900'>isjgbsjdb</p>
   }
 
   return (
