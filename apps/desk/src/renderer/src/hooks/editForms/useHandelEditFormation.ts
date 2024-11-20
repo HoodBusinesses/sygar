@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Theme } from '@renderer/components/formations/themes-columns';
 import {
   FormationFormData,
   formationSchema,
@@ -7,7 +8,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
-export default function useHandelEditFormation(defaultValues: FormationFormData, crud: string) {
+export default function useHandelEditFormation(defaultValues: Theme | null, crud: string) {
   const schema = formationSchema
 
   type SchemaType = typeof schema;

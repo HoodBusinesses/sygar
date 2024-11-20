@@ -1,14 +1,15 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  GroupFormData,
-  groupSchema,
-} from '@renderer/utils/schemas/formSchema';
+import { Group } from '@renderer/components/formations/groups-columns';
+import { groupSchema } from '@renderer/utils/schemas/formSchema';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
-export default function useHandelEditFormation(defaultValues: GroupFormData, crud: string) {
-  const schema = groupSchema
+export default function useHandelEditGroup(
+  defaultValues: Group | null,
+  crud: string
+) {
+  const schema = groupSchema;
 
   type SchemaType = typeof schema;
 
@@ -25,7 +26,7 @@ export default function useHandelEditFormation(defaultValues: GroupFormData, cru
   const handleUnsavedChange = (data: FormData) => {
     // check if there is an empty field
     if (defaultValues && crud == 'edit') {
-      const { id, ...values } = defaultValues;
+      const { id, date, ...values } = defaultValues;
       console.log('data : ', data);
       console.log('defaultValues jjjj: ', values);
       return JSON.stringify(data) !== JSON.stringify(values);

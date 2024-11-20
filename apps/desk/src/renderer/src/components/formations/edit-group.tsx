@@ -4,13 +4,14 @@ import { GroupFormData } from '@renderer/utils/schemas/formSchema';
 import FormInputItem from '../ui/form-input-item';
 import { groupFields } from '@renderer/data/formation-fields-input';
 import { useTranslate } from '@renderer/hooks/useTranslate';
-import useHandelEditGroup from '@renderer/hooks/editForms/useHandleEditParticipant';
 import { Button } from '../ui/button';
 import UnsavedChangeEdit from '../unsaved-change-edit';
+import useHandelEditGroup from '@renderer/hooks/editForms/useHandleEditGroup';
+import { Group } from './groups-columns';
 
 interface EditGroupProps {
   crud: string;
-  defaultValues: any;
+  defaultValues: Group | null;
   goBack: () => void;
 
 }
@@ -45,7 +46,7 @@ const EditGroup = ({ crud, defaultValues, goBack }: EditGroupProps): JSX.Element
                   label={field.label}
                   placeholder={field.placeholder}
                   register={methods.register(field.name as keyof GroupFormData)}
-                  value={(defaultValues && defaultValues[field.name]) || ''}
+                  value={(defaultValues && crud == 'edit' && defaultValues[field.name]) || ''}
                   error={methods.formState.errors[field.name]?.message}
                   isLargeInput={true}
                   required={field.required}

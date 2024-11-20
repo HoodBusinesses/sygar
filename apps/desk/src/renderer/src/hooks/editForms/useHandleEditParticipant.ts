@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Participant } from '@renderer/components/formations/participants-columns';
 import {
   ParticipantFormData,
   participantSchema,
@@ -7,7 +8,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
-export default function useHandelEditParticipant(defaultValues: ParticipantFormData, crud: string) {
+export default function useHandelEditParticipant(defaultValues: Participant | null, crud: string) {
   const schema = participantSchema
 
   type SchemaType = typeof schema;

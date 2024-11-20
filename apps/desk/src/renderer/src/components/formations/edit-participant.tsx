@@ -7,10 +7,11 @@ import { useTranslate } from '@renderer/hooks/useTranslate';
 import { Button } from '../ui/button';
 import UnsavedChangeEdit from '../unsaved-change-edit';
 import useHandelEditParticipant from '@renderer/hooks/editForms/useHandleEditParticipant';
+import { Participant } from './participants-columns';
 
 interface EditParticipantProps {
   crud: string;
-  defaultValues: any;
+  defaultValues: Participant | null;
   goBack: () => void;
 
 }
@@ -28,9 +29,7 @@ const EditParticipant = ({ crud, defaultValues, goBack }: EditParticipantProps):
 
   return (
     <div className="p-4 w-full py-6 space-y-6">
-      <form className='space-y-6'
-        onSubmit={methods.handleSubmit(handleSubmit)}
-      >
+      <form className="space-y-6" onSubmit={methods.handleSubmit(handleSubmit)}>
         <Card className="flex flex-col p-5 gap-6">
           <CardHeader className="text-gray-700 text-xl">
             {t(`participant.${crud}Participant`)}
@@ -43,8 +42,15 @@ const EditParticipant = ({ crud, defaultValues, goBack }: EditParticipantProps):
                   key={field.name}
                   label={field.label}
                   placeholder={field.placeholder}
-                  register={methods.register(field.name as keyof ParticipantFormData)}
-                  value={(defaultValues && defaultValues[field.name]) || ''}
+                  register={methods.register(
+                    field.name as keyof ParticipantFormData
+                  )}
+                  value={
+                    (defaultValues &&
+                      crud == 'edit' &&
+                      defaultValues[field.name]) ||
+                    ''
+                  }
                   error={methods.formState.errors[field.name]?.message}
                   isLargeInput={true}
                   required={field.required}
@@ -75,7 +81,7 @@ const EditParticipant = ({ crud, defaultValues, goBack }: EditParticipantProps):
           <UnsavedChangeEdit
             open={openUnsavedChange}
             ConfermFn={() => {
-              console.log("first redir")
+              console.log('first redir');
               goBack();
             }}
             KeepEditFn={setOpenUnsavedChange.bind(null, false)}
