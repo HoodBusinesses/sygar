@@ -5,7 +5,7 @@ import DeleteModal from '../DeleteModal';
 import SortHeader from '../costum-data/sort-header';
 
 export interface Participant {
-  id: number;
+  id: string;
   name: string;
   email: string;
   cin: string;
@@ -13,7 +13,7 @@ export interface Participant {
   status: string;
 }
 
-export const participantColumns = (): ColumnDef<Participant>[] => [
+export const participantColumns = (setRowData: (rowData: Participant) => void): ColumnDef<Participant>[] => [
   {
     accessorKey: 'id',
     header: ({ table }) => (
@@ -26,7 +26,7 @@ export const participantColumns = (): ColumnDef<Participant>[] => [
         {table.getIsSomeRowsSelected() && (
           <DeleteModal
             DeleteNumber={table.getFilteredSelectedRowModel().rows.length}
-            onDelete={() => {}}
+            onDelete={() => { }}
           />
         )}
       </div>
@@ -91,7 +91,8 @@ export const participantColumns = (): ColumnDef<Participant>[] => [
     header: 'themesTable.options',
     cell: ({ row }) => (
       <ButtonsAction
-        href={`/edit?type=participant&crud=edit&rowId=${row.original.id}`}
+        endpoint='/participant/delete'
+        saveDefaultData={setRowData.bind(null, row.original)}
         rowId={row.original.id}
         subscription={false}
       />

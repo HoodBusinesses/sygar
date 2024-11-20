@@ -1,14 +1,19 @@
-import { Columns } from '@renderer/components/organization/Organization-columns';
-import { CustomTable } from '@renderer/components/custom-table';
+import { Columns, Organization } from '@renderer/components/organization/Organization-columns';
+import { Components, CustomTable } from '@renderer/components/custom-table';
 import withAuth from '@renderer/hoc/with-auth';
 import { useTranslate } from '@renderer/hooks/useTranslate';
 import { useGetAllOrganizations } from '@renderer/hooks/api/get-all-organizations';
+import { useState } from 'react';
+import { OrganizationBasicInfo } from '@renderer/components/organization/OrganizationBasicInfo';
 
 const OrganizationsPage: React.FC = () => {
   const { isRtl } = useTranslate();
 
   const { data, isSuccess, isLoading, isError } = useGetAllOrganizations();
 
+  const [component, setComponent] = useState<Components>('table');
+
+  const [defaultValue, setdefaultValue] = useState<Organization |null>(null);
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -30,7 +35,17 @@ const OrganizationsPage: React.FC = () => {
             {/* Organization Table Component */}
             <CustomTable
               headTitle={'organization.organizations'}
-              columns={Columns}
+              columns={Columns(
+                (rowData: Organization) => {
+                  setdefaultValue(rowData);
+                  setComponent('edit');
+                }
+              )}
+              component={component}
+              setComponent={setComponent}
+              EditAndAddRowComponent={
+                <OrganizationBasicInfo crud={component} defaultValues={defaultValue} goBack={() => setComponent('table')} />
+              }
               // data={mockOrganizations}
               data={data.map((org, index) => ({
                 id: org.uid,
