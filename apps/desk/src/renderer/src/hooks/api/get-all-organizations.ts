@@ -26,20 +26,20 @@ export const useGetAllOrganizations = () => {
           Authorization: `Bearer ${token}`,
         },
       }),
-    staleTime: 0,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    refetchInterval: false,
-    refetchIntervalInBackground: false,
-  });
-
-  return {
-    data: data?.data.organizations as OrganizationsData[],
-    isLoading,
-    isError,
-    error,
-    isSuccess,
-    refetch,
+      staleTime: 0,
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchInterval: false,
+      refetchIntervalInBackground: false,
+    });
+    
+    return {
+      data: data?.data.organizations as OrganizationsData[],
+      isLoading,
+      isError,
+      error,
+      isSuccess,
+      refetch,
   };
 };

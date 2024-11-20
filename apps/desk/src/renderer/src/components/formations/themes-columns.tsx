@@ -7,15 +7,14 @@ import { Button } from '../ui/button';
 import { useTranslate } from '@renderer/hooks/useTranslate';
 
 export interface Theme {
-  id: number;
+  id: string;
   name: string;
   // identifier: string;
   year: string;
-  price: number;
+  price: string;
   // groups?: string;
   // options?: string;
 }
-
 
 export const themeColumns = (
   setGroupThemes: () => void
@@ -29,7 +28,9 @@ export const themeColumns = (
         <div className="flex items-center gap-2">
           <Checkbox
             checked={table.getIsAllPageRowsSelected()}
-            onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+            onCheckedChange={(value) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
             aria-label="Select all"
           />
 
@@ -65,7 +66,9 @@ export const themeColumns = (
           />
         );
       },
-      cell: ({ row }) => <p className="text-gray-600">{row.getValue('name')}</p>,
+      cell: ({ row }) => (
+        <p className="text-gray-600">{row.getValue('name')}</p>
+      ),
     },
     {
       accessorKey: 'year',
@@ -115,6 +118,8 @@ export const themeColumns = (
           rowId={row.original.id}
           subscription={false}
           href={`/edit?type=themes&crud=edit&rowId=${row.original.id}`}
+          endpoint={`/theme/delete?uid=${row.original.id}`}
+          invalidateKeyData="getAllThemes"
         />
       ),
     },

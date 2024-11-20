@@ -4,10 +4,18 @@ import {
   groupSchema,
   participantSchema,
 } from '@renderer/utils/schemas/formSchema';
-import { mockGroups, mockParticipant, mockThemes, nullMockGroups, nullMockParticipants, nullMockThemes } from '@renderer/utils/static/organizations';
+import {
+  mockGroups,
+  mockParticipant,
+  mockThemes,
+  nullMockGroups,
+  nullMockParticipants,
+  nullMockThemes,
+} from '@renderer/utils/static/organizations';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
+import useCreateTheme from './api/themes/create-theme';
 
 export default function useHandelEditForm() {
   const url = new URLSearchParams(window.location.search);
@@ -25,13 +33,17 @@ export default function useHandelEditForm() {
         ? mockGroups
         : mockParticipant;
 
-  const nullMockData = type === 'themes'
-    ? nullMockThemes
-    : type === 'group'
-      ? nullMockGroups
-      : nullMockParticipants;
+  const nullMockData =
+    type === 'themes'
+      ? nullMockThemes
+      : type === 'group'
+        ? nullMockGroups
+        : nullMockParticipants;
 
-  const defaultValues = rowId && crud == 'edit' ? mockData.find((item) => item.id.toString() === rowId) : nullMockData
+  const defaultValues =
+    rowId && crud == 'edit'
+      ? mockData.find((item) => item.id.toString() === rowId)
+      : nullMockData;
 
   // console.log('defaultValues :::', defaultValues);
 
@@ -50,7 +62,25 @@ export default function useHandelEditForm() {
     resolver: zodResolver(schema),
   });
 
+  // Create theme data
+  // name: string;
+  // cost: number;
+  // description: string;
+  // organizationId: string;
+  // startDate: number;
+  // endDate: number;
+
+  const mutate = useCreateTheme();
+
   const handleSubmit = (data: FormData) => {
+    mutate.mutate({
+      name: data.name,
+      cost: Number(data.price),
+      description: '',
+      organizationId: '',
+      startDate: 76,
+      endDate: 99,
+    });
     console.log('data :::', data);
   };
 
@@ -58,8 +88,8 @@ export default function useHandelEditForm() {
     // check if there is an empty field
     if (defaultValues && rowId && crud == 'edit') {
       const { id, ...values } = defaultValues;
-      console.log("data : ", data);
-      console.log("defaultValues : ", values);
+      console.log('data : ', data);
+      console.log('defaultValues : ', values);
       return JSON.stringify(data) !== JSON.stringify(values);
     }
     return Object.values(data).filter((value) => value !== '').length > 0;
@@ -76,6 +106,6 @@ export default function useHandelEditForm() {
     handleUnsavedChange,
     type,
     crud,
-    defaultValues
+    defaultValues,
   };
 }
