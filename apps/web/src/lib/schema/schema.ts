@@ -13,6 +13,53 @@ export const signInSchema = z.object({
     .max(255, 'Password is too long'),
 });
 
+// Step 1: Organization Information Schema
+export const organizationSchema = z.object({
+  rs: z.string().min(1, 'RS is required').max(255, 'RS is too long'),
+  ice: z.string().min(1, 'ICE is required').max(255, 'ICE is too long'),
+  cnss: z.string().min(1, 'CNSS is required').max(255, 'CNSS is too long'),
+  address: z
+    .string()
+    .min(1, 'Address is required')
+    .max(500, 'Address is too long'),
+  logo: z
+    .instanceof(File)
+    .refine((file) => file.size > 0, 'Logo is required')
+    .optional(),
+});
+
+// Step 2: Personal Information Schema
+export const personalSchema = z.object({
+  firstName: z
+    .string()
+    .min(1, 'First name is required')
+    .max(255, 'First name is too long'),
+  lastName: z
+    .string()
+    .min(1, 'Last name is required')
+    .max(255, 'Last name is too long'),
+  email: z
+    .string()
+    .min(1, 'Email is required')
+    .max(255, 'Email is too long')
+    .email('Please enter a valid email address'),
+  phoneNumber: z
+    .string()
+    .min(10, 'Phone number must be at least 10 digits')
+    .max(15, 'Phone number is too long')
+    .regex(/^[0-9]+$/, 'Phone number must contain only digits'),
+  profileImage: z
+    .instanceof(File)
+    .refine((file) => file.size > 0, 'Profile image is required')
+    .optional(),
+});
+
+// Sign up schema
+export const signUpSchema = z.object({
+  organization: organizationSchema,
+  personal: personalSchema,
+});
+
 // Define the schema for form validation using Zod
 export const forgetPassSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
