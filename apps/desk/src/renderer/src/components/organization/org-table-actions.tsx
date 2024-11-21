@@ -3,7 +3,7 @@ import DeleteModal from '../DeleteModal';
 import SubscriptionModal from '../SubscriptionModal';
 import { Button } from '../ui/button';
 import { useNavigate } from '@tanstack/react-router';
-import useDelete from '@renderer/hooks/api/delete-org';
+import useDelete from '@renderer/hooks/api/organization/delete-org';
 
 export default function ButtonsAction({
   rowId,

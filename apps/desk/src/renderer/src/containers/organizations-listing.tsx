@@ -2,7 +2,7 @@ import { Columns, Organization } from '@renderer/components/organization/Organiz
 import { Components, CustomTable } from '@renderer/components/custom-table';
 import withAuth from '@renderer/hoc/with-auth';
 import { useTranslate } from '@renderer/hooks/useTranslate';
-import { useGetAllOrganizations } from '@renderer/hooks/api/get-all-organizations';
+import { useGetAllOrganizations } from '@renderer/hooks/api/organization/get-all-organizations';
 import { useState } from 'react';
 import { OrganizationBasicInfo } from '@renderer/components/organization/OrganizationBasicInfo';
 
@@ -14,6 +14,7 @@ const OrganizationsPage: React.FC = () => {
   const [component, setComponent] = useState<Components>('table');
 
   const [defaultValue, setdefaultValue] = useState<Organization | null>(null);
+  
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -32,31 +33,31 @@ const OrganizationsPage: React.FC = () => {
     console.log('OrganizationsPage -> data', data);
     return (
       <div dir={isRtl ? 'rtl' : 'ltr'} className="h-full w-full p-6 gap-y-">
-            {/* Organization Table Component */}
-            <CustomTable
-              headTitle={'organization.organizations'}
-              columns={Columns(
-                (rowData: Organization) => {
-                  setdefaultValue(rowData);
-                  setComponent('edit');
-                }
-              )}
-              component={component}
-              setComponent={setComponent}
-              EditAndAddRowComponent={
-                <OrganizationBasicInfo defaultValues={defaultValue} goBack={() => setComponent('table')} />
-              }
-              // data={mockOrganizations}
-              data={data.map((org, index) => ({
-                id: org.uid,
-                logo: '',
-                rs: org.name,
-                ice: `ice_${index}`,
-                cnss: org.cnss,
-                address: `address_${index}`,
-                enabled: index % 2 === 0
-              }))}
+        {/* Organization Table Component */}
+        <CustomTable
+          headTitle={'organization.organizations'}
+          columns={Columns((rowData: Organization) => {
+            setdefaultValue(rowData);
+            setComponent('edit');
+          })}
+          component={component}
+          setComponent={setComponent}
+          EditAndAddRowComponent={
+            <OrganizationBasicInfo
+              defaultValues={defaultValue}
+              goBack={() => setComponent('table')}
             />
+          }
+          data={data.map((org, index) => ({
+            id: org.uid,
+            logo: '',
+            rs: org.name,
+            ice: `ice_${index}`,
+            cnss: org.cnss,
+            address: `address_${index}`,
+            enabled: index % 2 === 0,
+          }))}
+        />
       </div>
     );
   }

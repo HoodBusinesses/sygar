@@ -112,7 +112,8 @@ export const themeColumns = (
       header: t('themesTable.options'),
       cell: ({ row }) => (
         <ButtonsAction
-          endpoint='/theme/delete?' // endpot /
+          endpoint={`/theme/delete?uid=${row.original.id}`} // endpot /
+          invalidateKeyData='themesData'
           saveDefaultData={setRowData.bind( null, row.original)}
           rowId={row.original.id}
           subscription={false}

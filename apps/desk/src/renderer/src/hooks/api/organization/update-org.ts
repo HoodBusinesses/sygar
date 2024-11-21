@@ -1,6 +1,10 @@
 import { useAppSelector } from '@renderer/store/hooks';
 import { api } from '@renderer/utils/api';
-import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
+import {
+  useMutation,
+  UseMutationOptions,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { OrganizationsData } from './get-all-organizations';
 import { AxiosResponse } from 'axios';
 
@@ -13,6 +17,7 @@ export default function useUpdateOrg(
   options?: UseMutationOptions<AxiosResponse<any, any>, Error, unknown>
 ) {
   const token = useAppSelector((state) => state.auth.auth.token);
+  
   const queryClient = useQueryClient();
 
   return useMutation({

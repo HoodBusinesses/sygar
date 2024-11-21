@@ -13,7 +13,7 @@ export const registrationFields: OrganizationFieldsInput[] = [
   {
     label: 'registration.basicInfo.fields.rs.label',
     placeholder: 'registration.basicInfo.fields.rs.placeholder',
-    name: 'name',
+    name: 'rs',
     value: 'rs',
     required: true,
   },
@@ -32,14 +32,21 @@ export const registrationFields: OrganizationFieldsInput[] = [
     required: true,
   },
   {
+    label: 'registration.basicInfo.fields.address.label',
+    placeholder: 'registration.basicInfo.fields.address.placeholder',
+    name: 'address',
+    value: 'address',
+    required: true,
+  },
+  {
     label: 'registration.basicInfo.fields.logo.label',
     placeholder: 'registration.basicInfo.fields.logo.placeholder',
     name: 'logo',
     value: '',
     required: false,
     isLogoInput: true,
-  }
-]
+  },
+];
 
 export const fields: OrganizationFieldsInput[] = [
   {

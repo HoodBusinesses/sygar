@@ -4,7 +4,6 @@ export const organizationSchema = z.object({
   rs: z.string().min(1, 'Organization rs is required'),
   ice: z.string().min(1, 'ICE is required'),
   cnss: z.string().min(1, 'CNSS is required'),
-  logo: z.any().optional(),
   address: z.string().min(1, 'Address is required'),
 });
 

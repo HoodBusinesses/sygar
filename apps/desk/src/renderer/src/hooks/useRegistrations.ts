@@ -5,7 +5,7 @@ import {
 } from '@renderer/utils/schemas/formSchema';
 import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import useCreateOrg from './api/create-org';
+import useCreateOrg from './api/organization/create-org';
 
 export default function useRegistrations() {
   const methods = useForm<OrganizationFormData>({

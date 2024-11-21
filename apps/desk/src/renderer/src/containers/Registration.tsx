@@ -12,7 +12,7 @@ import { FaSpinner } from "react-icons/fa";
 const Registration: React.FC = () => {
   const { t } = useTranslate();
   // get members , form provider method, and submit handler
-  const { methods,isSuccess, isError, isPending,  handleSubmit} = useRegistrations();
+  const { methods, isPending,  handleSubmit} = useRegistrations();
 
   return (
     <div className="p-4 w-full py-6 space-y-6">

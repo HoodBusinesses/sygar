@@ -1,3 +1,4 @@
+import { useToast } from '@renderer/hooks/useToast';
 import { useAppSelector } from '@renderer/store/hooks';
 import { api } from '@renderer/utils/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -19,6 +20,7 @@ export default function useDeleteRowTable({
 }: DeleteRowProps) {
   const token = useAppSelector((state) => state.auth.auth.token);
   const queryClient = useQueryClient();
+  const { toast } = useToast();
 
   return useMutation({
     mutationKey: ['DeleteRow', rowId],
@@ -44,10 +46,16 @@ export default function useDeleteRowTable({
             console.log(error);
         }
       }
+
+      toast({
+        title: 'success',
+        description: 'item deleted successfully',
+      });
     },
 
     onError: () => {
-      console.log('wiwiw error');
-    },
+      toast({ title: 'Error', description: 'Error deleting item'
+    }); 
+    },  
   });
 }

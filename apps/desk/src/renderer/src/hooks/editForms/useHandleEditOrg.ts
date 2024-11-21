@@ -6,7 +6,7 @@ import {
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import useUpdateOrg from '../api/update-org';
+import useUpdateOrg from '../api/organization/update-org';
 
 export default function useHandelEditOrgs(defaultValues: Organization | null, goBack: () => void) {
   const schema = organizationSchema;

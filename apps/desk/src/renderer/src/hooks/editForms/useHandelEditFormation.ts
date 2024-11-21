@@ -7,9 +7,15 @@ import {
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
+import useCreateTheme from '../api/theme/create-theme';
+import useUpdateTheme from '../api/theme/update-theme';
 
-export default function useHandelEditFormation(defaultValues: Theme | null, crud: string) {
-  const schema = formationSchema
+export default function useHandelEditFormation(
+  defaultValues: Theme | null,
+  crud: string,
+  goBack: () => void
+) {
+  const schema = formationSchema;
 
   type SchemaType = typeof schema;
 
@@ -19,23 +25,44 @@ export default function useHandelEditFormation(defaultValues: Theme | null, crud
     resolver: zodResolver(schema),
   });
 
+  const createMuation = useCreateTheme({
+    onSettled: () => {
+      goBack();
+    },
+  });
+
+  const updateMuation = useUpdateTheme({
+    onSettled: () => {
+      goBack();
+    },
+  });
+
   const handleSubmit = (data: FormData) => {
-    console.log('data :::', defaultValues);
+    crud == 'edit'
+      ? updateMuation.mutate({
+          uid: defaultValues?.id || '',
+          data: {
+            description: 'Descrition of the theme',
+          },
+        })
+      : createMuation.mutate({
+          name: data.name,
+          description: 'Descrition of the theme',
+          cost: Number(data.price),
+          organizationId: 'asod',
+          startDate: Date.now(),
+          endDate: Date.now(),
+        });
   };
 
   const handleUnsavedChange = (data: FormData) => {
     // check if there is an empty field
     if (defaultValues && crud == 'edit') {
       const { id, ...values } = defaultValues;
-      console.log('data : ', data);
-      console.log('defaultValues jjjj: ', values);
       return JSON.stringify(data) !== JSON.stringify(values);
     }
-    console.log('hhhhhh : ', data);
-    return Object.values(data).filter((value) => value !== '').length > 0;
   };
 
-  // console.log('form state :::', methods.getValues());
   const [openUnsavedChange, setOpenUnsavedChange] = useState(false);
 
   return {

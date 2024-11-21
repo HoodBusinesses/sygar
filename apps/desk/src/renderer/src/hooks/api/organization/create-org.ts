@@ -1,7 +1,7 @@
 import { useAppSelector } from '@renderer/store/hooks';
 import { api } from '@renderer/utils/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useToast } from '../useToast';
+import { useToast } from '../../useToast';
 
 export interface CreateOrganParams {
   cnss: string;
@@ -14,7 +14,7 @@ export default function useCreateOrg() {
 
   const queryClient = useQueryClient();
 
-  const { toast } = useToast()
+  const { toast } = useToast();
 
   return useMutation({
     mutationKey: ['createOrg'],
@@ -32,16 +32,17 @@ export default function useCreateOrg() {
           queryKey: ['organizationsData'],
           exact: true,
         });
-        toast({title: 'success', description: 'Organization created successfully'});
+        toast({
+          title: 'success',
+          description: 'Organization created successfully',
+        });
       } catch (error) {
         console.log(error);
       }
     },
 
     onError: () => {
-      console.log('wiwiw error');
-      toast({title: 'Error', description: 'Error creating organization'});
-
+      toast({ title: 'Error', description: 'Error creating organization' });
     },
   });
 }
