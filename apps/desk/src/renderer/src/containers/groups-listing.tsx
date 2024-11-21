@@ -26,7 +26,7 @@ const GroupListing: React.FC = () => {
     );
   }
 
-  if (isSuccess) console.log('data', data)
+  if (isSuccess) console.log('data groups: ', data)
     
 
   return (

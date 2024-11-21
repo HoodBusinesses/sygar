@@ -2,14 +2,16 @@ import { useAppSelector } from '@renderer/store/hooks';
 import { api } from '@renderer/utils/api';
 import { useQuery } from '@tanstack/react-query';
 
+type Group = {
+  interfacePending: boolean;
+};
+
 type Theme = {
   createdAt: number;
   updatedAt: number;
   name: string;
-  cost: number;
-  groups: {
-    interfacePending: boolean;
-  }[];
+  cost: string;
+  groups: Group[];
   description: string;
   organizationId: string;
   startDate: number;
@@ -30,12 +32,21 @@ export const useGetAllThemes = () => {
   const token = useAppSelector((state) => state.auth.auth.token);
   const { data, isLoading, isError, error, isSuccess, refetch } = useQuery({
     queryKey: ['getAllThemes'],
-    queryFn: () =>
-      api.get('theme/get-all', {
+    queryFn: async () => {
+      const response = await api.get('theme/get-all', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-    }),
+      });
+
+      // Parse groups from the response data
+      return response.data.themes.map((theme: any) => ({
+        ...theme,
+        groups: theme.groups.map((group: any) => ({
+          interfacePending: group.M.interfacePending.BOOL,
+        })),
+      }));
+    },
     staleTime: 0,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
@@ -45,7 +56,7 @@ export const useGetAllThemes = () => {
   });
 
   return {
-    data: data?.data.themes as Theme[],
+    data: data || [],
     isLoading,
     isError,
     error,

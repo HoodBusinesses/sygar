@@ -1,9 +1,8 @@
-import { CustomTable } from "@renderer/components/custom-table";
-import { participantColumns } from "@renderer/components/formations/participants-columns";
-import withAuth from "@renderer/hoc/with-auth";
-import { useGetAllParticpants } from "@renderer/hooks/api/prticipants/gat-all-participants";
-import { useTranslate } from "@renderer/hooks/useTranslate";
-import { mockParticipant } from "@renderer/utils/static/organizations";
+import { CustomTable } from '@renderer/components/custom-table';
+import { participantColumns } from '@renderer/components/formations/participants-columns';
+import withAuth from '@renderer/hoc/with-auth';
+import { useGetAllParticpants } from '@renderer/hooks/api/prticipants/gat-all-participants';
+import { useTranslate } from '@renderer/hooks/useTranslate';
 
 const ParticipantsListing: React.FC = () => {
   const { isRtl } = useTranslate();
@@ -23,7 +22,9 @@ const ParticipantsListing: React.FC = () => {
     );
   }
 
-  const participants = isSuccess && Array.isArray(data) ? data : [];
+  if (isSuccess) console.log("data particapants: ", data)
+
+  const participants = isSuccess ? data : [];
 
   return (
     <div
@@ -34,14 +35,13 @@ const ParticipantsListing: React.FC = () => {
         <CustomTable
           headTitle="participant.participant"
           columns={participantColumns()}
-          // data={mockParticipant}
-          data={participants.map((parti) => ({
-            id: Number(parti.uid),
-            name: `${parti.firstName} ${parti.lastName}`,
-            email: parti.email,
-            cin: parti.organizationId,
-            cnss: parti.cnss,
-            status: parti.status,
+          data={participants.map((participant) => ({
+            id: Number(participant.uid),
+            name: `${participant.firstName} ${participant.lastName}`,
+            email: participant.email,
+            cin: participant.organizationId,
+            cnss: participant.cnss,
+            status: participant.status,
           }))}
         />
       </div>

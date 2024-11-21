@@ -1,6 +1,6 @@
-import { useAppSelector } from "@renderer/store/hooks";
-import { api } from "@renderer/utils/api";
-import { useQuery } from "@tanstack/react-query";
+import { useAppSelector } from '@renderer/store/hooks';
+import { api } from '@renderer/utils/api';
+import { useQuery } from '@tanstack/react-query';
 
 type Participant = {
   PK: string;
@@ -12,41 +12,47 @@ type Participant = {
   cnss: string;
   status: string;
   organizationId: string;
-  createdAt: number;
-  updatedAt: number;
 };
 
 type Participants = {
-    participants: Participant[];
-    date: string;
-}
+  participants: {
+    items: Participant[];
+    total: number;
+    page: number;
+    limit: number;
+  };
+  date: string;
+};
 
 export default Participants;
 
 export const useGetAllParticpants = () => {
-    const token = useAppSelector((state) => state.auth.auth.token);
-    const { data, isLoading, isError, error, isSuccess, refetch } = useQuery({
-      queryKey: ['getAllParticipants'],
-      queryFn: () =>
-        api.get('participant/get-all', {
+  const token = useAppSelector((state) => state.auth.auth.token);
+
+  const { data, isLoading, isError, error, isSuccess, refetch } = useQuery({
+    queryKey: ['getAllParticipants'],
+    queryFn: async () =>
+      api
+        .get('participant/get-all', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-      }),
-      staleTime: 0,
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      refetchInterval: false,
-      refetchIntervalInBackground: false,
-    });
-  
-    return {
-      data: data?.data.participants as Participant[],
-      isLoading,
-      isError,
-      error,
-      isSuccess,
-      refetch,
-    };
+        })
+        .then((res) => res.data as Participants),
+    staleTime: 0,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    refetchInterval: false,
+    refetchIntervalInBackground: false,
+  });
+
+  return {
+    data: data?.participants.items ?? [],
+    isLoading,
+    isError,
+    error,
+    isSuccess,
+    refetch,
   };
+};
