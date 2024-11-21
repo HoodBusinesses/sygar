@@ -1,85 +1,56 @@
-import React, { useMemo } from 'react';
-import { FormProvider } from 'react-hook-form';
-import withAuth from '@renderer/hoc/with-auth';
-import { AddMemberForm } from '@renderer/components/AddMemberForm';
-import { membersColumn } from '@renderer/components/membersColumn';
-import { OrganizationBasicInfo } from '@renderer/components/organization/OrganizationBasicInfo';
 import { Button } from '@renderer/components/ui/button';
-import { Card, CardContent } from '@renderer/components/ui/card';
-import { useOrganizationData } from '@renderer/hooks/api/get-organization-data';
+import { Card, CardContent, CardHeader } from '@renderer/components/ui/card';
+import FormInputItem from '@renderer/components/ui/form-input-item';
+import { registrationFields } from '@renderer/data/organinzation-fields-input';
+import withAuth from '@renderer/hoc/with-auth';
 import useRegistrations from '@renderer/hooks/useRegistrations';
 import { useTranslate } from '@renderer/hooks/useTranslate';
-import { CustomTable } from '@renderer/components/custom-table';
-import { mockMember } from '@renderer/utils/static/organizations';
+import { OrganizationFormData } from '@renderer/utils/schemas/formSchema';
+import React from 'react';
+import { FaSpinner } from "react-icons/fa";
 
 const Registration: React.FC = () => {
   const { t } = useTranslate();
-
-  const organizationId = useMemo(
-    () => new URLSearchParams(window.location.search).get('organization'),
-    []
-  );
-
-  // get organization data
-  const {
-    data: organization,
-    error,
-    isLoading,
-  } = useOrganizationData(organizationId);
   // get members , form provider method, and submit handler
-  const { memberOperations, editingMember, members, methods, handleSubmit } =
-    useRegistrations();
-
-  if (isLoading)
-    return (
-      <div className="flex items-center justify-center h-screen">
-        Loading...
-      </div>
-    );
-
-  if (error)
-    return (
-      <div className="text-red-500 p-4">Error loading organization data</div>
-    );
+  const { methods, isPending,  handleSubmit} = useRegistrations();
 
   return (
     <div className="p-4 w-full py-6 space-y-6">
-      <FormProvider {...methods}>
-        <form
-          onSubmit={methods.handleSubmit(handleSubmit)}
-          className="space-y-6"
-        >
-          <OrganizationBasicInfo organization={organization} />
-
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-lg font-bold text-gray-950">{t('registration.title')}</h2>
-                <Button variant="default">{t('buttons.import')}</Button>
-              </div>
-              <CustomTable headTitle='registration.title'  columns={membersColumn()} data={mockMember} />
-              <AddMemberForm
-                onSubmit={
-                  editingMember
-                    ? (data) =>
-                        memberOperations.handleUpdate(data, editingMember.index)
-                    : memberOperations.handleAdd
-                }
-                initialData={editingMember?.data}
-              />
-            </CardContent>
-          </Card>
-
-          <div className="flex justify-end">
+      <form onSubmit={methods.handleSubmit(handleSubmit)} className="space-y-6">
+        <Card className="flex flex-col gap-6">
+          <CardHeader className="text-lg text-gray-950 font-semibold mb-6">
+            {t('registration.registration')}
+            <span className="text-sm rounded-sm bg-blue-100 text-green-600">
+              {t('registration.title')}
+            </span>
+          </CardHeader>
+          <CardContent className="">
+            <div className="grid grid-cols-3 gap-4 mb-6">
+              {registrationFields.map((field) => (
+                <FormInputItem
+                  key={field.name}
+                  label={field.label}
+                  placeholder={field.placeholder}
+                  register={methods.register(
+                    field.name as keyof OrganizationFormData
+                  )}
+                  value={''}
+                  error={methods.formState.errors[field.name]?.message}
+                  required={field.required}
+                  isLogoInput={field.isLogoInput}
+                />
+              ))}
+            </div>
             <Button
               type="submit"
-              className="w-full custom-button bg-blue-500 sm:w-auto"
+              className="custom-button bg-blue-600"
+              disabled={isPending}
             >
-              {t('buttons.save')}
+              {isPending ? <FaSpinner className='' /> : t('buttons.save')}
             </Button>
-          </div>
-        </form>
-      </FormProvider>
+          </CardContent>
+        </Card>
+      </form>
     </div>
   );
 };

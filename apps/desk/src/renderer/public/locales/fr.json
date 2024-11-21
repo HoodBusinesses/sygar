@@ -31,6 +31,7 @@
   },
   "registration": {
     "title": "Informations sur les membres de l'organisation",
+    "registration": "Inscription",
     "basicInfo": {
       "title": "Informations sur l'organisation",
       "fields": {

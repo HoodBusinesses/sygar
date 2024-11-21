@@ -4,6 +4,7 @@ import { useTranslate } from '@renderer/hooks/useTranslate';
 import SelectLanguage from '@renderer/components/SelectLanguage';
 import Logo from '@renderer/assets/images/logo.png';
 import Pic from '@renderer/assets/images/pic.png';
+import { shell } from 'electron';
 
 const authUrl = 'http://localhost:3000/login';
 
@@ -12,9 +13,9 @@ export default function Signin() {
 
   const handleSignIn = () => {
     // Uncomment when Electron API is available
-    // if (window.electronAPI && window.electronAPI.openExternal) {
-    //   window.electronAPI.openExternal(authUrl)
-    // }
+    if (window.electron && window.electron.openExternal) {
+      window.electron.openExternal(authUrl)
+    }
   };
 
   return (

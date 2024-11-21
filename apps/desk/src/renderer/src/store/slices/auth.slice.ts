@@ -14,7 +14,7 @@ const initialState: AuthSliceType = {
 };
 
 const authSlice = createSlice({
-  name: 'lang',
+  name: 'auth',
   initialState,
   reducers: {
     setIsAuth: (state: AuthSliceType, { payload }: PayloadAction<boolean>) => {

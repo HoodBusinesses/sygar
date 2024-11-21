@@ -9,6 +9,7 @@ const api = {};
 if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld('electron', {
+      openExternal: (url) => ipcRenderer.invoke('open-external', url),
       onTokenReceived: (callback: any) => {
         console.log('isfired');
         ipcRenderer.on('token-received', (_event, token) => callback(token));

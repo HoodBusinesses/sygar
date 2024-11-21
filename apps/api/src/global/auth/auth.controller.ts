@@ -92,7 +92,7 @@ export class AuthController {
       );
       res
         .setHeader('Authorization', `Bearer ${token.token}`)
-        .json({ message: 'Login successful', date: new Date().toISOString() });
+        .json({ message: 'Login successful', date: new Date().toISOString(), token: token.token });
     } catch (error: any) {
       throw new HttpException(
         this.languageService.getTranslation(error.message, lang),

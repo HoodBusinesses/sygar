@@ -7,7 +7,7 @@ import { Button } from '../ui/button';
 import { useTranslate } from '@renderer/hooks/useTranslate';
 
 export interface Group {
-  id: number;
+  id: string;
   facilator: string;
   trainer: string;
   theme: string;
@@ -16,7 +16,8 @@ export interface Group {
 }
 
 export const groupColumn = (
-  setParticipants: () => void
+  setParticipants: () => void,
+  setRowData: (rowData: Group) => void
 ): ColumnDef<Group>[] => { 
   const { t } = useTranslate();
   return [
@@ -105,9 +106,10 @@ export const groupColumn = (
     header: 'themesTable.options',
     cell: ({ row }) => (
       <ButtonsAction
+        endpoint='/group/delete'
+        saveDefaultData={setRowData.bind(null, row.original)}
         rowId={row.original.id}
         subscription={false}
-        href={`/edit?type=group&crud=edit&rowId=${row.original.id}`}
       />
     ),
   },

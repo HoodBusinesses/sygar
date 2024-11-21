@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
+
 import { Handler, Context, Callback } from 'aws-lambda';
 import serverlessExpress from '@vendia/serverless-express';  // Update this line
 import { ValidationPipe } from '@nestjs/common';
@@ -15,13 +16,15 @@ console.log(SERVERLESS)
 console.log({ SERVERLESS })
 
 
+
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.enableCors({
-    origin: 'http://localhost:3000',
+    origin: ['http://localhost:3000','http://localhost:5173'],
     credentials: true,
   });
+  
   const config = new DocumentBuilder()
     .setTitle('API Documentation')
     .setDescription('API description')
@@ -42,6 +45,7 @@ async function bootstrap() {
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
   app.setViewEngine('ejs');
 
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -61,7 +65,6 @@ async function bootstrap() {
   }
 }
 
-console.log({ SERVERLESS })
 if (!SERVERLESS) {
   console.log('bootstrap')
   bootstrap()

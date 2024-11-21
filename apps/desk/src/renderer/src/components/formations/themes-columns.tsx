@@ -7,18 +7,18 @@ import { Button } from '../ui/button';
 import { useTranslate } from '@renderer/hooks/useTranslate';
 
 export interface Theme {
-  id: number;
+  id: string;
   name: string;
   // identifier: string;
   year: string;
-  price: number;
+  price: string;
   // groups?: string;
   // options?: string;
 }
 
-
 export const themeColumns = (
-  setGroupThemes: () => void
+  setGroupThemes: () => void,
+  setRowData: (rowData: Theme) => void
 ): ColumnDef<Theme>[] => {
   const { t } = useTranslate();
 
@@ -112,9 +112,11 @@ export const themeColumns = (
       header: t('themesTable.options'),
       cell: ({ row }) => (
         <ButtonsAction
+          endpoint={`/theme/delete?uid=${row.original.id}`} // endpot /
+          invalidateKeyData='themesData'
+          saveDefaultData={setRowData.bind( null, row.original)}
           rowId={row.original.id}
           subscription={false}
-          href={`/edit?type=themes&crud=edit&rowId=${row.original.id}`}
         />
       ),
     },

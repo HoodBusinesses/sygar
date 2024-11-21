@@ -182,7 +182,7 @@ export class OrganizationController {
   })
   @ApiResponse({ status: 400, description: 'Bad request.' })
   async update(
-    cnss: string,
+    @Query('cnss') cnss: string,
     @Body() updateOrganizationDto: UpdateOrganizationDto,
     @Req() req: Request
   ) {
@@ -226,17 +226,14 @@ export class OrganizationController {
     },
   })
   @ApiResponse({ status: 404, description: 'Organization not found.' })
-  async delete(
-    @Body() deleteOrganizationDto: DeleteOrganizationDto,
-    @Req() req: Request
-  ) {
+  async delete(@Query('cnss') cnss: string, @Req() req: Request) {
     const header: Record<string, any> = req.headers;
     const lang = header['accept-language'] ?? 'en';
 
     try {
       return {
         success: await this.organizationService.delete(
-          deleteOrganizationDto.cnss
+          cnss
         ),
         date: new Date().toISOString(),
       };

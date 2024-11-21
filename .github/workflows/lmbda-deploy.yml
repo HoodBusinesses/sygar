@@ -28,7 +28,6 @@ jobs:
 
       - name: Install Dependencies
         run: cd out && pnpm install --frozen-lockfile
-
       - name: Seed into database
         env:
           AWS_DYNAMODB_ENDPOINT: ''
@@ -44,7 +43,7 @@ jobs:
         run: |
           cd out/apps/api
           pnpm script:init
-
+p
       - name: Build the project
         run: cd out && pnpm turbo build --filter=api  # Builds the project before deployment
 

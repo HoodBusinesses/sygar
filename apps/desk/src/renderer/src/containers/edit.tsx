@@ -1,15 +1,25 @@
-import EditFormation from '@renderer/components/formations/edit-formation';
-import EditGroup from '@renderer/components/formations/edit-group';
-import EditParticipant from '@renderer/components/formations/edit-participant';
 import { Button } from '@renderer/components/ui/button';
 import UnsavedChangeEdit from '@renderer/components/unsaved-change-edit';
 import withAuth from '@renderer/hoc/with-auth';
-import useHandelEditForm from '@renderer/hooks/useHandelEditForm';
+import useHandelEditForm from '@renderer/hooks/editForms/useHandelEditFormation';
 import { useTranslate } from '@renderer/hooks/useTranslate';
 import { useNavigate } from '@tanstack/react-router';
+import { ReactNode } from 'react';
 import { FormProvider } from 'react-hook-form';
 
-function EditPage(): JSX.Element {
+function EditPage({
+  goBack,
+  Form,
+  defaultValues,
+  type,
+  crud,
+}: {
+  goBack: () => void;
+  Form: ReactNode;
+  crud: string;
+  type: string;
+  defaultValues?: any;
+}): JSX.Element {
   const navigate = useNavigate();
 
   const { t } = useTranslate();
@@ -20,10 +30,7 @@ function EditPage(): JSX.Element {
     methods,
     handleSubmit,
     handleUnsavedChange,
-    type,
-    crud,
-    defaultValues,
-  } = useHandelEditForm();
+  } = useHandelEditForm(defaultValues, crud);
 
   return (
     <div className="p-4 w-full py-6 space-y-6">
@@ -33,9 +40,7 @@ function EditPage(): JSX.Element {
           className="space-y-6"
         >
           <div className="flex flex-col p-5 gap-6">
-            {type === 'themes' && <EditFormation crud={crud as string} defaultValues={defaultValues}/>}
-            {type === 'group' && <EditGroup crud={crud as string} defaultValues={defaultValues}/>}
-            {type === 'participant' && <EditParticipant crud={crud as string} defaultValues={defaultValues}/>}
+            {Form}
             <div className="flex self-end gap-8 w-1/2">
               <Button
                 type="button"
@@ -43,7 +48,7 @@ function EditPage(): JSX.Element {
                 onClick={() =>
                   handleUnsavedChange(methods.getValues())
                     ? setOpenUnsavedChange(true)
-                    : navigate({ to: `/${type}-listing` })
+                    : goBack()
                 }
               >
                 {t('buttons.cancel')}
@@ -58,7 +63,10 @@ function EditPage(): JSX.Element {
 
             <UnsavedChangeEdit
               open={openUnsavedChange}
-              ConfermFn={() => navigate({ to: `/${type}-listing` })}
+              ConfermFn={() => {
+                console.log('ConfermFn type:', type);
+                navigate({ to: `/${type}-listing` });
+              }}
               KeepEditFn={setOpenUnsavedChange.bind(null, false)}
             />
           </div>

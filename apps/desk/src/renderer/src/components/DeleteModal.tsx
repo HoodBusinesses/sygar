@@ -28,24 +28,30 @@ const DeleteModal: FC<DeleteModalProps> = ({ onDelete, DeleteNumber }: DeleteMod
         <div className="bg-white p-4 items-center justify-center rounded-md shadow-md">
           <div className="p-4">
             <h2 className="text-xl text-gray-800  font-bold mb-4">
-              {DeleteNumber && DeleteNumber > 1 ? `Delete ${DeleteNumber} Items` : 'Delete item'}
+              {DeleteNumber && DeleteNumber > 1
+                ? `Delete ${DeleteNumber} Items`
+                : 'Delete item'}
             </h2>
             <p className="text-gray-400">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit natus
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit
+              natus
             </p>
           </div>
           <div className="flex justify-end">
             <DialogClose className="custom-button text-gray-500 hover:bg-gray-200 border border-gray-500 mr-2">
               Cancel
             </DialogClose>
-            <Button onClick={onDelete} className="custom-button bg-red-500 hover:bg-red-800">
+            <DialogClose
+              onClick={onDelete}
+              className="custom-button bg-red-500 hover:bg-red-800"
+            >
               {'Delete'}
-            </Button>
+            </DialogClose>
           </div>
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 
 export default DeleteModal
