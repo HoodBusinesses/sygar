@@ -61,25 +61,26 @@ export class DbService {
 
     const INTERNAL = this.config.get<boolean>('DYNAMODB_INTERNAL'); // GET LOCATION OF DB
 
-    const isLocal = !INTERNAL || ENV === 'test' || ENV === 'dev' || !ENV; // Determine if the environment is local
+    const isLocal = !INTERNAL || ENV === 'test' || ENV === 'development' || !ENV; // Determine if the environment is local
 
     let clientConfig: DbConfig;
+
 
     if (isLocal) {
       // Local development or testing configuration
       clientConfig = {
-        region: this.config.get<string>('SYGAR_DYNAMODB_REGION', 'us-east-1'),
+        region: this.config.get<string>('SYGAR_DYNAMODB_REGION', 'us-east-2'),
         endpoint: this.config.get<string>(
-          'DYNAMODB_ENDPOINT',
-          'http://localhost:8000'
+          'AWS_DYNAMODB_ENDPOINT',
+          'https://dynamodb.us-east-2.amazonaws.com'
         ),
         credentials: {
           accessKeyId: this.config.get<string>(
-            'DYNAMODB_ACCESS_KEY_ID',
+            'AWS_ACCESS_KEY_ID',
             'local'
           ),
           secretAccessKey: this.config.get<string>(
-            'DYNAMODB_SECRET_ACCESS_KEY',
+            'AWS_SECRET_ACCESS_KEY',
             'local'
           ),
           sessionToken: this.config.get<string>(

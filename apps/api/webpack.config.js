@@ -67,6 +67,7 @@ module.exports = (options, webpack) => {
       new CopyWebpackPlugin({
         patterns: [
           { from: 'serverless.yml', to: path.resolve(__dirname, 'dist') },
+          { from: './public/', to: path.resolve(__dirname, 'dist', 'public') },
           {
             from: 'package.json',
             to: path.resolve(__dirname, 'dist', 'package.json'),

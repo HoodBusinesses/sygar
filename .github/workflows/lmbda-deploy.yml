@@ -1,7 +1,11 @@
 name: Deploy to AWS Lambda
 
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      app_url:
+        description: 'The application URL'
+        required: true
 
 jobs:
   deploy:
@@ -17,14 +21,29 @@ jobs:
           node-version: '18'
 
       - name: Install pnpm and Set Up Global Bin Directory
-        run: npm install -g pnpm turbo
+        run: npm install -g pnpm turbo ts-node
 
       - name: prune
         run: turbo prune --scope=api
 
       - name: Install Dependencies
         run: cd out && pnpm install --frozen-lockfile
-
+      - name: Seed into database
+        env:
+          AWS_DYNAMODB_ENDPOINT: ''
+          AWS_ACCESS_KEY_ID: ${{ secrets.SYGAR_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SYGAR_AWS_SECRET_ACCESS_KEY }}
+          SYGAR_DYNAMODB_REGION: ${{ secrets.SYGAR_DYNAMODB_REGION }}
+          SYGAR_PROJECT_NAME: ${{ secrets.SYGAR_PROJECT_NAME }}
+          NODE_ENV: ${{ secrets.NODE_ENV }}
+          SYGAR_ADMIN_EMAIL: ${{ secrets.SYGAR_ADMIN_EMAIL }}
+          SYGAR_ADMIN_PASSWORD: ${{ secrets.SYGAR_ADMIN_PASSWORD }}
+          SYGAR_USER_EMAIL: ${{ secrets.SYGAR_USER_EMAIL }}
+          SYGAR_USER_PASSWORD: ${{ secrets.SYGAR_USER_PASSWORD }}
+        run: |
+          cd out/apps/api
+          pnpm script:init
+p
       - name: Build the project
         run: cd out && pnpm turbo build --filter=api  # Builds the project before deployment
 
@@ -35,10 +54,11 @@ jobs:
           entrypoint: /bin/sh
         env:
           SYGAR_SERVERLESS: true
+          AWS_DYNAMODB_ENDPOINT: 'https://dynamodb.us-east-2.amazonaws.com'
           AWS_ACCESS_KEY_ID: ${{ secrets.SYGAR_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.SYGAR_AWS_SECRET_ACCESS_KEY }}
           SYGAR_DYNAMODB_REGION: ${{ secrets.SYGAR_DYNAMODB_REGION }}
-          SYGAR_AUTH_WEB_APP_URL: ${{ secrets.SYGAR_AUTH_WEB_APP_URL }}
+          SYGAR_AUTH_WEB_APP_URL: ${{ github.event.inputs.app_url }}
           SYGAR_PROJECT_NAME: ${{ secrets.SYGAR_PROJECT_NAME }}
           NODE_ENV: ${{ secrets.NODE_ENV }}
           SYGAR_ADMIN_EMAIL: ${{ secrets.SYGAR_ADMIN_EMAIL }}
