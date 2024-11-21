@@ -9,12 +9,15 @@ import { participantsListingRoute } from './participants-route';
 import { settingsRoute } from './setting-route';
 import { editRoute } from './edit-route';
 import { groupListingRoute } from './group-route';
+import { dashboardRoute } from './dashboard-route';
+import { usersRoute } from './users-route';
 
 //TODO: ADD organization, themes, participants routes
 
 const routeTree = rootRoute.addChildren([
   homeRoute,
   registrationRoute,
+  dashboardRoute,
   signinRoute,
   organizationsRoute,
   themesListingRoute,
@@ -22,6 +25,7 @@ const routeTree = rootRoute.addChildren([
   editRoute,
   settingsRoute,
   groupListingRoute,
+  usersRoute
 ]);
 
 export const router = createRouter({ routeTree });

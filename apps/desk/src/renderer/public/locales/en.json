@@ -89,7 +89,8 @@
       "notifications": "Notifications",
       "reports": "Reports",
       "theme": "Theme",
-      "participants": "Participants"
+      "participants": "Participants",
+      "users": "Users"
     }
   },
   "organization": {
@@ -144,7 +145,8 @@
     "groups": "Groups",
     "options": "Options",
     "checkGroup": "Check Group",
-    "mad": "DH"
+    "mad": "DH",
+    "permission": "Permission"
   },
   "formation": {
     "formation": "Formation section",

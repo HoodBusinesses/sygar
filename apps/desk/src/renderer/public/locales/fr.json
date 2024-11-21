@@ -89,7 +89,8 @@
       "notifications": "Notifications",
       "reports": "Rapports",
       "theme": "Thème",
-      "participants": "Participants"
+      "participants": "Participants",
+      "users": "Utilisateurs"
     }
   },
   "organization": {
@@ -144,7 +145,8 @@
     "groups": "Groupes",
     "options": "Options",
     "checkGroup": "Vérifier le groupe",
-    "mad": "DH"
+    "mad": "DH",
+    "permission": "Permission"
   },
   "formation": {
     "formation": "Section de formation",

@@ -89,7 +89,8 @@
       "notifications": "الإشعارات",
       "reports": "التقارير",
       "theme": "التكوين",
-      "participants": "المشاركون"
+      "participants": "المشاركون",
+      "users": "المستخدمون"
     }
   },
   "organization": {
@@ -144,7 +145,8 @@
     "groups": "المجموعات",
     "options": "الخيارات",
     "checkGroup": "فحص المجموعة",
-    "mad": "درهم"
+    "mad": "درهم",
+    "permission": "الصلاحية"
   },
   "formation": {
     "formation": "قسم التكوين",

@@ -109,6 +109,17 @@ export const mockMember = Array.from({ length: 3 }, (_, index) => {
   }
 })
 
+export const mockUsers = Array.from({ length: 50 }, (_, index) => {
+  return {
+    id: (index + 1).toString(),
+    firstName: `FirstName${index + 1}`,
+    lastName: `LastName${index + 1}`,
+    phone: `123-456-789${index % 10}`,
+    email: `user${index + 1}@hood.com`
+  }
+})
+
+
 export const nullMockThemes = {
   id: -1,
   name: '',
@@ -117,7 +128,7 @@ export const nullMockThemes = {
 };
 
 export const nullMockGroups = {
-  id : -1,
+  id: -1,
   facilator: '',
   trainer: '',
   theme: '',
