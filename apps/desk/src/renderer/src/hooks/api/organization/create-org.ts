@@ -1,26 +1,29 @@
 import { useAppSelector } from '@renderer/store/hooks';
 import { api } from '@renderer/utils/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { OrganizationsData } from './get-all-organizations';
+import { useToast } from '../../useToast';
 
-export interface UpdateOrganParams {
+export interface CreateOrganParams {
   cnss: string;
-  data: Partial<OrganizationsData>;
+  name: string;
+  freeTrial: number;
 }
 
-export default function useUpdateOrg() {
+export default function useCreateOrg() {
   const token = useAppSelector((state) => state.auth.auth.token);
+
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationKey: ['UpdateOrg'],
+  const { toast } = useToast();
 
-    mutationFn: (params: UpdateOrganParams) =>
-      api.put(`organization/update`, params.data, {
+  return useMutation({
+    mutationKey: ['createOrg'],
+
+    mutationFn: (params: CreateOrganParams) =>
+      api.post('/organization/create', params, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        params: { cnss: params.cnss },
       }),
 
     onSuccess: () => {
@@ -29,13 +32,17 @@ export default function useUpdateOrg() {
           queryKey: ['organizationsData'],
           exact: true,
         });
+        toast({
+          title: 'success',
+          description: 'Organization created successfully',
+        });
       } catch (error) {
         console.log(error);
       }
     },
 
     onError: () => {
-      console.log('wiwiw error');
+      toast({ title: 'Error', description: 'Error creating organization' });
     },
   });
 }

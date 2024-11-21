@@ -5,24 +5,9 @@ import {
 } from '@renderer/utils/schemas/formSchema';
 import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import useCreateOrg from './api/create-org';
-import useUpdateOrg from './api/update-org';
-import { useOrganizationData } from './api/get-organization-data';
+import useCreateOrg from './api/organization/create-org';
 
 export default function useRegistrations() {
-  const organizationCnss = useMemo(
-    () => new URLSearchParams(window.location.search).get('organizationCnss'),
-    []
-  );
-
-  // get organization data
-
-  const {
-    data: organization,
-    error,
-    isLoading,
-  } = organizationCnss ?useOrganizationData(organizationCnss) : { data: undefined, error: null, isLoading: false };
-
   const methods = useForm<OrganizationFormData>({
     resolver: zodResolver(organizationSchema),
     defaultValues: useMemo(
@@ -35,30 +20,21 @@ export default function useRegistrations() {
 
   const createMuation = useCreateOrg();
 
-  const updateMuation = useUpdateOrg();
-
   const handleSubmit = (data: OrganizationFormData) => {
     // Handle form submission
-    console.log(data);
-    return organizationCnss
-      ? updateMuation.mutate({
-          cnss: organizationCnss,
-          data: {
-            name: data.name,
-          },
-        })
-      : createMuation.mutate({
-          name: data.name,
-          cnss: data.cnss,
-          freeTrial: 30,
-        });
+    console.log('ikhan: ', data);
+    createMuation.mutate({
+      name: data.rs,
+      cnss: data.cnss,
+      freeTrial: 30,
+    });
   };
 
   return {
-    organization,
-    error,
-    isLoading,
     methods,
+    isSuccess: createMuation.isSuccess,
+    isError: createMuation.isError,
+    isPending: createMuation.isPending,
     handleSubmit,
   };
 }

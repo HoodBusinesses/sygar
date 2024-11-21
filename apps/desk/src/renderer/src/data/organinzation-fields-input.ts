@@ -7,11 +7,13 @@ export type OrganizationFieldsInput = {
   required?: boolean;
   isLogoInput?: boolean;
 };
-export const fields: OrganizationFieldsInput[] = [
+
+
+export const registrationFields: OrganizationFieldsInput[] = [
   {
     label: 'registration.basicInfo.fields.rs.label',
     placeholder: 'registration.basicInfo.fields.rs.placeholder',
-    name: 'name',
+    name: 'rs',
     value: 'rs',
     required: true,
   },
@@ -37,10 +39,42 @@ export const fields: OrganizationFieldsInput[] = [
     required: true,
   },
   {
-    label: 'registration.basicInfo.fields.email.label',
-    placeholder: 'registration.basicInfo.fields.email.placeholder',
-    name: 'email',
-    value: 'email',
+    label: 'registration.basicInfo.fields.logo.label',
+    placeholder: 'registration.basicInfo.fields.logo.placeholder',
+    name: 'logo',
+    value: '',
+    required: false,
+    isLogoInput: true,
+  },
+];
+
+export const fields: OrganizationFieldsInput[] = [
+  {
+    label: 'registration.basicInfo.fields.rs.label',
+    placeholder: 'registration.basicInfo.fields.rs.placeholder',
+    name: 'rs',
+    value: 'rs',
+    required: true,
+  },
+  {
+    label: 'registration.basicInfo.fields.ice.label',
+    placeholder: 'registration.basicInfo.fields.ice.placeholder',
+    name: 'ice',
+    value: 'ice',
+    required: true,
+  },
+  {
+    label: 'registration.basicInfo.fields.cnss.label',
+    placeholder: 'registration.basicInfo.fields.cnss.placeholder',
+    name: 'cnss',
+    value: 'cnss',
+    required: true,
+  },
+  {
+    label: 'registration.basicInfo.fields.address.label',
+    placeholder: 'registration.basicInfo.fields.address.placeholder',
+    name: 'address',
+    value: 'address',
     required: true,
   },
   {
@@ -48,22 +82,9 @@ export const fields: OrganizationFieldsInput[] = [
     placeholder: 'registration.basicInfo.fields.logo.placeholder',
     name: 'logo',
     value: '',
-    required: true,
+    required: false,
     isLogoInput: true,
   },
-  {
-    label: 'registration.basicInfo.fields.responsibleName.label',
-    placeholder: 'registration.basicInfo.fields.responsibleName.placeholder',
-    name: 'responsibleName',
-    value: 'responsibleName',
-    required: true,
-  },
-  {
-    label: 'registration.basicInfo.fields.trainingManagerName.label',
-    placeholder:
-      'registration.basicInfo.fields.trainingManagerName.placeholder',
-    name: 'trainingManagerName',
-    value: 'trainingManagerName',
-    required: true,
-  },
 ];
+
+

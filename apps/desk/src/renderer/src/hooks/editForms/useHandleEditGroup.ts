@@ -31,11 +31,8 @@ export default function useHandelEditGroup(
       console.log('defaultValues jjjj: ', values);
       return JSON.stringify(data) !== JSON.stringify(values);
     }
-    console.log('hhhhhh : ', data);
-    return Object.values(data).filter((value) => value !== '').length > 0;
   };
 
-  // console.log('form state :::', methods.getValues());
   const [openUnsavedChange, setOpenUnsavedChange] = useState(false);
 
   return {

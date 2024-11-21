@@ -6,16 +6,20 @@ import ButtonsAction from './org-table-actions';
 import { Checkbox } from '../ui/checkbox';
 import DeleteModal from '../DeleteModal';
 
+
+// rs -- ice. -- cnss -- address - logo
 export type Organization = {
   id: string;
-  image: string;
+  logo: string;
   rs: string;
   cnss: string;
   address: string;
-  email: string;
-  responsibleName: string;
-  trainingManagerName: string;
-  date: string;
+  ice: string;
+  enabled: boolean;
+  // email: string;
+  // responsibleName: string;
+  // trainingManagerName: string;
+  // date: string;
 };
 
 export const Columns = (setRowData: (rowData: Organization) => void): ColumnDef<Organization>[] => {
@@ -52,12 +56,12 @@ export const Columns = (setRowData: (rowData: Organization) => void): ColumnDef<
     ),
   },
   {
-    accessorKey: 'image',
+    accessorKey: 'logo',
     header: 'organization.image',
     cell: ({ row }) => (
       <div className="flex justify-center items-center">
         <img
-          src={Profile_Img || row.getValue('image')}
+          src={Profile_Img || row.getValue('logo')}
           alt="Organization"
           className="w-8 h-8 rounded-full"
         />
@@ -75,40 +79,13 @@ export const Columns = (setRowData: (rowData: Organization) => void): ColumnDef<
     cell: ({ row }) => <p className="text-gray-600">{row.getValue('cnss')}</p>,
   },
   {
-    accessorKey: 'address',
-    header: 'organization.address',
+    accessorKey: 'ice',
+    header: 'ice',
     cell: ({ row }) => (
-      <p className="text-gray-600">{row.getValue('address')}</p>
+      <p className="text-gray-600">{row.getValue('ice')}</p>
     ),
   },
-  {
-    accessorKey: 'email',
-    header: ({ column }) => {
-      return (
-        <SortHeader
-          isSomeSortSeted={!!column.getIsSorted()}
-          resetFn={() => column.clearSorting()}
-          OnClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          label="organization.email"
-        />
-      );
-    },
-    cell: ({ row }) => <p className="text-gray-600">{row.getValue('email')}</p>,
-  },
-  {
-    accessorKey: 'responsibleName',
-    header: 'organization.responsibleName',
-    cell: ({ row }) => (
-      <p className="text-gray-600">{row.getValue('responsibleName')}</p>
-    ),
-  },
-  {
-    accessorKey: 'trainingManagerName',
-    header: 'organization.trainingManagerName',
-    cell: ({ row }) => (
-      <p className="text-gray-600">{row.getValue('trainingManagerName')}</p>
-    ),
-  },
+
   {
     accessorKey: 'enabled',
     header: ({ column }) => {

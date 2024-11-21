@@ -1,10 +1,7 @@
 import { formationFields } from '@renderer/data/formation-fields-input';
 import useHandelEditFormation from '@renderer/hooks/editForms/useHandelEditFormation';
 import { useTranslate } from '@renderer/hooks/useTranslate';
-import {
-  FormationFormData,
-  ParticipantFormData
-} from '@renderer/utils/schemas/formSchema';
+import { FormationFormData } from '@renderer/utils/schemas/formSchema';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardHeader } from '../ui/card';
 import FormInputItem from '../ui/form-input-item';
@@ -30,11 +27,7 @@ const EditFormation = ({
     methods,
     handleSubmit,
     handleUnsavedChange,
-  } = useHandelEditFormation(defaultValues, crud);
-
-  // const methods = useForm();
-
-  console.log('defaultValue : ', defaultValues);
+  } = useHandelEditFormation(defaultValues, crud, goBack);
 
   return (
     <div className="p-4 w-full py-6 space-y-6">
@@ -89,10 +82,7 @@ const EditFormation = ({
 
           <UnsavedChangeEdit
             open={openUnsavedChange}
-            ConfermFn={() => {
-              console.log('first redir');
-              goBack();
-            }}
+            ConfermFn={goBack}
             KeepEditFn={setOpenUnsavedChange.bind(null, false)}
           />
         </Card>
