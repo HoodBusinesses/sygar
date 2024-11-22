@@ -22,7 +22,7 @@ export default function CostumInputItem({
   type,
 }: FormInputProps) {
   return (
-    <>
+    <div className='gap-1'>
       <Label className="text-gray-600" htmlFor={id}>
         {label}
       </Label>
@@ -35,6 +35,6 @@ export default function CostumInputItem({
         disabled={isPending}
       />
       {error && <p className="text-sm text-red-600">{error}</p>}
-    </>
+    </div>
   );
 }

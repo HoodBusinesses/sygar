@@ -4,9 +4,8 @@ import { useTranslate } from '@renderer/hooks/useTranslate';
 import SelectLanguage from '@renderer/components/SelectLanguage';
 import Logo from '@renderer/assets/images/logo.png';
 import Pic from '@renderer/assets/images/pic.png';
-import { shell } from 'electron';
 
-const authUrl = 'http://localhost:3000/login';
+const authUrl = 'http://localhost:3000/';
 
 export default function Signin() {
   const { t } = useTranslate();
@@ -14,7 +13,14 @@ export default function Signin() {
   const handleSignIn = () => {
     // Uncomment when Electron API is available
     if (window.electron && window.electron.openExternal) {
-      window.electron.openExternal(authUrl)
+      window.electron.openExternal(`${authUrl}login`);
+    }
+  };
+
+  const handleSignUp = () => {
+    // Uncomment when Electron API is available
+    if (window.electron && window.electron.openExternal) {
+      window.electron.openExternal(`${authUrl}signup`);
     }
   };
 
@@ -41,12 +47,21 @@ export default function Signin() {
           <h1 className="text-3xl font-bold text-gray-800 mb-4">
             {t('Nice to see you again, please signin to your account')}
           </h1>
-          <Button
-            className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300"
-            onClick={handleSignIn}
-          >
-            {t('Sign in')}
-          </Button>
+          <div className="flex flex-row gap-2">
+            <Button
+              className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300"
+              onClick={handleSignIn}
+            >
+              {t('Sign in')}
+            </Button>
+
+            <Button
+              className="w-full text-blue-600 bg-white py-3 rounded-lg font-semibold border border-blue-600 hover:shadow-lg hover:bg-slate-50 transition duration-300 "
+              onClick={handleSignUp}
+            >
+              {t('Sign up')}
+            </Button>
+          </div>
           <p className="text-sm text-gray-600 mt-2">
             {t(
               'We will take you to the browser to log in and then bring you back'
