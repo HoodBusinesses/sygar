@@ -1,17 +1,15 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { AuthModule } from './global/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
-import { DbModule } from './global/db/db.module';
 import path, { join } from 'path';
 import { UserModule } from './modules/user/user.module';
-import { OrganizationModule } from './modules/organization/organization.module';
-import { AbilityModule } from './modules/ability/ability.module';
-import { RbacModule } from './global/rbac/roles.module';
-import { LanguageModule } from './global/language/language.module';
-import { NotificationsModule } from './global/notifactions/notifications.module';
-import { TaskService } from './global/schedule/task.service';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { DatabaseModule } from './global/databse/database.module';
+import { AuthModule } from './global/auth/auth.module';
+import { MailModule } from './global/mail/mail.module';
+import { EncryptionModule } from './global/encryption/encryption.module';
+import { TemplatesModule } from './global/templates/templates.module';
+import { JwtModule } from './global/jwt/jwt.module';
 
 /**
  * @module AppModule
@@ -24,13 +22,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
       rootPath: join(process.cwd(), 'public/api'), // Path to the `public/api` folder
       serveRoot: '/api', // Prefix for requests
     }),
-    NotificationsModule,
-    LanguageModule,
-    AbilityModule,
     UserModule,
-    AuthModule,
-    OrganizationModule,
-    RbacModule,
     // TODO: validate schema and load default env's
     ConfigModule.forRoot({
       cache: true,
@@ -42,9 +34,12 @@ import { ServeStaticModule } from '@nestjs/serve-static';
       // load: [appConfig(process.env.NODE_ENV)],
     }),
     // NotificationsModule,
-    DbModule,
+    DatabaseModule,
+    AuthModule,
+    MailModule,
+    EncryptionModule,
+    TemplatesModule, JwtModule
   ],
-  providers: [TaskService],
   controllers: [AppController],
 })
 export class AppModule { }

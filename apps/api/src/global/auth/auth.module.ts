@@ -1,13 +1,9 @@
 import { Global, Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { JwtService } from './jwt.service';
-import { CryptService } from './crypt.service';
 import { JwtGuard } from './auth.guard';
 import { MailModule } from '../mail/mail.module';
-import { UserService } from 'src/modules/user/user.service';
-import { LanguageModule } from '../language/language.module';
-import { OrganizationModule } from 'src/modules/organization/organization.module';
+import { UserModule } from 'src/modules/user/user.module';
 
 /**
  * @module AuthModule
@@ -17,9 +13,9 @@ import { OrganizationModule } from 'src/modules/organization/organization.module
  */
 @Global()
 @Module({
-  imports: [MailModule, LanguageModule, OrganizationModule],
+  imports: [MailModule, UserModule],
   controllers: [AuthController],
-  exports: [AuthService, JwtService, JwtGuard, CryptService],
-  providers: [AuthService, JwtService, CryptService, JwtGuard, UserService],
+  exports: [AuthService, JwtGuard,],
+  providers: [AuthService, JwtGuard],
 })
-export class AuthModule {}
+export class AuthModule { }

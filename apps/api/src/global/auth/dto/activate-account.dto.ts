@@ -22,15 +22,3 @@ export class ActivateAccountDto {
   password!: string;
 }
 
-/**
- * DTO for validating a token
- */
-export class ValidateTokenDto {
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty({
-    description: 'The token to validate',
-    example: 'abc123token',
-  })
-  token!: string;
-}

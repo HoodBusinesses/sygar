@@ -1,68 +1,43 @@
 import {
-  BadRequestException,
-  forwardRef,
-  Inject,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UserService } from 'src/modules/user/user.service';
-import { CryptService } from './crypt.service';
-import { JwtService } from './jwt.service';
 import {
   ResetPasswordDto,
-  ResetPasswordRequestDto,
 } from './dto/reset-password.dto';
 import { v4 as uuid } from 'uuid';
 import { MailService } from '../mail/mail.service';
-import { UserRoles } from 'src/modules/user/model/user.model';
 import {
   ActivateAccountDto,
-  ValidateTokenDto,
 } from './dto/activate-account.dto';
-import { OrganizationService } from 'src/modules/organization/organization.service';
+import { JwtService } from '../jwt/jwt.service';
+import { EncryptionService } from '../encryption/encryption.service';
+import { TemplatesService } from '../templates/templates.service';
 
 @Injectable()
 export class AuthService {
   private readonly jwtSecretToken: string;
 
-  /**
-   * Constructor for the AuthService
-   * @param configService - The ConfigService instance
-   * @param userService - The UserService instance
-   * @param cryptService - The CryptService instance
-   * @param jwtService - The JwtService instance
-   * @param mailService - The MailService instance
-   */
   constructor(
     private readonly configService: ConfigService,
-    @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
-    private readonly cryptService: CryptService,
+    private readonly cryptService: EncryptionService,
     private readonly jwtService: JwtService,
     private readonly mailService: MailService,
-    private readonly organizationService: OrganizationService
+    private readonly templatesService: TemplatesService
   ) {
     this.jwtSecretToken = configService.getOrThrow('SYGAR_JWT_SECRET_TOKEN');
   }
 
-  /**
-   * Logs in a user with provided username and password.
-   * Throws a BadRequestException if the username or password is missing.
-   * Throws an UnauthorizedException if the user is not found or password is invalid.
-   * Generates and returns a JWT token for the authenticated user.
-   *
-   * @param email - The user's email.
-   * @param password - The user's password.
-   * @returns Object containing the JWT token and user information.
-   */
   async login(email: string, password: string) {
     // Fetch user by email
-    const user = await this.userService.getByEmail(email);
+    const user = await this.userService.getByFieldUnique('email', email);
 
     // Ensure user exists
-    if (!user) {
-      throw new UnauthorizedException('invalidCredentials');
+    if (!user || !user.isActive) {
+      throw new UnauthorizedException('invalidCredentials or Invalid User');
     }
 
     // Verify the provided password against the stored hash
@@ -75,16 +50,9 @@ export class AuthService {
       throw new UnauthorizedException('invalidCredentials');
     }
 
-    // If the user is not active, send an email to the user to activate the account
-    if (user.role !== UserRoles.SYGAR_ADMIN && !user.isActive) {
-      await this.requestActiveAccount(user.email);
-      throw new UnauthorizedException('accountNotActivated');
-    }
-
     // Generate Jwt Token for the use
     const token = this.jwtService.sing(
       {
-        uid: user.uid,
         email: user.email,
         cnss: user.cnss,
         role: user.role,
@@ -95,16 +63,7 @@ export class AuthService {
       }
     );
 
-    // Return the token and user information
-    return {
-      token,
-      user: {
-        uid: user.uid,
-        email: user.email,
-        cnss: user.cnss,
-        role: user.role,
-      },
-    };
+    return token
   }
 
   /**
@@ -114,7 +73,9 @@ export class AuthService {
    */
   async activateAccount(dto: ActivateAccountDto) {
     // Get the user by the reset password token
-    const user = await this.userService.getByResetPasswordToken(dto.token);
+    const user = await this.userService.getByField('resetToken', dto.token);
+
+    console.log({ user })
 
     // If the user is not found, throw an unauthorized exception
     if (!user) {
@@ -123,8 +84,8 @@ export class AuthService {
 
     // If the token is expired, throw an unauthorized exception
     if (
-      user.resetPasswordTokenExpiresAt &&
-      new Date(user.resetPasswordTokenExpiresAt) < new Date()
+      user.resetTokenExpiresAt &&
+      new Date(user.resetTokenExpiresAt) < new Date()
     ) {
       throw new UnauthorizedException('invalidToken'); // throw an unauthorized exception if the token is expired
     }
@@ -133,67 +94,60 @@ export class AuthService {
     const newPasswordHash = await this.cryptService.hash(dto.password);
 
     // Update the password
-    await this.userService.updatePassword(user.uid, newPasswordHash);
-
-    // Delete the reset password token
-    await this.userService.setResetPasswordToken(user.uid, null, null);
-
-    // Activate the user
-    await this.userService.activateTheUser(user.uid);
+    await this.userService.update(user.id, { password: newPasswordHash, passwordChangedAt: new Date(), isActive: true, resetToken: null, resetTokenExpiresAt: null });
 
     return {
       message: 'Account activated successfully',
     };
   }
 
-  /**
-   * Requests an activation email for a user.
-   * @param email - The user's email.
-   * @returns An object indicating the success of the activation email request.
-   */
   async requestActiveAccount(email: string) {
-    // Get the user by the email
-    const user = await this.userService.getByEmail(email);
+
+    // Generate a token
+    const token = uuid();
+
+    // Generate the reset link
+    const resetLink = `${this.configService.getOrThrow('SYGAR_AUTH_WEB_APP_URL')}/${''}?token=${token}`;
+
+    await this.sendTokenEmail(email, 'activationAccount', 'Sygar: Account Activate Email', token,
+      { ['{{resetLink}}']: resetLink, ['{{organizationName}}']: 'SYGAR' })
+  }
+
+  private async sendTokenEmail(
+    email: string,
+    template: string,
+    subject: string,
+    token: string,
+    changes: object
+  ) { // Get the user by the email
+    const user = await this.userService.getByFieldUnique('email', email);
 
     // If the user is not found, throw an unauthorized exception
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    // Generate a token
-    const token = uuid();
 
-    // Set the token expiration time 7 days from now
     const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7);
 
     // Set the reset password token for the user
-    await this.userService.setResetPasswordToken(
-      user.uid,
-      token,
-      expiresAt.getTime()
+    await this.userService.update(
+      user.id,
+      { resetTokenExpiresAt: expiresAt, resetToken: token }
     );
-
-    // Generate the reset link
-    const resetLink = `${this.configService.getOrThrow('SYGAR_AUTH_WEB_APP_URL')}/activateAccount?token=${token}`;
 
     // Load the activation account template
-    const activationAccountTemplate =
-      await this.mailService.getTemplate('activationAccount');
+    const emailTemplate =
+      await this.templatesService.getTemplate(template, { ...changes, ['{{username}}']: `${user.firstName} ${user.lastName}` });
 
-    // Replace the placeholders with the actual values
-    let html = activationAccountTemplate.replace('{{resetLink}}', resetLink);
-    html = html.replace(
-      '{{organizationName}}',
-      (await this.organizationService.get(user.organizationId)).name
-    );
-    html = html.replace('{{username}}', `${user.firstName} ${user.lastName}`);
+    console.log(emailTemplate)
 
     // send the reset password email
     const mailOptions = {
       from: this.configService.getOrThrow('SYGAR_MAILER_FROM_ADDRESS'), // from address
       to: user.email, // to address
-      subject: 'Activate your account', // subject
-      html: html,
+      subject, // subject
+      html: emailTemplate,
     };
 
     // Send the reset password email
@@ -201,83 +155,32 @@ export class AuthService {
       await this.mailService.sendEmail(mailOptions);
     } catch (error: any) {
       // Delete the reset password token
-      await this.userService.setResetPasswordToken(user.uid, null, null);
+      await this.userService.update(user.id, { resetToken: null, resetTokenExpiresAt: null });
       return { error: error.message };
     }
 
     // Return a message indicating that the activation email was sent
     return {
-      message: 'Activation email sent',
+      message: 'email sent',
     };
   }
 
-  /**
-   * Requests a password reset email for a user.
-   * @param dto - The ResetPasswordRequestDto containing the user's email.
-   * @returns An object indicating the success of the password reset email request.
-   */
-  async requestPasswordReset(dto: ResetPasswordRequestDto) {
-    // Get the user by the email
-    const user = await this.userService.getByEmail(dto.email);
-
-    // If the user is not found, return a message indicating that the user was not found
-    if (!user) {
-      throw Error('userNotFound');
-    }
+  async requestPasswordReset(email: string) {
 
     // Generate a token
     const token = uuid();
-    const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7); // expires after 7 days from now
-
-    // Set the reset password token for the user
-    await this.userService.setResetPasswordToken(
-      user.uid,
-      token,
-      expiresAt.getTime()
-    );
 
     // Generate the reset link
-    const resetLink = `${this.configService.getOrThrow('SYGAR_AUTH_WEB_APP_URL')}/resetPassword?token=${token}`;
+    const resetLink = `${this.configService.getOrThrow('SYGAR_AUTH_WEB_APP_URL')}/${''}?token=${token}`;
 
-    // Load the reset password template
-    const resetPasswordTemplate =
-      await this.mailService.getTemplate('resetPassword');
+    await this.sendTokenEmail(email, 'resetPassword', 'Sygar: Account Reset password Email', token,
+      { ['{{resetLink}}']: resetLink })
 
-    // Replace the placeholders with the actual values
-    let html = resetPasswordTemplate.replace('{{resetLink}}', resetLink);
-    html = html.replace('{{username}}', `${user.firstName} ${user.lastName}`);
-
-    // send the reset password email
-    const mailOptions = {
-      from: this.configService.getOrThrow('SYGAR_MAILER_FROM_ADDRESS'),
-      to: user.email,
-      subject: 'Password Reset Request',
-      html: html,
-    };
-
-    // Send the reset password email
-    try {
-      await this.mailService.sendEmail(mailOptions);
-    } catch (error: any) {
-      // Delete the reset password token
-      await this.userService.setResetPasswordToken(user.uid, null, null);
-      throw Error(error.message);
-    }
-
-    // Return a message indicating that the password reset email was sent
-    return {
-      message: 'Password reset email sent',
-    };
   }
 
-  /**
-   * Resets a user's password based on the provided token and new password.
-   * @param dto - The ResetPasswordDto containing the token and new password.
-   * @returns An object indicating the success of the password reset process.
-   */
   async resetPassword(dto: ResetPasswordDto) {
     // Get the user by the reset password token
-    const user = await this.userService.getByResetPasswordToken(dto.token);
+    const user = await this.userService.getByField('resetToken', dto.token);
 
     // If the user is not found, throw an unauthorized exception
     if (!user) {
@@ -286,8 +189,8 @@ export class AuthService {
 
     // If the token is expired, throw an unauthorized exception
     if (
-      user.resetPasswordTokenExpiresAt &&
-      new Date(user.resetPasswordTokenExpiresAt) < new Date()
+      user.resetTokenExpiresAt &&
+      new Date(user.resetTokenExpiresAt) < new Date()
     ) {
       throw new UnauthorizedException('tokenExpired');
     }
@@ -296,15 +199,14 @@ export class AuthService {
     const newPasswordHash = await this.cryptService.hash(dto.newPassword);
 
     // Update the password
-    await this.userService.updatePassword(user.uid, newPasswordHash);
+    await this.userService.update(user.id, { password: newPasswordHash, resetToken: null, resetTokenExpiresAt: null });
 
     // Delete the reset password token
-    await this.userService.setResetPasswordToken(user.uid, null, null);
 
     // Generate a token
     const token = this.jwtService.sing(
       {
-        uid: user.uid,
+        uid: user.id,
         email: user.email,
         cnss: user.cnss,
         role: user.role,
@@ -320,31 +222,5 @@ export class AuthService {
       message: 'Password reset successfully',
       token: token,
     };
-  }
-
-  /**
-   * Validates a token by checking if it exists in the database.
-   * @param token - The token to validate.
-   * @returns True if the token is valid, false otherwise.
-   */
-  async validateToken(token: string): Promise<boolean> {
-    // Get the user by the reset password token
-    const user = await this.userService.getByResetPasswordToken(token);
-
-    // If the user is not found, return false
-    if (!user) {
-      return false;
-    }
-
-    // If the token is expired, return false
-    if (
-      user.resetPasswordTokenExpiresAt &&
-      new Date(user.resetPasswordTokenExpiresAt) < new Date()
-    ) {
-      return false;
-    }
-
-    // Return true if the token is valid
-    return true;
   }
 }

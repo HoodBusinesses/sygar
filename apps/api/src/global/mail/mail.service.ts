@@ -4,8 +4,8 @@ import * as nodemailer from 'nodemailer';
 import { MailOptionsInterface } from '../../shared/types/mail';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
+import { IsServerless } from 'src/shared/utils/infra';
 
-const SERVERLESS = (process.env.SYGAR_SERVERLESS ?? false) === 'false' ? false : (process.env.SYGAR_SERVERLESS ?? false) === 'true' ? true : process.env.SYGAR_SERVERLESS ?? false;
 
 /**
  * Service for sending emails using nodemailer.
@@ -22,7 +22,7 @@ export class MailService {
   constructor(private readonly configService: ConfigService) {
     const templatePath = join(
       process.cwd(),
-      SERVERLESS ? 'static/' : 'src/templates',
+      IsServerless() ? 'static/' : 'src/templates',
       `${'all'}.html`
     );
     console.log(templatePath)
@@ -56,12 +56,4 @@ export class MailService {
     }
   }
 
-  async getTemplate(template: string): Promise<string> {
-    const templatePath = join(
-      process.cwd(),
-      SERVERLESS ? 'static/' : 'src/templates',
-      `${template}.html`
-    );
-    return readFile(templatePath, 'utf8');
-  }
 }

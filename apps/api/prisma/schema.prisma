@@ -1,0 +1,185 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                  String        @id @default(uuid())
+  email               String        @unique
+  phone               String
+  cnss                Int           @unique
+  firstName           String
+  lastName            String
+  password            String?
+  passwordChangedAt   DateTime?
+  resetToken          String?
+  resetTokenExpiresAt DateTime?
+  role                Role
+  type                UserType
+  identityType        IdentityType
+  identity            String
+  isActive            Boolean       @default(false)
+  // organizationId      String?       @relation(fields: [organizationId], references: [id])
+  // organization        Organization? // Relation to Organization
+  // abilities           Ability[]
+
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+}
+//
+// model Organization {
+//   id        String     @id @default(uuid())
+//   name      String
+//   address   String
+//   cnss      String     @unique
+//   ice       String     @unique
+//   imageLink String     @default("")
+//   users     User[] // Relation to Users
+//   reminders Reminder[]
+//   themes Theme[] // Relation to Groups
+//
+//   updatedAt DateTime @updatedAt
+//   createdAt DateTime @default(now())
+// }
+//
+// model Group {
+//   id             String            @id @default(uuid())
+//   themeId        String            @relation(fields: [themeId], references: [id])
+//   theme          Theme // Relation to Theme
+//   trainerName    String
+//   animatorName   String
+//   address        String
+//   organization   Organization // Relation to Organization
+//   dates          GroupDate[] // Relation to GroupDate
+//   participants   Participant[] // Relation to Participants
+//   feedbacks      Feedback[] // Group feedback
+//   attendances    GroupAttendance[] // Attendance relation
+//
+//   updatedAt DateTime @updatedAt
+//   createdAt DateTime @default(now())
+// }
+//
+// model GroupDate {
+//   id          String            @id @default(uuid())
+//   groupId     String            @relation(fields: [groupId], references: [id])
+//   group       Group // Relation to Group
+//   date        DateTime
+//   attendances GroupAttendance[] // Relation to Attendance
+//
+//   updatedAt DateTime @updatedAt
+//   createdAt DateTime @default(now())
+// }
+//
+// model Participant {
+//   id           String            @id @default(uuid())
+//   firstName    String
+//   lastName     String
+//   phone        String
+//   email        String
+//   cnss         String
+//   identityType IdentityType
+//   identity     String
+//   status       ParticipantStatus
+//   groupId      String            @relation(fields: [groupId], references: [id])
+//   group        Group // Relation to Group
+//   feedbacks    Feedback[]
+//   attendances  GroupAttendance[] // Attendance relation
+//
+//   updatedAt DateTime @updatedAt
+//   createdAt DateTime @default(now())
+// }
+//
+// model GroupAttendance {
+//   id            String      @id @default(uuid())
+//   groupDateId   String      @relation(fields: [groupDateId], references: [id])
+//   groupDate     GroupDate // Relation to GroupDate
+//   participantId String      @relation(fields: [participantId], references: [id])
+//   participant   Participant // Relation to Participant
+//   attended      Boolean // Whether the participant attended
+//
+//   updatedAt DateTime @updatedAt
+//   createdAt DateTime @default(now())
+// }
+//
+// model Reminder {
+//   id             String       @id @default(uuid())
+//   name           String
+//   description    String
+//   action         Json
+//   done           Boolean      @default(false)
+//   organizationId String       @relation(fields: [organizationId], references: [id])
+//   organization   Organization
+//   assignedToId   String?      @relation(fields: [assignedToId], references: [id])
+//   assignedTo     User?
+//
+//   updatedAt DateTime @updatedAt
+//   createdAt DateTime @default(now())
+// }
+//
+// model Ability {
+//   id       String       @id @default(uuid())
+//   userId   String       @relation(fields: [userId], references: [id])
+//   user     User // Relation to User
+//   resource String
+//   action   String
+//   scope    AbilityScope
+// }
+//
+// model Feedback {
+//   id            String       @id @default(uuid())
+//   participantId String?      @relation(fields: [participantId], references: [id])
+//   participant   Participant?
+//   groupId       String       @relation(fields: [groupId], references: [id])
+//   group         Group
+//   content       String
+//
+//   updatedAt DateTime @updatedAt
+//   createdAt DateTime @default(now())
+// }
+//
+// model Theme {
+//   id     String  @id @default(uuid())
+//   name   String
+//   price  Decimal
+//   year   Int
+//   groups Group[]
+//
+//   updatedAt DateTime @updatedAt
+//   createdAt DateTime @default(now())
+// }
+
+enum UserType {
+  ORGANIZATION_USER
+  SOLUTION_OWNER
+}
+//
+// enum ParticipantStatus {
+//   Employer
+// }
+
+enum IdentityType {
+  CIN
+  Passport
+  Permit
+}
+
+enum Role {
+  Owner
+  Admin
+  User
+}
+
+enum AbilityScope {
+  Organization
+  Solution
+}
