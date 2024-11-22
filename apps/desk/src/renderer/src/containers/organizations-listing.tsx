@@ -5,8 +5,9 @@ import { useTranslate } from '@renderer/hooks/useTranslate';
 import { useGetAllOrganizations } from '@renderer/hooks/api/organization/get-all-organizations';
 import { useState } from 'react';
 import { OrganizationBasicInfo } from '@renderer/components/organization/OrganizationBasicInfo';
+import { useNavigate } from '@tanstack/react-router';
 
-const OrganizationsPage: React.FC = () => {
+const OrganizationsPage: React.FC = (): JSX.Element => {
   const { isRtl } = useTranslate();
 
   const { data, isSuccess, isLoading, isError } = useGetAllOrganizations();
@@ -14,6 +15,8 @@ const OrganizationsPage: React.FC = () => {
   const [component, setComponent] = useState<Components>('table');
 
   const [defaultValue, setdefaultValue] = useState<Organization | null>(null);
+  const navigate = useNavigate();
+
   
   if (isLoading) {
     return (
@@ -36,7 +39,9 @@ const OrganizationsPage: React.FC = () => {
         {/* Organization Table Component */}
         <CustomTable
           headTitle={'organization.organizations'}
-          columns={Columns((rowData: Organization) => {
+          columns={Columns(
+            ()=> navigate({ to: '/users-listing' as string }),
+            (rowData: Organization) => {
             setdefaultValue(rowData);
             setComponent('edit');
           })}
@@ -61,6 +66,7 @@ const OrganizationsPage: React.FC = () => {
       </div>
     );
   }
+  return <></>;
 }
 
 export default withAuth(OrganizationsPage);

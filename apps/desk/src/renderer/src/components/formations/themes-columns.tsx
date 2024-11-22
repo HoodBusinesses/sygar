@@ -3,15 +3,14 @@ import { Checkbox } from '../ui/checkbox';
 import ButtonsAction from '../organization/org-table-actions';
 import DeleteModal from '../DeleteModal';
 import SortHeader from '../costum-data/sort-header';
-import { Button } from '../ui/button';
-import { useTranslate } from '@renderer/hooks/useTranslate';
+import RedirectButton from '../redirectButton';
 
 export interface Theme {
   id: string;
   name: string;
-  // identifier: string;
   year: string;
   price: string;
+  // identifier: string;
   // groups?: string;
   // options?: string;
 }
@@ -20,8 +19,6 @@ export const themeColumns = (
   setGroupThemes: () => void,
   setRowData: (rowData: Theme) => void
 ): ColumnDef<Theme>[] => {
-  const { t } = useTranslate();
-
   return [
     {
       accessorKey: 'id',
@@ -61,7 +58,7 @@ export const themeColumns = (
             isSomeSortSeted={!!column.getIsSorted()}
             resetFn={() => column.clearSorting()}
             OnClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-            label={t('themesTable.name')}
+            label={'themesTable.name'}
           />
         );
       },
@@ -75,7 +72,7 @@ export const themeColumns = (
             isSomeSortSeted={!!column.getIsSorted()}
             resetFn={() => column.clearSorting()}
             OnClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-            label={t('themesTable.year')}
+            label={'themesTable.year'}
           />
         );
       },
@@ -89,7 +86,7 @@ export const themeColumns = (
             isSomeSortSeted={!!column.getIsSorted()}
             resetFn={() => column.clearSorting()}
             OnClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-            label={t('themesTable.price')}
+            label={'themesTable.price'}
           />
         );
       },
@@ -97,19 +94,20 @@ export const themeColumns = (
     },
     {
       accessorKey: 'groups',
-      header: t('themesTable.groups'),
+      header: ('themesTable.groups'),
       cell: () => (
-        <Button
-          onClick={setGroupThemes}
-          className="hover:underline text-blue-500 px-4 py-1"
-        >
-          {t('themesTable.groups')}
-        </Button>
+        <RedirectButton click={setGroupThemes} text="themesTable.groups" />
+        // <Button
+        //   onClick={setGroupThemes}
+        //   className="hover:underline text-blue-500 px-4 py-1"
+        // >
+        //   {t('themesTable.groups')}
+        // </Button>
       ),
     },
     {
       accessorKey: 'options',
-      header: t('themesTable.options'),
+      header: 'themesTable.options',
       cell: ({ row }) => (
         <ButtonsAction
           endpoint={`/theme/delete?uid=${row.original.id}`} // endpot /

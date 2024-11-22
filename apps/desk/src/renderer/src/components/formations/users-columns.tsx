@@ -5,15 +5,9 @@ import { Button } from "../ui/button"
 import { useTranslate } from "@renderer/hooks/useTranslate"
 import SortHeader from "../costum-data/sort-header"
 import ButtonsAction from "../organization/org-table-actions"
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-} from "../ui/select"
+
+import RedirectButton from "../redirectButton"
+import CostumSelect from "../costum-select"
 
 export interface Users {
     id: string
@@ -28,7 +22,6 @@ export interface Users {
 
 export const usersColumns = (setRowData: (rowData: Users) => void
 ): ColumnDef<Users>[] => {
-    const { t } = useTranslate();
 
     return [
         {
@@ -69,7 +62,7 @@ export const usersColumns = (setRowData: (rowData: Users) => void
                         isSomeSortSeted={!!column.getIsSorted()}
                         resetFn={() => column.clearSorting()}
                         OnClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-                        label={t('themesTable.firstName')}
+                        label={('themesTable.firstName')}
                     />
                 );
             },
@@ -83,7 +76,7 @@ export const usersColumns = (setRowData: (rowData: Users) => void
                         isSomeSortSeted={!!column.getIsSorted()}
                         resetFn={() => column.clearSorting()}
                         OnClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-                        label={t('themesTable.lastName')}
+                        label={('themesTable.lastName')}
                     />
                 );
             },
@@ -97,7 +90,7 @@ export const usersColumns = (setRowData: (rowData: Users) => void
                         isSomeSortSeted={!!column.getIsSorted()}
                         resetFn={() => column.clearSorting()}
                         OnClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-                        label={t('themesTable.email')}
+                        label={('themesTable.email')}
                     />
                 );
             },
@@ -110,42 +103,29 @@ export const usersColumns = (setRowData: (rowData: Users) => void
         },
         {
             accessorKey: 'permissions',
-            header: t('themesTable.permission'),
+            header: ('themesTable.permission'),
             cell: () => (
-                <Button
-                    onClick={() => {
-                        console.log("view permissions")
-                    }}
-                    className="hover:underline text-blue-500 px-4 py-1"
-                >
-                    {t('themesTable.permission')}
-                </Button>
+                <RedirectButton click={() => { console.log("view permissions") }} text="themesTable.permission" />
+                // <Button
+                //     onClick={() => {
+                //         console.log("view permissions")
+                //     }}
+                //     className="hover:underline text-blue-500 px-4 py-1"
+                // >
+                //     {('themesTable.permission')}
+                // </Button>
             ),
         },
         {
             accessorKey: 'role',
-            header: t('themesTable.role'),
+            header: ('themesTable.role'),
             cell: () => (
-                <>
-                    <Select>
-                        <SelectTrigger className="">
-                            <SelectValue placeholder={t('themesTable.role')} />
-                        </SelectTrigger>
-                        <SelectContent className="bg-white">
-                            <SelectGroup>
-                                <SelectLabel>{t('themesTable.role')}</SelectLabel>
-                                <SelectItem value="apple">user</SelectItem>
-                                <SelectItem value="banana">admin</SelectItem>
-                                <SelectItem value="blueberry">owner</SelectItem>
-                            </SelectGroup>
-                        </SelectContent>
-                    </Select>
-                </>
+                <CostumSelect />
             ),
         },
         {
             accessorKey: 'options',
-            header: t('themesTable.options'),
+            header: ('themesTable.options'),
             cell: ({ row }) => (
                 <ButtonsAction
                     endpoint={`/theme/delete?uid=${row.original.id}`} // endpot /

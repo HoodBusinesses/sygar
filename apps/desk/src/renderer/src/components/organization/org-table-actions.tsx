@@ -2,7 +2,7 @@ import { Edit2 } from 'lucide-react';
 import DeleteModal from '../DeleteModal';
 import SubscriptionModal from '../SubscriptionModal';
 import { Button } from '../ui/button';
-import { useNavigate } from '@tanstack/react-router';
+// import { useNavigate } from '@tanstack/react-router';
 import useDelete from '@renderer/hooks/api/organization/delete-org';
 
 export default function ButtonsAction({
