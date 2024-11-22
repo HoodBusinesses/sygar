@@ -1,16 +1,12 @@
 import {
   CanActivate,
   ExecutionContext,
-  Inject,
   Injectable,
   UnauthorizedException,
-  forwardRef,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { JwtService } from './jwt.service';
 import { UserService } from 'src/modules/user/user.service';
-import { LanguageService } from '../language/language.service';
-import { Socket } from 'socket.io';
+import { JwtService } from '../jwt/jwt.service';
 
 @Injectable()
 export class JwtGuard implements CanActivate {
@@ -19,9 +15,7 @@ export class JwtGuard implements CanActivate {
   constructor(
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
-    @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
-    private readonly languageService: LanguageService
   ) {
     this.jwtSecret = this.configService.getOrThrow('SYGAR_JWT_SECRET_TOKEN');
   }
@@ -35,7 +29,6 @@ export class JwtGuard implements CanActivate {
       const lang = req.headers['accept-language'] ?? 'en';
       if (!authHeader) {
         throw new UnauthorizedException(
-          this.languageService.getTranslation('invalidAuthHeader', lang)
         );
       }
 
@@ -48,16 +41,14 @@ export class JwtGuard implements CanActivate {
         payload = this.jwtService.verify(token, this.jwtSecret);
       } catch (error: any) {
         throw new UnauthorizedException(
-          this.languageService.getTranslation(error.message, lang)
         );
       }
 
       // Fetch the user from the database
-      const user = await this.userService.getByEmail(payload.email);
+      const user = await this.userService.getByField('email', payload.email);
 
       if (!user) {
         throw new UnauthorizedException(
-          this.languageService.getTranslation('userNotFound', lang)
         );
       }
 

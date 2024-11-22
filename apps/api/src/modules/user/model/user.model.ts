@@ -2,10 +2,9 @@ import { LocalTableInput } from 'src/shared/types/db';
 
 // Define the roles for the users
 export enum UserRoles {
-  SYGAR_ADMIN = 'SYGAR_ADMIN',
-  SYGAR_USER = 'SYGAR_USER',
-  ORG_ADMIN = 'ORG_ADMIN',
-  ORG_USER = 'ORG_USER',
+  ADMIN = 'ADMIN',
+  USER = 'USER',
+  OWNER = 'OWNER',
 }
 
 // Define the national identifier types

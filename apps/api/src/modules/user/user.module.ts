@@ -1,10 +1,7 @@
-import { forwardRef, Global, Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserRepository } from './user.repository';
-import { CryptService } from 'src/global/auth/crypt.service';
 import { UserController } from './user.controller';
-import { AdminsModule } from '../admins/admins,module';
-import { NotificationsModule } from 'src/global/notifactions/notifications.module';
 
 /**
  * @module UserModule
@@ -13,9 +10,8 @@ import { NotificationsModule } from 'src/global/notifactions/notifications.modul
  */
 @Global()
 @Module({
-  imports: [AdminsModule, NotificationsModule],
   controllers: [UserController],
-  providers: [UserService, UserRepository, CryptService],
-  exports: [UserService, UserRepository],
+  providers: [UserService, UserRepository],
+  exports: [UserService],
 })
-export class UserModule {}
+export class UserModule { }
