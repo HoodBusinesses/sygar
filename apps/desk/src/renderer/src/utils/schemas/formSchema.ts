@@ -42,8 +42,16 @@ export const groupSchema = z.object({
   date: z.string().min(1, 'Date is required'),
 });
 
+export const userSchema = z.object({
+  firstName: z.string().min(1, 'First name is required'),
+  lastName: z.string().min(1, 'Last name is required'),
+  phone: z.string().min(1, 'Phone number is required'),
+  email: z.string().email('Invalid email address'),
+});
+
 export type OrganizationFormData = z.infer<typeof organizationSchema>;
 export type MemberFormData = z.infer<typeof memberSchema>;
 export type FormationFormData = z.infer<typeof formationSchema>;
 export type ParticipantFormData = z.infer<typeof participantSchema>;
 export type GroupFormData = z.infer<typeof groupSchema>;
+export type UserFormData = z.infer<typeof userSchema>;

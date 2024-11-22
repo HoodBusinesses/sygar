@@ -90,7 +90,8 @@
       "notifications": "Notifications",
       "reports": "Rapports",
       "theme": "Thème",
-      "participants": "Participants"
+      "participants": "Participants",
+      "users": "Utilisateurs"
     }
   },
   "organization": {
@@ -137,6 +138,7 @@
   },
   "themesTable": {
     "title": "Thèmes",
+    "users": "Utilisateurs",
     "name": "Nom",
     "identifier": "Identifiant",
     "year": "Année",
@@ -145,13 +147,19 @@
     "groups": "Groupes",
     "options": "Options",
     "checkGroup": "Vérifier le groupe",
-    "mad": "DH"
+    "mad": "DH",
+    "permission": "Permission",
+    "firstName": "Prénom",
+    "lastName": "Nom de famille",
+    "role": "Rôle",
+    "email": "Email",
+    "phone": "Téléphone"
   },
   "formation": {
     "formation": "Section de formation",
     "tables": "Tables",
-    "addFormation" : "Ajouter une formation",
-    "editFormation" : "Modifier formation",
+    "addFormation": "Ajouter une formation",
+    "editFormation": "Modifier formation",
     "fields": {
       "formationName": {
         "label": "Nom de la formation",
@@ -169,8 +177,8 @@
   },
   "group": {
     "group": "Section de groupe",
-    "addGroup" : "Ajouter un group",
-    "editGroup" : "Modifier group",
+    "addGroup": "Ajouter un group",
+    "editGroup": "Modifier group",
     "fields": {
       "facilator": {
         "label": "Facilitateur",
@@ -244,6 +252,32 @@
     "confirmPass": {
       "label": "Confirmez le mot de passe",
       "placeholder": "Confirmez votre nouveau mot de passe"
+    }
+  },
+  "users": {
+    "addUser": "Ajouter un utilisateur",
+    "editUser": "Modifier l'utilisateur",
+    "fields": {
+      "fullName": {
+        "label": "Nom complet",
+        "placeholder": "Entrez le nom complet"
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "Entrez l'email"
+      },
+      "role": {
+        "label": "Rôle",
+        "placeholder": "Sélectionnez le rôle"
+      },
+      "actionType": {
+        "label": "Type d'action",
+        "placeholder": "Sélectionnez le type d'action"
+      },
+      "phone": {
+        "label": "Téléphone",
+        "placeholder": "Entrez le numéro de téléphone"
+      }
     }
   }
 }

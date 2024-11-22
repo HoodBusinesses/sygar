@@ -101,3 +101,34 @@ export const formationFields: FieldsInput[] = [
     required: true,
   },
 ];
+
+export const usersFields: FieldsInput[] = [
+  {
+    label: 'users.fields.firstName.label',
+    placeholder: 'users.fields.firstName.placeholder',
+    name: 'firstName',
+    value: 'firstName',
+    required: true,
+  },
+  {
+    label: 'users.fields.lastName.label',
+    placeholder: 'users.fields.lastName.placeholder',
+    name: 'lastName',
+    value: 'lastName',
+    required: true,
+  },
+  {
+    label: 'users.fields.phone.label',
+    placeholder: 'users.fields.phone.placeholder',
+    name: 'phone',
+    value: 'phone',
+    required: true,
+  },
+  {
+    label: 'users.fields.email.label',
+    placeholder: 'users.fields.email.placeholder',
+    name: 'email',
+    value: 'email',
+    required: true,
+  },
+]
