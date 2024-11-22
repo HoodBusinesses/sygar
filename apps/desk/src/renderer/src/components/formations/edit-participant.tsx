@@ -1,4 +1,3 @@
-import { useFormContext } from 'react-hook-form';
 import { Card, CardContent, CardHeader } from '../ui/card';
 import { ParticipantFormData } from '@renderer/utils/schemas/formSchema';
 import FormInputItem from '../ui/form-input-item';

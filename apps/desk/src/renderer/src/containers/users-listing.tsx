@@ -1,6 +1,7 @@
 import UsersTable from '@renderer/components/UsersTable';
 import withAuth from '@renderer/hoc/with-auth';
-import React from 'react'
+import { mockUsers } from '@renderer/utils/static/organizations';
+
 
 const usersListing = () => {
     // const { data, isSuccess, isLoading, isError } = useGetAllUsers();
@@ -23,7 +24,7 @@ const usersListing = () => {
     //     return <UsersTable data={data} />;
     //   }
     
-        return <UsersTable /* data={data} */ />;
+        return <UsersTable  data={mockUsers}  />;
 }
 
 export default withAuth(usersListing)

@@ -3,18 +3,31 @@ import { Checkbox } from "../ui/checkbox"
 import DeleteModal from "../DeleteModal"
 import { Button } from "../ui/button"
 import { useTranslate } from "@renderer/hooks/useTranslate"
+import SortHeader from "../costum-data/sort-header"
+import ButtonsAction from "../organization/org-table-actions"
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "../ui/select"
 
 export interface Users {
     id: string
     firstName: string
     lastName: string
-    email: string
     phone: string
+    email: string
+    // role select
 }
 
 
 
-export const usersColumns = (): ColumnDef<Users>[] => {
+export const usersColumns = (setRowData: (rowData: Users) => void
+): ColumnDef<Users>[] => {
     const { t } = useTranslate();
 
     return [
@@ -50,22 +63,49 @@ export const usersColumns = (): ColumnDef<Users>[] => {
         },
         {
             accessorKey: 'firstName',
-            header: 'First Name',
+            header: ({ column }) => {
+                return (
+                    <SortHeader
+                        isSomeSortSeted={!!column.getIsSorted()}
+                        resetFn={() => column.clearSorting()}
+                        OnClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+                        label={t('themesTable.firstName')}
+                    />
+                );
+            },
             cell: ({ row }) => <p className="text-gray-600">{row.original.firstName}</p>
         },
         {
             accessorKey: 'lastName',
-            header: 'Last Name',
+            header: ({ column }) => {
+                return (
+                    <SortHeader
+                        isSomeSortSeted={!!column.getIsSorted()}
+                        resetFn={() => column.clearSorting()}
+                        OnClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+                        label={t('themesTable.lastName')}
+                    />
+                );
+            },
             cell: ({ row }) => <p className="text-gray-600">{row.original.lastName}</p>
         },
         {
             accessorKey: 'email',
-            header: 'Email',
+            header: ({ column }) => {
+                return (
+                    <SortHeader
+                        isSomeSortSeted={!!column.getIsSorted()}
+                        resetFn={() => column.clearSorting()}
+                        OnClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+                        label={t('themesTable.email')}
+                    />
+                );
+            },
             cell: ({ row }) => <p className="text-gray-600">{row.original.email}</p>
         },
         {
             accessorKey: 'phone',
-            header: 'Phone',
+            header: 'themesTable.phone',
             cell: ({ row }) => <p className="text-gray-600">{row.original.phone}</p>
         },
         {
@@ -74,11 +114,46 @@ export const usersColumns = (): ColumnDef<Users>[] => {
             cell: () => (
                 <Button
                     onClick={() => {
-                        console.log("view permissions")}}
+                        console.log("view permissions")
+                    }}
                     className="hover:underline text-blue-500 px-4 py-1"
                 >
                     {t('themesTable.permission')}
                 </Button>
+            ),
+        },
+        {
+            accessorKey: 'role',
+            header: t('themesTable.role'),
+            cell: () => (
+                <>
+                    <Select>
+                        <SelectTrigger className="">
+                            <SelectValue placeholder={t('themesTable.role')} />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white">
+                            <SelectGroup>
+                                <SelectLabel>{t('themesTable.role')}</SelectLabel>
+                                <SelectItem value="apple">user</SelectItem>
+                                <SelectItem value="banana">admin</SelectItem>
+                                <SelectItem value="blueberry">owner</SelectItem>
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                </>
+            ),
+        },
+        {
+            accessorKey: 'options',
+            header: t('themesTable.options'),
+            cell: ({ row }) => (
+                <ButtonsAction
+                    endpoint={`/theme/delete?uid=${row.original.id}`} // endpot /
+                    invalidateKeyData='themesData'
+                    saveDefaultData={setRowData.bind(null, row.original)}
+                    rowId={row.original.id}
+                    subscription={false}
+                />
             ),
         },
 

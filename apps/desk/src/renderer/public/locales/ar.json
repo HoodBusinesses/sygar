@@ -137,6 +137,7 @@
   },
   "themesTable": {
     "title": "المواضيع",
+    "users": "المستخدمون",
     "name": "الاسم",
     "identifier": "المعرف",
     "year": "السنة",
@@ -146,7 +147,12 @@
     "options": "الخيارات",
     "checkGroup": "فحص المجموعة",
     "mad": "درهم",
-    "permission": "الصلاحية"
+    "permission": "الصلاحية",
+    "firstName": "الاسم الأول",
+    "lastName": "الاسم الأخير",
+    "role": "الدور",
+    "email": "البريد الإلكتروني",
+    "phone": "الهاتف"
   },
   "formation": {
     "formation": "قسم التكوين",
@@ -245,6 +251,32 @@
     "confirmPass": {
       "label": "تأكيد كلمة المرور",
       "placeholder": "تأكيد كلمة المرور الجديدة"
+    }
+  },
+  "users": {
+    "addUser": "إضافة مستخدم",
+    "editUser": "تعديل مستخدم",
+    "fields": {
+      "fullName": {
+        "label": "الاسم الكامل",
+        "placeholder": "أدخل الاسم الكامل"
+      },
+      "email": {
+        "label": "البريد الإلكتروني",
+        "placeholder": "أدخل البريد الإلكتروني"
+      },
+      "role": {
+        "label": "الدور",
+        "placeholder": "اختر الدور"
+      },
+      "actionType": {
+        "label": "نوع الإجراء",
+        "placeholder": "اختر نوع الإجراء"
+      },
+      "phone": {
+        "label": "الهاتف",
+        "placeholder": "أدخل رقم الهاتف"
+      }
     }
   }
 }

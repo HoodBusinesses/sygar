@@ -137,6 +137,7 @@
   },
   "themesTable": {
     "title": "Themes",
+    "users": "Users",
     "name": "Name",
     "identifier": "Identifier",
     "year": "Year",
@@ -146,7 +147,12 @@
     "options": "Options",
     "checkGroup": "Check Group",
     "mad": "DH",
-    "permission": "Permission"
+    "permission": "Permission",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "role": "Role",
+    "email": "Email",
+    "phone": "Phone"
   },
   "formation": {
     "formation": "Formation section",
@@ -246,5 +252,31 @@
       "label": "Confirm Password",
       "placeholder": "Confirm your new password"
     }
+  },
+  "users": {
+  "addUser": "Add User",
+  "editUser": "Edit User",
+  "fields": {
+    "fullName": {
+      "label": "Full Name",
+      "placeholder": "Enter full name"
+    },
+    "email": {
+      "label": "Email",
+      "placeholder": "Enter email"
+    },
+    "role": {
+      "label": "Role",
+      "placeholder": "Select role"
+    },
+    "actionType": {
+      "label": "Action Type",
+      "placeholder": "Select action type"
+    },
+    "phone": {
+      "label": "Phone",
+      "placeholder": "Enter phone number"
+    }
   }
+}
 }

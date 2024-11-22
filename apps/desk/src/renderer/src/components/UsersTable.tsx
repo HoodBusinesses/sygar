@@ -1,11 +1,22 @@
 import { useTranslate } from '@renderer/hooks/useTranslate';
-import { mockUsers } from '@renderer/utils/static/organizations';
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Components, CustomTable } from './custom-table';
-import { usersColumns } from './formations/users-columns';
+import { Users, usersColumns } from './formations/users-columns';
+import EditUsers from './formations/edit-users';
 
-const UsersTable = () => {
+
+export interface UsersProps {
+  data: Users[];
+}
+type UserRollType = 'admin' | 'user' | 'owner';
+
+export default function UsersTable ({data} : {data: Users[]}) {
   const [component, setComponent] = useState<Components>('table');
+
+  const [defaultValue, setdefaultValue] = useState<Users | null>(null);
+
+  // const 
+
 
   const { isRtl } = useTranslate();
   
@@ -14,13 +25,22 @@ const UsersTable = () => {
       <CustomTable 
           component={component}
           setComponent={setComponent}
-          headTitle="Users"
-          columns={usersColumns()}
-          data={mockUsers}
-          EditAndAddRowComponent={null}
+          headTitle="themesTable.users"
+          columns={usersColumns(
+            (rowData: Users) => {
+              setdefaultValue(rowData);
+              setComponent('edit');
+            }
+          )}
+          data={data}
+          EditAndAddRowComponent={
+            <EditUsers
+              crud={component}
+              defaultValues={defaultValue}
+              goBack={() => setComponent('table')}
+            />
+          }
       />
     </div>
   )
 }
-
-export default UsersTable
