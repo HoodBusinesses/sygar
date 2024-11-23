@@ -267,6 +267,14 @@
         "label": "الاسم الكامل",
         "placeholder": "أدخل الاسم الكامل"
       },
+      "firstName": {
+        "label": "الاسم الأول",
+        "placeholder": "أدخل الاسم الأول"
+      },
+      "lastName": {
+        "label": "الاسم الأخير",
+        "placeholder": "أدخل الاسم الأخير"
+      },
       "email": {
         "label": "البريد الإلكتروني",
         "placeholder": "أدخل البريد الإلكتروني"

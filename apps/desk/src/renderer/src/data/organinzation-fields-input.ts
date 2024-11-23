@@ -88,3 +88,54 @@ export const fields: OrganizationFieldsInput[] = [
 ];
 
 
+export const userFields: OrganizationFieldsInput[] = [
+  {
+    label: 'user.fields.firstName.label',
+    placeholder: 'user.fields.firstName.placeholder',
+    name: 'firstName',
+    value: 'firstName',
+    required: true,
+  },
+  {
+    label: 'user.fields.lastName.label',
+    placeholder: 'user.fields.lastName.placeholder',
+    name: 'lastName',
+    value: 'lastName',
+    required: true,
+  },
+  {
+    label: 'user.fields.email.label',
+    placeholder: 'user.fields.email.placeholder',
+    name: 'email',
+    value: 'email',
+    required: true,
+  },
+  {
+    label: 'user.fields.phone.label',
+    placeholder: 'user.fields.phone.placeholder',
+    name: 'phone',
+    value: 'phone',
+    required: true,
+  },
+  {
+    label: 'user.fields.cnss.label',
+    placeholder: 'user.fields.cnss.placeholder',
+    name: 'cnss',
+    value: 'cnss',
+    required: true,
+  },
+  {
+    label: 'user.fields.identityType.label',
+    placeholder: 'user.fields.identityType.placeholder',
+    name: 'identityType',
+    value: 'identityType',
+    required: true,
+  },
+  {
+    label: 'user.fields.identity.label',
+    placeholder: 'user.fields.identity.placeholder',
+    name: 'identity',
+    value: 'identity',
+    required: true,
+  },
+];

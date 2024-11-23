@@ -267,6 +267,14 @@
         "label": "Nom complet",
         "placeholder": "Entrez le nom complet"
       },
+      "firstName": {
+        "label": "Prénom",
+        "placeholder": "Entrez le prénom"
+      },
+      "lastName": {
+        "label": "Nom",
+        "placeholder": "Entrez le nom"
+      },
       "email": {
         "label": "Email",
         "placeholder": "Entrez l'email"
