@@ -33,6 +33,7 @@
   "registration": {
     "title": "Organization Members Information",
     "registration": "Registration",
+    "EditOrganization": "Edit Organization",
     "basicInfo": {
       "title": "Organization Information",
       "fields": {
@@ -259,13 +260,21 @@
       "placeholder": "Confirm your new password"
     }
   },
-  "users": {
+  "user": {
   "addUser": "Add User",
   "editUser": "Edit User",
   "fields": {
     "fullName": {
       "label": "Full Name",
       "placeholder": "Enter full name"
+    },
+    "firstName": {
+      "label": "First Name",
+      "placeholder": "Enter first name"
+    },
+    "lastName": {
+      "label": "Last Name",
+      "placeholder": "Enter last name"
     },
     "email": {
       "label": "Email",
@@ -282,6 +291,18 @@
     "phone": {
       "label": "Phone",
       "placeholder": "Enter phone number"
+    },
+    "userCnss": {
+      "label": "User CNSS",
+      "placeholder": "Enter user CNSS"
+    },
+    "identity": {
+      "label": "Identity",
+      "placeholder": "Enter identity"
+    },
+    "identityType": {
+      "label": "Identity Type",
+      "placeholder": "Select identity type"
     }
   }
 }

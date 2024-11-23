@@ -33,6 +33,7 @@
   "registration": {
     "title": "معلومات أعضاء المؤسسة",
     "registration": "التسجيل",
+    "EditOrganization": "تعديل المؤسسة",
     "basicInfo": {
       "title": "معلومات المؤسسة",
       "fields": {
@@ -259,13 +260,21 @@
       "placeholder": "تأكيد كلمة المرور الجديدة"
     }
   },
-  "users": {
+  "user": {
     "addUser": "إضافة مستخدم",
     "editUser": "تعديل مستخدم",
     "fields": {
       "fullName": {
         "label": "الاسم الكامل",
         "placeholder": "أدخل الاسم الكامل"
+      },
+      "firstName": {
+        "label": "الاسم الأول",
+        "placeholder": "أدخل الاسم الأول"
+      },
+      "lastName": {
+        "label": "الاسم الأخير",
+        "placeholder": "أدخل الاسم الأخير"
       },
       "email": {
         "label": "البريد الإلكتروني",
@@ -282,6 +291,18 @@
       "phone": {
         "label": "الهاتف",
         "placeholder": "أدخل رقم الهاتف"
+      },
+      "userCnss": {
+        "label": "الضمان الاجتماعي",
+        "placeholder": "أدخل رقم الضمان الاجتماعي"
+      },
+      "identity": {
+        "label": "الهوية",
+        "placeholder": "أدخل الهوية"
+      },
+      "identityType": {
+        "label": "نوع الهوية",
+        "placeholder": "اختر نوع الهوية"
       }
     }
   }

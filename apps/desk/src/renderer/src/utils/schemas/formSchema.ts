@@ -47,6 +47,9 @@ export const userSchema = z.object({
   lastName: z.string().min(1, 'Last name is required'),
   phone: z.string().min(1, 'Phone number is required'),
   email: z.string().email('Invalid email address'),
+  userCnss: z.string().min(1, 'CNSS is required'),
+  identityType: z.string().min(1, 'Identity type is required'),
+  identity: z.string().min(1, 'Identity is required'),
 });
 
 export const EditProfileSchema = z

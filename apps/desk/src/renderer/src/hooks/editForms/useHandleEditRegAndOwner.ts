@@ -7,11 +7,11 @@ import {
 } from '@renderer/utils/schemas/formSchema';
 import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import useCreateOrg from './api/organization/create-org';
+import useCreateOrg from '../api/organization/create-org';
 
-export default function useRegistrations() {
-  const methods = useForm<OrganizationFormData>({
-    resolver: zodResolver(organizationSchema),
+export default function useHandleEditRegAndOwner() {
+  const methods = useForm<OrganizationFormData & UserFormData>({
+    resolver: zodResolver(organizationSchema.merge(userSchema)),
     defaultValues: useMemo(
       () => ({
         // default values
@@ -32,7 +32,7 @@ export default function useRegistrations() {
 
   const createMuation = useCreateOrg();
 
-  const handleSubmit = (data: OrganizationFormData) => {
+  const handleSubmit = (data: OrganizationFormData & UserFormData) => {
     // Handle form submission
     console.log('ikhan: ', data);
     // createMuation.mutate({
