@@ -48,6 +48,21 @@ export const personalSchema = z.object({
     .min(10, 'Phone number must be at least 10 digits')
     .max(15, 'Phone number is too long')
     .regex(/^[0-9]+$/, 'Phone number must contain only digits'),
+  identityType: z
+    .string()
+    .min(1, 'Identity type is required')
+    .max(50, 'Identity type is too long')
+    .refine((value) => ['CIN', 'PERMIS', 'PASSPORT'].includes(value), {
+      message: 'Identity type must be CIN, PERMIS, or PASSPORT',
+    }),
+  identity: z
+    .string()
+    .min(1, 'Identity number is required')
+    .max(255, 'Identity number is too long'),
+  cnss: z
+    .string()
+    .min(1, 'CNSS number is required')
+    .max(255, 'CNSS number is too long'),
   profileImage: z
     .instanceof(File)
     .refine((file) => file.size > 0, 'Profile image is required')

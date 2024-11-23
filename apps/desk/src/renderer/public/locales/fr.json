@@ -233,9 +233,13 @@
     "updateProfile": "Mettez à jour vos informations personnelles",
     "changePhoto": "Changez votre photo",
     "personalInfo": "Informations personnelles",
-    "fullName": {
-      "label": "Nom complet",
-      "placeholder": "Entrez votre nom complet"
+    "firstName": {
+      "label": "Prénom",
+      "placeholder": "Entrez votre prénom"
+    },
+    "lastName": {
+      "label": "Nom",
+      "placeholder": "Entrez votre nom"
     },
     "email": {
       "label": "Email",

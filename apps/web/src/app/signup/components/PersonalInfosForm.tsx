@@ -1,7 +1,7 @@
-import CostumInputItem from "@/components/ui/custom-input-item";
-import { personalSchema } from "@/lib/schema/schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import CostumInputItem from '@/components/ui/custom-input-item';
+import { personalSchema } from '@/lib/schema/schema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 
 interface PersonalInfosProps {
   setStep: React.Dispatch<React.SetStateAction<number>>;
@@ -69,6 +69,39 @@ const PersonalInfosForm: React.FC<PersonalInfosProps> = ({
         error={errors.phoneNumber?.message?.toString()}
         id="phoneNumber"
         type="tel"
+      />
+
+      {/* Add the new fields here */}
+      <CostumInputItem
+        label="Identity Type"
+        placeholder="Enter Identity Type (CIN, PERMIS, PASSPORT)"
+        register={register('identityType', {
+          required: 'Identity Type is required',
+        })}
+        isPending={false}
+        error={errors.identityType?.message?.toString()}
+        id="identityType"
+        type="text"
+      />
+
+      <CostumInputItem
+        label="Identity"
+        placeholder="Enter Identity Number"
+        register={register('identity', { required: 'Identity is required' })}
+        isPending={false}
+        error={errors.identity?.message?.toString()}
+        id="identity"
+        type="text"
+      />
+
+      <CostumInputItem
+        label="CNSS"
+        placeholder="Enter CNSS Number"
+        register={register('cnss', { required: 'CNSS is required' })}
+        isPending={false}
+        error={errors.cnss?.message?.toString()}
+        id="cnss"
+        type="text"
       />
 
       <div>

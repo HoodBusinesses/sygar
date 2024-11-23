@@ -1,14 +1,27 @@
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
 import { Button } from './ui/button';
 import { Label } from './ui/label';
 import { Input } from './ui/input';
 import { useTranslate } from '@renderer/hooks/useTranslate';
 import Profile_Img from '@renderer/assets/images/profile_img.png';
-
-
+import { EditProfileSchema } from '@renderer/utils/schemas/formSchema';
 
 export default function EditProfile(): JSX.Element {
   const { t, isRtl } = useTranslate();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(EditProfileSchema),
+  });
+
+  const onSubmit = (data: any) => {
+    console.log('Form Data:', data);
+  };
 
   return (
     <div
@@ -38,23 +51,45 @@ export default function EditProfile(): JSX.Element {
       </div>
 
       {/* Form Fields */}
-      <div className="space-y-8">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
         <h3 className="text-lg font-bold text-gray-700 mb-6">
           {t('editProfile.personalInfo')}
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <Label htmlFor="name" className="text-gray-700 font-medium">
-              {t('editProfile.fullName.label')}
+            <Label htmlFor="firstName" className="text-gray-700 font-medium">
+              {t('editProfile.firstName.label')}
             </Label>
             <Input
-              id="name"
+              id="firstName"
               type="text"
-              defaultValue="John Doe"
-              placeholder={t('editProfile.fullName.placeholder')}
+              {...register('firstName')}
+              placeholder={t('editProfile.firstName.placeholder')}
               className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
             />
+            {errors.firstName && (
+              <p className="text-red-600 text-sm">
+                {errors.firstName.message?.toString()}
+              </p>
+            )}
+          </div>
+          <div>
+            <Label htmlFor="lastName" className="text-gray-700 font-medium">
+              {t('editProfile.lastName.label')}
+            </Label>
+            <Input
+              id="lastName"
+              type="text"
+              {...register('lastName')}
+              placeholder={t('editProfile.lastName.placeholder')}
+              className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
+            />
+            {errors.lastName && (
+              <p className="text-red-600 text-sm">
+                {errors.lastName.message?.toString()}
+              </p>
+            )}
           </div>
           <div>
             <Label htmlFor="email" className="text-gray-700 font-medium">
@@ -63,69 +98,94 @@ export default function EditProfile(): JSX.Element {
             <Input
               id="email"
               type="email"
-              defaultValue="john@example.com"
+              {...register('email')}
               placeholder={t('editProfile.email.placeholder')}
               className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
             />
+            {errors.email && (
+              <p className="text-red-600 text-sm">
+                {errors.email.message?.toString()}
+              </p>
+            )}
           </div>
           <div>
             <Label
-              htmlFor="current-password"
+              htmlFor="currentPassword"
               className="text-gray-700 font-medium"
             >
               {t('editProfile.currentPass.label')}
             </Label>
             <Input
-              id="current-password"
+              id="currentPassword"
               type="password"
+              {...register('currentPassword')}
               placeholder={t('editProfile.currentPass.placeholder')}
               className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
             />
+            {errors.currentPassword && (
+              <p className="text-red-600 text-sm">
+                {errors.currentPassword.message?.toString()}
+              </p>
+            )}
           </div>
           <div>
-            <Label htmlFor="new-password" className="text-gray-700 font-medium">
+            <Label htmlFor="newPassword" className="text-gray-700 font-medium">
               {t('editProfile.newPass.label')}
-
             </Label>
             <Input
-              id="new-password"
+              id="newPassword"
               type="password"
-              placeholder={t('editProfile.currentPass.placeholder')}
+              {...register('newPassword')}
+              placeholder={t('editProfile.newPass.placeholder')}
               className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
             />
+            {errors.newPassword && (
+              <p className="text-red-600 text-sm">
+                {errors.newPassword.message?.toString()}
+              </p>
+            )}
           </div>
           <div>
             <Label
-              htmlFor="confirm-password"
+              htmlFor="confirmPassword"
               className="text-gray-700 font-medium"
             >
               {t('editProfile.confirmPass.label')}
             </Label>
             <Input
-              id="confirm-password"
+              id="confirmPassword"
               type="password"
+              {...register('confirmPassword')}
               placeholder={t('editProfile.confirmPass.placeholder')}
-
               className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
             />
+            {errors.confirmPassword && (
+              <p className="text-red-600 text-sm">
+                {errors.confirmPassword.message?.toString()}
+              </p>
+            )}
           </div>
         </div>
-      </div>
 
-      {/* Footer Buttons */}
-      <div
-        className={`flex ${isRtl ? 'justify-start' : 'justify-end'} mt-12 space-x-4`}
-      >
-        <Button
-          variant="outline"
-          className="text-gray-600 border-gray-300 hover:bg-gray-100 transition-colors rounded-md"
+        {/* Footer Buttons */}
+        <div
+          className={`flex ${isRtl ? 'justify-start' : 'justify-end'} mt-12 space-x-4`}
         >
-          {t('buttons.cancel')}
-        </Button>
-        <Button className="bg-blue-600 text-white hover:bg-blue-700 transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-md">
-          {t('buttons.save')}
-        </Button>
-      </div>
+          <Button
+            type="button"
+            variant="outline"
+            className="text-gray-600 border-gray-300 hover:bg-gray-100 transition-colors rounded-md"
+          >
+            {t('buttons.cancel')}
+          </Button>
+          <Button
+            type="submit"
+            className="bg-blue-600 text-white hover:bg-blue-700 transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-md"
+          >
+            {t('buttons.save')}
+          </Button>
+        </div>
+      </form>
     </div>
   );
 }
