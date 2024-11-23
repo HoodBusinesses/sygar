@@ -64,7 +64,7 @@ const Registration: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-3 gap-12 mb-6">
-              {usersFields.map((field) => (
+              {userFields.map((field) => (
                 <FormInputItem
                   key={field.name}
                   label={field.label}

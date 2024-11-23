@@ -18,7 +18,7 @@ const SettingPage = (): JSX.Element => {
 
         <Card className="flex flex-col gap-6 ">
           <CardHeader className="text-lg text-gray-950 font-semibold mb-6">
-            {t('registration.registration')}
+            {t('registration.EditOrganization')}
             <span className="text-sm rounded-sm bg-blue-100 text-green-600">
               {t('registration.title')}
             </span>

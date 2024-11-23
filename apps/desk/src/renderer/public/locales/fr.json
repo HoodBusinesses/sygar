@@ -33,6 +33,7 @@
   "registration": {
     "title": "Informations sur les membres de l'organisation",
     "registration": "Inscription",
+    "EditOrganization": "Modifier l'organisation",
     "basicInfo": {
       "title": "Informations sur l'organisation",
       "fields": {
@@ -290,6 +291,18 @@
       "phone": {
         "label": "Téléphone",
         "placeholder": "Entrez le numéro de téléphone"
+      },
+      "userCnss": {
+        "label": "CNSS de l'utilisateur",
+        "placeholder": "Entrez le CNSS de l'utilisateur"
+      },
+      "identity": {
+        "label": "Identité",
+        "placeholder": "Entrez l'identité"
+      },
+      "identityType": {
+        "label": "Type d'identité",
+        "placeholder": "Sélectionnez le type d'identité"
       }
     }
   }

@@ -118,10 +118,10 @@ export const userFields: OrganizationFieldsInput[] = [
     required: true,
   },
   {
-    label: 'user.fields.cnss.label',
-    placeholder: 'user.fields.cnss.placeholder',
-    name: 'cnss',
-    value: 'cnss',
+    label: 'user.fields.userCnss.label',
+    placeholder: 'user.fields.userCnss.placeholder',
+    name: 'userCnss',
+    value: 'userCnss',
     required: true,
   },
   {
