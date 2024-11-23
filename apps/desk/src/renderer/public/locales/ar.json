@@ -234,9 +234,13 @@
     "updateProfile": "تحديث معلوماتك الشخصية",
     "changePhoto": "تغيير صورتك",
     "personalInfo": "المعلومات الشخصية",
-    "fullName": {
-      "label": "الاسم الكامل",
-      "placeholder": "أدخل اسمك الكامل"
+    "firstName": {
+      "label": "الاسم الأول",
+      "placeholder": "أدخل اسمك الأول"
+    },
+    "lastName": {
+      "label": "الاسم الأخير",
+      "placeholder": "أدخل اسمك الأخير"
     },
     "email": {
       "label": "البريد الإلكتروني",

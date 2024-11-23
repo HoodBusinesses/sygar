@@ -73,6 +73,15 @@ const OrgInfosForm: React.FC<OrgInfosProps> = ({ setStep, onSubmit }) => {
         />
       </div>
 
+      <div className="flex justify-center">
+        <p className="mt-4 text-sm text-gray-600">
+          Already have an account?{' '}
+          <a href="/login" className="mt-4 text-blue-600 hover:underline">
+            Log in
+          </a>
+        </p>
+      </div>
+
       <button
         type="submit"
         className="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 mt-4"

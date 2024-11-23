@@ -18,7 +18,7 @@ export default function ProfilePopover() {
         </div>
 
         <button className="w-full bg-blue-500 text-white py-2 rounded-md mb-3 text-sm">
-          Profile Page
+          <a href="/profile">Profile Page</a>
         </button>
 
         <hr className="my-2" />

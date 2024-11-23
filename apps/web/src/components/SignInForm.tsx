@@ -66,13 +66,21 @@ export default function SignInForm() {
         </button>
       </div>
       {/* Forgot Password Link */}
-      <div className="text-right">
-        <a
-          href="/forgetPassword"
-          className="text-sm text-blue-500 hover:underline"
-        >
-          Forgot password?
-        </a>
+      <div className="flex flex-col items-center space-y-2">
+        <div className="text-sm">
+          <a href="/forgetPassword" className="text-blue-500 hover:underline">
+            Forgot password?
+          </a>
+        </div>
+        <p className="text-sm text-gray-600">
+          Don’t have an account?{' '}
+          <a
+            href="/signup"
+            className="text-blue-500 hover:underline font-medium"
+          >
+            Sign up
+          </a>
+        </p>
       </div>
       {/* Sign In Button with Loader */}
       <Button

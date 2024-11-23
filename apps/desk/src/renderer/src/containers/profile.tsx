@@ -1,7 +1,6 @@
 import EditProfile from '@renderer/components/EditProfile';
-import React from 'react';
 
-const SettingPage = (): JSX.Element => {
+const ProfilePage = (): JSX.Element => {
   return (
     <div className="flex border items-center justify-center bg-white w-full">
       <EditProfile />
@@ -9,4 +8,4 @@ const SettingPage = (): JSX.Element => {
   );
 };
 
-export default SettingPage;
+export default ProfilePage;
