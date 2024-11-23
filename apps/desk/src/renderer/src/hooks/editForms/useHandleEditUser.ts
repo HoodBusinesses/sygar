@@ -37,6 +37,7 @@ export default function useHandleEditUser(defaultValues: Users | null, crud: str
         openUnsavedChange,
         setOpenUnsavedChange,
         methods,
+        isPending: false,
         handleSubmit,
         handleUnsavedChange,
     };
