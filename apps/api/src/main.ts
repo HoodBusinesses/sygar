@@ -21,10 +21,10 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.enableCors({
-    origin: ['http://localhost:3000','http://localhost:5173'],
+    origin: ['http://localhost:3000', 'http://localhost:5173'],
     credentials: true,
   });
-  
+
   const config = new DocumentBuilder()
     .setTitle('API Documentation')
     .setDescription('API description')
@@ -48,13 +48,10 @@ async function bootstrap() {
 
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true,
-      transform: true,
-      forbidNonWhitelisted: true,
-      transformOptions: {
-        enableImplicitConversion: true,
-      },
-    })
+      whitelist: true, // Strips unrecognized properties
+      forbidNonWhitelisted: true, // Throws error for extra properties
+      transform: true, // Transforms plain objects into class instances
+    }),
   );
 
   if (SERVERLESS) {

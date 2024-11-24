@@ -29,6 +29,7 @@ export class AddParticipant {
 
 	@IsEnum(Role)
 	role!: Role;
+
 	@IsString()
 	organizationId!: string;
 }

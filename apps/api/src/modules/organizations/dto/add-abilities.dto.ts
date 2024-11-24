@@ -1,5 +1,4 @@
-
-import { IsNumberString, IsString, IsArray, ValidateNested, IsOptional } from "class-validator";
+import { IsNumberString, IsString, IsArray, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
 
 export class AddAbilityDto {
@@ -15,12 +14,5 @@ export class AddAbilitiesDto {
 	@ValidateNested({ each: true })
 	@Type(() => AddAbilityDto)
 	abilities!: AddAbilityDto[];
-
-	@IsString()
-	userId!: string;
-
-	@IsOptional()
-	@IsString()
-	organizationId?: string;
 }
 

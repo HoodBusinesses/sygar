@@ -1,6 +1,6 @@
 import { Global, Module } from '@nestjs/common';
 import { AbilityFactory } from './rbac.service';
-import { AbilitiesGuard } from './rbac.guard';
+// import { AbilitiesGuard } from './rbac.guard';
 
 /**
  * @module RbacModule
@@ -15,7 +15,7 @@ import { AbilitiesGuard } from './rbac.guard';
 
 @Global()
 @Module({
-  providers: [AbilityFactory, AbilitiesGuard],
-  exports: [AbilityFactory, AbilitiesGuard],
+  providers: [AbilityFactory],
+  exports: [AbilityFactory],
 })
 export class RbacModule { }

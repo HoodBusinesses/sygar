@@ -1,26 +1,33 @@
 import { Injectable } from "@nestjs/common";
+import { Prisma } from "@prisma/client";
 import { DatabseService } from "src/lib/databse/datbase.service";
 
 @Injectable()
-export class AbiitiesRepository {
+export class AbilitiesRepository {
 	constructor(
 		private readonly dbService: DatabseService,
 	) { }
 
-	async addAbilities() {
+	async addAbilities(
+		data: Prisma.AbilityCreateManyInput[]
+	) {
 		return await this.dbService.ability.createMany({
-			data: [
-				{
-					code: 1,
-					action: '',
-					userId: '',
-					organizationId: ''
-				}
-			]
+			data
 		})
 	}
 
-	async removeAbilities() { }
+	async removeAbilities(codes: number[], userId: string, organizationId?: string) {
+
+		return await this.dbService.ability.deleteMany(
+			{
+				where: {
+					code: { in: codes },
+					userId,
+					... (organizationId ? { organizationId } : {})
+				}
+			}
+		)
+	}
 
 	async getUserAbilities(
 		userId: string,
