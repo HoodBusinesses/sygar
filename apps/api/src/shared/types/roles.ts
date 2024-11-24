@@ -1,5 +1,7 @@
 import { MongoAbility, MongoQuery } from '@casl/ability';
 import { Subjects } from '@casl/prisma';
+import { AbilitiesEnum } from '../constants/abilities';
+import { Ability, Organization, User } from '@prisma/client';
 
 /**
  * Enum representing different actions that can be performed on a resource.
@@ -15,7 +17,22 @@ export enum Action {
 /**
  * Type representing the subject of an action, which can be a specific subject or 'all'.
  */
-export type Subject = Subjects<any> | 'all';
+export type Subject = Subjects<{
+  'Users': User,
+  'Organization': Organization,
+  'Organization_Users': { user: User, organization: Organization },
+  'Ability': {
+    consumer: User,
+    producer: User,
+    ability: Ability,
+  },
+  'Organization_Ability': {
+    consumer: User,
+    producer: User,
+    ability: Ability,
+    organization: Organization
+  }
+}> | 'all';
 
 /**
  * Type representing the possible abilities, which is a tuple of Action and Subject.
@@ -38,4 +55,5 @@ export type AppAbility = MongoAbility<PossibleAbilities, Conditions>;
 export interface RequirementsRules {
   action: Action; // The action required, such as 'create', 'read', 'update', or 'delete'.
   subject: Subject; // The subject or resource type on which the action is performed, or 'all' for all resources.
+  ability?: AbilitiesEnum
 }

@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
+import { DatabseService } from 'src/global/databse/datbase.service';
 import { Prisma, User, UserType } from '@prisma/client';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
 import { getPaginationQuery, getPaginationResponse } from 'src/shared/pagination';
-import { DatabseService } from 'src/lib/databse/datbase.service';
 
 export enum UpdateAction {
   SET,
@@ -46,7 +46,7 @@ export class UserRepository {
 
     // Fetch users based on the filter and handle pagination
     const [count, users] = await Promise.all([
-      this.dbService.user.count({ where: filter }),
+      this.dbService.user.count({ where: { AND: [filter, ...(where ? where : {})] } }),
       this.dbService.user.findMany({
         where: filter,
         ...(getPaginationQuery(pagination))

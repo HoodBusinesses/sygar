@@ -29,28 +29,41 @@ model User {
   identityType        IdentityType
   identity            String
   isActive            Boolean       @default(false)
-  // organizationId      String?       @relation(fields: [organizationId], references: [id])
-  // organization        Organization? // Relation to Organization
-  // abilities           Ability[]
+  abilities           Ability[]
+  organization        Organization? @relation(fields: [organizationId], references: [id])
+  organizationId      String?
 
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
 }
-//
-// model Organization {
-//   id        String     @id @default(uuid())
-//   name      String
-//   address   String
-//   cnss      String     @unique
-//   ice       String     @unique
-//   imageLink String     @default("")
-//   users     User[] // Relation to Users
-//   reminders Reminder[]
-//   themes Theme[] // Relation to Groups
-//
-//   updatedAt DateTime @updatedAt
-//   createdAt DateTime @default(now())
-// }
+
+model Organization {
+  id        String    @id @default(uuid())
+  name      String
+  address   String
+  cnss      String    @unique
+  ice       String    @unique
+  imageLink String    @default("")
+  users     User[] // Relation to Users
+  Ability   Ability[]
+
+  // reminders Reminder[]
+  // themes Theme[] // Relation to Groups
+
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+}
+
+model Ability {
+  id             String        @id @default(uuid()) // Primary key
+  userId         String // Scalar foreign key for User
+  user           User          @relation(fields: [userId], references: [id]) // Relation to User
+  action         String
+  code           Int
+  organizationId String? // Nullable foreign key for Organization
+  organization   Organization? @relation(fields: [organizationId], references: [id]) // Proper relation to Organization
+}
+
 //
 // model Group {
 //   id             String            @id @default(uuid())
@@ -125,15 +138,7 @@ model User {
 //   updatedAt DateTime @updatedAt
 //   createdAt DateTime @default(now())
 // }
-//
-// model Ability {
-//   id       String       @id @default(uuid())
-//   userId   String       @relation(fields: [userId], references: [id])
-//   user     User // Relation to User
-//   resource String
-//   action   String
-//   scope    AbilityScope
-// }
+
 //
 // model Feedback {
 //   id            String       @id @default(uuid())
@@ -162,6 +167,7 @@ enum UserType {
   ORGANIZATION_USER
   SOLUTION_OWNER
 }
+
 //
 // enum ParticipantStatus {
 //   Employer
@@ -177,9 +183,4 @@ enum Role {
   Owner
   Admin
   User
-}
-
-enum AbilityScope {
-  Organization
-  Solution
 }

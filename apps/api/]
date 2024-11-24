@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
+import { DatabseService } from 'src/global/databse/datbase.service';
 import { Prisma, User, UserType } from '@prisma/client';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
 import { getPaginationQuery, getPaginationResponse } from 'src/shared/pagination';
-import { DatabseService } from 'src/lib/databse/datbase.service';
 
 export enum UpdateAction {
   SET,
@@ -27,25 +27,21 @@ export class UserRepository {
 
   async searchUsers(
     searchTerm: string,
-    pagination: PaginationDto,
-    where?: Prisma.UserWhereInput
+    pagination: PaginationDto
   ) {
     // Define a filter that will match the search term across the desired fields
     const filter: Prisma.UserWhereInput = {
-      AND: [
-        {
-          OR: [
-            { firstName: { contains: searchTerm, mode: 'insensitive' } },
-            { lastName: { contains: searchTerm, mode: 'insensitive' } },
-            { email: { contains: searchTerm, mode: 'insensitive' } },
-            { phone: { contains: searchTerm, mode: 'insensitive' } },
-            { identity: { contains: searchTerm, mode: 'insensitive' } },
-          ]
-        }, (where ? where : {})]
+      OR: [
+        { firstName: { contains: searchTerm, mode: 'insensitive' } },
+        { lastName: { contains: searchTerm, mode: 'insensitive' } },
+        { email: { contains: searchTerm, mode: 'insensitive' } },
+        { phone: { contains: searchTerm, mode: 'insensitive' } },
+        { identity: { contains: searchTerm, mode: 'insensitive' } },
+      ],
     };
 
     // Fetch users based on the filter and handle pagination
-    const [count, users] = await Promise.all([
+    const [count, orgs] = await Promise.all([
       this.dbService.user.count({ where: filter }),
       this.dbService.user.findMany({
         where: filter,
@@ -53,19 +49,14 @@ export class UserRepository {
       })]);
 
     return {
-      users,
+      organizations: orgs,
       ...(getPaginationResponse(pagination, count))
     }
   }
 
   async getAllUsersWhere(filter: Prisma.UserWhereInput, pagination: PaginationDto) {
 
-    const [count, users] = await Promise.all([this.dbService.user.count({ where: filter }), this.dbService.user.findMany({ where: filter, ...(getPaginationQuery(pagination)) })])
-
-    return {
-      users,
-      ...(getPaginationResponse(pagination, count))
-    }
+    const [count, org] = await Promise.all([this.dbService.user.count({ where: filter }), this.dbService.user.findMany({ where: filter, ...(getPaginationQuery(pagination)) })])
   }
 
   async getByFieldUnique<T extends keyof Prisma.UserWhereUniqueInput>(

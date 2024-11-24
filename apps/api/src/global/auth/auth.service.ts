@@ -8,13 +8,13 @@ import {
   ResetPasswordDto,
 } from './dto/reset-password.dto';
 import { v4 as uuid } from 'uuid';
-import { MailService } from '../mail/mail.service';
 import {
   ActivateAccountDto,
 } from './dto/activate-account.dto';
-import { JwtService } from '../jwt/jwt.service';
-import { EncryptionService } from '../encryption/encryption.service';
-import { TemplatesService } from '../templates/templates.service';
+import { EncryptionService } from 'src/lib/encryption/encryption.service';
+import { JwtService } from 'src/lib/jwt/jwt.service';
+import { MailService } from 'src/lib/mail/mail.service';
+import { TemplatesService } from 'src/lib/templates/templates.service';
 
 @Injectable()
 export class AuthService {
