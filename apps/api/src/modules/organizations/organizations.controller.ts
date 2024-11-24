@@ -1,9 +1,16 @@
-import { Body, Controller, Delete, Get, Injectable, Param, Post, Put, Query } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, UseInterceptors } from "@nestjs/common";
 import { CreateOrganizationDto } from "./dto/create-organization.dto";
 import { OrganizationsService } from "./organizations.service";
 import { UpdateOrganizationDto } from "./dto/update-organization.dto";
 import { PaginationDto } from "src/shared/dto/pagination.dto";
 import { AddParticipant } from "./dto/add-participant.dto";
+import { JwtGuard } from "src/global/auth/auth.guard";
+import { GetUser } from "src/shared/decorators/user";
+
+import type { Organization, User } from "@prisma/client";
+import { GetOrganization } from "src/shared/decorators/organization";
+import { OrganizationExists } from "src/shared/interceptors/organization-exists.interceptor";
+
 
 @Controller('organizations')
 export class OrganizationsController {
@@ -18,9 +25,18 @@ export class OrganizationsController {
 		return await this.orgService.createOrganization(dto);
 	}
 
-	@Put(':uid')
-	async updateOrganization(@Body() dto: UpdateOrganizationDto, @Param('uid') uid: string) {
-		return await this.orgService.updateOrganization(uid, dto);
+	@Put(':orgId')
+	@UseInterceptors(OrganizationExists)
+	@UseGuards(JwtGuard)
+	async updateOrganization(
+		@Body() dto: UpdateOrganizationDto,
+		@GetUser() user: User,
+		@GetOrganization() org: Organization
+	) {
+		console.log(
+			user, org
+		)
+		return await this.orgService.updateOrganization(user, org, dto);
 	}
 
 	@Get(':uid')

@@ -2,19 +2,16 @@
 import { IsNumberString, IsString, IsArray, ValidateNested, IsOptional } from "class-validator";
 import { Type } from "class-transformer";
 
-export class AddAbilityDto {
+export class RemoveAbilityDto {
 	@IsNumberString()
 	code!: string;
-
-	@IsString()
-	action!: string;
 }
 
-export class AddAbilitiesDto {
+export class RemoveAbilitiesDto {
 	@IsArray()
 	@ValidateNested({ each: true })
-	@Type(() => AddAbilityDto)
-	abilities!: AddAbilityDto[];
+	@Type(() => RemoveAbilityDto)
+	abilities!: RemoveAbilityDto[];
 
 	@IsString()
 	userId!: string;
@@ -23,4 +20,3 @@ export class AddAbilitiesDto {
 	@IsString()
 	organizationId?: string;
 }
-

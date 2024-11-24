@@ -1,23 +1,43 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { UseGuards, ConflictException, Injectable, NotFoundException, ForbiddenException } from "@nestjs/common";
 import { OrganizationsRepository } from "./organizations.repository";
 import { UserService } from "../user/user.service";
 import { AuthService } from "src/global/auth/auth.service";
 import { CreateOrganizationDto } from "./dto/create-organization.dto";
-import { Prisma, Role, UserType } from "@prisma/client";
+import { Organization, Prisma, Role, User, UserType } from "@prisma/client";
 import { AddParticipant } from "./dto/add-participant.dto";
 import { UpdateOrganizationDto } from "./dto/update-organization.dto";
 import { PaginationDto } from "src/shared/dto/pagination.dto";
+import { AbilityFactory } from "src/global/rbac/rbac.service";
+import { Action, internalSubject } from "src/shared/types/roles";
 
 @Injectable()
 export class OrganizationsService {
 	constructor(
 		private readonly orgRepository: OrganizationsRepository,
 		private readonly userService: UserService,
-		private readonly authService: AuthService
+		private readonly authService: AuthService,
+		private readonly abilitiesFactory: AbilityFactory
 	) { }
 
 
 	async createOrganization({ owner, ...orgData }: CreateOrganizationDto) {
+
+		const existedOrg = await this.getOrgnizationByUnqiueField('cnss', orgData.cnss);
+
+		if (existedOrg) {
+			throw new ConflictException('organization aith same cnss already exist')
+		}
+
+		const existedUser = await this.userService.getAllUsersWhere({
+			OR: [
+				{ email: owner.email },
+				{ cnss: +owner.cnss }
+			]
+		}, new PaginationDto())
+
+		if (existedUser.users.length) {
+			throw new ConflictException('Already existed user with same email or cnss')
+		}
 		const org = await this.orgRepository.createOrganization({
 			name: orgData.name,
 			cnss: orgData.cnss,
@@ -26,10 +46,27 @@ export class OrganizationsService {
 			imageLink: orgData.imageLink
 		})
 
-		await this.addParticipant(org.id, { ...owner, role: Role.Owner })
+		const user = await this.addParticipant(org.id, { ...owner, role: Role.Owner, organizationId: org.id })
+
+		return {
+			user,
+			organization: org
+		}
 	}
 
 	async addParticipant(orgId: string, dto: AddParticipant) {
+
+		const existedUser = await this.userService.getAllUsersWhere({
+			OR: [
+				{ email: dto.email },
+				{ cnss: +dto.cnss }
+			]
+		}, new PaginationDto())
+
+		if (existedUser.users.length) {
+			throw new ConflictException('Already existed user with same email or cnss')
+		}
+
 		const user = await this.userService.create({
 			firstName: dto.firstName,
 			lastName: dto.lastName,
@@ -63,12 +100,15 @@ export class OrganizationsService {
 	}
 
 
-	async updateOrganization(orgId: string, dto: UpdateOrganizationDto) {
-		const org = this.orgRepository.getOrganizationByUinqueField('id', orgId)
+	async updateOrganization(user: User, org: Organization, dto: UpdateOrganizationDto) {
+		this.abilitiesFactory
+			.createForUser(user)
+			.can(
+				Action.Update,
+				internalSubject('Organization', org)
+			)
 
-		if (!org) throw new NotFoundException()
-
-		const newOrg = this.orgRepository.updateOrganization(orgId, { name: dto.name, address: dto.address, ice: dto.ice, imageLink: dto.imageLink })
+		const newOrg = this.orgRepository.updateOrganization(org.id, { name: dto.name, address: dto.address, ice: dto.ice, imageLink: dto.imageLink })
 		return newOrg
 	}
 

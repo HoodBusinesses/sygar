@@ -1,4 +1,4 @@
-import { MongoAbility, MongoQuery } from '@casl/ability';
+import { MongoAbility, MongoQuery, subject } from '@casl/ability';
 import { Subjects } from '@casl/prisma';
 import { AbilitiesEnum } from '../constants/abilities';
 import { Ability, Organization, User } from '@prisma/client';
@@ -14,10 +14,7 @@ export enum Action {
   Delete = 'delete',
 }
 
-/**
- * Type representing the subject of an action, which can be a specific subject or 'all'.
- */
-export type Subject = Subjects<{
+export type SubjectMap = {
   'Users': User,
   'Organization': Organization,
   'Organization_Users': { user: User, organization: Organization },
@@ -32,7 +29,20 @@ export type Subject = Subjects<{
     ability: Ability,
     organization: Organization
   }
-}> | 'all';
+}
+
+/**
+ * Type representing the subject of an action, which can be a specific subject or 'all'.
+ */
+export type Subject = Subjects<SubjectMap> | 'all';
+
+export const internalSubject = <T extends keyof SubjectMap>(
+  key: T,
+  args: SubjectMap[T]
+) => {
+  return subject(key, args)
+}
+
 
 /**
  * Type representing the possible abilities, which is a tuple of Action and Subject.

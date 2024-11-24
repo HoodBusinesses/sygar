@@ -11,6 +11,8 @@ import { EncryptionModule } from './lib/encryption/encryption.module';
 import { TemplatesModule } from './lib/templates/templates.module';
 import { JwtModule } from './lib/jwt/jwt.module';
 import { OrganizationsModule } from './modules/organizations/organizations.modules';
+import { AbilitiesModule } from './modules/abilities/abilities.module';
+import { RbacModule } from './global/rbac/roles.module';
 
 /**
  * @module AppModule
@@ -39,7 +41,7 @@ import { OrganizationsModule } from './modules/organizations/organizations.modul
     AuthModule,
     MailModule,
     EncryptionModule,
-    TemplatesModule, JwtModule, OrganizationsModule
+    TemplatesModule, JwtModule, OrganizationsModule, AbilitiesModule, RbacModule
   ],
   controllers: [AppController],
 })

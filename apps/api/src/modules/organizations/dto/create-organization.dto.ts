@@ -1,5 +1,35 @@
-import { IsNumberString, IsOptional, IsString, ValidateNested } from "class-validator";
-import { AddParticipant } from "./add-participant.dto";
+import { IsEmail, IsEnum, IsNotEmptyObject, IsNumberString, IsOptional, IsPhoneNumber, IsString, ValidateNested } from "class-validator";
+import { Type } from "class-transformer";
+import { IdentityType } from "@prisma/client";
+
+
+export class AddOwner {
+
+	@IsNumberString()
+	cnss!: string;
+
+	@IsString()
+	@IsOptional()
+	imageLink?: string;
+
+	@IsString()
+	identity!: string;
+
+	@IsEnum(IdentityType)
+	identityType!: IdentityType;
+
+	@IsString()
+	firstName!: string;
+
+	@IsString()
+	lastName!: string;
+
+	@IsEmail()
+	email!: string;
+
+	@IsPhoneNumber()
+	phone!: string;
+}
 
 export class CreateOrganizationDto {
 	@IsString()
@@ -19,6 +49,9 @@ export class CreateOrganizationDto {
 	@IsString()
 	ice!: string;
 
+
+	@IsNotEmptyObject()
 	@ValidateNested()
-	owner!: AddParticipant;
+	@Type(() => AddOwner)
+	owner!: AddOwner;
 }
