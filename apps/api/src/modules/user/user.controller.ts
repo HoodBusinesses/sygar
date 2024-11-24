@@ -20,6 +20,7 @@ import { User, UserRoles } from './model/user.model';
 import { UserRepository } from './user.repository';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
+import { UserType } from '@prisma/client';
 
 /**
  * @class UserController
@@ -45,13 +46,22 @@ export class UserController {
    */
   @Post() // This is the endpoint that will call the create method
   async create(
-    @Body() createUserDto: CreateUserDto,
+    @Body() user: CreateUserDto,
 
   ) {
+    const createdUser = await this.userService.create({
+      phone: user.phone,
+      cnss: +user.cnss,
+      email: user.email,
+      lastName: user.lastName,
+      firstName: user.firstName,
+      role: user.role,
+      identityType: user.identityType,
+      identity: user.identity,
+      type: UserType.SOLUTION_OWNER
 
-
-    const user = await this.userService.create(createUserDto);
-    return { user, date: new Date().toISOString() }; // Added date to response
+    });
+    return { createdUser, date: new Date().toISOString() }; // Added date to response
 
   }
 

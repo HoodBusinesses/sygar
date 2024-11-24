@@ -4,12 +4,13 @@ import { ConfigModule } from '@nestjs/config';
 import path, { join } from 'path';
 import { UserModule } from './modules/user/user.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import { DatabaseModule } from './global/databse/database.module';
 import { AuthModule } from './global/auth/auth.module';
-import { MailModule } from './global/mail/mail.module';
-import { EncryptionModule } from './global/encryption/encryption.module';
-import { TemplatesModule } from './global/templates/templates.module';
-import { JwtModule } from './global/jwt/jwt.module';
+import { DatabaseModule } from './lib/databse/database.module';
+import { MailModule } from './lib/mail/mail.module';
+import { EncryptionModule } from './lib/encryption/encryption.module';
+import { TemplatesModule } from './lib/templates/templates.module';
+import { JwtModule } from './lib/jwt/jwt.module';
+import { OrganizationsModule } from './modules/organizations/organizations.modules';
 
 /**
  * @module AppModule
@@ -38,7 +39,7 @@ import { JwtModule } from './global/jwt/jwt.module';
     AuthModule,
     MailModule,
     EncryptionModule,
-    TemplatesModule, JwtModule
+    TemplatesModule, JwtModule, OrganizationsModule
   ],
   controllers: [AppController],
 })

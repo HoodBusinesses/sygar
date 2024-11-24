@@ -12,7 +12,7 @@ export class UserService {
     private readonly userRepository: UserRepository, // Inject the user repository for database operations
   ) { }
 
-  async create(user: CreateUserDto) {
+  async create(user: Prisma.UserCreateInput) {
     let userExists = await this.userRepository.getByFieldUnique('email', user.email);
 
     if (userExists) {
@@ -36,8 +36,8 @@ export class UserService {
     return await this.userRepository.getAllUsersWhere(filter, pagination)
   }
 
-  async searchInUsers(search: string, pagination: PaginationDto) {
-    return await this.userRepository.searchUsers(search, pagination);
+  async searchInUsers(search: string, pagination: PaginationDto, where?: Prisma.UserWhereInput) {
+    return await this.userRepository.searchUsers(search, pagination, where);
   }
 
 
@@ -67,12 +67,8 @@ export class UserService {
       throw new Error('userNotFound');
     }
 
-    try {
-      // TODO: remove all user related data
-      return await this.userRepository.deleteUser(uid);
-    } catch (error: any) {
-      return { error: error.message };
-    }
+    // TODO: remove all user related data
+    return await this.userRepository.deleteUser(uid);
   }
 
   async getByFieldUnique<T extends keyof Prisma.UserWhereUniqueInput>(
