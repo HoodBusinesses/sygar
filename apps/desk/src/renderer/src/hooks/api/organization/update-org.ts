@@ -9,26 +9,29 @@ import { OrganizationsData } from './get-all-organizations';
 import { AxiosResponse } from 'axios';
 
 export interface UpdateOrganParams {
-  cnss: string;
+  orgId: string;
   data: Partial<OrganizationsData>;
 }
 
 export default function useUpdateOrg(
-  options?: UseMutationOptions<AxiosResponse<any, any>, Error, unknown>
+  options?: UseMutationOptions<
+    AxiosResponse<any, any>,
+    Error,
+    UpdateOrganParams
+  >
 ) {
   const token = useAppSelector((state) => state.auth.auth.token);
-  
+
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: ['UpdateOrg'],
 
-    mutationFn: (params: UpdateOrganParams) =>
-      api.put(`organization/update`, params.data, {
+    mutationFn: ({ orgId, data }: UpdateOrganParams) =>
+      api.put(`organizations/${orgId}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        params: { cnss: params.cnss },
       }),
 
     onSuccess: () => {
@@ -44,8 +47,8 @@ export default function useUpdateOrg(
 
     ...options,
 
-    onError: () => {
-      console.log('wiwiw error');
+    onError: (error) => {
+      console.log('Error updating organization:', error);
     },
   });
 }

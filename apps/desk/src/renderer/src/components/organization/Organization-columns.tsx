@@ -126,7 +126,7 @@ export const Columns = (
           subscription={true}
           saveDefaultData={setRowData.bind(null, row.original)}
           rowId={row.original.cnss}
-          endpoint={`/organization/delete?cnss=${row.original.cnss}`}
+          endpoint={`/organizations/${row.original.id}`}
           invalidateKeyData="organizationsData"
         />
       ),

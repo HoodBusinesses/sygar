@@ -54,12 +54,12 @@ const OrganizationsPage: React.FC = (): JSX.Element => {
             />
           }
           data={data.map((org, index) => ({
-            id: org.uid,
+            id: org.id,
             logo: '',
             rs: org.name,
-            ice: `ice_${index}`,
+            ice: org.ice,
             cnss: org.cnss,
-            address: `address_${index}`,
+            address: org.address,
             enabled: index % 2 === 0,
           }))}
         />
