@@ -12,7 +12,7 @@ export const useLogin = () => {
       const { data } = res;
       // Open the custom URL when the request is successful
       console.log('data:: ', data);
-      const customUrl = `sygar://anaas?token=${data.token}`;
+      const customUrl = `sygar://anaas?token=${data}`;
       window.location.href = customUrl; // Open the custom scheme URL
     },
 

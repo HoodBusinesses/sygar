@@ -1,27 +1,25 @@
-import {
-  CreateUserParams,
-  DeleteUserParams,
-  UpdateUserParams,
-} from 'Args/user';
-import {
-  LoginParams,
-  ResetPasswordParams,
-  ForgotPasswordParams,
-  ActivateAccountParams,
-} from './Args/auth';
-import type { AxiosInstance } from 'axios';
-import axios from 'axios';
+import { CreateGroupParams, UpdateGroupParams } from 'Args/group';
 import {
   CreateOrganParams,
-  DeleteOrganParams,
-  UpdateOrganParams,
+  UpdateOrganParams
 } from 'Args/org';
-import { CreateThemeParams, UpdateThemeParams } from 'Args/theme';
 import {
   CreateParticipantParams,
   UpdateParticipantParams,
 } from 'Args/participant';
-import { CreateGroupParams, UpdateGroupParams } from 'Args/group';
+import { CreateThemeParams, UpdateThemeParams } from 'Args/theme';
+import {
+  CreateUserParams,
+  UpdateUserParams
+} from 'Args/user';
+import type { AxiosInstance } from 'axios';
+import axios from 'axios';
+import {
+  ActivateAccountParams,
+  ForgotPasswordParams,
+  LoginParams,
+  ResetPasswordParams,
+} from './Args/auth';
 
 export class Api {
   private httpClient: AxiosInstance;
@@ -83,7 +81,7 @@ export class Api {
     },
     organization: {
       create: (params: CreateOrganParams) => {
-        const endpoint = '/organization/create';
+        const endpoint = '/organizations';
         return this.httpClient.post(endpoint, params);
       },
       update: (params: UpdateOrganParams) => {
@@ -139,3 +137,4 @@ export class Api {
 
 export * from './Args/auth';
 export * from './modules/User';
+

@@ -6,28 +6,49 @@ import images from '@/public/images';
 import OrgInfosForm from './components/OrgInfosForm';
 import PersonalInfosForm from './components/PersonalInfosForm';
 import SendEmailStep from './components/SendEmailStep';
+import { useSignup } from '@/hooks/useSignUp';
+import { orgType, ownerType } from '@/lib/schema/schema';
 
 const SignUpPage: React.FC = () => {
-  const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({
-    orgInfo: {},
-    personalInfo: {},
+  const mutation = useSignup({
+    onSuccess: () => setStep(3),
   });
 
-  const handleOrgInfoSubmit = (data: any) => {
+  const [step, setStep] = useState(1);
+
+  const [formData, setFormData] = useState<{
+    orgInfo: orgType | null;
+    personalInfo: ownerType | null;
+  }>({
+    orgInfo: null,
+    personalInfo: null,
+  });
+
+  const handleOrgInfoSubmit = (data: orgType) => {
     const updatedFormData = { ...formData, orgInfo: data };
-    console.log('Organization Info Submitted:', data);
-    console.log('Current Form Data:', updatedFormData);
     setFormData(updatedFormData);
     setStep(2);
   };
 
-  const handlePersonalInfoSubmit = (data: any) => {
+  const handlePersonalInfoSubmit = (data: ownerType) => {
     const combinedData = { ...formData, personalInfo: data };
-    console.log('Personal Info Submitted:', data);
-    console.log('Combined Form Data:', combinedData);
     setFormData(combinedData);
-    setStep(3);
+
+    mutation.mutate({
+      name: combinedData.orgInfo!.rs,
+      address: combinedData.orgInfo!.address,
+      cnss: combinedData.orgInfo!.cnss,
+      ice: combinedData.orgInfo!.ice,
+      owner: {
+        cnss: combinedData.personalInfo!.cnss,
+        identity: combinedData.personalInfo!.identity,
+        identityType: combinedData.personalInfo!.identityType,
+        firstName: combinedData.personalInfo!.firstName,
+        lastName: combinedData.personalInfo!.lastName,
+        email: combinedData.personalInfo!.email,
+        phone: combinedData.personalInfo!.phoneNumber,
+      },
+    });
   };
 
   const logo = images.logo;
