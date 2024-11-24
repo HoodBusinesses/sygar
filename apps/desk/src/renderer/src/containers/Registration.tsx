@@ -29,18 +29,19 @@ const Registration: React.FC = () => {
 
   return (
     <div className="p-4 w-full py-6 space-y-6">
+      <h1 className="text-2xl font-semibold text-gray-950">
+        {t('registration.registration')}
+      </h1>
       <form onSubmit={methods1.handleSubmit(handleSubmit)}
         className="space-y-6"
       >
-        <Card className="flex flex-col gap-6">
-          <CardHeader className="text-lg text-gray-950 font-semibold mb-6">
-            {t('registration.registration')}
-            <span className="text-sm rounded-sm bg-blue-100 text-green-600">
+        <Card className="flex flex-col gap-4 ">
+          <CardHeader className="text-sm rounded-sm text-green-600 bg-green-100 font-bold  p-0 w-fit">
+            
               {t('registration.title')}
-            </span>
           </CardHeader>
           <CardContent className="">
-            <div className="grid grid-cols-3 gap-12 mb-6">
+            <div className="grid grid-cols-3 gap-4">
               {registrationFields.map((field) => (
                 <FormInputItem
                   key={field.name}
@@ -58,12 +59,12 @@ const Registration: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        <Card className='flex flex-col p-5 gap-6'>
-          <CardHeader className="text-gray-700 text-lg font-semibold">
-            {('OWNER INFOS')}
+        <Card className='flex flex-col  gap-4'>
+          <CardHeader className="text-sm rounded-sm text-green-600 bg-green-100 font-bold  p-0 w-fit">
+            {t('registration.ownerInfo')}
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-3 gap-12 mb-6">
+            <div className="grid grid-cols-3 gap-4">
               {userFields.map((field) => (
                 <FormInputItem
                   key={field.name}

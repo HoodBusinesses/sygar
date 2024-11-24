@@ -33,6 +33,7 @@
   "registration": {
     "title": "Informations sur les membres de l'organisation",
     "registration": "Inscription",
+    "ownerInfo": "Informations sur le propriétaire",
     "EditOrganization": "Modifier l'organisation",
     "basicInfo": {
       "title": "Informations sur l'organisation",
