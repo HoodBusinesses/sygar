@@ -28,7 +28,7 @@ const EditUsers = ({crud, defaultValues, goBack} : EditUserProps): JSX.Element =
         <form className='space-y-6' onSubmit={methods.handleSubmit(handleSubmit)}>
             <Card className="flex flex-col p-5 gap-6">
                 <CardHeader className="text-gray-700 text-xl">
-                    {t(`users.${crud}User`)}
+                    {t(`user.${crud}User`)}
                 </CardHeader>
                 <CardContent className="">
                     <div className="grid grid-cols-3 gap-4 mb-6">

@@ -33,6 +33,7 @@
   "registration": {
     "title": "معلومات أعضاء المؤسسة",
     "registration": "التسجيل",
+    "ownerInfo": "معلومات المالك",
     "EditOrganization": "تعديل المؤسسة",
     "basicInfo": {
       "title": "معلومات المؤسسة",
