@@ -1,15 +1,33 @@
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
-import { Button } from './ui/button';
-import { Label } from './ui/label';
-import { Input } from './ui/input';
-import { useTranslate } from '@renderer/hooks/useTranslate';
 import Profile_Img from '@renderer/assets/images/profile_img.png';
+import { User } from '@renderer/hooks/api/user/me';
+import useUpdateUser from '@renderer/hooks/api/user/useUpdateUser';
+import { useTranslate } from '@renderer/hooks/useTranslate';
 import { EditProfileSchema } from '@renderer/utils/schemas/formSchema';
+import { UploadIcon } from 'lucide-react';
+import { useMemo } from 'react';
+import { useForm } from 'react-hook-form';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { Button } from './ui/button';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
 
-export default function EditProfile(): JSX.Element {
+//TODO: USE REUSABLE FORM FIELDS COMPOONENT @PAPOCHA
+
+export default function EditProfile({ data }: { data: User }): JSX.Element {
+
   const { t, isRtl } = useTranslate();
+
+  const mutation = useUpdateUser();
+
+  const defaultValues = useMemo(() => {
+    return {
+      firstName: data?.firstName ?? '',
+      lastName: data?.lastName ?? '',
+      email: data?.email ?? '',
+      id: data?.id ?? '',
+    };
+  }, [data]);
 
   const {
     register,
@@ -17,10 +35,24 @@ export default function EditProfile(): JSX.Element {
     formState: { errors },
   } = useForm({
     resolver: zodResolver(EditProfileSchema),
+    defaultValues: {
+      firstName: defaultValues?.firstName ?? '',
+      lastName: defaultValues?.lastName ?? '',
+      email: defaultValues?.email ?? '',
+    },
   });
 
   const onSubmit = (data: any) => {
-    console.log('Form Data:', data);
+    mutation.mutate({
+      userId: defaultValues?.id ?? '',
+      data: {
+        firstName: defaultValues.firstName === data.firstName ? undefined : data.firstName,
+        lastName: defaultValues.lastName === data.lastName ? undefined : data.lastName,
+        email:  defaultValues.email === data.email ? undefined : data.email,
+        //TODO: add phone
+        // phone: data.phone
+      },
+    });
   };
 
   return (
@@ -108,7 +140,7 @@ export default function EditProfile(): JSX.Element {
               </p>
             )}
           </div>
-          <div>
+          {/* <div>
             <Label
               htmlFor="currentPassword"
               className="text-gray-700 font-medium"
@@ -164,20 +196,13 @@ export default function EditProfile(): JSX.Element {
                 {errors.confirmPassword.message?.toString()}
               </p>
             )}
-          </div>
+          </div> */}
         </div>
 
         {/* Footer Buttons */}
         <div
-          className={`flex ${isRtl ? 'justify-start' : 'justify-end'} mt-12 space-x-4`}
+          className={`flex mt-12 space-x-4`}
         >
-          <Button
-            type="button"
-            variant="outline"
-            className="text-gray-600 border-gray-300 hover:bg-gray-100 transition-colors rounded-md"
-          >
-            {t('buttons.cancel')}
-          </Button>
           <Button
             type="submit"
             className="bg-blue-600 text-white hover:bg-blue-700 transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-md"
@@ -187,26 +212,5 @@ export default function EditProfile(): JSX.Element {
         </div>
       </form>
     </div>
-  );
-}
-
-function UploadIcon(props): JSX.Element {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-      <polyline points="17 8 12 3 7 8" />
-      <line x1="12" x2="12" y1="3" y2="15" />
-    </svg>
   );
 }

@@ -1,26 +1,26 @@
-export type UserRoleType = 'admin' | 'user' | 'owner';
-
-export type UserProfileType = 'SYGAR' | 'ORGANIZATION';
+import { Role, UserType } from "@renderer/store/slices/auth.slice";
 
 export const hasPermission = (
   isAccountActivated: boolean,
-  userRole: UserRoleType,
-  userProfile: UserProfileType
+  userRole: Role,
+  userProfile: UserType
 ) => {
   return {
-    // only SYGAR admin and owner can access registration
+    // only SOLUTION_OWNER admin and owner can access registration
     canAccessRegistration: () => ({
       canRead:
-        isAccountActivated && userProfile === 'SYGAR' && userRole !== 'user',
+        isAccountActivated,
       canCUD:
-        isAccountActivated && userProfile === 'SYGAR' && userRole !== 'user',
+        isAccountActivated &&
+        userProfile === 'SOLUTION_OWNER' &&
+        userRole !== 'User',
     }),
 
-    // only SYGAR admin and owner can access organizations list
+    // only SOLUTION_OWNER admin and owner can access organizations list
     AccessOrganizations: () => {
       return {
-        canRead: isAccountActivated || userProfile === 'SYGAR',
-        canCUD: userProfile === 'SYGAR',
+        canRead: isAccountActivated,
+        canCUD: isAccountActivated && userProfile === 'SOLUTION_OWNER',
       };
     },
 
@@ -33,17 +33,15 @@ export const hasPermission = (
         canRead: isAccountActivated,
         canCUD:
           isAccountActivated &&
-          userProfile === 'ORGANIZATION' &&
-          (userRole !== 'user'),
+          userProfile === 'ORGANIZATION_USER' &&
+          userRole !== 'User',
       };
     },
 
-    // only  Activated  Account and (SYGAR admin and owner) and (ORGANIZATION owner admin)
+    // only  Activated  Account and (SOLUTION_OWNER admin and owner) and (ORGANIZATION owner admin)
     canAccessUsers: () => ({
-      canRead:
-        isAccountActivated && (userRole !== 'user'),
-      canCRUD:
-        isAccountActivated && (userRole !== 'user'),
+      canRead: isAccountActivated && userRole !== 'User',
+      canCRUD: isAccountActivated && userRole !== 'User',
     }),
   };
 };

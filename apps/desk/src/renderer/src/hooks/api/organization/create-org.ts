@@ -3,10 +3,24 @@ import { api } from '@renderer/utils/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useToast } from '../../useToast';
 
-export interface CreateOrganParams {
+type AddParticipant = {
   cnss: string;
+  imageLink?: string;
+  identity: string;
+  identityType: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+};
+
+export interface CreateOrganParams {
   name: string;
-  freeTrial: number;
+  cnss: string;
+  imageLink?: string;
+  address: string;
+  ice: string;
+  owner: AddParticipant;
 }
 
 export default function useCreateOrg() {
@@ -20,7 +34,7 @@ export default function useCreateOrg() {
     mutationKey: ['createOrg'],
 
     mutationFn: (params: CreateOrganParams) =>
-      api.post('/organization/create', params, {
+      api.post('/organizations', params, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

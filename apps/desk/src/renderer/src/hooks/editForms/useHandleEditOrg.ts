@@ -31,7 +31,10 @@ export default function useHandelEditOrgs(
       updateMutation.mutate({
         orgId: defaultValues.id,
         data: {
-          name: data.rs,
+          name: defaultValues.rs !== data.rs ? data.rs : undefined,
+          cnss: defaultValues.cnss !== data.cnss ? data.cnss : undefined,
+          address: defaultValues.address !== data.address ? data.address : undefined,
+          ice: defaultValues.ice !== data.ice ? data.ice : undefined,
         },
       });
     }
@@ -42,7 +45,7 @@ export default function useHandelEditOrgs(
       const { id, enabled, logo, ...values } = defaultValues;
       const { logo: imageData, ...defaultData } = data;
       console.log('Data:', data);
-      console.log('Default Values:', values);
+      console.log('Default Values:', values); 
       return JSON.stringify(defaultData) !== JSON.stringify(values);
     }
   };

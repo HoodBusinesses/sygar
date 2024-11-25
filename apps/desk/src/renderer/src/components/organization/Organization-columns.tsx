@@ -8,7 +8,6 @@ import DeleteModal from '../DeleteModal';
 import RedirectButton from '../redirectButton';
 
 
-// rs -- ice. -- cnss -- address - logo
 export type Organization = {
   id: string;
   logo: string;
@@ -34,14 +33,16 @@ export const Columns = (
         <div className="flex items-center">
           <Checkbox
             checked={table.getIsAllPageRowsSelected()}
-            onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+            onCheckedChange={(value) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
             aria-label="Select all"
           />
 
           {table.getIsSomeRowsSelected() && (
             <DeleteModal
               DeleteNumber={table.getFilteredSelectedRowModel().rows.length}
-              onDelete={() => { }}
+              onDelete={() => {}}
             />
           )}
         </div>
@@ -77,28 +78,29 @@ export const Columns = (
       cell: ({ row }) => <p className="text-gray-600">{row.getValue('rs')}</p>,
     },
     {
+      accessorKey: 'address',
+      header: 'organization.address',
+      cell: ({ row }) => (
+        <p className="text-gray-600">{row.getValue('address')}</p>
+      ),
+    },
+    {
       accessorKey: 'cnss',
       header: 'organization.cnss',
-      cell: ({ row }) => <p className="text-gray-600">{row.getValue('cnss')}</p>,
+      cell: ({ row }) => (
+        <p className="text-gray-600">{row.getValue('cnss')}</p>
+      ),
     },
     {
       accessorKey: 'ice',
       header: 'ice',
-      cell: ({ row }) => (
-        <p className="text-gray-600">{row.getValue('ice')}</p>
-      ),
+      cell: ({ row }) => <p className="text-gray-600">{row.getValue('ice')}</p>,
     },
     {
       accessorKey: 'viewUsers',
       header: 'organization.viewUsers',
       cell: () => (
         <RedirectButton click={viewUsers} text="organization.viewUsers" />
-        // <Button
-        //   onClick={viewUsers}
-        //   className="hover:underline text-blue-500 px-4 py-1"
-        // >
-        //   {'organization.viewUsers'}
-        // </Button>
       ),
     },
 
@@ -115,7 +117,7 @@ export const Columns = (
         );
       },
       cell: ({ row }) => (
-        <EnableButton onClick={() => { }} value={row.getValue('enabled')} />
+        <EnableButton onClick={() => {}} value={row.getValue('enabled')} />
       ),
     },
     {
