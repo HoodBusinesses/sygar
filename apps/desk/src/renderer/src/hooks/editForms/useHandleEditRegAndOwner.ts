@@ -20,26 +20,25 @@ export default function useHandleEditRegAndOwner() {
     ),
   });
 
-  // const userMethods = useForm<UserFormData>({
-  //   resolver: zodResolver(userSchema),
-  //   defaultValues: useMemo(
-  //     () => ({
-  //       // default values
-  //     }),
-  //     []
-  //   ),
-  // });
-
   const createMuation = useCreateOrg();
 
   const handleSubmit = (data: OrganizationFormData & UserFormData) => {
-    // Handle form submission
     console.log('ikhan: ', data);
-    // createMuation.mutate({
-    //   name: data.rs,
-    //   cnss: data.cnss,
-    //   freeTrial: 30,
-    // });
+    createMuation.mutate({
+      name: data.rs,
+      cnss: data.cnss,
+      address: data.address,
+      ice: data.ice,
+      owner: {
+        cnss: data.userCnss,
+        identity: data.identity,
+        identityType: data.identityType,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        phone: data.phone,
+      }
+    });
   };
 
   return {

@@ -85,6 +85,7 @@ const SignUpPage: React.FC = () => {
         )}
         {step === 2 && (
           <PersonalInfosForm
+            isLoading={mutation.isPending}
             setStep={setStep}
             onSubmit={handlePersonalInfoSubmit}
           />

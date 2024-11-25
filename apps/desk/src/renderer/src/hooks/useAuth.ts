@@ -1,8 +1,8 @@
 import { useAppDispatch, useAppSelector } from '@renderer/store/hooks';
-import { setIsAuth } from '@renderer/store/slices/auth.slice';
+import { Role, setIsAuth, setUserData, UserType } from '@renderer/store/slices/auth.slice';
 import { useRouter } from '@tanstack/react-router';
 import { useCallback, useEffect, useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useGetMe, User } from './api/user/me';
 
 interface AuthState {
   isLoading: boolean;
@@ -10,47 +10,36 @@ interface AuthState {
   isAuth: boolean;
 }
 
-const fetchUser = async (token: string | null) => {
-  return new Promise((res, rej) => {
-    setTimeout(() => {
-      if (!token) rej('ba3osha');
-      res('ok');
-    }, 1000);
-  });
-};
-
 export const useAuth = (): AuthState => {
   const dispatch = useAppDispatch();
 
   const {
-    auth: { isAuth, token },
+    auth: { isAuth },
   } = useAppSelector((state) => state.auth); // Select authentication state
 
   const router = useRouter();
+  
+  const { error, isLoading, status, data } = useGetMe();
 
-  const onSuccess = useCallback(() => {
+  const onSuccess = useCallback((usrData: User) => {
     dispatch(setIsAuth(true));
+    dispatch(setUserData({
+      userId: usrData.id ?? '',
+      organizationId: usrData.organizationId ?? '',
+      role: (usrData.role ?? 'User') as Role,
+      userType: (usrData.type ?? 'ORGANIZATION_USER') as UserType,
+      isAccountActivated: usrData.isActive,
+    }));
+
     if (router.latestLocation.pathname === '/signin') {
       router.navigate({ to: '/' });
     }
   }, [dispatch, router.latestLocation.pathname]);
 
   const onError = useCallback(() => {
+    dispatch(setIsAuth(false));
     router.navigate({ to: '/signin' });
   }, [router]);
-
-  const fetchUserCallback = useCallback(
-    () => fetchUser(token),
-    [fetchUser, token]
-  );
-
-  const { error, isLoading, status, refetch } = useQuery({
-    queryKey: ['fetch-user-data', token],
-    enabled: !isAuth,
-    queryFn: fetchUserCallback,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-  });
 
   // TODO : refactor this @smia
   useEffect(() => {
@@ -58,15 +47,15 @@ export const useAuth = (): AuthState => {
       onError();
     }
     if (status === 'success') {
-      onSuccess();
+      onSuccess(data);
     }
   }, [status]);
 
-  useEffect(() => {
-    if (token) {
-      refetch();
-    }
-  }, [token]);
+  // useEffect(() => {
+  //   if (token) {
+  //     refetch();
+  //   }
+  // }, [token]);
 
   return useMemo(
     () => ({

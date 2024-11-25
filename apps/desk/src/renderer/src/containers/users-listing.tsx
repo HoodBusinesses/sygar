@@ -1,30 +1,43 @@
 import UsersTable from '@renderer/components/UsersTable';
 import withAuth from '@renderer/hoc/with-auth';
-import { mockUsers } from '@renderer/utils/static/organizations';
-
+import { useOrganizationUsers } from '@renderer/hooks/api/organization/get-organization-users';
+import { useAppSelector } from '@renderer/store/hooks';
 
 const usersListing = () => {
-    // const { data, isSuccess, isLoading, isError } = useGetAllUsers();
+  const orgId = useAppSelector((state) => state.auth.auth.organizationId);
 
-    // if (isLoading) {
-    //     return (
-    //       <div className="flex items-center justify-center h-screen">
-    //         Loading...
-    //       </div>
-    //     );
-    //   }
-    
-    //   if (isError) {
-    //     return (
-    //       <div className="text-red-500 p-4">Error loading organization data</div>
-    //     );
-    //   }
-    
-    //   if (isSuccess) {
-    //     return <UsersTable data={data} />;
-    //   }
-    
-        return <UsersTable  data={mockUsers}  />;
-}
+  const { data, isLoading, isError, error, isSuccess, refetch } =
+    useOrganizationUsers(orgId);
 
-export default withAuth(usersListing)
+  console.log(data);
+  if (isLoading) {
+      return (
+        <div className="flex items-center justify-center h-screen">
+          Loading...
+        </div>
+      );
+    }
+
+    if (isError) {
+      return (
+        <div className="text-red-500 p-4">Error loading organization data</div>
+      );
+    }
+
+    if (isSuccess) {
+      return (
+        <UsersTable
+          data={data.users.map((user) => ({
+            id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            phone: user.phone,
+            // role: user.role,
+          }))}
+        />
+      );
+    }
+};
+
+export default withAuth(usersListing);

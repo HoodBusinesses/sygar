@@ -1,12 +1,9 @@
 import { Button } from '@renderer/components/ui/button';
 import { Card, CardContent, CardHeader } from '@renderer/components/ui/card';
 import FormInputItem from '@renderer/components/ui/form-input-item';
-import { usersFields } from '@renderer/data/formation-fields-input';
 import { registrationFields, userFields } from '@renderer/data/organinzation-fields-input';
 import withAuth from '@renderer/hoc/with-auth';
 import useHandleEditRegAndOwner from '@renderer/hooks/editForms/useHandleEditRegAndOwner';
-import useHandleEditUser from '@renderer/hooks/editForms/useHandleEditUser';
-import useRegistrations from '@renderer/hooks/useRegistrations';
 import { useTranslate } from '@renderer/hooks/useTranslate';
 import { OrganizationFormData, UserFormData } from '@renderer/utils/schemas/formSchema';
 import React from 'react';
@@ -16,16 +13,6 @@ const Registration: React.FC = () => {
   const { t } = useTranslate();
   // get members , form provider method, and submit handler
   const { methods: methods1, isPending, handleSubmit } = useHandleEditRegAndOwner();
-  // const { methods: methods2, isPending: isPending1, handleSubmit: handleSubmit1 } = useHandleEditUser(
-  //   {
-  //     id: '',
-  //     firstName: 'HAMZA',
-  //     lastName: 'AMEUR',
-  //     email: 'SYGAR@gmail.com',
-  //     phone: '123456789'
-  //   }, 'edit'
-  // );
-
 
   return (
     <div className="p-4 w-full py-6 space-y-6">
@@ -37,7 +24,6 @@ const Registration: React.FC = () => {
       >
         <Card className="flex flex-col gap-4 ">
           <CardHeader className="text-sm rounded-sm text-green-600 bg-green-100 font-bold  p-0 w-fit">
-            
               {t('registration.title')}
           </CardHeader>
           <CardContent className="">

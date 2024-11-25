@@ -7,6 +7,7 @@ import {
 } from '@tanstack/react-query';
 import { OrganizationsData } from './get-all-organizations';
 import { AxiosResponse } from 'axios';
+import { useToast } from '@renderer/hooks/useToast';
 
 export interface UpdateOrganParams {
   orgId: string;
@@ -24,6 +25,8 @@ export default function useUpdateOrg(
 
   const queryClient = useQueryClient();
 
+  const { toast } = useToast();
+
   return useMutation({
     mutationKey: ['UpdateOrg'],
 
@@ -39,6 +42,10 @@ export default function useUpdateOrg(
         queryClient.refetchQueries({
           queryKey: ['organizationsData'],
           exact: true,
+        });
+        toast({
+          title: 'success',
+          description: 'Organization updated successfully',
         });
       } catch (error) {
         console.log(error);

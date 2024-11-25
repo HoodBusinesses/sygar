@@ -1,5 +1,4 @@
 import { api } from '@/api';
-import { errorToast } from '@/lib/toasts';
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 
@@ -13,7 +12,7 @@ export const useSignup = (
 
     ...options,
 
-    onError: (error) => errorToast(error.message),
+    onError: (error) => {},
   });
 
   return {
