@@ -52,7 +52,11 @@ export default function useUpdateTheme(
     ...options,
 
     onError: () => {
-      toast({ title: 'Error', description: 'Error creating Theme' });
+      toast({
+        title: 'Error',
+        variant: 'destructive',
+        description: 'Error creating Theme',
+      });
     },
   });
 }

@@ -15,7 +15,11 @@ import { Dispatch } from 'react';
 function handleAxiosError(
   error: unknown,
   dispatch: Dispatch<AnyAction>,
-  toast: (args: { title: string; description: string }) => void
+  toast: (args: {
+    title: string;
+    description: string;
+    variant: 'destructive' | 'default' | 'success' | null | undefined;
+  }) => void
 ) {
   const axiosError = error as AxiosError;
   const data = axiosError.response?.data as any;
@@ -27,6 +31,7 @@ function handleAxiosError(
     toast({
       title: 'Unauthorized',
       description: 'Your session has expired. Please log in again.',
+      variant: 'destructive',
     });
   }
 
@@ -34,6 +39,7 @@ function handleAxiosError(
   if (data && data.statusCode === 403 && data.message === 'Forbidden') {
     toast({
       title: 'Forbidden',
+      variant: 'destructive',
       description:
         'You do not have the required permissions to perform this action.',
     });

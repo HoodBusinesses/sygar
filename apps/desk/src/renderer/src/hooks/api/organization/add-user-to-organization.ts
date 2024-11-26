@@ -41,6 +41,7 @@ export default function useAddUserToOrganization(orgId: string, goBack: () => vo
         });
         toast({
           title: 'success',
+          variant: 'success',
           description: 'Organization created successfully',
         });
         goBack();
@@ -50,7 +51,11 @@ export default function useAddUserToOrganization(orgId: string, goBack: () => vo
     },
 
     onError: () => {
-      toast({ title: 'Error', description: 'Error creating organization' });
+      toast({
+        title: 'Error',
+        variant: 'destructive',
+        description: 'Error creating organization',
+      });
     },
   });
 }
