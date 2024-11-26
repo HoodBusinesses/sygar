@@ -10,7 +10,7 @@ import * as z from 'zod';
 import useCreateTheme from '../api/theme/create-theme';
 import useUpdateTheme from '../api/theme/update-theme';
 
-export default function useHandelEditFormation(
+export default function   useHandelEditFormation(
   defaultValues: Theme | null,
   crud: string,
   goBack: () => void

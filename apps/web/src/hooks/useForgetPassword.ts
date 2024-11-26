@@ -1,5 +1,4 @@
 import { api } from '@/api';
-import { errorToast } from '@/lib/toasts';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 
@@ -16,7 +15,7 @@ export const useForgotPassword = () => {
       router.push('/login'); // Redirect to the login page
     },
 
-    onError: (error) => errorToast(error.message),
+    onError: (error) => {},
   });
 
   return {

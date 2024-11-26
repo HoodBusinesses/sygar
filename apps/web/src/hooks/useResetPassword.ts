@@ -1,5 +1,4 @@
 import { api } from '@/api';
-import { errorToast } from '@/lib/toasts';
 import { ResetPasswordParams } from '@repo/exapi';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
@@ -32,7 +31,6 @@ export const useResetPassword = () => {
     },
 
     onError: (error) => {
-      errorToast(error.message);
       console.log('Error resetting password:', error);
     },
   });

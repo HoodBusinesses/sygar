@@ -40,11 +40,13 @@ const OrganizationsPage: React.FC = (): JSX.Element => {
         <CustomTable
           headTitle={'organization.organizations'}
           columns={Columns(
-            ()=> navigate({ to: '/users-listing' as string }),
+            (orgId: string) =>
+              navigate({ to: `/users-listing?orgId=${orgId}` as string }),
             (rowData: Organization) => {
-            setdefaultValue(rowData);
-            setComponent('edit');
-          })}
+              setdefaultValue(rowData);
+              setComponent('edit');
+            }
+          )}
           component={component}
           setComponent={setComponent}
           EditAndAddRowComponent={

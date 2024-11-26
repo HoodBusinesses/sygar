@@ -1,5 +1,4 @@
 import { api } from '@/api';
-import { errorToast } from '@/lib/toasts';
 import { ActivateAccountParams } from '@repo/exapi';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
@@ -21,7 +20,6 @@ export const useActivateAccount = () => {
     },
 
     onError: (error) => {
-      errorToast(error.message);
       console.log('Error activating account:', error);
     },
   });

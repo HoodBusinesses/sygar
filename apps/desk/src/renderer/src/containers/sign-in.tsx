@@ -4,6 +4,8 @@ import { useTranslate } from '@renderer/hooks/useTranslate';
 import SelectLanguage from '@renderer/components/SelectLanguage';
 import Logo from '@renderer/assets/images/logo.png';
 import Pic from '@renderer/assets/images/pic.png';
+import { useEffect } from 'react';
+import { useToast } from '@renderer/hooks/useToast';
 
 const authUrl = 'http://localhost:3000/';
 
@@ -23,6 +25,12 @@ export default function Signin() {
       window.electron.openExternal(`${authUrl}signup`);
     }
   };
+
+  const { dismiss } = useToast();
+
+  useEffect(() => {
+    dismiss();
+  });
 
   return (
     <div className="flex flex-col bg-gradient-to-r from-blue-300/25 to-blue-500 p-6 w-full h-screen sm:h-full">
