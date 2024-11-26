@@ -50,6 +50,17 @@ export const userSchema = z.object({
   userCnss: z.string().min(1, 'CNSS is required'),
   identityType: z.string().min(1, 'Identity type is required'),
   identity: z.string().min(1, 'Identity is required'),
+  role: z.string().min(1, 'Role is required'),
+});
+
+export const userRegistrationSchema = z.object({
+  firstName: z.string().min(1, 'First name is required'),
+  lastName: z.string().min(1, 'Last name is required'),
+  phone: z.string().min(1, 'Phone number is required'),
+  email: z.string().email('Invalid email address'),
+  userCnss: z.string().min(1, 'CNSS is required'),
+  identityType: z.string().min(1, 'Identity type is required'),
+  identity: z.string().min(1, 'Identity is required'),
 });
 
 export const EditProfileSchema = z

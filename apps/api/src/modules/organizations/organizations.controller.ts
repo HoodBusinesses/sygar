@@ -54,7 +54,7 @@ export class OrganizationsController {
 		return await this.orgService.addParticipant(uid, dto)
 	}
 
-	@Post(":uid/users/:userId")
+	@Delete(":uid/users/:userId")
 	async removeUserFromOrganization(
 		@Param("uid") uid: string,
 		@Param("userId") userId: string

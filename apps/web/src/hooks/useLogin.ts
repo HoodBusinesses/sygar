@@ -1,5 +1,4 @@
 import { api } from '@/api';
-import { errorToast } from '@/lib/toasts';
 import { useMutation } from '@tanstack/react-query';
 
 export const useLogin = () => {
@@ -16,7 +15,7 @@ export const useLogin = () => {
       window.location.href = customUrl; // Open the custom scheme URL
     },
 
-    onError: (error) => errorToast(error.message),
+    onError: (error) => {},
   });
 
   return {

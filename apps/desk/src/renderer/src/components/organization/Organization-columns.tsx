@@ -23,7 +23,7 @@ export type Organization = {
 };
 
 export const Columns = (
-  viewUsers: () => void,
+  viewUsers: (orgId: string) => void,
   setRowData: (rowData: Organization) => void
   ): ColumnDef<Organization>[] => {
   return [
@@ -99,8 +99,8 @@ export const Columns = (
     {
       accessorKey: 'viewUsers',
       header: 'organization.viewUsers',
-      cell: () => (
-        <RedirectButton click={viewUsers} text="organization.viewUsers" />
+      cell: ({ row }) => (
+        <RedirectButton click={viewUsers.bind(null, row.original.id)} text="organization.viewUsers" />
       ),
     },
 
@@ -129,7 +129,7 @@ export const Columns = (
           saveDefaultData={setRowData.bind(null, row.original)}
           rowId={row.original.cnss}
           endpoint={`/organizations/${row.original.id}`}
-          invalidateKeyData="organizationsData"
+          invalidateKeyData={["organizationsData"]}
         />
       ),
       enableSorting: false,

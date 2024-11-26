@@ -3,6 +3,7 @@ import {
   OrganizationFormData,
   organizationSchema,
   UserFormData,
+  userRegistrationSchema,
   userSchema,
 } from '@renderer/utils/schemas/formSchema';
 import { useMemo } from 'react';
@@ -11,7 +12,7 @@ import useCreateOrg from '../api/organization/create-org';
 
 export default function useHandleEditRegAndOwner() {
   const methods = useForm<OrganizationFormData & UserFormData>({
-    resolver: zodResolver(organizationSchema.merge(userSchema)),
+    resolver: zodResolver(organizationSchema.merge(userRegistrationSchema)),
     defaultValues: useMemo(
       () => ({
         // default values

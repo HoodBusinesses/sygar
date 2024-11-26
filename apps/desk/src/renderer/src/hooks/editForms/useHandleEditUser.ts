@@ -4,41 +4,93 @@ import { userSchema } from "@renderer/utils/schemas/formSchema";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import useAddUserToOrganization from "../api/organization/add-user-to-organization";
+import { useAppSelector } from "@renderer/store/hooks";
 
-export default function useHandleEditUser(defaultValues: Users | null, crud: string) {
-    const schema = userSchema;
+function areObjectsEqual(
+  obj1: Record<string, any>,
+  obj2: Record<string, any>
+): boolean {
+  // If both are the same reference, they are equal
+  if (obj1 === obj2) return true;
 
-    type SchemaType = typeof schema;
+  // If either is not an object or is null, they are not equal
+  if (
+    typeof obj1 !== 'object' ||
+    typeof obj2 !== 'object' ||
+    obj1 === null ||
+    obj2 === null
+  ) {
+    return false;
+  }
 
-    type FormData = z.infer<SchemaType>;
+  // Get keys of both objects
+  const keys1 = Object.keys(obj1);
+  const keys2 = Object.keys(obj2);
 
-    const methods = useForm<FormData>({
-        resolver: zodResolver(schema),
+  // If they have a different number of keys, they are not equal
+  if (keys1.length !== keys2.length) {
+    return false;
+  }
+
+  // Compare keys and values recursively
+  for (const key of keys1) {
+    // Check if the key exists in both objects and their values are equal
+    if (!keys2.includes(key) || !areObjectsEqual(obj1[key], obj2[key])) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+
+export default function useHandleEditUser(defaultValues: Users | null, crud: string, goBack: () => void) {
+  const schema = userSchema;
+
+  type SchemaType = typeof schema;
+
+  type FormData = z.infer<SchemaType>;
+
+  const methods = useForm<FormData>({
+    resolver: zodResolver(schema),
+  });
+
+  const orgId = useAppSelector((state) => state.auth.auth.organizationId);
+
+  const mutationCreate = useAddUserToOrganization(orgId, goBack);
+
+  const handleSubmit = (data: FormData) => {
+    mutationCreate.mutate({
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      organizationId: orgId,
+      identityType: data.identityType,
+      identity: data.identity,
+      role: data.role,
+      cnss: data.userCnss,
+      phone: data.phone,
     });
+  };
 
-    const handleSubmit = (data: FormData) => {
-        console.log('data :::', defaultValues);
-    };
+  const handleUnsavedChange = (data: FormData) => {
+    // check if there is an empty field
+    if (defaultValues && crud == 'edit') {
+      const { id, organizationId, ...values } = defaultValues;
+      return !areObjectsEqual(data, values)
+    }
+    return false
+  };
 
+  const [openUnsavedChange, setOpenUnsavedChange] = useState(false);
 
-    const handleUnsavedChange = (data: FormData) => {
-        // check if there is an empty field
-        if (defaultValues && crud == 'edit') {
-            const { id, ...values } = defaultValues;
-            console.log('data : ', data);
-            console.log('defaultValues jjjj: ', values);
-            return JSON.stringify(data) !== JSON.stringify(values);
-        }
-    };
-
-    const [openUnsavedChange, setOpenUnsavedChange] = useState(false);
-
-    return {
-        openUnsavedChange,
-        setOpenUnsavedChange,
-        methods,
-        isPending: false,
-        handleSubmit,
-        handleUnsavedChange,
-    };
+  return {
+    openUnsavedChange,
+    setOpenUnsavedChange,
+    methods,
+    isPending: false,
+    handleSubmit,
+    handleUnsavedChange,
+  };
 }
