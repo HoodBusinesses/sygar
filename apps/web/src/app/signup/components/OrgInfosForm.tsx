@@ -1,5 +1,8 @@
+import { Button } from "@/components/ui/button";
 import CostumInputItem from "@/components/ui/custom-input-item";
-import { organizationSchema } from "@/lib/schema/schema";
+import FormInputItem from "@/components/ui/form-input-item";
+import { organizationSchema, orgType } from "@/lib/schema/schema";
+import { registrationFields } from "@/utils/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
@@ -23,7 +26,21 @@ const OrgInfosForm: React.FC<OrgInfosProps> = ({ setStep, onSubmit }) => {
       <h2 className="text-2xl font-semibold text-center mb-6">
         Organization Information
       </h2>
-
+      <div className="grid grid-cols-3 gap-4">
+              {/* {registrationFields.map((field) => (
+                <FormInputItem
+                  key={field.name}
+                  label={field.label}
+                  placeholder={field.placeholder}
+                  register={register(
+                    field.name as keyof orgType
+                  )}
+                  value={''}
+                  error={formState.errors[field.name]?.message?.toString()}
+                  required={field.required}
+                  isLogoInput={field.isLogoInput}
+                />
+              ))} */}
       <CostumInputItem
         label="RS"
         placeholder="Enter RS"
@@ -63,14 +80,15 @@ const OrgInfosForm: React.FC<OrgInfosProps> = ({ setStep, onSubmit }) => {
         id="address"
         type="text"
       />
-
+      
       <div>
-        <label className="block text-sm font-medium text-gray-700">Logo</label>
-        <input
-          type="file"
-          className="mt-1 w-full"
-          onChange={(e) => setValue('logo', e.target.files?.[0])}
-        />
+      <label className="block text-sm font-medium text-gray-700">Logo</label>
+      <input
+      type="file"
+      className="mt-1 w-full"
+      onChange={(e) => setValue('logo', e.target.files?.[0])}
+      />
+      </div>
       </div>
 
       <div className="flex justify-center">
@@ -82,12 +100,12 @@ const OrgInfosForm: React.FC<OrgInfosProps> = ({ setStep, onSubmit }) => {
         </p>
       </div>
 
-      <button
+      <Button
         type="submit"
         className="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 mt-4"
       >
         Next
-      </button>
+      </Button>
     </form>
   );
 };

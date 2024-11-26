@@ -4,6 +4,7 @@ import './globals.css';
 import { ReactQueryProvider } from '@/providers/react-query';
 
 import { ToastContainer } from 'react-toastify';
+import { Toaster } from '@/components/ui/toaster';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -32,7 +33,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ReactQueryProvider>
-          <ToastContainer />
+        <Toaster />
           <main>{children}</main>
         </ReactQueryProvider>
       </body>

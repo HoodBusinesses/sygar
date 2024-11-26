@@ -1,6 +1,9 @@
 import CostumInputItem from '@/components/ui/custom-input-item';
+import FormInputItem from '@/components/ui/form-input-item';
 import { personalSchema } from '@/lib/schema/schema';
+import { PersonalInfosFields } from '@/utils/form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { FormInput } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 
 interface PersonalInfosProps {
@@ -28,7 +31,20 @@ const PersonalInfosForm: React.FC<PersonalInfosProps> = ({
         Personal Information
       </h2>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-3 gap-4">
+
+        {/* {PersonalInfosFields.map((field) => (
+          <FormInputItem
+            key={field.name}
+            label={field.label}
+            placeholder={field.placeholder}
+            register={register(field.name as keyof orgType)}
+            value={''}
+            error={formState.errors[field.name]?.message?.toString()}
+            required={field.required}
+            isLogoInput={field.isLogoInput}
+          />
+          ))} */}
         <CostumInputItem
           label="First Name"
           placeholder="Enter First Name"
