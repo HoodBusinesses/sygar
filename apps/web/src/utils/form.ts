@@ -8,6 +8,7 @@ export type FieldsInput = {
   placeholder: string;
   required?: boolean;
   isLogoInput?: boolean;
+  isSelect?: boolean;
 };
 
 
@@ -23,7 +24,7 @@ export const userSchema = z.object({
   lastName: z.string().min(1, 'Last name is required'),
   email: z.string().email('Invalid email address'),
   phone: z.string().min(1, 'Phone number is required'),
-  userCnss: z.string().min(1, 'CNSS is required'),
+  cnss: z.string().min(1, 'CNSS is required'),
   identityType: z.string().min(1, 'Identity type is required'),
   identity: z.string().min(1, 'Identity is required'),
 });
@@ -92,8 +93,8 @@ export const PersonalInfosFields: FieldsInput[] = [
   {
     label: 'Phone Number',
     placeholder: 'Enter Phone Number',
-    name: 'phoneNumber',
-    value: 'phoneNumber',
+    name: 'phone',
+    value: 'phone',
     required: true,
   },
   {
@@ -102,6 +103,7 @@ export const PersonalInfosFields: FieldsInput[] = [
     name: 'identityType',
     value: 'identityType',
     required: true,
+    isSelect: true,
   },
   {
     label: 'Identity',
@@ -116,7 +118,15 @@ export const PersonalInfosFields: FieldsInput[] = [
     name: 'cnss',
     value: 'cnss',
     required: true,
-  }
+  },
+  {
+    label: 'Logo',
+    placeholder: 'Upload Logo',
+    name: 'logo',
+    value: '',
+    required: false,
+    isLogoInput: true,
+  },
 ];
 
 

@@ -30,6 +30,10 @@ export const organizationSchema = z.object({
 
 // Step 2: Personal Information Schema
 export const personalSchema = z.object({
+  cnss: z
+    .string()
+    .min(1, 'CNSS number is required')
+    .max(255, 'CNSS number is too long'),
   firstName: z
     .string()
     .min(1, 'First name is required')
@@ -43,7 +47,7 @@ export const personalSchema = z.object({
     .min(1, 'Email is required')
     .max(255, 'Email is too long')
     .email('Please enter a valid email address'),
-  phoneNumber: z
+  phone: z
     .string()
     .min(10, 'Phone number must be at least 10 digits')
     .max(15, 'Phone number is too long'),
@@ -58,10 +62,7 @@ export const personalSchema = z.object({
     .string()
     .min(1, 'Identity number is required')
     .max(255, 'Identity number is too long'),
-  cnss: z
-    .string()
-    .min(1, 'CNSS number is required')
-    .max(255, 'CNSS number is too long'),
+  
   profileImage: z
     .instanceof(File)
     .refine((file) => file.size > 0, 'Profile image is required')

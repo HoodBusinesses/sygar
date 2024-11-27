@@ -8,48 +8,18 @@ import PersonalInfosForm from './components/PersonalInfosForm';
 import SendEmailStep from './components/SendEmailStep';
 import { useSignup } from '@/hooks/useSignUp';
 import { orgType, ownerType } from '@/lib/schema/schema';
+import useHandleCreateAccount from '@/hooks/useHandleCreateAccount';
 
 const SignUpPage: React.FC = () => {
-  const mutation = useSignup({
-    onSuccess: () => setStep(3),
-  });
-
-  const [step, setStep] = useState(1);
-
-  const [formData, setFormData] = useState<{
-    orgInfo: orgType | null;
-    personalInfo: ownerType | null;
-  }>({
-    orgInfo: null,
-    personalInfo: null,
-  });
-
-  const handleOrgInfoSubmit = (data: orgType) => {
-    const updatedFormData = { ...formData, orgInfo: data };
-    setFormData(updatedFormData);
-    setStep(2);
-  };
-
-  const handlePersonalInfoSubmit = (data: ownerType) => {
-    const combinedData = { ...formData, personalInfo: data };
-    setFormData(combinedData);
-
-    mutation.mutate({
-      name: combinedData.orgInfo!.rs,
-      address: combinedData.orgInfo!.address,
-      cnss: combinedData.orgInfo!.cnss,
-      ice: combinedData.orgInfo!.ice,
-      owner: {
-        cnss: combinedData.personalInfo!.cnss,
-        identity: combinedData.personalInfo!.identity,
-        identityType: combinedData.personalInfo!.identityType,
-        firstName: combinedData.personalInfo!.firstName,
-        lastName: combinedData.personalInfo!.lastName,
-        email: combinedData.personalInfo!.email,
-        phone: combinedData.personalInfo!.phoneNumber,
-      },
-    });
-  };
+  const {
+    orgMethods,
+    personMethods,
+    step,
+    isPending,
+    setStep,
+    handleOrgSubmit,
+    handlePersonSubmit
+  } = useHandleCreateAccount();
 
   const logo = images.logo;
 
@@ -65,9 +35,8 @@ const SignUpPage: React.FC = () => {
           {[1, 2, 3].map((num) => (
             <div key={num} className="flex items-center">
               <div
-                className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                  step >= num ? 'bg-blue-600 text-white' : 'bg-gray-200'
-                }`}
+                className={`w-8 h-8 rounded-full flex items-center justify-center ${step >= num ? 'bg-blue-600 text-white' : 'bg-gray-200'
+                  }`}
               >
                 {num}
               </div>
@@ -81,13 +50,18 @@ const SignUpPage: React.FC = () => {
         </div>
 
         {step === 1 && (
-          <OrgInfosForm setStep={setStep} onSubmit={handleOrgInfoSubmit} />
+          <OrgInfosForm 
+            onSubmit={handleOrgSubmit}
+            orgMethods={orgMethods}
+          />
         )}
         {step === 2 && (
           <PersonalInfosForm
-            isLoading={mutation.isPending}
             setStep={setStep}
-            onSubmit={handlePersonalInfoSubmit}
+            isLoading={isPending}
+            onSubmit={handlePersonSubmit}
+            personMethods={personMethods}
+            
           />
         )}
         {step === 3 && <SendEmailStep />}

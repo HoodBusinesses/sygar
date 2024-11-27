@@ -2,6 +2,7 @@
 import { UseFormRegisterReturn } from 'react-hook-form';
 import { Input } from './input';
 import { cn } from '@/lib/utils';
+import CostumSelect from '../costum-select';
 
 
 interface FormInputProps {
@@ -15,6 +16,7 @@ interface FormInputProps {
   isLargeInput?: boolean;
   required?: boolean;
   isLogoInput?: boolean;
+  isSelect?: boolean;
 }
 
 export default function FormInputItem({
@@ -27,8 +29,13 @@ export default function FormInputItem({
   value,
   isLargeInput,
   isLogoInput,
+  isSelect,
 }: FormInputProps) {
-
+  if (label === 'Identity Type'){
+    console.log("HELLO")
+    if (isSelect === true)
+      console.log("HEHE")
+}
   return (
     <div className="flex flex-col mb-4 gap-1">
       <p
@@ -49,7 +56,11 @@ export default function FormInputItem({
             {('Upload Logo')}
           </label>
         </div>
-      ) : (
+      ) :
+      isSelect ? (
+        <p className='text-red-800'> HELLO </p>
+      )
+      : (
         <Input
           {...register}
           defaultValue={value}
