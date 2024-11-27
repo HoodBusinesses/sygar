@@ -17,7 +17,6 @@ export const useForgotPassword = () => {
     onSuccess: () => {
       router.push('/login'); // Redirect to the login page
     },
-
     onError: (error) => {
       toast({
         title: 'Error sending forgot password link',
