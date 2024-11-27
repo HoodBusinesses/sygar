@@ -1,7 +1,9 @@
 import { api } from '@/api';
 import { useMutation } from '@tanstack/react-query';
+import { useToast } from './useToast';
 
 export const useLogin = () => {
+  const { toast } = useToast()
   const { isPending, isError, isSuccess, mutate } = useMutation({
     mutationKey: ['login'],
 
@@ -15,7 +17,15 @@ export const useLogin = () => {
       window.location.href = customUrl; // Open the custom scheme URL
     },
 
-    onError: (error) => {},
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: 'Error logging in',
+        description: error.cause,
+        status: 'error',
+        position: 'top',
+      });
+      console.error('error:: ', error)},
   });
 
   return {

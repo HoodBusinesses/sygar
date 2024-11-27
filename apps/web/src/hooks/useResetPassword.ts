@@ -2,14 +2,14 @@ import { api } from '@/api';
 import { ResetPasswordParams } from '@repo/exapi';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
+import { useToast } from './useToast';
 
 export const useResetPassword = () => {
   console.log('0000');
 
   const router = useRouter();
 
-  console.log('====================================');
-  console.log('====================================');
+  const { toast } = useToast()
   const { data, isPending, isError, isSuccess, mutate } = useMutation({
     mutationKey: ['resetPassword'],
 
@@ -31,6 +31,11 @@ export const useResetPassword = () => {
     },
 
     onError: (error) => {
+      toast({
+        title: 'Error resetting password',
+        description: error.message,
+        variant: "destructive" 
+      })
       console.log('Error resetting password:', error);
     },
   });

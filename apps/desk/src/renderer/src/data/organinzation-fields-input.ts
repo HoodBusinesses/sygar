@@ -139,3 +139,27 @@ export const userFields: OrganizationFieldsInput[] = [
     required: true,
   },
 ];
+
+export const profileFields: OrganizationFieldsInput[] = [
+  {
+    label: 'user.fields.firstName.label',
+    placeholder: 'user.fields.firstName.placeholder',
+    name: 'firstName',
+    value: 'firstName',
+    required: true,
+  },
+  {
+    label: 'user.fields.lastName.label',
+    placeholder: 'user.fields.lastName.placeholder',
+    name: 'lastName',
+    value: 'lastName',
+    required: true,
+  },
+  {
+    label: 'user.fields.email.label',
+    placeholder: 'user.fields.email.placeholder',
+    name: 'email',
+    value: 'email',
+    required: true,
+  },
+];

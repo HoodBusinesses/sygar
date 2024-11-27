@@ -1,16 +1,15 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import Profile_Img from '@renderer/assets/images/profile_img.png';
 import { User } from '@renderer/hooks/api/user/me';
-import useUpdateUser from '@renderer/hooks/api/user/useUpdateUser';
 import { useTranslate } from '@renderer/hooks/useTranslate';
-import { EditProfileSchema } from '@renderer/utils/schemas/formSchema';
+import { ProfileFormData } from '@renderer/utils/schemas/formSchema';
 import { UploadIcon } from 'lucide-react';
 import { useMemo } from 'react';
-import { useForm } from 'react-hook-form';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
+import useHandleEditProfile from '@renderer/hooks/editForms/useHandleEditProfile';
+import { profileFields } from '@renderer/data/organinzation-fields-input';
+import FormInputItem from './ui/form-input-item';
+import { FaSpinner } from 'react-icons/fa';
 
 //TODO: USE REUSABLE FORM FIELDS COMPOONENT @PAPOCHA
 
@@ -18,7 +17,10 @@ export default function EditProfile({ data }: { data: User }): JSX.Element {
 
   const { t, isRtl } = useTranslate();
 
-  const mutation = useUpdateUser();
+  const { methods,
+    isPending,
+    handleSubmit,
+  } = useHandleEditProfile(data)
 
   const defaultValues = useMemo(() => {
     return {
@@ -28,32 +30,6 @@ export default function EditProfile({ data }: { data: User }): JSX.Element {
       id: data?.id ?? '',
     };
   }, [data]);
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: zodResolver(EditProfileSchema),
-    defaultValues: {
-      firstName: defaultValues?.firstName ?? '',
-      lastName: defaultValues?.lastName ?? '',
-      email: defaultValues?.email ?? '',
-    },
-  });
-
-  const onSubmit = (data: any) => {
-    mutation.mutate({
-      userId: defaultValues?.id ?? '',
-      data: {
-        firstName: defaultValues.firstName === data.firstName ? undefined : data.firstName,
-        lastName: defaultValues.lastName === data.lastName ? undefined : data.lastName,
-        email:  defaultValues.email === data.email ? undefined : data.email,
-        //TODO: add phone
-        // phone: data.phone
-      },
-    });
-  };
 
   return (
     <div
@@ -83,120 +59,26 @@ export default function EditProfile({ data }: { data: User }): JSX.Element {
       </div>
 
       {/* Form Fields */}
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={methods.handleSubmit(handleSubmit)} className="space-y-8">
         <h3 className="text-lg font-bold text-gray-700 mb-6">
           {t('editProfile.personalInfo')}
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <Label htmlFor="firstName" className="text-gray-700 font-medium">
-              {t('editProfile.firstName.label')}
-            </Label>
-            <Input
-              id="firstName"
-              type="text"
-              {...register('firstName')}
-              placeholder={t('editProfile.firstName.placeholder')}
-              className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
+          {profileFields.map((field) => (
+            <FormInputItem
+              key={field.name}
+              label={field.label}
+              placeholder={field.placeholder}
+              register={methods.register(
+                field.name as keyof ProfileFormData
+              )}
+              value={defaultValues[field.name]}
+              error={methods.formState.errors[field.name]?.message}
+              required={field.required}
+              isLogoInput={field.isLogoInput}
             />
-            {errors.firstName && (
-              <p className="text-red-600 text-sm">
-                {errors.firstName.message?.toString()}
-              </p>
-            )}
-          </div>
-          <div>
-            <Label htmlFor="lastName" className="text-gray-700 font-medium">
-              {t('editProfile.lastName.label')}
-            </Label>
-            <Input
-              id="lastName"
-              type="text"
-              {...register('lastName')}
-              placeholder={t('editProfile.lastName.placeholder')}
-              className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
-            />
-            {errors.lastName && (
-              <p className="text-red-600 text-sm">
-                {errors.lastName.message?.toString()}
-              </p>
-            )}
-          </div>
-          <div>
-            <Label htmlFor="email" className="text-gray-700 font-medium">
-              {t('editProfile.email.label')}
-            </Label>
-            <Input
-              id="email"
-              type="email"
-              {...register('email')}
-              placeholder={t('editProfile.email.placeholder')}
-              className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
-            />
-            {errors.email && (
-              <p className="text-red-600 text-sm">
-                {errors.email.message?.toString()}
-              </p>
-            )}
-          </div>
-          {/* <div>
-            <Label
-              htmlFor="currentPassword"
-              className="text-gray-700 font-medium"
-            >
-              {t('editProfile.currentPass.label')}
-            </Label>
-            <Input
-              id="currentPassword"
-              type="password"
-              {...register('currentPassword')}
-              placeholder={t('editProfile.currentPass.placeholder')}
-              className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
-            />
-            {errors.currentPassword && (
-              <p className="text-red-600 text-sm">
-                {errors.currentPassword.message?.toString()}
-              </p>
-            )}
-          </div>
-          <div>
-            <Label htmlFor="newPassword" className="text-gray-700 font-medium">
-              {t('editProfile.newPass.label')}
-            </Label>
-            <Input
-              id="newPassword"
-              type="password"
-              {...register('newPassword')}
-              placeholder={t('editProfile.newPass.placeholder')}
-              className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
-            />
-            {errors.newPassword && (
-              <p className="text-red-600 text-sm">
-                {errors.newPassword.message?.toString()}
-              </p>
-            )}
-          </div>
-          <div>
-            <Label
-              htmlFor="confirmPassword"
-              className="text-gray-700 font-medium"
-            >
-              {t('editProfile.confirmPass.label')}
-            </Label>
-            <Input
-              id="confirmPassword"
-              type="password"
-              {...register('confirmPassword')}
-              placeholder={t('editProfile.confirmPass.placeholder')}
-              className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
-            />
-            {errors.confirmPassword && (
-              <p className="text-red-600 text-sm">
-                {errors.confirmPassword.message?.toString()}
-              </p>
-            )}
-          </div> */}
+          ))}
         </div>
 
         {/* Footer Buttons */}
@@ -205,9 +87,10 @@ export default function EditProfile({ data }: { data: User }): JSX.Element {
         >
           <Button
             type="submit"
+            disabled={isPending}
             className="bg-blue-600 text-white hover:bg-blue-700 transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-md"
           >
-            {t('buttons.save')}
+            {isPending ? <FaSpinner /> : t('buttons.save')}
           </Button>
         </div>
       </form>

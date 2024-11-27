@@ -76,7 +76,7 @@ app.whenReady().then(() => {
 
 });
 
-ipcMain.handle('open-external', async (event, url) => {
+ipcMain.handle('open-external', async (_, url) => {
   await shell.openExternal(url);
 });
 // Quit when all windows are closed, except on macOS. There, it's common

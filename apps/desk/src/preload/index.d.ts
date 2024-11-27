@@ -5,7 +5,7 @@ declare global {
   interface ElectronAPI {
     onTokenReceived: (callback: (token: string) => void) => void;
     removeTokenListeners: () => void;
-
+    openExternal: (url: string) => void;
     sendPing: () => void;
   }
 

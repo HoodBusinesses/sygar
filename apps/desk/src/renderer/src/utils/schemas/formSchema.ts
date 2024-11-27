@@ -63,7 +63,7 @@ export const userRegistrationSchema = z.object({
   identity: z.string().min(1, 'Identity is required'),
 });
 
-export const EditProfileSchema = z
+export const profileSchema = z
   .object({
     firstName: z
       .string()
@@ -103,4 +103,4 @@ export type FormationFormData = z.infer<typeof formationSchema>;
 export type ParticipantFormData = z.infer<typeof participantSchema>;
 export type GroupFormData = z.infer<typeof groupSchema>;
 export type UserFormData = z.infer<typeof userSchema>;
-export type EditProfileFormData = z.infer<typeof EditProfileSchema>;
+export type ProfileFormData = z.infer<typeof profileSchema>;
