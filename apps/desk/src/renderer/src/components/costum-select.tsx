@@ -8,24 +8,24 @@ import {
     SelectTrigger,
     SelectValue,
 } from "./ui/select"
+import { Role } from "@renderer/store/slices/auth.slice";
 
 // TODO: Implement the following components
 
-const CostumSelect = () => {
+const CostumSelect = ({value} : {value: Role}) => {
     const { t } = useTranslate();
 
     return (
         <>
-            <Select>
+            <Select defaultValue={value}>
                 <SelectTrigger className="">
                     <SelectValue placeholder={t('themesTable.role')} />
                 </SelectTrigger>
                 <SelectContent className="bg-white">
                     <SelectGroup>
-                        <SelectLabel>{t('themesTable.role')}</SelectLabel>
-                        <SelectItem value="apple">user</SelectItem>
-                        <SelectItem value="banana">admin</SelectItem>
-                        <SelectItem value="blueberry">owner</SelectItem>
+                        <SelectItem value="User">user</SelectItem>
+                        <SelectItem value="Admin">admin</SelectItem>
+                        <SelectItem value="Owner">owner</SelectItem>
                     </SelectGroup>
                 </SelectContent>
             </Select>

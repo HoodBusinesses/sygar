@@ -13,7 +13,7 @@ const Search: React.FC<SearchProps> = ({
   placeholder,
   setSearchQuery,
 }) => {
-  const { t, isRtl } = useTranslate();
+  const { isRtl } = useTranslate();
 
   return (
     <div dir={isRtl ? 'rtl' : 'ltr'} className="relative ml-4">

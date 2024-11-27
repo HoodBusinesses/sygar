@@ -1,7 +1,7 @@
 import {
   Cog6ToothIcon,
   BellIcon,
-  ClipboardDocumentListIcon,
+  // ClipboardDocumentListIcon,
   HomeIcon,
   UsersIcon,
   IdentificationIcon,

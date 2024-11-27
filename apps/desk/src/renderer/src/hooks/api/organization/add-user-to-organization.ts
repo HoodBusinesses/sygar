@@ -1,21 +1,22 @@
 import { useAppSelector } from '@renderer/store/hooks';
 import { api } from '@renderer/utils/api';
-import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useToast } from '../../useToast';
-import { AxiosResponse } from 'axios';
 
-export interface CreateThemeParams {
-  cost: number;
-  name: string;
-  description: string;
-  organizationId: string;
-  startDate: number;
-  endDate: number;
-}
+type AddParticipant = {
+  cnss: string;
+  imageLink?: string;
+  role: string;
+  identity: string;
+  identityType: string;
+  organizationId?: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+};
 
-export default function useCreateTheme(
-  options?: UseMutationOptions<AxiosResponse<any, any>, Error, unknown>
-) {
+export default function useAddUserToOrganization(orgId: string, goBack: () => void) {
   const token = useAppSelector((state) => state.auth.auth.token);
 
   const queryClient = useQueryClient();
@@ -23,25 +24,27 @@ export default function useCreateTheme(
   const { toast } = useToast();
 
   return useMutation({
-    mutationKey: ['createTheme'],
+    mutationKey: ['createOrg'],
 
-    mutationFn: (params: CreateThemeParams) =>
-      api.post('/theme/create', params, {
+    mutationFn: (params: AddParticipant) =>
+      api.post(`/organizations/${orgId}/users`, params, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }),
-    ...options,
+
     onSuccess: () => {
       try {
         queryClient.refetchQueries({
-          queryKey: ['themesData'],
+          queryKey: ['organizationUsers', orgId],
           exact: true,
         });
         toast({
           title: 'success',
-          description: 'Theme created successfully',
+          variant: 'success',
+          description: 'Organization created successfully',
         });
+        goBack();
       } catch (error) {
         console.log(error);
       }
@@ -51,7 +54,7 @@ export default function useCreateTheme(
       toast({
         title: 'Error',
         variant: 'destructive',
-        description: 'Error creating theme',
+        description: 'Error creating organization',
       });
     },
   });

@@ -12,14 +12,14 @@ import { FaSpinner } from "react-icons/fa";
 const Registration: React.FC = () => {
   const { t } = useTranslate();
   // get members , form provider method, and submit handler
-  const { methods: methods1, isPending, handleSubmit } = useHandleEditRegAndOwner();
+  const { methods, isPending, handleSubmit } = useHandleEditRegAndOwner();
 
   return (
     <div className="p-4 w-full py-6 space-y-6">
       <h1 className="text-2xl font-semibold text-gray-950">
         {t('registration.registration')}
       </h1>
-      <form onSubmit={methods1.handleSubmit(handleSubmit)}
+      <form onSubmit={methods.handleSubmit(handleSubmit)}
         className="space-y-6"
       >
         <Card className="flex flex-col gap-4 ">
@@ -33,11 +33,11 @@ const Registration: React.FC = () => {
                   key={field.name}
                   label={field.label}
                   placeholder={field.placeholder}
-                  register={methods1.register(
+                  register={methods.register(
                     field.name as keyof OrganizationFormData
                   )}
                   value={''}
-                  error={methods1.formState.errors[field.name]?.message}
+                  error={methods.formState.errors[field.name]?.message}
                   required={field.required}
                   isLogoInput={field.isLogoInput}
                 />
@@ -56,9 +56,9 @@ const Registration: React.FC = () => {
                   key={field.name}
                   label={field.label}
                   placeholder={field.placeholder}
-                  register={methods1.register(field.name as keyof UserFormData)}
+                  register={methods.register(field.name as keyof UserFormData)}
                   value={''}
-                  error={methods1.formState.errors[field.name]?.message}
+                  error={methods.formState.errors[field.name]?.message}
                   isLargeInput={true}
                   required={field.required}
                 />

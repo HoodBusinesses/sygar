@@ -33,18 +33,19 @@ const OrganizationsPage: React.FC = (): JSX.Element => {
   }
 
   if (isSuccess) {
-    console.log('OrganizationsPage -> data', data);
     return (
       <div dir={isRtl ? 'rtl' : 'ltr'} className="h-full w-full p-6 gap-y-">
         {/* Organization Table Component */}
         <CustomTable
           headTitle={'organization.organizations'}
           columns={Columns(
-            ()=> navigate({ to: '/users-listing' as string }),
+            (orgId: string) =>
+              navigate({ to: `/users-listing?orgId=${orgId}` as string }),
             (rowData: Organization) => {
-            setdefaultValue(rowData);
-            setComponent('edit');
-          })}
+              setdefaultValue(rowData);
+              setComponent('edit');
+            }
+          )}
           component={component}
           setComponent={setComponent}
           EditAndAddRowComponent={

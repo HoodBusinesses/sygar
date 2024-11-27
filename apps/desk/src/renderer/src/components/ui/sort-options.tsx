@@ -13,7 +13,7 @@ const SortOption: React.FC<SortOptionProps> = ({
   title,
   name,
   value,
-  checkedValue,
+  // checkedValue,
   onChange,
   labels,
 }) => {

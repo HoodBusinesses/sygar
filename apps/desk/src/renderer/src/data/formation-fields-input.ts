@@ -131,4 +131,33 @@ export const usersFields: FieldsInput[] = [
     value: 'email',
     required: true,
   },
-]
+  {
+    label: 'user.fields.userCnss.label',
+    placeholder: 'user.fields.userCnss.placeholder',
+    name: 'userCnss',
+    value: 'userCnss',
+    required: true,
+  },
+  {
+    label: 'user.fields.identityType.label',
+    placeholder: 'user.fields.identityType.placeholder',
+    name: 'identityType',
+    value: 'identityType',
+    required: true,
+  },
+  {
+    label: 'user.fields.identity.label',
+    placeholder: 'user.fields.identity.placeholder',
+    name: 'identity',
+    value: 'identity',
+    required: true,
+  },
+  {
+    // role
+    label: 'user.fields.role.label',
+    placeholder: 'user.fields.role.placeholder',
+    name: 'role',
+    value: 'role',
+    required: true,
+  },
+];

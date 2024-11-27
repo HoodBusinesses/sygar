@@ -50,9 +50,20 @@ export const userSchema = z.object({
   userCnss: z.string().min(1, 'CNSS is required'),
   identityType: z.string().min(1, 'Identity type is required'),
   identity: z.string().min(1, 'Identity is required'),
+  role: z.string().min(1, 'Role is required'),
 });
 
-export const EditProfileSchema = z
+export const userRegistrationSchema = z.object({
+  firstName: z.string().min(1, 'First name is required'),
+  lastName: z.string().min(1, 'Last name is required'),
+  phone: z.string().min(1, 'Phone number is required'),
+  email: z.string().email('Invalid email address'),
+  userCnss: z.string().min(1, 'CNSS is required'),
+  identityType: z.string().min(1, 'Identity type is required'),
+  identity: z.string().min(1, 'Identity is required'),
+});
+
+export const profileSchema = z
   .object({
     firstName: z
       .string()
@@ -92,4 +103,4 @@ export type FormationFormData = z.infer<typeof formationSchema>;
 export type ParticipantFormData = z.infer<typeof participantSchema>;
 export type GroupFormData = z.infer<typeof groupSchema>;
 export type UserFormData = z.infer<typeof userSchema>;
-export type EditProfileFormData = z.infer<typeof EditProfileSchema>;
+export type ProfileFormData = z.infer<typeof profileSchema>;

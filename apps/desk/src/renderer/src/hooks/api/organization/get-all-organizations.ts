@@ -23,12 +23,6 @@ export const useGetAllOrganizations = () => {
           Authorization: `Bearer ${token}`,
         },
       }),
-    staleTime: Infinity,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    refetchInterval: false,
-    refetchIntervalInBackground: false,
   });
 
   return {
