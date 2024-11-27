@@ -41,6 +41,7 @@ export default function useUpdateUser(
     onError: () => {
       toast({
         title: 'error',
+        variant: 'destructive',
         description: 'Error while changing data',
       });
     },

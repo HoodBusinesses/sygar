@@ -33,7 +33,6 @@ const OrganizationsPage: React.FC = (): JSX.Element => {
   }
 
   if (isSuccess) {
-    console.log('OrganizationsPage -> data', data);
     return (
       <div dir={isRtl ? 'rtl' : 'ltr'} className="h-full w-full p-6 gap-y-">
         {/* Organization Table Component */}

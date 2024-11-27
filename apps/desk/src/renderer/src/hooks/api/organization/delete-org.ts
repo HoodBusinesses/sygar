@@ -54,8 +54,11 @@ export default function useDeleteRowTable({
     },
 
     onError: () => {
-      toast({ title: 'Error', description: 'Error deleting item'
-    }); 
+      toast({
+        title: 'Error',
+        variant: 'destructive',
+        description: 'Error deleting item',
+      }); 
     },  
   });
 }

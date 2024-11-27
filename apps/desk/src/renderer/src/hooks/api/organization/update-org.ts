@@ -45,6 +45,7 @@ export default function useUpdateOrg(
         });
         toast({
           title: 'success',
+          variant: 'success',
           description: 'Organization updated successfully',
         });
       } catch (error) {

@@ -48,6 +48,7 @@ export default function useCreateOrg() {
         });
         toast({
           title: 'success',
+          variant: 'success',
           description: 'Organization created successfully',
         });
       } catch (error) {
@@ -56,7 +57,11 @@ export default function useCreateOrg() {
     },
 
     onError: () => {
-      toast({ title: 'Error', description: 'Error creating organization' });
+      toast({
+        title: 'Error',
+        variant: 'destructive',
+        description: 'Error creating organization',
+      });
     },
   });
 }
