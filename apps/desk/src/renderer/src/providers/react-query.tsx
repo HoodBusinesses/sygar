@@ -54,8 +54,7 @@ export const ReactQueryProvider = ({ children }) => {
     // Configure default options for queries
     defaultOptions: {
       queries: {
-        staleTime: Infinity, // Prevents automatic refetching
-        retry: false, // Prevent retries on failure
+        staleTime: 0,
         refetchOnWindowFocus: false, // Prevent refetch on window focus
         refetchOnReconnect: false, // Prevent refetch on network reconnect
         refetchOnMount: false, // Prevent automatic refetch when the component mounts
