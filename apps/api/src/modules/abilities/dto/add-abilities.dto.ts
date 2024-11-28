@@ -1,5 +1,5 @@
 
-import { IsNumberString, IsString, IsArray, ValidateNested, IsOptional } from "class-validator";
+import { IsNumberString, IsString, IsArray, ValidateNested, IsOptional, ARRAY_NOT_EMPTY } from "class-validator";
 import { Type } from "class-transformer";
 
 export class AddAbilityDto {

@@ -3,51 +3,37 @@ import {
   Controller,
   Delete,
   Get,
-  HttpException,
   NotFoundException,
   Param,
   Post,
   Put,
   Query,
-  Req,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Action } from 'src/shared/types/roles';
-import { User, UserRoles } from './model/user.model';
-import { UserRepository } from './user.repository';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
 import { UserType } from '@prisma/client';
+import { JwtGuard } from 'src/global/auth/auth.guard';
+import { UsersGuard } from './guards/user.guard';
+import { Action } from 'src/shared/types/roles';
+import { PutAbilities } from 'src/global/rbac/decorators/rbac.decorator';
+import { TargetUserExists } from './interceptors/user-exists.interceptor';
 
-/**
- * @class UserController
- * @description
- * This class is the controller for the User module.
- */
-@ApiTags('user')
 @Controller('user')
 export class UserController {
-  /**
-   * @constructor
-   * @description
-   * This constructor is used to inject the UserService and AbilityService into the controller.
-   */
+
   constructor(
     private readonly userService: UserService,
   ) { }
 
-  /**
-   * The endpoint used to create a user
-   * @param createUserDto The DTO containing the user information
-   * @returns The user created
-   */
   @Post() // This is the endpoint that will call the create method
+  @UseGuards(JwtGuard, UsersGuard)
+  @PutAbilities({ action: Action.Create, subject: 'Users' })
   async create(
     @Body() user: CreateUserDto,
-
   ) {
     const createdUser = await this.userService.create({
       phone: user.phone,
@@ -62,22 +48,22 @@ export class UserController {
 
     });
     return { createdUser, date: new Date().toISOString() }; // Added date to response
-
   }
 
 
   @Put(':uid') // This is the endpoint that will call the update method
+  @UseGuards(JwtGuard, UsersGuard)
+  @PutAbilities({ action: Action.Update, subject: 'Users' })
+  @UseInterceptors(TargetUserExists)
   async update(@Body() updateUserDto: UpdateUserDto, @Param('uid') uid: string) {
     const user = await this.userService.update(uid, { phone: updateUserDto.phone, email: updateUserDto.email, firstName: updateUserDto.firstName, lastName: updateUserDto.lastName });
     return user; // Added date to response
   }
 
-  /**
-   * The endpoint used to delete a user
-   * @param deleteUserDto The DTO containing the userUid
-   * @returns a success message if the user is deleted successfully
-   */
   @Delete(':uid') // This is the endpoint that will call the delete method
+  @UseGuards(JwtGuard, UsersGuard)
+  @PutAbilities({ action: Action.Delete, subject: 'Users' })
+  @UseInterceptors(TargetUserExists)
   async delete(@Param('uid') uid: string) {
 
     await this.userService.delete(uid);
@@ -88,6 +74,9 @@ export class UserController {
   }
 
   @Get(':uid')
+  @UseGuards(JwtGuard, UsersGuard)
+  @PutAbilities({ action: Action.Read, subject: 'Users' })
+  @UseInterceptors(TargetUserExists)
   async getUser(@Param('uid') uid: string) {
     const user = await this.userService.getByField('id', uid);
 
@@ -97,9 +86,11 @@ export class UserController {
   }
 
   @Get()
+  @UseGuards(JwtGuard, UsersGuard)
+  @PutAbilities({ action: Action.ReadAll, subject: 'Users' })
   async getAll(@Query() query: any) {
     const pagination = new PaginationDto(query.page ?? 1, query.limit ?? 50)
-    const users = query.search ? await this.userService.searchInUsers(query.search, pagination) : await this.userService.getAllUsersWhere({}, pagination);
+    const users = query.search ? await this.userService.searchInUsers(query.search, pagination, { organizationId: null }) : await this.userService.getAllUsersWhere({ organizationId: null }, pagination);
     return users
   }
 }

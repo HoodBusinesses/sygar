@@ -1,19 +1,16 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { AddAbilitiesDto } from './dto/add-abilities.dto';
 import { RemoveAbilitiesDto } from './dto/remove-abilities.dto';
 import { AbilitiesRepository } from './abilities.repository';
-import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AbilitiesService {
 	constructor(
 		private readonly abilitiesRepository: AbilitiesRepository,
-		private readonly userService: UserService
 	) { }
 
 
 	async addAbilities(dto: AddAbilitiesDto) {
-
 		return await this.abilitiesRepository.addAbilities(
 			dto.abilities.map(ability => ({
 				action: ability.action,
@@ -33,7 +30,6 @@ export class AbilitiesService {
 	}
 
 	async getAllUserAbilities(userId: string, orgId?: string) {
-
 		return await this.abilitiesRepository.getUserAbilities(userId, orgId)
 	}
 }

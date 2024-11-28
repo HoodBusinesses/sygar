@@ -84,31 +84,11 @@ export class OrganizationsService {
 	}
 
 	async removeUser(orgId: string, userId: string) {
-		const org = await this.orgRepository.getAllOrganizationsWhere({
-			users: {
-				some: { id: userId }
-			},
-			id: orgId
-		}, new PaginationDto())
-
-		if (!org.organizations.length) {
-			throw new NotFoundException('user not found');
-		}
-
 		await this.userService.delete(userId);
-		// TODO: remove all users Data
 	}
 
-
-	async updateOrganization(user: User, org: Organization, dto: UpdateOrganizationDto) {
-		this.abilitiesFactory
-			.createForUser(user)
-			.can(
-				Action.Update,
-				internalSubject('Organization', org)
-			)
-
-		const newOrg = this.orgRepository.updateOrganization(org.id, { name: dto.name, address: dto.address, ice: dto.ice, imageLink: dto.imageLink })
+	async updateOrganization(orgId: string, dto: UpdateOrganizationDto) {
+		const newOrg = this.orgRepository.updateOrganization(orgId, { name: dto.name, address: dto.address, ice: dto.ice, imageLink: dto.imageLink })
 		return newOrg
 	}
 

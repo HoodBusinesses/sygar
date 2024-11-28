@@ -14,6 +14,9 @@ export class TargetUserExists implements NestInterceptor {
 
 		const userId = req.body.userId || req.query.userId || req.params.userId;
 
+		if (!userId)
+			return next.handle()
+
 		const user = await this.userService.getByFieldUnique('id', userId);
 
 		if (!user) {
