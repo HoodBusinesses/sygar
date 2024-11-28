@@ -14,6 +14,9 @@ export class OrganizationExists implements NestInterceptor {
 
 		const orgId = req.body.organizationId || req.query.organizationId || req.params.orgId;
 
+		if (!orgId)
+			return next.handle()
+
 		const org = await this.orgService.getOrgnizationByUnqiueField('id', orgId);
 
 		if (!org) {

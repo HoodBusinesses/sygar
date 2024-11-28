@@ -22,9 +22,10 @@ import { RbacModule } from './global/rbac/roles.module';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: join(process.cwd(), 'public/api'), // Path to the `public/api` folder
-      serveRoot: '/api', // Prefix for requests
+      rootPath: join(process.cwd(), 'public/api'), serveRoot: '/api',
     }),
+    AbilitiesModule,
+
     UserModule,
     // TODO: validate schema and load default env's
     ConfigModule.forRoot({
@@ -36,12 +37,14 @@ import { RbacModule } from './global/rbac/roles.module';
       // validationOptions,
       // load: [appConfig(process.env.NODE_ENV)],
     }),
-    // NotificationsModule,
     DatabaseModule,
     AuthModule,
     MailModule,
     EncryptionModule,
-    TemplatesModule, JwtModule, OrganizationsModule, AbilitiesModule, RbacModule
+    TemplatesModule,
+    JwtModule,
+    OrganizationsModule,
+    RbacModule
   ],
   controllers: [AppController],
 })

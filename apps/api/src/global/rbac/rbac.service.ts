@@ -1,5 +1,5 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { Ability, AbilityBuilder, ForcedSubject } from '@casl/ability';
+import { Ability, AbilityBuilder, ConditionsMatcher, ForcedSubject, MatchConditions } from '@casl/ability';
 import { Action, AppAbility, SubjectMap } from 'src/shared/types/roles';
 import { Role, User, Ability as UserAbility } from '@prisma/client';
 import { ClientsAbilitiesEnum, OwnersAbilitiesEnum } from 'src/shared/constants/abilities';
@@ -23,60 +23,29 @@ const hasAbility = (abilities: UserAbility[], ability: OwnersAbilitiesEnum | Cli
 @Injectable()
 export class AbilityFactory {
 
-  ability: Ability | undefined;
   constructor(
   ) { }
 
-  cannot<T extends keyof SubjectMap>(
-    action: Action,
-    subject: SubjectMap[T] & ForcedSubject<T>,
-  ) {
-    if (this.ability!.cannot(action, subject)) {
-      throw new ForbiddenException()
-    }
-  }
-
-
-  can<T extends keyof SubjectMap>(
-    action: Action,
-    subject: SubjectMap[T] & ForcedSubject<T>,
-  ) {
-    if (this.ability!.can(action, subject)) {
-      return true;
-    }
-    throw new ForbiddenException()
-  }
-
   createForUser(user: User, abilities: UserAbility[] = []) {
-    const { can, build } = new AbilityBuilder<AppAbility>(Ability);
+    const { can, build } = new AbilityBuilder<AppAbility>(Ability as any);
 
+    can(Action.Manage, 'all')
 
-    if (isOrganizationOwner(user)) {
-      can(Action.Manage, 'Organization', { id: user.organizationId })
-      can(Action.Manage, 'Organization_Users',
-        {
-          ...(user ? { user: { organizationId: user.organizationId } } : {}),
-          organization: { id: user.organizationId! }
-        }
-      )
-    }
-
-    if (isOrganizationAdmin(user)) {
-      can(Action.Manage, 'Organization', { id: user.organizationId })
-      can(Action.Read, 'Organization_Users',
-        {
-          ...(user ? { user: { organizationId: user.organizationId } } : {}),
-          organization: { id: user.organizationId! }
-        }
-      )
-    }
-
-    if (isOrganizationUser(user)) {
-      if (hasAbility(abilities, ClientsAbilitiesEnum.CLIENT_UPDATE_ORGANIZATIONS)) {
-        can(Action.Update, 'Organization')
-      }
-    }
-
+    //
+    const lambdaMatcher: ConditionsMatcher<MatchConditions> = matchConditions => matchConditions;
+    // if (isOrganizationOwner(user)) {
+    // }
+    //
+    // if (isOrganizationAdmin(user)) {
+    //
+    // }
+    //
+    // if (isOrganizationUser(user)) {
+    //   if (hasAbility(abilities, ClientsAbilitiesEnum.CLIENT_UPDATE_ORGANIZATIONS)) {
+    //     can(Action.Update, 'Organization')
+    //   }
+    // }
+    //
     // if (isOrganizationOwner(user)) {
     //   can(Action.Manage, 'Organization', { id: user.organizationId })
     //   can(Action.Manage, 'Organization_Users',
@@ -84,10 +53,10 @@ export class AbilityFactory {
     //       ...(user ? { user: { organizationId: user.organizationId } } : {}),
     //       organization: { id: user.organizationId! }
     //     }
-    //   )
-    //  }
+    //   )}
 
-    //
+
+
     // // sygar owner permissions
     // if (isSygarOwner(user)) {
     //   can(Action.Manage, 'Users');
@@ -153,8 +122,7 @@ export class AbilityFactory {
     //   }
     // }
 
-    this.ability = build()
+    return build({ conditionsMatcher: lambdaMatcher });
 
-    return this
   }
 }

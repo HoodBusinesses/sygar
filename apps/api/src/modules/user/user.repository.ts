@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { Prisma, User, UserType } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
 import { getPaginationQuery, getPaginationResponse } from 'src/shared/pagination';
 import { DatabseService } from 'src/lib/databse/datbase.service';

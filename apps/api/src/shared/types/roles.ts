@@ -1,6 +1,5 @@
-import { MongoAbility, MongoQuery, subject } from '@casl/ability';
+import { MatchConditions, MongoAbility, MongoQuery, PureAbility, subject } from '@casl/ability';
 import { Subjects } from '@casl/prisma';
-import { AbilitiesEnum } from '../constants/abilities';
 import { Ability, Organization, User } from '@prisma/client';
 
 /**
@@ -10,25 +9,21 @@ export enum Action {
   Manage = 'manage',
   Create = 'create',
   Read = 'read',
+  ReadAll = 'read_all',
   Update = 'update',
   Delete = 'delete',
 }
 
 export type SubjectMap = {
-  'Users': User,
+  'Users': { user: User, targetUser?: User },
   'Organization': Organization,
-  'Organization_Users': { user: User, organization: Organization },
+  'Organization_Users': { user?: User, organization: Organization },
   'Ability': {
-    consumer: User,
+    consumer?: User,
     producer: User,
-    ability: Ability,
+    organization?: Organization;
   },
-  'Organization_Ability': {
-    consumer: User,
-    producer: User,
-    ability: Ability,
-    organization: Organization
-  }
+
 }
 
 /**
@@ -52,12 +47,12 @@ export type PossibleAbilities = [Action, Subject];
 /**
  * Type representing conditions for filtering queries, using MongoDB query syntax.
  */
-export type Conditions = MongoQuery;
+export type Conditions = MatchConditions;
 
 /**
  * Type representing the application's ability, which is based on the MongoAbility from @casl/ability.
  */
-export type AppAbility = MongoAbility<PossibleAbilities, Conditions>;
+export type AppAbility = PureAbility<PossibleAbilities, Conditions>;
 
 /**
  * Interface representing the requirements rules for defining abilities required for a specific action on a subject.
@@ -65,5 +60,4 @@ export type AppAbility = MongoAbility<PossibleAbilities, Conditions>;
 export interface RequirementsRules {
   action: Action; // The action required, such as 'create', 'read', 'update', or 'delete'.
   subject: Subject; // The subject or resource type on which the action is performed, or 'all' for all resources.
-  ability?: AbilitiesEnum
 }
