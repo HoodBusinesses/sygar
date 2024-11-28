@@ -1,7 +1,6 @@
 import { IsNumber, IsNumberString, IsString, Max, Min } from "class-validator";
 
 export class CreateThemeDto {
-
 	@IsString()
 	name!: string;
 
@@ -11,5 +10,6 @@ export class CreateThemeDto {
 	@IsNumberString()
 	year!: string;
 
-
+	@IsString()
+	organizationId!: string;
 }
