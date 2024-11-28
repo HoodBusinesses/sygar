@@ -13,12 +13,8 @@ import { JwtModule } from './lib/jwt/jwt.module';
 import { OrganizationsModule } from './modules/organizations/organizations.modules';
 import { AbilitiesModule } from './modules/abilities/abilities.module';
 import { RbacModule } from './global/rbac/roles.module';
+import { ThemesModule } from './modules/themes/themes.module';
 
-/**
- * @module AppModule
- * @description
- * This module is the root module of the application. It imports all the necessary modules and providers.
- */
 @Module({
   imports: [
     ServeStaticModule.forRoot({
@@ -44,7 +40,8 @@ import { RbacModule } from './global/rbac/roles.module';
     TemplatesModule,
     JwtModule,
     OrganizationsModule,
-    RbacModule
+    RbacModule,
+    ThemesModule
   ],
   controllers: [AppController],
 })

@@ -13,4 +13,7 @@ export class UpdateThemeDto {
 	@IsOptional()
 	year?: string;
 
+
+	@IsString()
+	organizationId!: string;
 }
