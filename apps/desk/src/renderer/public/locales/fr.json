@@ -33,6 +33,8 @@
   "registration": {
     "title": "Informations sur les membres de l'organisation",
     "registration": "Inscription",
+    "ownerInfo": "Informations sur le propriétaire",
+    "EditOrganization": "Modifier l'organisation",
     "basicInfo": {
       "title": "Informations sur l'organisation",
       "fields": {
@@ -97,6 +99,7 @@
   "organization": {
     "organizations": "Organisations",
     "searchPlaceholder": "Rechercher...",
+    "viewUsers": "Voir les utilisateurs",
     "dateSelect": "Sélectionner la date",
     "image": "Image",
     "rs": "R.S",
@@ -233,9 +236,13 @@
     "updateProfile": "Mettez à jour vos informations personnelles",
     "changePhoto": "Changez votre photo",
     "personalInfo": "Informations personnelles",
-    "fullName": {
-      "label": "Nom complet",
-      "placeholder": "Entrez votre nom complet"
+    "firstName": {
+      "label": "Prénom",
+      "placeholder": "Entrez votre prénom"
+    },
+    "lastName": {
+      "label": "Nom",
+      "placeholder": "Entrez votre nom"
     },
     "email": {
       "label": "Email",
@@ -262,6 +269,14 @@
         "label": "Nom complet",
         "placeholder": "Entrez le nom complet"
       },
+      "firstName": {
+        "label": "Prénom",
+        "placeholder": "Entrez le prénom"
+      },
+      "lastName": {
+        "label": "Nom",
+        "placeholder": "Entrez le nom"
+      },
       "email": {
         "label": "Email",
         "placeholder": "Entrez l'email"
@@ -277,6 +292,18 @@
       "phone": {
         "label": "Téléphone",
         "placeholder": "Entrez le numéro de téléphone"
+      },
+      "userCnss": {
+        "label": "CNSS de l'utilisateur",
+        "placeholder": "Entrez le CNSS de l'utilisateur"
+      },
+      "identity": {
+        "label": "Identité",
+        "placeholder": "Entrez l'identité"
+      },
+      "identityType": {
+        "label": "Type d'identité",
+        "placeholder": "Sélectionnez le type d'identité"
       }
     }
   }

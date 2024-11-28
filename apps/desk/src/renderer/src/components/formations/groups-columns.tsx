@@ -3,8 +3,7 @@ import DeleteModal from '../DeleteModal';
 import ButtonsAction from '../organization/org-table-actions';
 import { Checkbox } from '../ui/checkbox';
 import SortHeader from '../costum-data/sort-header';
-import { Button } from '../ui/button';
-import { useTranslate } from '@renderer/hooks/useTranslate';
+import RedirectButton from '../redirectButton';
 
 export interface Group {
   id: string;
@@ -19,7 +18,6 @@ export const groupColumn = (
   setParticipants: () => void,
   setRowData: (rowData: Group) => void
 ): ColumnDef<Group>[] => { 
-  const { t } = useTranslate();
   return [
   {
     accessorKey: 'id',
@@ -93,12 +91,13 @@ export const groupColumn = (
     accessorKey: 'participant',
     header: 'participant.participant',
     cell: () => (
-      <Button
-        onClick={setParticipants}
-        className="hover:underline text-blue-500"
-      >
-        {t("participant.participant")}
-      </Button>
+      <RedirectButton click={setParticipants} text="participant.participant" />
+      // <Button
+      //   onClick={setParticipants}
+      //   className="hover:underline text-blue-500"
+      // >
+      //   {t("participant.participant")}
+      // </Button>
     ),
   },
   {

@@ -8,15 +8,11 @@ import EditUsers from './formations/edit-users';
 export interface UsersProps {
   data: Users[];
 }
-type UserRollType = 'admin' | 'user' | 'owner';
 
 export default function UsersTable ({data} : {data: Users[]}) {
   const [component, setComponent] = useState<Components>('table');
 
   const [defaultValue, setdefaultValue] = useState<Users | null>(null);
-
-  // const 
-
 
   const { isRtl } = useTranslate();
   

@@ -4,25 +4,21 @@ import { useQuery } from '@tanstack/react-query';
 import { OrganizationsData } from './get-all-organizations';
 
 //TODO: use api Library to get the organization data
-export const useOrganizationData = (organizationCnss: string | null) => {
+export const useOrganizationData = (orgId:string) => {
   const token = useAppSelector((state) => state.auth.auth.token);
 
-  const { data, isLoading, isError, error,isSuccess, refetch } = useQuery({
-    queryKey: ['organizationData', organizationCnss],
-    queryFn: () => api.get(`organization/get?cnss=${organizationCnss}`,{
-      headers: {
-        Authorization: `Bearer ${token}`,
-      }
-    }),
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    refetchInterval: false,
-    refetchIntervalInBackground: false,
+  const { data, isLoading, isError, error, isSuccess, refetch } = useQuery({
+    queryKey: ['organizationData', orgId],
+    queryFn: () =>
+      api.get(`organizations/${orgId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
   });
 
   return {
-    data: data?.data.organization as OrganizationsData,
+    data: data?.data as OrganizationsData,
     isLoading,
     isError,
     error,

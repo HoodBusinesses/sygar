@@ -54,9 +54,8 @@ export default function FormInputItem({
           {...register}
           defaultValue={value}
           placeholder={t(placeholder)}
-          type={type}
+          type={type ?? 'text'}
           className={cn(
-            isLargeInput && 'h-14',
             'bg-gray-100 text-gray-950 p-2 rounded-md'
           )}
         />

@@ -5,8 +5,9 @@ import { useTranslate } from '@renderer/hooks/useTranslate';
 import { useGetAllOrganizations } from '@renderer/hooks/api/organization/get-all-organizations';
 import { useState } from 'react';
 import { OrganizationBasicInfo } from '@renderer/components/organization/OrganizationBasicInfo';
+import { useNavigate } from '@tanstack/react-router';
 
-const OrganizationsPage: React.FC = () => {
+const OrganizationsPage: React.FC = (): JSX.Element => {
   const { isRtl } = useTranslate();
 
   const { data, isSuccess, isLoading, isError } = useGetAllOrganizations();
@@ -14,6 +15,8 @@ const OrganizationsPage: React.FC = () => {
   const [component, setComponent] = useState<Components>('table');
 
   const [defaultValue, setdefaultValue] = useState<Organization | null>(null);
+  const navigate = useNavigate();
+
   
   if (isLoading) {
     return (
@@ -30,16 +33,19 @@ const OrganizationsPage: React.FC = () => {
   }
 
   if (isSuccess) {
-    console.log('OrganizationsPage -> data', data);
     return (
       <div dir={isRtl ? 'rtl' : 'ltr'} className="h-full w-full p-6 gap-y-">
         {/* Organization Table Component */}
         <CustomTable
           headTitle={'organization.organizations'}
-          columns={Columns((rowData: Organization) => {
-            setdefaultValue(rowData);
-            setComponent('edit');
-          })}
+          columns={Columns(
+            (orgId: string) =>
+              navigate({ to: `/users-listing?orgId=${orgId}` as string }),
+            (rowData: Organization) => {
+              setdefaultValue(rowData);
+              setComponent('edit');
+            }
+          )}
           component={component}
           setComponent={setComponent}
           EditAndAddRowComponent={
@@ -49,18 +55,19 @@ const OrganizationsPage: React.FC = () => {
             />
           }
           data={data.map((org, index) => ({
-            id: org.uid,
+            id: org.id,
             logo: '',
             rs: org.name,
-            ice: `ice_${index}`,
+            ice: org.ice,
             cnss: org.cnss,
-            address: `address_${index}`,
+            address: org.address,
             enabled: index % 2 === 0,
           }))}
         />
       </div>
     );
   }
+  return <></>;
 }
 
 export default withAuth(OrganizationsPage);

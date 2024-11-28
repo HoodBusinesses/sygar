@@ -2,8 +2,9 @@ import { Edit2 } from 'lucide-react';
 import DeleteModal from '../DeleteModal';
 import SubscriptionModal from '../SubscriptionModal';
 import { Button } from '../ui/button';
-import { useNavigate } from '@tanstack/react-router';
+// import { useNavigate } from '@tanstack/react-router';
 import useDelete from '@renderer/hooks/api/organization/delete-org';
+import { QueryKey } from '@tanstack/react-query';
 
 export default function ButtonsAction({
   rowId,
@@ -15,10 +16,9 @@ export default function ButtonsAction({
   rowId: string;
   subscription: boolean;
   endpoint: string;
-  invalidateKeyData?: string;
+  invalidateKeyData?: QueryKey;
   saveDefaultData: () => void;
 }): JSX.Element {
-
   const mutation = useDelete({
     rowId,
     endpoint,

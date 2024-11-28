@@ -47,7 +47,55 @@ export const userSchema = z.object({
   lastName: z.string().min(1, 'Last name is required'),
   phone: z.string().min(1, 'Phone number is required'),
   email: z.string().email('Invalid email address'),
+  userCnss: z.string().min(1, 'CNSS is required'),
+  identityType: z.string().min(1, 'Identity type is required'),
+  identity: z.string().min(1, 'Identity is required'),
+  role: z.string().min(1, 'Role is required'),
 });
+
+export const userRegistrationSchema = z.object({
+  firstName: z.string().min(1, 'First name is required'),
+  lastName: z.string().min(1, 'Last name is required'),
+  phone: z.string().min(1, 'Phone number is required'),
+  email: z.string().email('Invalid email address'),
+  userCnss: z.string().min(1, 'CNSS is required'),
+  identityType: z.string().min(1, 'Identity type is required'),
+  identity: z.string().min(1, 'Identity is required'),
+});
+
+export const profileSchema = z
+  .object({
+    firstName: z
+      .string()
+      .min(1, { message: 'First name is required.' })
+      .max(50, { message: 'First name must be at most 50 characters.' }),
+    lastName: z
+      .string()
+      .min(1, { message: 'Last name is required.' })
+      .max(50, { message: 'Last name must be at most 50 characters.' }),
+    email: z
+      .string()
+      .email({ message: 'Invalid email address.' })
+      .min(1, { message: 'Email is required.' }),
+    // currentPassword: z
+    //   .string()
+    //   .min(6, { message: 'Current password must be at least 6 characters.' }),
+    // newPassword: z
+    //   .string()
+    //   .min(6, { message: 'New password must be at least 6 characters.' }),
+    // confirmPassword: z
+    //   .string()
+    //   .min(6, { message: 'Confirm password must be at least 6 characters.' }),
+  })
+  // .refine(
+  //   (values) => {
+  //     return values.newPassword === values.confirmPassword;
+  //   },
+  //   {
+  //     message: 'Passwords must match!',
+  //     path: ['confirmPassword'],
+  //   }
+  // );
 
 export type OrganizationFormData = z.infer<typeof organizationSchema>;
 export type MemberFormData = z.infer<typeof memberSchema>;
@@ -55,3 +103,4 @@ export type FormationFormData = z.infer<typeof formationSchema>;
 export type ParticipantFormData = z.infer<typeof participantSchema>;
 export type GroupFormData = z.infer<typeof groupSchema>;
 export type UserFormData = z.infer<typeof userSchema>;
+export type ProfileFormData = z.infer<typeof profileSchema>;

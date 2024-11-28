@@ -33,6 +33,8 @@
   "registration": {
     "title": "معلومات أعضاء المؤسسة",
     "registration": "التسجيل",
+    "ownerInfo": "معلومات المالك",
+    "EditOrganization": "تعديل المؤسسة",
     "basicInfo": {
       "title": "معلومات المؤسسة",
       "fields": {
@@ -97,6 +99,7 @@
   "organization": {
     "organizations": "المؤسسات",
     "searchPlaceholder": "البحث...",
+    "viewUsers": "عرض المستخدمين",
     "dateSelect": "اختر التاريخ",
     "image": "الصورة",
     "rs": "السجل التجاري",
@@ -233,9 +236,13 @@
     "updateProfile": "تحديث معلوماتك الشخصية",
     "changePhoto": "تغيير صورتك",
     "personalInfo": "المعلومات الشخصية",
-    "fullName": {
-      "label": "الاسم الكامل",
-      "placeholder": "أدخل اسمك الكامل"
+    "firstName": {
+      "label": "الاسم الأول",
+      "placeholder": "أدخل اسمك الأول"
+    },
+    "lastName": {
+      "label": "الاسم الأخير",
+      "placeholder": "أدخل اسمك الأخير"
     },
     "email": {
       "label": "البريد الإلكتروني",
@@ -254,13 +261,21 @@
       "placeholder": "تأكيد كلمة المرور الجديدة"
     }
   },
-  "users": {
+  "user": {
     "addUser": "إضافة مستخدم",
     "editUser": "تعديل مستخدم",
     "fields": {
       "fullName": {
         "label": "الاسم الكامل",
         "placeholder": "أدخل الاسم الكامل"
+      },
+      "firstName": {
+        "label": "الاسم الأول",
+        "placeholder": "أدخل الاسم الأول"
+      },
+      "lastName": {
+        "label": "الاسم الأخير",
+        "placeholder": "أدخل الاسم الأخير"
       },
       "email": {
         "label": "البريد الإلكتروني",
@@ -277,6 +292,18 @@
       "phone": {
         "label": "الهاتف",
         "placeholder": "أدخل رقم الهاتف"
+      },
+      "userCnss": {
+        "label": "الضمان الاجتماعي",
+        "placeholder": "أدخل رقم الضمان الاجتماعي"
+      },
+      "identity": {
+        "label": "الهوية",
+        "placeholder": "أدخل الهوية"
+      },
+      "identityType": {
+        "label": "نوع الهوية",
+        "placeholder": "اختر نوع الهوية"
       }
     }
   }

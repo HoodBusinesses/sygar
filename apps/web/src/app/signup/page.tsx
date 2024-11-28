@@ -6,34 +6,25 @@ import images from '@/public/images';
 import OrgInfosForm from './components/OrgInfosForm';
 import PersonalInfosForm from './components/PersonalInfosForm';
 import SendEmailStep from './components/SendEmailStep';
+import { useSignup } from '@/hooks/useSignUp';
+import { orgType, ownerType } from '@/lib/schema/schema';
+import useHandleCreateAccount from '@/hooks/useHandleCreateAccount';
 
 const SignUpPage: React.FC = () => {
-  const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({
-    orgInfo: {},
-    personalInfo: {},
-  });
-
-  const handleOrgInfoSubmit = (data: any) => {
-    const updatedFormData = { ...formData, orgInfo: data };
-    console.log('Organization Info Submitted:', data);
-    console.log('Current Form Data:', updatedFormData);
-    setFormData(updatedFormData);
-    setStep(2);
-  };
-
-  const handlePersonalInfoSubmit = (data: any) => {
-    const combinedData = { ...formData, personalInfo: data };
-    console.log('Personal Info Submitted:', data);
-    console.log('Combined Form Data:', combinedData);
-    setFormData(combinedData);
-    setStep(3);
-  };
+  const {
+    orgMethods,
+    personMethods,
+    step,
+    isPending,
+    setStep,
+    handleOrgSubmit,
+    handlePersonSubmit
+  } = useHandleCreateAccount();
 
   const logo = images.logo;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
       <div className="bg-white p-8 rounded-lg shadow-md w-[480px]">
         <div className="flex justify-center mb-6">
           <Image src={logo} alt="Sygafor" width={120} height={40} />
@@ -44,9 +35,8 @@ const SignUpPage: React.FC = () => {
           {[1, 2, 3].map((num) => (
             <div key={num} className="flex items-center">
               <div
-                className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                  step >= num ? 'bg-blue-600 text-white' : 'bg-gray-200'
-                }`}
+                className={`w-8 h-8 rounded-full flex items-center justify-center ${step >= num ? 'bg-blue-600 text-white' : 'bg-gray-200'
+                  }`}
               >
                 {num}
               </div>
@@ -60,12 +50,18 @@ const SignUpPage: React.FC = () => {
         </div>
 
         {step === 1 && (
-          <OrgInfosForm setStep={setStep} onSubmit={handleOrgInfoSubmit} />
+          <OrgInfosForm 
+            onSubmit={handleOrgSubmit}
+            orgMethods={orgMethods}
+          />
         )}
         {step === 2 && (
           <PersonalInfosForm
             setStep={setStep}
-            onSubmit={handlePersonalInfoSubmit}
+            isLoading={isPending}
+            onSubmit={handlePersonSubmit}
+            personMethods={personMethods}
+            
           />
         )}
         {step === 3 && <SendEmailStep />}

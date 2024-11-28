@@ -30,7 +30,7 @@ function EditPage({
     methods,
     handleSubmit,
     handleUnsavedChange,
-  } = useHandelEditForm(defaultValues, crud);
+  } = useHandelEditForm(defaultValues, crud , () => {});
 
   return (
     <div className="p-4 w-full py-6 space-y-6">

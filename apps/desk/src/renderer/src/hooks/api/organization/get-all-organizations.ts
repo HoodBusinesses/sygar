@@ -4,13 +4,10 @@ import { useQuery } from '@tanstack/react-query';
 
 export type OrganizationsData = {
     id: string;
-    uid: string;
     name: string;
     cnss: string;
-    freeTrial: string;
-    key: string;
-    SK: string;
-    PK: string;
+    address: string;
+    ice: string;
     createdAt: string;
     updatedAt: string;
 };
@@ -21,17 +18,11 @@ export const useGetAllOrganizations = () => {
   const { data, isLoading, isError, error, isSuccess, refetch } = useQuery({
     queryKey: ['organizationsData'],
     queryFn: () =>
-      api.get('organization/get-all', {
+      api.get('organizations', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }),
-    staleTime: 0,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    refetchInterval: false,
-    refetchIntervalInBackground: false,
   });
 
   return {

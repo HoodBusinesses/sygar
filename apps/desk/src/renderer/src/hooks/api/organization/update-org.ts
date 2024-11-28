@@ -7,28 +7,34 @@ import {
 } from '@tanstack/react-query';
 import { OrganizationsData } from './get-all-organizations';
 import { AxiosResponse } from 'axios';
+import { useToast } from '@renderer/hooks/useToast';
 
 export interface UpdateOrganParams {
-  cnss: string;
+  orgId: string;
   data: Partial<OrganizationsData>;
 }
 
 export default function useUpdateOrg(
-  options?: UseMutationOptions<AxiosResponse<any, any>, Error, unknown>
+  options?: UseMutationOptions<
+    AxiosResponse<any, any>,
+    Error,
+    UpdateOrganParams
+  >
 ) {
   const token = useAppSelector((state) => state.auth.auth.token);
-  
+
   const queryClient = useQueryClient();
+
+  const { toast } = useToast();
 
   return useMutation({
     mutationKey: ['UpdateOrg'],
 
-    mutationFn: (params: UpdateOrganParams) =>
-      api.put(`organization/update`, params.data, {
+    mutationFn: ({ orgId, data }: UpdateOrganParams) =>
+      api.put(`organizations/${orgId}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        params: { cnss: params.cnss },
       }),
 
     onSuccess: () => {
@@ -37,6 +43,11 @@ export default function useUpdateOrg(
           queryKey: ['organizationsData'],
           exact: true,
         });
+        toast({
+          title: 'success',
+          variant: 'success',
+          description: 'Organization updated successfully',
+        });
       } catch (error) {
         console.log(error);
       }
@@ -44,8 +55,8 @@ export default function useUpdateOrg(
 
     ...options,
 
-    onError: () => {
-      console.log('wiwiw error');
+    onError: (error) => {
+      console.log('Error updating organization:', error);
     },
   });
 }

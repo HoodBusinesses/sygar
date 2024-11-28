@@ -2,8 +2,11 @@ import { FaUserCircle } from 'react-icons/fa';
 import { FiLogOut } from 'react-icons/fi';
 import { HiOutlineChevronDown } from 'react-icons/hi';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { useRouter } from '@tanstack/react-router';
+import { Button } from '../ui/button';
 
 export default function ProfilePopover() {
+  const router = useRouter();
   return (
     <Popover>
       <PopoverTrigger className="flex items-center cursor-pointer gap-1">
@@ -17,9 +20,12 @@ export default function ProfilePopover() {
           <p className="font-semibold text-xl">Sygafor Admin</p>
         </div>
 
-        <button className="w-full bg-blue-500 text-white py-2 rounded-md mb-3 text-sm">
+        <Button
+          onClick={() => router.navigate({ to: '/profile' })}
+          className="w-full bg-blue-500 text-white py-2 rounded-md mb-3 text-sm"
+        >
           Profile Page
-        </button>
+        </Button>
 
         <hr className="my-2" />
 

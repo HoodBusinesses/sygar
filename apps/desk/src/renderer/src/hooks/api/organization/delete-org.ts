@@ -1,7 +1,7 @@
 import { useToast } from '@renderer/hooks/useToast';
 import { useAppSelector } from '@renderer/store/hooks';
 import { api } from '@renderer/utils/api';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import {  QueryKey, useMutation, useQueryClient } from '@tanstack/react-query';
 
 export interface DeleteOrganParams {
   cnss: string;
@@ -9,7 +9,7 @@ export interface DeleteOrganParams {
 
 type DeleteRowProps = {
   rowId: string;
-  invalidateKeyData?: string;
+  invalidateKeyData?: QueryKey;
   endpoint: string;
 };
 
@@ -37,7 +37,7 @@ export default function useDeleteRowTable({
         try {
             queryClient.invalidateQueries(
               {
-                queryKey: [invalidateKeyData],
+                queryKey: invalidateKeyData,
                 exact: true,
                 refetchType: 'active',
               },
@@ -54,8 +54,11 @@ export default function useDeleteRowTable({
     },
 
     onError: () => {
-      toast({ title: 'Error', description: 'Error deleting item'
-    }); 
+      toast({
+        title: 'Error',
+        variant: 'destructive',
+        description: 'Error deleting item',
+      }); 
     },  
   });
 }

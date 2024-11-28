@@ -4,7 +4,7 @@ import DeleteModal from './DeleteModal'
 import { Button } from './ui/button'
 
 import { Edit2, Trash2 } from 'lucide-react'
-import SelectInputItem from './ui/select-input-item'
+// import SelectInputItem from './ui/select-input-item'
 
 export interface Member {
   id: number

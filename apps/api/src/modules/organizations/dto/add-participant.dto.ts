@@ -25,6 +25,7 @@ export class AddParticipant {
 	@IsEmail()
 	email!: string;
 
+	@IsString()
 	phone!: string;
 
 	@IsEnum(Role)

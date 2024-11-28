@@ -27,6 +27,7 @@ const toastVariants = cva(
     variants: {
       variant: {
         default: 'border bg-background text-foreground',
+        success: 'group border-green-500 bg-green-200 text-green-500',
         destructive:
           'destructive group border-destructive bg-destructive text-destructive-foreground',
       },
@@ -107,6 +108,7 @@ const ToastDescription = React.forwardRef<
     {...props}
   />
 ));
+
 ToastDescription.displayName = ToastPrimitives.Description.displayName;
 
 type ToastProps = React.ComponentPropsWithoutRef<typeof Toast>;
