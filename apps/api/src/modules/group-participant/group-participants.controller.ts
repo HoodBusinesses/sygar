@@ -4,7 +4,7 @@ import { GroupParticipantService } from "./group-participants.service";
 import { AddGroupParticipantDto } from "./dto/add-group-participant.dto";
 import { UpdateGroupParticipantDto } from "./dto/update-group-participant.dto";
 
-@Controller('group')
+@Controller('group-participants')
 export class GroupParticipantController {
 
 	constructor(
