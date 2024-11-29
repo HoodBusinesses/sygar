@@ -61,13 +61,6 @@ export const groupFields: FieldsInput[] = [
     required: true,
   },
   {
-    label: 'group.fields.theme.label',
-    placeholder: 'group.fields.theme.placeholder',
-    name: 'theme',
-    value: 'theme',
-    required: true,
-  },
-  {
     label: 'group.fields.location.label',
     placeholder: 'group.fields.location.placeholder',
     name: 'location',

@@ -1,9 +1,9 @@
 import UsersTable from '@renderer/components/UsersTable';
 import withAuth from '@renderer/hoc/with-auth';
 import { useOrganizationUsers } from '@renderer/hooks/api/organization/get-organization-users';
-import { useGetAllSygarUsers } from '@renderer/hooks/api/user/get-all-users';
 import { useAppSelector } from '@renderer/store/hooks';
 import { Role } from '@renderer/store/slices/auth.slice';
+import { useGetAllSygarUsers } from '@renderer/hooks/api/user/get-all-users';
 
 const usersListing = () => {
   const url = new URLSearchParams(window.location.search);

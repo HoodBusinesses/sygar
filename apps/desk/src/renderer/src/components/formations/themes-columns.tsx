@@ -13,7 +13,7 @@ export interface Theme {
 }
 
 export const themeColumns = (
-  setGroupThemes: () => void,
+  setGroupThemes: (themeId: string, orgId: string) => void,
   orgId: string,
   setRowData: (rowData: Theme) => void
 ): ColumnDef<Theme>[] => {
@@ -97,14 +97,8 @@ export const themeColumns = (
     {
       accessorKey: 'groups',
       header: 'themesTable.groups',
-      cell: () => (
-        <RedirectButton click={setGroupThemes} text="themesTable.groups" />
-        // <Button
-        //   onClick={setGroupThemes}
-        //   className="hover:underline text-blue-500 px-4 py-1"
-        // >
-        //   {t('themesTable.groups')}
-        // </Button>
+      cell: ( {row} ) => (
+        <RedirectButton click={setGroupThemes.bind(null, row.original.id, orgId)} text="themesTable.groups" />
       ),
     },
     {

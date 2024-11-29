@@ -1,37 +1,38 @@
-import React, { useState } from 'react';
-import { mockGroups } from '@renderer/utils/static/organizations';
-import { Components, CustomTable } from '@renderer/components/custom-table';
-import { useTranslate } from '@renderer/hooks/useTranslate';
-import { useNavigate } from '@tanstack/react-router';
+import GroupTable from '@renderer/components/group-table';
 import withAuth from '@renderer/hoc/with-auth';
-import { Group, groupColumn } from '@renderer/components/formations/groups-columns';
-import EditGroup from '@renderer/components/formations/edit-group';
+import { useGetAllGroups } from '@renderer/hooks/api/group/get-all';
+import React from 'react';
 
 const GroupListing: React.FC = () => {
-  const { isRtl } = useTranslate();
-  const navigate = useNavigate();
-  const [component, setComponent] = useState<Components>('table');
-  const [defaultValue, setdefaultValue] = useState<Group | null>(null);
-  return (
-    <div dir={isRtl ? 'rtl' : 'ltr'} className="h-full w-full p-6 space-y-6">
-      <CustomTable
-        component={component}
-        EditAndAddRowComponent={
-          <EditGroup crud={component} defaultValues={defaultValue} goBack={()=> setComponent('table')}/>
-        }
-        setComponent={setComponent}
-        headTitle="group.group"
-        columns={groupColumn(
-          () => navigate({ to: '/participant-listing' as string }),
-          (rowData: Group) => {
-            setdefaultValue(rowData);
-            setComponent('edit');
-          }
-        )}
-        data={mockGroups}
-      />
-    </div>
+  const url = new URLSearchParams(window.location.search);
+  const themId = url.get('themeId');
+  const organizationId = url.get('organizationId');
+
+  const { data, isLoading, isError, isSuccess } = useGetAllGroups(
+    themId || '',
+    organizationId || ''
   );
+
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        Loading...
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="text-red-500 p-4">Error loading organization data</div>
+    );
+  }
+
+  if (isSuccess) {
+    return (
+     <GroupTable data={data} themeId={themId || ''} organizationId={organizationId || ''} />
+    );
+  }
 };
 
 export default withAuth(GroupListing);
