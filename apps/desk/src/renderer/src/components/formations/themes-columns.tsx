@@ -10,13 +10,11 @@ export interface Theme {
   name: string;
   year: string;
   price: string;
-  // identifier: string;
-  // groups?: string;
-  // options?: string;
 }
 
 export const themeColumns = (
   setGroupThemes: () => void,
+  orgId: string,
   setRowData: (rowData: Theme) => void
 ): ColumnDef<Theme>[] => {
   return [
@@ -26,7 +24,9 @@ export const themeColumns = (
         <div className="flex items-center gap-2">
           <Checkbox
             checked={table.getIsAllPageRowsSelected()}
-            onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+            onCheckedChange={(value) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
             aria-label="Select all"
           />
 
@@ -62,7 +62,9 @@ export const themeColumns = (
           />
         );
       },
-      cell: ({ row }) => <p className="text-gray-600">{row.getValue('name')}</p>,
+      cell: ({ row }) => (
+        <p className="text-gray-600">{row.getValue('name')}</p>
+      ),
     },
     {
       accessorKey: 'year',
@@ -94,7 +96,7 @@ export const themeColumns = (
     },
     {
       accessorKey: 'groups',
-      header: ('themesTable.groups'),
+      header: 'themesTable.groups',
       cell: () => (
         <RedirectButton click={setGroupThemes} text="themesTable.groups" />
         // <Button
@@ -110,9 +112,9 @@ export const themeColumns = (
       header: 'themesTable.options',
       cell: ({ row }) => (
         <ButtonsAction
-          endpoint={`/theme/delete?uid=${row.original.id}`} // endpot /
+          endpoint={`themes/${row.original.id}?organizationId=${orgId}`} // endpot /
           invalidateKeyData={['themesData']}
-          saveDefaultData={setRowData.bind( null, row.original)}
+          saveDefaultData={setRowData.bind(null, row.original)}
           rowId={row.original.id}
           subscription={false}
         />

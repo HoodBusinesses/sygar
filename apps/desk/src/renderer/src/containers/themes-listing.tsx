@@ -1,9 +1,17 @@
 import ThemeTable from '@renderer/components/theme-table';
 import withAuth from '@renderer/hoc/with-auth';
 import { useGetAllThemes } from '@renderer/hooks/api/theme/get-alll-thems';
+import { useAppSelector } from '@renderer/store/hooks';
 
 const ThemesListing: React.FC = () => {
-  const { data, isSuccess, isLoading, isError } = useGetAllThemes();
+  const url = new URLSearchParams(window.location.search);
+
+  const orgId = url.get('orgId');
+  const organizationId =
+    orgId || useAppSelector((state) => state.auth.auth.organizationId);
+
+  const { data, isSuccess, isLoading, isError } =
+    useGetAllThemes(organizationId);
 
   if (isLoading) {
     return (
@@ -20,7 +28,7 @@ const ThemesListing: React.FC = () => {
   }
 
   if (isSuccess) {
-    return <ThemeTable data={data} />;
+    return <ThemeTable orgId={organizationId} data={data} />;
   }
 
   return null;

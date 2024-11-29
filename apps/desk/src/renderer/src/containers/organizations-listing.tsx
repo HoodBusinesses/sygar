@@ -41,6 +41,8 @@ const OrganizationsPage: React.FC = (): JSX.Element => {
           columns={Columns(
             (orgId: string) =>
               navigate({ to: `/users-listing?orgId=${orgId}` as string }),
+            (orgId: string) =>
+              navigate({ to: `/themes-listing?orgId=${orgId}` as string }),
             (rowData: Organization) => {
               setdefaultValue(rowData);
               setComponent('edit');

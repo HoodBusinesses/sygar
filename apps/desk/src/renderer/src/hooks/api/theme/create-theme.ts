@@ -5,12 +5,10 @@ import { useToast } from '../../useToast';
 import { AxiosResponse } from 'axios';
 
 export interface CreateThemeParams {
-  cost: number;
+  price: string;
   name: string;
-  description: string;
+  year: string;
   organizationId: string;
-  startDate: number;
-  endDate: number;
 }
 
 export default function useCreateTheme(
@@ -26,7 +24,7 @@ export default function useCreateTheme(
     mutationKey: ['createTheme'],
 
     mutationFn: (params: CreateThemeParams) =>
-      api.post('/theme/create', params, {
+      api.post('/themes', params, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -40,6 +38,7 @@ export default function useCreateTheme(
         });
         toast({
           title: 'success',
+          variant: 'success',
           description: 'Theme created successfully',
         });
       } catch (error) {

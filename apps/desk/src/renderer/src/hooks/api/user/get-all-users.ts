@@ -1,22 +1,22 @@
 import { useAppSelector } from '@renderer/store/hooks';
 import { api } from '@renderer/utils/api';
 import { useQuery } from '@tanstack/react-query';
+import { User } from './me';
 
-export type ThemesData = {
-  id: string;
-  name: string;
-  price: string;
-  year: number;
-  organizationId: string | null;  
+type UsersType = {
+  page: number;
+  totalAmount: number;
+  totalPage: number;
+  users: User[];
 };
 
 //TODO: use api Library to get the organizations data
-export const useGetAllThemes = (organizationId: string) => {
+export const useGetAllSygarUsers = () => {
   const token = useAppSelector((state) => state.auth.auth.token);
   const { data, isLoading, isError, error, isSuccess, refetch } = useQuery({
-    queryKey: ['themesData', organizationId],
+    queryKey: ['usersSygarData'],
     queryFn: () =>
-      api.get(`/themes?organizationId=${organizationId}`, {
+      api.get('user', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -24,7 +24,7 @@ export const useGetAllThemes = (organizationId: string) => {
   });
 
   return {
-    data: data?.data.themes as ThemesData[],
+    data: data?.data as UsersType,
     isLoading,
     isError,
     error,

@@ -6,7 +6,6 @@ import { rootRoute } from './root-route';
 import { organizationsRoute } from './organizations-route';
 import { themesListingRoute } from './themes-route';
 import { participantsListingRoute } from './participants-route';
-import { editRoute } from './edit-route';
 import { groupListingRoute } from './group-route';
 import { dashboardRoute } from './dashboard-route';
 import { usersRoute } from './users-route';
@@ -23,7 +22,6 @@ const routeTree = rootRoute.addChildren([
   organizationsRoute,
   themesListingRoute,
   participantsListingRoute,
-  editRoute,
   settingsRoute,
   profileRoute,
   groupListingRoute,

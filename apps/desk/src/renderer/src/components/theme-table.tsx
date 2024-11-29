@@ -9,7 +9,7 @@ import { useTranslate } from '@renderer/hooks/useTranslate';
 import { useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 
-export default function ThemeTable({ data }: { data: ThemesData[] }) {
+export default function ThemeTable({ data, orgId }: { data: ThemesData[], orgId: string }) {
   const navigate = useNavigate();
   const { isRtl } = useTranslate();
   const [component, setComponent] = useState<Components>('table');
@@ -24,22 +24,24 @@ export default function ThemeTable({ data }: { data: ThemesData[] }) {
             crud={component}
             defaultValues={defaultValue}
             goBack={() => setComponent('table')}
+            orgId={orgId}
           />
         }
         setComponent={setComponent}
         headTitle="formation.formation"
         columns={themeColumns(
           () => navigate({ to: '/group-listing' as string }),
+          orgId,
           (rowData: Theme) => {
             setdefaultValue(rowData);
             setComponent('edit');
           }
         )}
         data={data.map((theme) => ({
-          id: theme.uid,
+          id: theme.id,
           name: theme.name,
-          year: theme.createdAt.toString(),
-          price: theme.cost.toString(),
+          year: theme.year.toString(),
+          price: theme.price,
         }))}
       />
     </div>

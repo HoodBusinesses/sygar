@@ -57,7 +57,7 @@ export const OrganizationBasicInfo = ({
               type="button"
               className="w-full h-12 bg-transparent border border-blue-500 text-blue-500"
               onClick={() =>
-                handleUnsavedChange(methods.getValues())
+                handleUnsavedChange({...methods.getValues(), logo:''})
                   ? setOpenUnsavedChange(true)
                   : goBack()
               }

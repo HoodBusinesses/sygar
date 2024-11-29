@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Components, CustomTable } from './custom-table';
 import { Users, usersColumns } from './formations/users-columns';
 import EditUsers from './formations/edit-users';
+import { useAppSelector } from '@renderer/store/hooks';
 
 
 export interface UsersProps {
@@ -15,6 +16,8 @@ export default function UsersTable ({data} : {data: Users[]}) {
   const [defaultValue, setdefaultValue] = useState<Users | null>(null);
 
   const { isRtl } = useTranslate();
+
+  const userType =  useAppSelector(state => state.auth.auth.userType);
   
   return (
     <div dir={isRtl ? 'rtl' : 'ltr'} className="h-full w-full p-6 space-y-6">
@@ -23,6 +26,7 @@ export default function UsersTable ({data} : {data: Users[]}) {
           setComponent={setComponent}
           headTitle="themesTable.users"
           columns={usersColumns(
+            userType,
             (rowData: Users) => {
               setdefaultValue(rowData);
               setComponent('edit');

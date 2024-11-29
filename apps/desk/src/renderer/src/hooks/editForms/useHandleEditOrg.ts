@@ -40,14 +40,13 @@ export default function useHandelEditOrgs(
     }
   };
 
-  const handleUnsavedChange = (data: FormData) => {
+  const handleUnsavedChange = (data: FormData & { logo: string }) => {
     if (defaultValues) {
       const { id, enabled, logo, ...values } = defaultValues;
       const { logo: imageData, ...defaultData } = data;
-      console.log('Data:', data);
-      console.log('Default Values:', values); 
       return JSON.stringify(defaultData) !== JSON.stringify(values);
     }
+    return false;
   };
 
   const [openUnsavedChange, setOpenUnsavedChange] = useState(false);

@@ -97,7 +97,7 @@ export const formationFields: FieldsInput[] = [
     placeholder: 'formation.fields.price.placeholder',
     name: 'price',
     value: 'price',
-    type: 'number',
+    type: 'text',
     required: true,
   },
 ];
