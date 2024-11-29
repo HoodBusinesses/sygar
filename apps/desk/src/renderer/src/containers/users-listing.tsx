@@ -1,6 +1,7 @@
 import UsersTable from '@renderer/components/UsersTable';
 import withAuth from '@renderer/hoc/with-auth';
 import { useOrganizationUsers } from '@renderer/hooks/api/organization/get-organization-users';
+import { useGetAllSygarUsers } from '@renderer/hooks/api/user/get-all-users';
 import { useAppSelector } from '@renderer/store/hooks';
 import { Role } from '@renderer/store/slices/auth.slice';
 
@@ -9,11 +10,12 @@ const usersListing = () => {
 
   const orgId1 = url.get('orgId');
 
-  const orgId2 = useAppSelector((state) => state.auth.auth.organizationId);
+  const user = useAppSelector((state) => state.auth.auth);
 
-  const { data, isLoading, isError, isSuccess } = useOrganizationUsers(
-    orgId1 || orgId2
-  );
+  const { data, isLoading, isError, isSuccess } =
+    user.userType === 'SOLUTION_OWNER'
+      ? useGetAllSygarUsers()
+      : useOrganizationUsers(orgId1 || user.organizationId);
 
   if (isLoading) {
     return (

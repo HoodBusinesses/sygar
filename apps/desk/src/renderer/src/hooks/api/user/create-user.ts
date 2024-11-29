@@ -4,28 +4,30 @@ import { api } from '@renderer/utils/api';
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 
-export interface UpdateUserParams {
-  userId: string;
-  data: Partial<{
-    firstName: string;
-    lastName: string;
-    email: string;
-    phone: string;
-  }>;
+export interface UserParams {
+  cnss: string;
+  imageLink?: string;
+  role: string;
+  identity: string;
+  identityType: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
 }
 
-export default function useUpdateUser(
-  options?: UseMutationOptions<AxiosResponse<any, any>, Error, UpdateUserParams>
+export default function useCreateSygarUser(
+  options?: UseMutationOptions<AxiosResponse<any, any>, Error, UserParams>
 ) {
   const token = useAppSelector((state) => state.auth.auth.token);
-  
+
   const { toast } = useToast();
 
   return useMutation({
     mutationKey: ['UpdateUser'],
 
-    mutationFn: ({ userId, data }: UpdateUserParams) =>
-      api.put(`user/${userId}`, data, {
+    mutationFn: (params: UserParams) =>
+      api.post(`user`, params, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

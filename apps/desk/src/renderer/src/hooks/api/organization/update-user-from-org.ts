@@ -24,7 +24,7 @@ export interface UpdateParams {
   data: Partial<AddParticipant>;
 }
 
-export default function useUpdateUserOfOrganization(orgId: string) {
+export default function useUpdateUserOfOrganization(orgId: string,userId: string, goBack: () => void) {
   const token = useAppSelector((state) => state.auth.auth.token);
 
   const queryClient = useQueryClient();
@@ -35,7 +35,7 @@ export default function useUpdateUserOfOrganization(orgId: string) {
     mutationKey: ['UpdateOrg'],
 
     mutationFn: ({ orgId, data }: UpdateParams) =>
-      api.put(`organizations/${orgId}`, data, {
+      api.put(`organizations/${orgId}/users/${userId}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -49,14 +49,21 @@ export default function useUpdateUserOfOrganization(orgId: string) {
         });
         toast({
           title: 'success',
+          variant: 'success',
           description: 'user Organization updated successfully',
         });
+        goBack();
       } catch (error) {
         console.log(error);
       }
     },
 
     onError: (error) => {
+      toast({
+        title: 'Error updating user organization',
+        description: error.message,
+        variant: 'destructive',
+      });
       console.log('Error updating user organization:', error);
     },
   });

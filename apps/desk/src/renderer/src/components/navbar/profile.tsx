@@ -4,9 +4,14 @@ import { HiOutlineChevronDown } from 'react-icons/hi';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { useRouter } from '@tanstack/react-router';
 import { Button } from '../ui/button';
+import { useAppDispatch, useAppSelector } from '@renderer/store/hooks';
+import { resetAuth } from '@renderer/store/slices/auth.slice';
 
 export default function ProfilePopover() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.auth.auth);
+
   return (
     <Popover>
       <PopoverTrigger className="flex items-center cursor-pointer gap-1">
@@ -17,7 +22,9 @@ export default function ProfilePopover() {
       <PopoverContent className="mt-5 bg-white rounded-lg p-5 border shadow-lg">
         <div className="flex items-center space-x-3 mb-3">
           <FaUserCircle className="text-5xl" />
-          <p className="font-semibold text-xl">Sygafor Admin</p>
+          <p className="font-semibold text-xl">
+            {user.firstName} {user.lastName}
+          </p>
         </div>
 
         <Button
@@ -29,13 +36,21 @@ export default function ProfilePopover() {
 
         <hr className="my-2" />
 
-        <div className="flex items-center space-x-2 cursor-pointer hover:bg-gray-100 p-2 rounded-md">
+        <Button
+          onClick={() => {
+            localStorage.clear();
+            dispatch(resetAuth());
+            router.navigate({ to: '/signin' });
+          }}
+          className="flex items-center space-x-2 cursor-pointer hover:bg-gray-100 p-2 rounded-md"
+        >
           <FiLogOut className="text-lg" />
           <a href="#" className="text-sm text-gray-600">
             Logout
           </a>
-        </div>
+        </Button>
       </PopoverContent>
     </Popover>
   );
 }
+

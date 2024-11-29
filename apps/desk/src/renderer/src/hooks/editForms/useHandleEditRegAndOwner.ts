@@ -24,7 +24,6 @@ export default function useHandleEditRegAndOwner() {
   const createMuation = useCreateOrg();
 
   const handleSubmit = (data: OrganizationFormData & UserFormData) => {
-    console.log('ikhan: ', data);
     createMuation.mutate({
       name: data.rs,
       cnss: data.cnss,

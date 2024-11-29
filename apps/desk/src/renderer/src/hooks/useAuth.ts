@@ -26,6 +26,8 @@ export const useAuth = (): AuthState => {
     dispatch(setUserData({
       userId: usrData.id ?? '',
       organizationId: usrData.organizationId ?? '',
+      firstName: usrData.firstName ?? '',
+      lastName: usrData.lastName ?? '',
       role: (usrData.role ?? 'User') as Role,
       userType: (usrData.type ?? 'ORGANIZATION_USER') as UserType,
       isAccountActivated: usrData.isActive,

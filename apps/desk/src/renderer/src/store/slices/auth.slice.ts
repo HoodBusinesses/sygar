@@ -9,6 +9,8 @@ export type AuthPayloadType = {
   userId: string;
   organizationId: string;
   isAccountActivated: boolean;
+  lastName: string;
+  firstName: string;
   role: Role;
   userType: UserType;
 };
@@ -22,7 +24,9 @@ const initialState: AuthSliceType = {
     isAuth: false,
     token: localStorage.getItem('token'),
     userId: '',
+    lastName: '',
     organizationId: '',
+    firstName: '',
     role: 'User',
     userType: 'ORGANIZATION_USER',
     isAccountActivated: false,
@@ -54,6 +58,8 @@ const authSlice = createSlice({
         token: null,
         userId: '',
         organizationId: '',
+        firstName: '',
+        lastName: '',
         role: 'User' as Role,
         userType: 'ORGANIZATION_USER' as UserType,
         isAccountActivated: false,

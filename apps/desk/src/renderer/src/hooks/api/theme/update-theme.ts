@@ -41,6 +41,7 @@ export default function useUpdateTheme(
         });
         toast({
           title: 'success',
+          variant: 'success',
           description: 'Theme created successfully',
         });
       } catch (error) {

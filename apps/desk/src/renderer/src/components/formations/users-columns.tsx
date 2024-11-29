@@ -6,7 +6,7 @@ import { Checkbox } from '../ui/checkbox';
 
 import CostumSelect from '../costum-select';
 import RedirectButton from '../redirectButton';
-import { Role } from '@renderer/store/slices/auth.slice';
+import { Role, UserType } from '@renderer/store/slices/auth.slice';
 
 export interface Users {
   id: string;
@@ -22,7 +22,8 @@ export interface Users {
 }
 
 export const usersColumns = (
-  setRowData: (rowData: Users) => void,
+  userType: UserType,
+  setRowData: (rowData: Users) => void
 ): ColumnDef<Users>[] => {
   return [
     {
@@ -123,15 +124,23 @@ export const usersColumns = (
     {
       accessorKey: 'role',
       header: 'themesTable.role',
-      cell: ({ row }) => <CostumSelect value={row.original.role} />,
+      cell: ({ row }) => <p className='text-gray-600'>{row.original.role}</p>,
     },
     {
       accessorKey: 'options',
       header: 'themesTable.options',
       cell: ({ row }) => (
         <ButtonsAction
-          endpoint={`/organizations/${row.original.organizationId}/users/${row.original.id}`} // endpot /
-          invalidateKeyData={['organizationUsers', row.original.organizationId]}
+          endpoint={
+            userType === 'SOLUTION_OWNER'
+              ? `user/${row.original.id}`
+              : `/organizations/${row.original.organizationId}/users/${row.original.id}`
+          }
+          invalidateKeyData={
+            userType === 'SOLUTION_OWNER'
+              ? ['usersSygarData']
+              : ['organizationUsers', row.original.organizationId]
+          }
           saveDefaultData={setRowData.bind(null, row.original)}
           rowId={row.original.id}
           subscription={false}
