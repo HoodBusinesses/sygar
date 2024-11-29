@@ -15,6 +15,7 @@ import { AbilitiesModule } from './modules/abilities/abilities.module';
 import { RbacModule } from './global/rbac/roles.module';
 import { ThemesModule } from './modules/themes/themes.module';
 import { GroupParticipantModule } from './modules/group-participant/group-participants.module';
+import { GroupModule } from './modules/groups/groups.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { GroupParticipantModule } from './modules/group-participant/group-partic
     TemplatesModule,
     JwtModule,
     OrganizationsModule,
+    GroupModule,
     GroupParticipantModule,
     RbacModule,
     ThemesModule
