@@ -30,7 +30,10 @@ export default function ThemeTable({ data, orgId }: { data: ThemesData[], orgId:
         setComponent={setComponent}
         headTitle="formation.formation"
         columns={themeColumns(
-          () => navigate({ to: '/group-listing' as string }),
+          (themeId: string, orgId: string) =>
+            navigate({
+              to: `/group-listing?themeId=${themeId}&organizationId=${orgId}` as string,
+            }),
           orgId,
           (rowData: Theme) => {
             setdefaultValue(rowData);

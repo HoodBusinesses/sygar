@@ -12,16 +12,19 @@ interface EditGroupProps {
   crud: string;
   defaultValues: Group | null;
   goBack: () => void;
+  themeId: string;
+  organizationId: string;
 }
 
-const EditGroup = ({ crud, defaultValues, goBack }: EditGroupProps): JSX.Element => {
+const EditGroup = ({ crud, defaultValues, goBack, themeId, organizationId }: EditGroupProps): JSX.Element => {
   const {
     openUnsavedChange,
     setOpenUnsavedChange,
     methods,
     handleSubmit,
     handleUnsavedChange,
-  } = useHandelEditGroup(defaultValues, crud)
+  } = useHandelEditGroup(defaultValues, crud, themeId, organizationId, goBack);
+
   const { t } = useTranslate();
 
   console.log("defaultValue : ", defaultValues);

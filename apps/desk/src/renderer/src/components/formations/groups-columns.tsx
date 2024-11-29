@@ -9,108 +9,102 @@ export interface Group {
   id: string;
   facilator: string;
   trainer: string;
-  theme: string;
   location: string;
-  date: string;
 }
 
 export const groupColumn = (
   setParticipants: () => void,
+  organizationId: string,
   setRowData: (rowData: Group) => void
 ): ColumnDef<Group>[] => { 
   return [
-  {
-    accessorKey: 'id',
-    header: ({ table }) => (
-      <div className="flex items-center">
-        <Checkbox
-          checked={table.getIsAllPageRowsSelected()}
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-
-        {table.getIsSomeRowsSelected() && (
-          <DeleteModal
-            DeleteNumber={table.getFilteredSelectedRowModel().rows.length}
-            onDelete={() => {}}
+    {
+      accessorKey: 'id',
+      header: ({ table }) => (
+        <div className="flex items-center">
+          <Checkbox
+            checked={table.getIsAllPageRowsSelected()}
+            onCheckedChange={(value) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
+            aria-label="Select all"
           />
-        )}
-      </div>
-    ),
-    cell: ({ row }) => (
-      <div className="flex items-center gap-2">
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-          key="checkbox"
-        />
-        <p>{row.index + 1}</p>
-      </div>
-    ),
-  },
-  {
-    accessorKey: 'facilator',
-    header: ({ column }) => {
-      return (
-        <SortHeader
-          isSomeSortSeted={!!column.getIsSorted()}
-          resetFn={() => column.clearSorting()}
-          OnClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          label="group.fields.facilator.label"
-        />
-      );
+
+          {table.getIsSomeRowsSelected() && (
+            <DeleteModal
+              DeleteNumber={table.getFilteredSelectedRowModel().rows.length}
+              onDelete={() => {}}
+            />
+          )}
+        </div>
+      ),
+      cell: ({ row }) => (
+        <div className="flex items-center gap-2">
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+            aria-label="Select row"
+            key="checkbox"
+          />
+          <p>{row.index + 1}</p>
+        </div>
+      ),
     },
-    cell: ({ row }) => <p>{row.getValue('facilator')}</p>,
-  },
-  {
-    accessorKey: 'trainer',
-    header: ({ column }) => {
-      return (
-        <SortHeader
-          isSomeSortSeted={!!column.getIsSorted()}
-          resetFn={() => column.clearSorting()}
-          OnClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          label="group.fields.trainer.label"
-        />
-      );
+    {
+      accessorKey: 'facilator',
+      header: ({ column }) => {
+        return (
+          <SortHeader
+            isSomeSortSeted={!!column.getIsSorted()}
+            resetFn={() => column.clearSorting()}
+            OnClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+            label="group.fields.facilator.label"
+          />
+        );
+      },
+      cell: ({ row }) => <p>{row.getValue('facilator')}</p>,
     },
-    cell: ({ row }) => <p>{row.getValue('trainer')}</p>,
-  },
-  {
-    accessorKey: 'theme',
-    header: 'group.fields.theme.label',
-    cell: ({ row }) => <p>{row.getValue('theme')}</p>,
-  },
-  {
-    accessorKey: 'location',
-    header: 'group.fields.location.label',
-    cell: ({ row }) => <p>{row.getValue('location')}</p>,
-  },
-  {
-    accessorKey: 'participant',
-    header: 'participant.participant',
-    cell: () => (
-      <RedirectButton click={setParticipants} text="participant.participant" />
-      // <Button
-      //   onClick={setParticipants}
-      //   className="hover:underline text-blue-500"
-      // >
-      //   {t("participant.participant")}
-      // </Button>
-    ),
-  },
-  {
-    accessorKey: 'options',
-    header: 'themesTable.options',
-    cell: ({ row }) => (
-      <ButtonsAction
-        endpoint='/group/delete'
-        saveDefaultData={setRowData.bind(null, row.original)}
-        rowId={row.original.id}
-        subscription={false}
-      />
-    ),
-  },
-];
+    {
+      accessorKey: 'trainer',
+      header: ({ column }) => {
+        return (
+          <SortHeader
+            isSomeSortSeted={!!column.getIsSorted()}
+            resetFn={() => column.clearSorting()}
+            OnClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+            label="group.fields.trainer.label"
+          />
+        );
+      },
+      cell: ({ row }) => <p>{row.getValue('trainer')}</p>,
+    },
+    {
+      accessorKey: 'location',
+      header: 'group.fields.location.label',
+      cell: ({ row }) => <p>{row.getValue('location')}</p>,
+    },
+    {
+      accessorKey: 'participant',
+      header: 'participant.participant',
+      cell: () => (
+        <RedirectButton
+          click={setParticipants}
+          text="participant.participant"
+        />
+      ),
+    },
+    {
+      accessorKey: 'options',
+      header: 'themesTable.options',
+      cell: ({ row }) => (
+        <ButtonsAction
+          endpoint={`group/${row.original.id}?organizationId=${organizationId}`}
+          invalidateKeyData={['groupsData']}
+          saveDefaultData={setRowData.bind(null, row.original)}
+          rowId={row.original.id}
+          subscription={false}
+        />
+      ),
+    },
+  ];
 }

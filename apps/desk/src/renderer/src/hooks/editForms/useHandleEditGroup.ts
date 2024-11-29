@@ -4,10 +4,15 @@ import { groupSchema } from '@renderer/utils/schemas/formSchema';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
+import useCreateGroup from '../api/group/add-group';
+import useUpdateGroup from '../api/group/update-group';
 
 export default function useHandelEditGroup(
   defaultValues: Group | null,
-  crud: string
+  crud: string,
+  themeId: string,
+  organizationId: string,
+  goBack: () => void
 ) {
   const schema = groupSchema;
 
@@ -19,8 +24,37 @@ export default function useHandelEditGroup(
     resolver: zodResolver(schema),
   });
 
+  const createMutation = useCreateGroup(goBack);
+
+  const updateMutation = useUpdateGroup(goBack);
+
   const handleSubmit = (data: FormData) => {
-    console.log('data :::', defaultValues);
+    crud == 'edit'
+      ? updateMutation.mutate({
+          groupId: defaultValues!.id,
+          data: {
+            trainerName:
+              defaultValues!.trainer !== data.trainer
+                ? data.trainer
+                : undefined,
+            animatorName:
+              defaultValues!.facilator !== data.facilator
+                ? data.facilator
+                : undefined,
+            address:
+              defaultValues!.location !== data.location
+                ? data.location
+                : undefined,
+            organizationId,
+          },
+        })
+      : createMutation.mutate({
+          trainerName: data.trainer,
+          animatorName: data.facilator,
+          address: data.location,
+          organizationId,
+          themeId,
+        });
   };
 
   const handleUnsavedChange = (data: FormData) => {
