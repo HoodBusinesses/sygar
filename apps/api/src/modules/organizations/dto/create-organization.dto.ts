@@ -1,4 +1,4 @@
-import { IsEmail, IsEnum, IsNotEmptyObject, IsNumberString, IsOptional, IsPhoneNumber, IsString, ValidateNested } from "class-validator";
+import { IsEmail, IsEnum, IsNotEmptyObject, IsNumberString, IsOptional, IsString, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
 import { IdentityType } from "@prisma/client";
 
@@ -27,7 +27,7 @@ export class AddOwner {
 	@IsEmail()
 	email!: string;
 
-	@IsPhoneNumber()
+	@IsString()
 	phone!: string;
 }
 

@@ -1,4 +1,4 @@
-import { Global, Module } from '@nestjs/common';
+import { forwardRef, Global, Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtGuard } from './auth.guard';
@@ -13,7 +13,7 @@ import { MailModule } from 'src/lib/mail/mail.module';
  */
 @Global()
 @Module({
-  imports: [MailModule, UserModule],
+  imports: [MailModule, forwardRef(() => UserModule)],
   controllers: [AuthController],
   exports: [AuthService, JwtGuard,],
   providers: [AuthService, JwtGuard],

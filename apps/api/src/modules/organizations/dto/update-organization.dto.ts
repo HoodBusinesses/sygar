@@ -17,5 +17,4 @@ export class UpdateOrganizationDto {
 	@IsString()
 	@IsOptional()
 	ice!: string;
-
 }

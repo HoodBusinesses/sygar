@@ -14,6 +14,7 @@ import { OrganizationsModule } from './modules/organizations/organizations.modul
 import { AbilitiesModule } from './modules/abilities/abilities.module';
 import { RbacModule } from './global/rbac/roles.module';
 import { ThemesModule } from './modules/themes/themes.module';
+import { GroupParticipantModule } from './modules/group-participant/group-participants.module';
 
 @Module({
   imports: [
@@ -22,7 +23,6 @@ import { ThemesModule } from './modules/themes/themes.module';
     }),
     AbilitiesModule,
 
-    UserModule,
     // TODO: validate schema and load default env's
     ConfigModule.forRoot({
       cache: true,
@@ -35,11 +35,14 @@ import { ThemesModule } from './modules/themes/themes.module';
     }),
     DatabaseModule,
     AuthModule,
+    UserModule,
+
     MailModule,
     EncryptionModule,
     TemplatesModule,
     JwtModule,
     OrganizationsModule,
+    GroupParticipantModule,
     RbacModule,
     ThemesModule
   ],
