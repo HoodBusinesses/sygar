@@ -1,11 +1,9 @@
 import { IsString } from "class-validator";
-import { argv0 } from "process";
 
 export class CreateGroupDto {
 
 	@IsString()
 	trainerName!: string;
-
 
 	@IsString()
 	animatorName!: string;
@@ -18,5 +16,4 @@ export class CreateGroupDto {
 
 	@IsString()
 	themeId!: string;
-
 }

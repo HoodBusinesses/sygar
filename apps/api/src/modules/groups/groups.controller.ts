@@ -2,6 +2,7 @@ import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Put, Q
 import { PaginationDto } from "src/shared/dto/pagination.dto";
 import { GroupsService } from "./groups.service";
 import { CreateGroupDto } from "./dto/create-group.dto";
+import { UpdateGroupDto } from "./dto/update-group.dto";
 
 @Controller('group')
 export class GroupsController {
@@ -24,10 +25,15 @@ export class GroupsController {
 
 	@Put(":groupId")
 	async updateGroup(
-		@Body() dto: any,
+		@Body() dto: UpdateGroupDto,
 		@Param("groupId") groupId: string
 	) {
-		return await this.groupService.updateGroup(groupId, {})
+		return await this.groupService.updateGroup(groupId, {
+			...(dto.trainerName ? { trainerName: dto.trainerName } : {}),
+			...(dto.animatorName ? { animatorName: dto.animatorName } : {}),
+			...(dto.address ? { address: dto.address } : {}),
+
+		})
 	}
 
 	@Delete(":groupId")

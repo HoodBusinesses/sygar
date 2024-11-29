@@ -1,4 +1,6 @@
 import {
+  forwardRef,
+  Inject,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -22,6 +24,7 @@ export class AuthService {
 
   constructor(
     private readonly configService: ConfigService,
+    @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
     private readonly cryptService: EncryptionService,
     private readonly jwtService: JwtService,
@@ -107,7 +110,7 @@ export class AuthService {
     const token = uuid();
 
     // Generate the reset link
-    const resetLink = `${this.configService.getOrThrow('SYGAR_AUTH_WEB_APP_URL')}/${''}?token=${token}`;
+    const resetLink = `${this.configService.getOrThrow('SYGAR_AUTH_WEB_APP_URL')}/${'activateAccount'}?token=${token}`;
 
     await this.sendTokenEmail(email, 'activationAccount', 'Sygar: Account Activate Email', token,
       { ['{{resetLink}}']: resetLink, ['{{organizationName}}']: 'SYGAR' })
@@ -171,7 +174,7 @@ export class AuthService {
     const token = uuid();
 
     // Generate the reset link
-    const resetLink = `${this.configService.getOrThrow('SYGAR_AUTH_WEB_APP_URL')}/${''}?token=${token}`;
+    const resetLink = `${this.configService.getOrThrow('SYGAR_AUTH_WEB_APP_URL')}/${'resetPassword'}?token=${token}`;
 
     await this.sendTokenEmail(email, 'resetPassword', 'Sygar: Account Reset password Email', token,
       { ['{{resetLink}}']: resetLink })

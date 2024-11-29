@@ -1,13 +1,16 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, forwardRef, Inject, Injectable } from '@nestjs/common';
 import { UserRepository } from './user.repository';
 import { Prisma } from '@prisma/client';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
+import { AuthService } from 'src/global/auth/auth.service';
 
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly userRepository: UserRepository, // Inject the user repository for database operations
+    @Inject(forwardRef(() => AuthService))
+    private readonly authService: AuthService
   ) { }
 
   async create(user: Prisma.UserCreateInput) {
@@ -25,6 +28,8 @@ export class UserService {
     }
 
     const newUser = await this.userRepository.create(user);
+
+    // await this.authService.requestActiveAccount(newUser.email)
 
     return newUser;
   }
