@@ -3,41 +3,24 @@ import { api } from '@renderer/utils/api';
 import { useQuery } from '@tanstack/react-query';
 
 export type ThemesData = {
-  createdAt: number;
-  updatedAt: number;
+  id: string;
   name: string;
-  cost: number;
-  groups: [
-    {
-      interfacePending: true;
-    },
-  ];
-  description: string;
-  organizationId: string;
-  startDate: number;
-  endDate: number;
-  uid: string;
-  PK: string;
-  SK: string;
+  price: string;
+  year: number;
+  organizationId: string | null;  
 };
 
 //TODO: use api Library to get the organizations data
-export const useGetAllThemes = () => {
+export const useGetAllThemes = (organizationId: string) => {
   const token = useAppSelector((state) => state.auth.auth.token);
   const { data, isLoading, isError, error, isSuccess, refetch } = useQuery({
-    queryKey: ['themesData'],
+    queryKey: ['themesData', organizationId],
     queryFn: () =>
-      api.get('theme/get-all', {
+      api.get(`/themes?organizationId=${organizationId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }),
-    staleTime: 0,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    refetchInterval: false,
-    refetchIntervalInBackground: false,
   });
 
   return {

@@ -24,6 +24,7 @@ export type Organization = {
 
 export const Columns = (
   viewUsers: (orgId: string) => void,
+  viewThemes: (orgId: string) => void,
   setRowData: (rowData: Organization) => void
   ): ColumnDef<Organization>[] => {
   return [
@@ -100,10 +101,22 @@ export const Columns = (
       accessorKey: 'viewUsers',
       header: 'organization.viewUsers',
       cell: ({ row }) => (
-        <RedirectButton click={viewUsers.bind(null, row.original.id)} text="organization.viewUsers" />
+        <RedirectButton
+          click={viewUsers.bind(null, row.original.id)}
+          text="organization.viewUsers"
+        />
       ),
     },
-
+    {
+      accessorKey: 'viewThemes',
+      header: 'Themes',
+      cell: ({ row }) => (
+        <RedirectButton
+          click={viewThemes.bind(null, row.original.id)}
+          text="view Themes"
+        />
+      ),
+    },
     {
       accessorKey: 'enabled',
       header: ({ column }) => {
@@ -129,7 +142,7 @@ export const Columns = (
           saveDefaultData={setRowData.bind(null, row.original)}
           rowId={row.original.cnss}
           endpoint={`/organizations/${row.original.id}`}
-          invalidateKeyData={["organizationsData"]}
+          invalidateKeyData={['organizationsData']}
         />
       ),
       enableSorting: false,

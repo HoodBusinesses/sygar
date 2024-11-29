@@ -6,12 +6,12 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
-import { ThemesData } from './get-alll-thems';
 import { useToast } from '@renderer/hooks/useToast';
+import { CreateThemeParams } from './create-theme';
 
 export interface UpdateThemeParams {
   uid: string;
-  data: Partial<ThemesData>;
+  data: Partial<CreateThemeParams>;
 }
 
 export default function useUpdateTheme(
@@ -27,11 +27,10 @@ export default function useUpdateTheme(
     mutationKey: ['UpdateOrg'],
 
     mutationFn: (params: UpdateThemeParams) =>
-      api.put(`theme/update`, params.data, {
+      api.put(`themes/${params.uid}`, params.data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        params: { uid: params.uid },
       }),
 
     onSuccess: () => {

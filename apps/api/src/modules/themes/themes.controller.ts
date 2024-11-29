@@ -11,7 +11,6 @@ export class ThemesController {
 		private readonly themeService: ThemesService
 	) { }
 
-
 	@Post()
 	async createTheme(@Body() dto: CreateThemeDto) {
 		return await this.themeService.createTheme({

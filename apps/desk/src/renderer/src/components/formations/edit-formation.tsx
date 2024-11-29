@@ -12,12 +12,14 @@ interface EditFormationProps {
   crud: string;
   defaultValues: Theme | null;
   goBack: () => void;
+  orgId: string;
 }
 
 const EditFormation = ({
   crud,
   defaultValues,
   goBack,
+  orgId,
 }: EditFormationProps): JSX.Element => {
   const { t } = useTranslate();
 
@@ -27,7 +29,7 @@ const EditFormation = ({
     methods,
     handleSubmit,
     handleUnsavedChange,
-  } = useHandelEditFormation(defaultValues, crud, goBack);
+  } = useHandelEditFormation(defaultValues, crud, orgId, goBack);
 
   return (
     <div className="p-4 w-full py-6 space-y-6">

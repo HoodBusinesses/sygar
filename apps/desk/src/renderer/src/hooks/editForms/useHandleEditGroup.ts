@@ -31,6 +31,7 @@ export default function useHandelEditGroup(
       console.log('defaultValues jjjj: ', values);
       return JSON.stringify(data) !== JSON.stringify(values);
     }
+    return false;
   };
 
   const [openUnsavedChange, setOpenUnsavedChange] = useState(false);

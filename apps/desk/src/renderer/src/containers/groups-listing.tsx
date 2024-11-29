@@ -10,8 +10,6 @@ import EditGroup from '@renderer/components/formations/edit-group';
 const GroupListing: React.FC = () => {
   const { isRtl } = useTranslate();
   const navigate = useNavigate();
-  
-  
   const [component, setComponent] = useState<Components>('table');
   const [defaultValue, setdefaultValue] = useState<Group | null>(null);
   return (

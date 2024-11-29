@@ -1,14 +1,15 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Participant } from '@renderer/components/formations/participants-columns';
-import {
-  participantSchema
-} from '@renderer/utils/schemas/formSchema';
+import { participantSchema } from '@renderer/utils/schemas/formSchema';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
-export default function useHandelEditParticipant(defaultValues: Participant | null, crud: string) {
-  const schema = participantSchema
+export default function useHandelEditParticipant(
+  defaultValues: Participant | null,
+  crud: string
+) {
+  const schema = participantSchema;
 
   type SchemaType = typeof schema;
 
@@ -30,6 +31,7 @@ export default function useHandelEditParticipant(defaultValues: Participant | nu
       console.log('defaultValues jjjj: ', values);
       return JSON.stringify(data) !== JSON.stringify(values);
     }
+    return false;
   };
 
   const [openUnsavedChange, setOpenUnsavedChange] = useState(false);

@@ -1,4 +1,3 @@
-import { useFormContext } from 'react-hook-form';
 import { Card, CardContent, CardHeader } from '../ui/card';
 import { GroupFormData } from '@renderer/utils/schemas/formSchema';
 import FormInputItem from '../ui/form-input-item';
@@ -13,7 +12,6 @@ interface EditGroupProps {
   crud: string;
   defaultValues: Group | null;
   goBack: () => void;
-
 }
 
 const EditGroup = ({ crud, defaultValues, goBack }: EditGroupProps): JSX.Element => {
@@ -76,10 +74,7 @@ const EditGroup = ({ crud, defaultValues, goBack }: EditGroupProps): JSX.Element
 
           <UnsavedChangeEdit
             open={openUnsavedChange}
-            ConfermFn={() => {
-              console.log("first redir")
-              goBack();
-            }}
+            ConfermFn={goBack}
             KeepEditFn={setOpenUnsavedChange.bind(null, false)}
           />
         </Card>

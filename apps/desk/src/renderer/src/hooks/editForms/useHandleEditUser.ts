@@ -7,7 +7,7 @@ import { z } from "zod";
 import useAddUserToOrganization from "../api/organization/add-user-to-organization";
 import { useAppSelector } from "@renderer/store/hooks";
 
-function areObjectsEqual(
+export function areObjectsEqual(
   obj1: Record<string, any>,
   obj2: Record<string, any>
 ): boolean {
