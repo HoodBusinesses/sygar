@@ -9,43 +9,7 @@ import { useAppSelector } from '@renderer/store/hooks';
 import useUpdateUserOfOrganization from '../api/organization/update-user-from-org';
 import useUpdateUser from '../api/user/useUpdateUser';
 import useCreateSygarUser from '../api/user/create-user';
-
-export function areObjectsEqual(
-  obj1: Record<string, any>,
-  obj2: Record<string, any>
-): boolean {
-  // If both are the same reference, they are equal
-  if (obj1 === obj2) return true;
-
-  // If either is not an object or is null, they are not equal
-  if (
-    typeof obj1 !== 'object' ||
-    typeof obj2 !== 'object' ||
-    obj1 === null ||
-    obj2 === null
-  ) {
-    return false;
-  }
-
-  // Get keys of both objects
-  const keys1 = Object.keys(obj1);
-  const keys2 = Object.keys(obj2);
-
-  // If they have a different number of keys, they are not equal
-  if (keys1.length !== keys2.length) {
-    return false;
-  }
-
-  // Compare keys and values recursively
-  for (const key of keys1) {
-    // Check if the key exists in both objects and their values are equal
-    if (!keys2.includes(key) || !areObjectsEqual(obj1[key], obj2[key])) {
-      return false;
-    }
-  }
-
-  return true;
-}
+import { areObjectsEqual } from '@renderer/utils/is-objects-equal';
 
 export default function useHandleEditUser(
   defaultValues: Users | null,
@@ -58,25 +22,41 @@ export default function useHandleEditUser(
 
   type FormData = z.infer<SchemaType>;
 
-  const methods = useForm<FormData>({
-    resolver: zodResolver(schema),
-  });
+  const { control, register, handleSubmit, formState, watch } =
+    useForm<FormData>({
+      resolver: zodResolver(schema),
+      defaultValues: {
+        firstName: (crud == 'edit' && defaultValues?.firstName) || '',
+        lastName: (crud == 'edit' && defaultValues?.lastName) || '',
+        email: (crud == 'edit' && defaultValues?.email) || '',
+        phone: (crud == 'edit' && defaultValues?.phone) || '',
+        role: (crud == 'edit' && defaultValues?.role) || undefined,
+        identityType: (crud == 'edit' && defaultValues?.identityType) || '',
+        identity: (crud == 'edit' && defaultValues?.identity) || '',
+        userCnss: (crud == 'edit' && defaultValues?.userCnss) || '',
+      },
+    });
+
+  const formValues = watch();
 
   const orgId = useAppSelector((state) => state.auth.auth.organizationId);
 
   const userType = useAppSelector((state) => state.auth.auth.userType);
 
   const mutationCreate = useAddUserToOrganization(orgId, goBack);
+
   const nutationCreateSygar = useCreateSygarUser();
 
   const mutationUpdateUser = useUpdateUser();
+
   const mutationUpdate = useUpdateUserOfOrganization(
     orgId,
     defaultValues?.id || '',
     goBack
   );
 
-  const handleSubmit = (data: FormData) => {
+  const onSubmit = (data: FormData) => {
+    console.log('data :::', data);
     if (userType === 'SOLUTION_OWNER') {
       crud == 'edit'
         ? mutationUpdateUser.mutate({
@@ -166,6 +146,8 @@ export default function useHandleEditUser(
     // check if there is an empty field
     if (defaultValues && crud == 'edit') {
       const { id, organizationId, ...values } = defaultValues;
+      console.log('data : ', data);
+      console.log('defaultValues jjjj: ', values);
       return !areObjectsEqual(data, values);
     }
     return false;
@@ -176,9 +158,13 @@ export default function useHandleEditUser(
   return {
     openUnsavedChange,
     setOpenUnsavedChange,
-    methods,
+    register,
+    control,
+    formValues,
+    formState,
     isPending: false,
     handleSubmit,
+    onSubmit,
     handleUnsavedChange,
   };
 }

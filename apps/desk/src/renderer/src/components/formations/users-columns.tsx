@@ -3,8 +3,6 @@ import SortHeader from '../costum-data/sort-header';
 import DeleteModal from '../DeleteModal';
 import ButtonsAction from '../organization/org-table-actions';
 import { Checkbox } from '../ui/checkbox';
-
-import CostumSelect from '../costum-select';
 import RedirectButton from '../redirectButton';
 import { Role, UserType } from '@renderer/store/slices/auth.slice';
 

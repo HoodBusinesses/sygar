@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import useCreateTheme from '../api/theme/create-theme';
 import useUpdateTheme from '../api/theme/update-theme';
-import { areObjectsEqual } from './useHandleEditUser';
+import { areObjectsEqual } from '@renderer/utils/is-objects-equal';
 
 export default function   useHandelEditFormation(
   defaultValues: Theme | null,
