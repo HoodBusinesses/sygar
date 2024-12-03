@@ -23,7 +23,7 @@ export interface CreateOrganParams {
   owner: AddParticipant;
 }
 
-export default function useCreateOrg() {
+export default function useCreateOrg(resetForm: () => void) {
   const token = useAppSelector((state) => state.auth.auth.token);
 
   const queryClient = useQueryClient();
@@ -42,14 +42,15 @@ export default function useCreateOrg() {
 
     onSuccess: () => {
       try {
-        queryClient.refetchQueries({
-          queryKey: ['organizationsData'],
-          exact: true,
-        });
+        resetForm();
         toast({
           title: 'success',
           variant: 'success',
           description: 'Organization created successfully',
+        });
+        queryClient.refetchQueries({
+          queryKey: ['organizationsData'],
+          exact: true,
         });
       } catch (error) {
         console.log(error);

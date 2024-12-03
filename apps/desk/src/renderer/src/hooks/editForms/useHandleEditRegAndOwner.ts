@@ -10,7 +10,7 @@ import { useForm } from 'react-hook-form';
 import useCreateOrg from '../api/organization/create-org';
 
 export default function useHandleEditRegAndOwner() {
-  const { control, register, handleSubmit, formState } = useForm<
+  const { control, register, handleSubmit, formState, reset } = useForm<
     OrganizationFormData & UserFormData
   >({
     resolver: zodResolver(organizationSchema.merge(userRegistrationSchema)),
@@ -22,7 +22,7 @@ export default function useHandleEditRegAndOwner() {
     ),
   });
 
-  const createMuation = useCreateOrg();
+  const createMuation = useCreateOrg(reset);
 
   const onSubmit = (data: OrganizationFormData & UserFormData) => {
     createMuation.mutate({
