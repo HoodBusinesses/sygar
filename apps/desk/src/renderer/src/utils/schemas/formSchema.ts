@@ -1,4 +1,5 @@
 import * as z from 'zod';
+import { phone } from 'phone';
 
 export const organizationSchema = z.object({
   rs: z.string().min(1, 'Organization rs is required'),
@@ -43,7 +44,12 @@ export const groupSchema = z.object({
 export const userSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
   lastName: z.string().min(1, 'Last name is required'),
-  phone: z.string().min(1, 'Phone number is required'),
+  phone: z.string().refine(
+    (v: string) => {
+      return phone(v).isValid;
+    },
+    { message: 'Invalid phone number' }
+  ),
   email: z.string().email('Invalid email address'),
   userCnss: z.string().min(1, 'CNSS is required'),
   identityType: z.string().min(1, 'Identity type is required'),
@@ -54,7 +60,12 @@ export const userSchema = z.object({
 export const userRegistrationSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
   lastName: z.string().min(1, 'Last name is required'),
-  phone: z.string().min(1, 'Phone number is required'),
+  phone: z.string().refine(
+    (v: string) => {
+      return phone(v).isValid;
+    },
+    { message: 'Invalid phone number' }
+  ),
   email: z.string().email('Invalid email address'),
   userCnss: z.string().min(1, 'CNSS is required'),
   identityType: z.string().min(1, 'Identity type is required'),

@@ -3,15 +3,16 @@ import {
   OrganizationFormData,
   organizationSchema,
   UserFormData,
-  userRegistrationSchema,
-  userSchema,
+  userRegistrationSchema
 } from '@renderer/utils/schemas/formSchema';
 import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import useCreateOrg from '../api/organization/create-org';
 
 export default function useHandleEditRegAndOwner() {
-  const methods = useForm<OrganizationFormData & UserFormData>({
+  const { control, register, handleSubmit, formState } = useForm<
+    OrganizationFormData & UserFormData
+  >({
     resolver: zodResolver(organizationSchema.merge(userRegistrationSchema)),
     defaultValues: useMemo(
       () => ({
@@ -23,7 +24,7 @@ export default function useHandleEditRegAndOwner() {
 
   const createMuation = useCreateOrg();
 
-  const handleSubmit = (data: OrganizationFormData & UserFormData) => {
+  const onSubmit = (data: OrganizationFormData & UserFormData) => {
     createMuation.mutate({
       name: data.rs,
       cnss: data.cnss,
@@ -42,7 +43,10 @@ export default function useHandleEditRegAndOwner() {
   };
 
   return {
-    methods,
+    control,
+    register,
+    formState,
+    onSubmit,
     isSuccess: createMuation.isSuccess,
     isError: createMuation.isError,
     isPending: createMuation.isPending,

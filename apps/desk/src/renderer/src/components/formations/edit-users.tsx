@@ -9,6 +9,7 @@ import { Controller } from 'react-hook-form';
 import UnsavedChangeEdit from '../unsaved-change-edit';
 import MainSelect from '../ui/main-select';
 import { Users } from './users-columns';
+import PhoneInputItem from '../ui/phone-input-item';
 
 interface EditUserProps {
   crud: string;
@@ -44,8 +45,25 @@ const EditUsers = ({
           <CardContent className="">
             <div className="grid grid-cols-3 gap-4 mb-6">
               {usersFields.map((field) =>
-                field.isSelect ? (
+                field.name === 'phone' ? (
                   <Controller
+                    key={field.name}
+                    name={field.name as keyof UserFormData}
+                    control={control}
+                    render={({ field: fields }) => (
+                      <PhoneInputItem
+                        value={fields.value}
+                        onChange={fields.onChange}
+                        error={formState.errors[field.name]?.message}
+                        required={field.required}
+                        label={field.label}
+                        defaultValue="ma"
+                      />
+                    )}
+                  />
+                ) : field.isSelect ? (
+                  <Controller
+                    key={field.name}
                     name={field.name as keyof UserFormData}
                     control={control}
                     render={({ field: fields }) => (
