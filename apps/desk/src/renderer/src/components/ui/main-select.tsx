@@ -1,0 +1,47 @@
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from './select';
+import { useTranslate } from '@renderer/hooks/useTranslate';
+
+type Props = {
+  label: string;
+  placeholder: string;
+  options: { value: string; label: string }[];
+  value: string;
+  onChange: (value: string) => void;
+  error?: string;
+  required?: boolean;
+};
+export default function MainSelect({
+  value,
+  label,
+  placeholder,
+  options,
+  required,
+  onChange,
+}: Props) {
+  const { t } = useTranslate();
+  return (
+    <div className="flex flex-col mb-4 gap-1">
+      <p className={'text-gray-950 text-sm mb-2'}>
+        {t(label)} {required && <span className="text-red-500">*</span>}
+      </p>
+      <Select onValueChange={onChange} value={value}>
+        <SelectTrigger className="bg-gray-100 text-gray-950 h-10 rounded-md">
+          <SelectValue placeholder={placeholder} />
+        </SelectTrigger>
+        <SelectContent className="bg-white text-gray-950 rounded-md">
+          {(options || []).map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+  );
+}
