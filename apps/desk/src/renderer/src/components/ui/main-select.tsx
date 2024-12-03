@@ -22,6 +22,7 @@ export default function MainSelect({
   placeholder,
   options,
   required,
+  error,
   onChange,
 }: Props) {
   const { t } = useTranslate();
@@ -42,6 +43,7 @@ export default function MainSelect({
           ))}
         </SelectContent>
       </Select>
+      {error && <span className="text-sm text-red-500">{t(error)}</span>}
     </div>
   );
 }
