@@ -4,6 +4,8 @@ export type OrganizationFieldsInput = {
   value: string;
   label: string;
   placeholder: string;
+  isSelect?: boolean;
+  options?: { value: string; label: string }[];
   required?: boolean;
   isLogoInput?: boolean;
 };
@@ -126,9 +128,14 @@ export const userFields: OrganizationFieldsInput[] = [
   },
   {
     label: 'user.fields.identityType.label',
-    placeholder: 'user.fields.identityType.placeholder',
+    placeholder: 'Select Identity Type',
     name: 'identityType',
     value: 'identityType',
+    isSelect: true,
+    options: [
+      { value: 'CIN', label: 'CIN' },
+      { value: 'PASSPORT', label: 'PASSPORT' },
+    ],
     required: true,
   },
   {

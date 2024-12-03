@@ -20,6 +20,47 @@ body {
   }
 }
 
+.react-international-phone-input {
+	font-size: 14px !important;
+	height: 40px !important;
+  background-color: #f3f4f6 !important;
+	/* border-radius: 0 100px 100px 0 !important; */
+}
+
+.react-international-phone-input-container:focus-within {
+	/* border-radius: 100px; */
+	outline: 1px solid hsl(var(--primary));
+}
+
+/* .react-international-phone-country-selector-button__dropdown-arrow {
+  display: none;
+} */
+
+.react-international-phone-country-selector-button {
+	height: 100% !important;
+	border: 0 !important;
+  padding: 4px !important;
+	border-right: 1px solid #e2e2e2 !important;
+	border-radius: 6px 0 0 6px !important;
+}
+
+.react-international-phone-country-selector-button:hover {
+	background-color: #f3f4f6 !important;
+}
+
+.react-international-phone-country-selector-dropdown {
+	border-radius: calc(var(--radius) - 4px) !important;
+	max-height: 10rem !important;
+	box-shadow: none !important;
+	outline: none !important;
+	top: 4rem !important;
+	overflow-y: auto !important;
+}
+
+.react-international-phone-country-selector-dropdown__list-item {
+	padding: 0.5rem 0 !important;
+}
+
 /* Custom scrollbar for notifications */
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;
