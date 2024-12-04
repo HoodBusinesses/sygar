@@ -5,7 +5,7 @@ import SelectLanguage from './SelectLanguage';
 
 export default function Navbar() {
   return (
-    <nav className=" flex w-full justify-between items-center bg-white text-gray-600 px-6 py-4 h-20 border-b shadow-md">
+    <nav className=" flex w-full justify-between items-center bg-white text-gray-600 px-12 py-4 h-20 border-b shadow-md">
       {/* Logo Section */}
       <div className="flex items-center">
         <img
@@ -18,7 +18,7 @@ export default function Navbar() {
       </div>
 
       {/* Right Section: Profile, Language, Notifications */}
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-6 pr-4">
         {/* Profile */}
         <ProfilePopover />
         {/* Language Selector */}

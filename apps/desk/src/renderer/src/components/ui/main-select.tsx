@@ -29,7 +29,7 @@ export default function MainSelect({
   const { t } = useTranslate();
   return (
     <div className="flex flex-col mb-4 gap-1">
-      <p className={'text-gray-950 text-sm mb-2'}>
+      <p className={'text-gray-600 text-[12px] leading-[12px] tracking-[0.3px] mb-2 font-poppins font-normal'}>
         {t(label)} {required && <span className="text-red-500">*</span>}
       </p>
       <Select onValueChange={onChange} value={value}>

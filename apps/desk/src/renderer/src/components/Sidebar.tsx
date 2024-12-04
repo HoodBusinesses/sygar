@@ -21,7 +21,7 @@ export default function Sidebar() {
       {/* Navigation */}
       <nav className="mt-4">
         {/* Dashboard Section */}
-        <div className="px-4 py-2 text-xs font-semibold text-gray-400 uppercase">
+        <div className="px-4 py-2 text-xs font-poppins text-gray-400 uppercase">
           {t('sidebar.sections.dashboard')}
         </div>
         <ul className="flex flex-col gap-2">
@@ -31,14 +31,22 @@ export default function Sidebar() {
               <li key={item.name}>
                 <Link
                   href={item.href}
-                  className={`flex items-center px-4 py-2 gap-3 rounded-md text-sm font-medium transition-colors duration-200 ${
+                  className={`flex items-center px-4 py-2 gap-3 rounded-md text-sm font-poppins font-normal leading-[12px] tracking-[0.5px] transition-colors duration-200 ${
                     active === item.name
-                      ? 'bg-blue-100 text-blue-500'
-                      : 'text-gray-600 hover:bg-blue-50 hover:text-blue-500'
+                      ? 'bg-blue-100/50 text-blue-600'
+                      : 'text-[#273240] hover:bg-blue-50 hover:text-blue-500'
                   }`}
                   onClick={() => setActive(item.name)}
                 >
-                  {item.icon && <item.icon className="h-5 w-5 text-gray-400" />}
+                  {item.icon && (
+                    <item.icon
+                      className={`h-5 w-5 ${
+                        active === item.name
+                          ? 'bg-blue-100/50 text-[#2563E9] '
+                          : 'text-[#1E3A8A59] hover:bg-blue-50 hover:text-blue-500'
+                      }`}
+                    />
+                  )}
                   <span>{t(item.label)}</span>
                 </Link>
               </li>

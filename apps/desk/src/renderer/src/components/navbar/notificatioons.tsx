@@ -45,7 +45,7 @@ export default function Notificatioons() {
   return (
     <Popover>
       <PopoverTrigger>
-        <IoNotificationsOutline className="text-2xl cursor-pointer" />
+        <IoNotificationsOutline className="text-2xl cursor-pointer text-black" />
       </PopoverTrigger>
 
       <PopoverContent className="mt-6 w-96 bg-white shadow-lg rounded-lg p-5 border overflow-y-auto max-h-[32rem] custom-scrollbar">
