@@ -50,7 +50,7 @@ export default function EditeSettings({ data }: { data: OrganizationsData }) {
         </Card>
         <Button
           type="submit"
-          className="custom-button bg-blue-600"
+          className="custom-button bg-blue-600 w-1/4"
           disabled={isPending}
         >
           {isPending ? <FaSpinner className="" /> : t('buttons.save')}
