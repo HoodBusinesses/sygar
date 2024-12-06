@@ -7,7 +7,7 @@ import {
 } from '@tanstack/react-query';
 import { OrganizationsData } from './get-all-organizations';
 import { AxiosResponse } from 'axios';
-import { useToast } from '@renderer/hooks/useToast';
+import { toast } from 'react-toastify';
 
 export interface UpdateOrganParams {
   orgId: string;
@@ -15,6 +15,7 @@ export interface UpdateOrganParams {
 }
 
 export default function useUpdateOrg(
+  orgId?:string,
   options?: UseMutationOptions<
     AxiosResponse<any, any>,
     Error,
@@ -25,11 +26,7 @@ export default function useUpdateOrg(
 
   const queryClient = useQueryClient();
 
-  const { toast } = useToast();
-
   return useMutation({
-    mutationKey: ['UpdateOrg'],
-
     mutationFn: ({ orgId, data }: UpdateOrganParams) =>
       api.put(`organizations/${orgId}`, data, {
         headers: {
@@ -39,14 +36,12 @@ export default function useUpdateOrg(
 
     onSuccess: () => {
       try {
-        queryClient.refetchQueries({
-          queryKey: ['organizationsData'],
+        queryClient.invalidateQueries({
+          queryKey: [orgId ? 'organizationData' : 'organizationsData', orgId],
           exact: true,
         });
-        toast({
-          title: 'success',
-          variant: 'success',
-          description: 'Organization updated successfully',
+        toast.success('Success Notification !', {
+          position: 'top-center',
         });
       } catch (error) {
         console.log(error);
@@ -56,7 +51,9 @@ export default function useUpdateOrg(
     ...options,
 
     onError: (error) => {
-      console.log('Error updating organization:', error);
+      toast.error('Error Notification !', {
+        position: 'top-center',
+      });
     },
   });
 }

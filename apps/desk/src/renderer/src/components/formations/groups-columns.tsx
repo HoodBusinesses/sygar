@@ -15,6 +15,7 @@ export interface Group {
 export const groupColumn = (
   setParticipants: () => void,
   organizationId: string,
+  themeId: string,
   setRowData: (rowData: Group) => void
 ): ColumnDef<Group>[] => { 
   return [
@@ -99,7 +100,7 @@ export const groupColumn = (
       cell: ({ row }) => (
         <ButtonsAction
           endpoint={`group/${row.original.id}?organizationId=${organizationId}`}
-          invalidateKeyData={['groupsData']}
+          invalidateKeyData={['groupsData', organizationId, themeId]}
           saveDefaultData={setRowData.bind(null, row.original)}
           rowId={row.original.id}
           subscription={false}

@@ -26,13 +26,13 @@ export default function   useHandelEditFormation(
     resolver: zodResolver(schema),
   });
 
-  const createMuation = useCreateTheme({
+  const createMuation = useCreateTheme(orgId,{
     onSettled: () => {
       goBack();
     },
   });
 
-  const updateMuation = useUpdateTheme({
+  const updateMuation = useUpdateTheme(orgId, {
     onSettled: () => {
       goBack();
     },

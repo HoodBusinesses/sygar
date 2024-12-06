@@ -107,7 +107,7 @@ export const themeColumns = (
       cell: ({ row }) => (
         <ButtonsAction
           endpoint={`themes/${row.original.id}?organizationId=${orgId}`} // endpot /
-          invalidateKeyData={['themesData']}
+          invalidateKeyData={['themesData', orgId]}
           saveDefaultData={setRowData.bind(null, row.original)}
           rowId={row.original.id}
           subscription={false}

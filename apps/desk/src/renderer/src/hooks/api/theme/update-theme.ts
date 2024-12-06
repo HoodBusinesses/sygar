@@ -6,8 +6,8 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
-import { useToast } from '@renderer/hooks/useToast';
 import { CreateThemeParams } from './create-theme';
+import { toast } from 'react-toastify';
 
 export interface UpdateThemeParams {
   uid: string;
@@ -15,35 +15,28 @@ export interface UpdateThemeParams {
 }
 
 export default function useUpdateTheme(
+  organizationId: string,
   options?: UseMutationOptions<AxiosResponse<any, any>, Error, unknown>
 ) {
   const token = useAppSelector((state) => state.auth.auth.token);
 
   const queryClient = useQueryClient();
 
-  const { toast } = useToast();
-
   return useMutation({
-    mutationKey: ['UpdateOrg'],
-
     mutationFn: (params: UpdateThemeParams) =>
       api.put(`themes/${params.uid}`, params.data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }),
-
     onSuccess: () => {
       try {
-        queryClient.refetchQueries({
-          queryKey: ['themesData'],
-          exact: true,
+         queryClient.invalidateQueries({
+          queryKey: ['themesData', organizationId],
         });
-        toast({
-          title: 'success',
-          variant: 'success',
-          description: 'Theme created successfully',
-        });
+       toast.success('Success Notification !', {
+         position: 'top-center',
+       });
       } catch (error) {
         console.log(error);
       }
@@ -52,10 +45,8 @@ export default function useUpdateTheme(
     ...options,
 
     onError: () => {
-      toast({
-        title: 'Error',
-        variant: 'destructive',
-        description: 'Error creating Theme',
+      toast.error('Error Notification !', {
+        position: 'top-center',
       });
     },
   });

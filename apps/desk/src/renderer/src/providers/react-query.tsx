@@ -1,5 +1,5 @@
 import { AnyAction } from '@reduxjs/toolkit';
-import { useToast } from '@renderer/hooks/useToast';
+import { toast } from 'react-toastify';
 import { useAppDispatch } from '@renderer/store/hooks';
 import { resetAuth } from '@renderer/store/slices/auth.slice';
 import {
@@ -10,16 +10,12 @@ import {
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { Dispatch } from 'react';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 // Define a reusable function for handling Unauthorized errors
 function handleAxiosError(
   error: unknown,
-  dispatch: Dispatch<AnyAction>,
-  toast: (args: {
-    title: string;
-    description: string;
-    variant: 'destructive' | 'default' | 'success' | null | undefined;
-  }) => void
+  dispatch: Dispatch<AnyAction>
 ) {
   const axiosError = error as AxiosError;
   const data = axiosError.response?.data as any;
@@ -28,49 +24,46 @@ function handleAxiosError(
   if (data && data.statusCode === 401 && data.error === 'Unauthorized') {
     dispatch(resetAuth());
     localStorage.clear();
-    toast({
-      title: 'Unauthorized',
-      description: 'Your session has expired. Please log in again.',
-      variant: 'destructive',
+    toast.error('Unauthorized', {
+      position: 'top-center',
     });
   }
 
   // Handle Permissions
   if (data && data.statusCode === 403 && data.message === 'Forbidden') {
-    toast({
-      title: 'Forbidden',
-      variant: 'destructive',
-      description:
-        'You do not have the required permissions to perform this action.',
+    toast.error('Permissions', {
+      position: 'top-center',
     });
   }
 }
 
 export const ReactQueryProvider = ({ children }) => {
   const dispatch = useAppDispatch();
-  const { toast } = useToast();
 
   const queryClient = new QueryClient({
     // Configure default options for queries
     defaultOptions: {
       queries: {
-        staleTime: 0,
-        refetchOnWindowFocus: false, // Prevent refetch on window focus
+        // staleTime: Infinity,
+        refetchOnWindowFocus: false,
         refetchOnReconnect: false, // Prevent refetch on network reconnect
         refetchOnMount: false, // Prevent automatic refetch when the component mounts
       },
     },
     // Configure default options for mutations cache
     mutationCache: new MutationCache({
-      onError: (error) => handleAxiosError(error, dispatch, toast),
+      onError: (error) => handleAxiosError(error, dispatch),
     }),
     // Configure default options for queries cache
     queryCache: new QueryCache({
-      onError: (error) => handleAxiosError(error, dispatch, toast),
+      onError: (error) => handleAxiosError(error, dispatch),
     }),
   });
 
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      {children}
+      {/* <ReactQueryDevtools initialIsOpen={true} /> */}
+    </QueryClientProvider>
   );
 };

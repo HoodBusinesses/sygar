@@ -2,6 +2,7 @@ import ThemeTable from '@renderer/components/theme-table';
 import withAuth from '@renderer/hoc/with-auth';
 import { useGetAllThemes } from '@renderer/hooks/api/theme/get-alll-thems';
 import { useAppSelector } from '@renderer/store/hooks';
+import { Loading } from './laoding';
 
 const ThemesListing: React.FC = () => {
   const url = new URLSearchParams(window.location.search);
@@ -14,11 +15,7 @@ const ThemesListing: React.FC = () => {
     useGetAllThemes(organizationId);
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        Loading...
-      </div>
-    );
+    return <Loading />;
   }
 
   if (isError) {
