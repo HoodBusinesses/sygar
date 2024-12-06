@@ -31,9 +31,10 @@
     "view": "Viewing only"
   },
   "registration": {
-    "title": "Organization Members Information",
+    "title": "Information Management: Members and Owner",
     "registration": "Registration",
-    "ownerInfo": "Owner Information",
+    "ownerInfo": "Owner Information :",
+    "MembersInfos": "Member Information :",
     "EditOrganization": "Edit Organization",
     "basicInfo": {
       "title": "Organization Information",

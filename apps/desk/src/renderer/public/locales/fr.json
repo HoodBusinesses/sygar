@@ -31,9 +31,10 @@
     "view": "Visualisation uniquement"
   },
   "registration": {
-    "title": "Informations sur les membres de l'organisation",
+    "title": "Gestion des Informations : Membres et Propriétaire",
     "registration": "Inscription",
-    "ownerInfo": "Informations sur le propriétaire",
+    "ownerInfo": "Informations sur le propriétaire :",
+    "MembersInfos": "Informations sur les Membres :",
     "EditOrganization": "Modifier l'organisation",
     "basicInfo": {
       "title": "Informations sur l'organisation",

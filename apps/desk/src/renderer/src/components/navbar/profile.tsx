@@ -14,8 +14,8 @@ export default function ProfilePopover() {
 
   return (
     <Popover>
-      <PopoverTrigger className="flex items-center cursor-pointer gap-1">
-        <FaUserCircle className="text-2xl text-gray-700" />
+      <PopoverTrigger className="flex items-center cursor-pointer gap-2">
+        <FaUserCircle className="w-8 h-8 text-gray-700 rounded-full border-4 border-blue-200/80" />
         <HiOutlineChevronDown className="text-sm text-gray-500" />
       </PopoverTrigger>
 
