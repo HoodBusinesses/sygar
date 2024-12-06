@@ -4,6 +4,7 @@ import { useOrganizationUsers } from '@renderer/hooks/api/organization/get-organ
 import { useAppSelector } from '@renderer/store/hooks';
 import { Role } from '@renderer/store/slices/auth.slice';
 import { useGetAllSygarUsers } from '@renderer/hooks/api/user/get-all-users';
+import { Loading } from './laoding';
 
 const usersListing = () => {
   const url = new URLSearchParams(window.location.search);
@@ -18,11 +19,7 @@ const usersListing = () => {
       : useOrganizationUsers(orgId1 || user.organizationId);
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        Loading...
-      </div>
-    );
+    return <Loading />;
   }
 
   if (isError) {
