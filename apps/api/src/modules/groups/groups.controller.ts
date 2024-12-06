@@ -15,12 +15,12 @@ export class GroupsController {
 	@Post()
 	async createGroup(@Body() dto: CreateGroupDto) {
 		return await this.groupService.createGroup({
-			trainerName: dto.trainerName,
-			address: dto.address,
-			animatorName: dto.animatorName,
-			theme: { connect: { id: dto.themeId } },
-			Organization: { connect: { id: dto.organizationId } }
-		})
+      trainerName: dto.trainerName,
+      address: dto.address,
+      animatorName: dto.animatorName,
+      theme: { connect: { id: dto.themeId } },
+      organization: { connect: { id: dto.organizationId } },
+    });
 	}
 
 	@Put(":groupId")
