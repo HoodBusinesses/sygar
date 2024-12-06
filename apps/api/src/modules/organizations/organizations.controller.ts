@@ -31,7 +31,7 @@ export class OrganizationsController {
 	@UseInterceptors(OrganizationExists)
 	async updateOrganization(
 		@Body() dto: UpdateOrganizationDto,
-		@Query('orgId') orgId: string
+		@Param('orgId') orgId: string
 	) {
 		return await this.orgService.updateOrganization(orgId, dto);
 	}
