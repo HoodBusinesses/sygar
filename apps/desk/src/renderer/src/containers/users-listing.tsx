@@ -34,6 +34,7 @@ const usersListing = () => {
   if (isSuccess) {
     return (
       <UsersTable
+        orgId={orgId1 || user.organizationId}
         data={data.users.map((user) => ({
           id: user.id,
           role: user.role as Role,

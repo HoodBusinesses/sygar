@@ -15,9 +15,9 @@ const OrganizationsPage: React.FC = (): JSX.Element => {
   const [component, setComponent] = useState<Components>('table');
 
   const [defaultValue, setdefaultValue] = useState<Organization | null>(null);
+
   const navigate = useNavigate();
 
-  
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">

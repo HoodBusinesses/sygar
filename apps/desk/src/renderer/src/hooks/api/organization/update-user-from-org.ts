@@ -1,10 +1,7 @@
-import { useToast } from '@renderer/hooks/useToast';
+import { toast } from 'react-toastify';
 import { useAppSelector } from '@renderer/store/hooks';
 import { api } from '@renderer/utils/api';
-import {
-  useMutation,
-  useQueryClient
-} from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 type AddParticipant = {
   cnss: string;
@@ -24,16 +21,16 @@ export interface UpdateParams {
   data: Partial<AddParticipant>;
 }
 
-export default function useUpdateUserOfOrganization(orgId: string,userId: string, goBack: () => void) {
+export default function useUpdateUserOfOrganization(
+  orgId: string,
+  userId: string,
+  goBack: () => void
+) {
   const token = useAppSelector((state) => state.auth.auth.token);
 
   const queryClient = useQueryClient();
 
-  const { toast } = useToast();
-
   return useMutation({
-    mutationKey: ['UpdateOrg'],
-
     mutationFn: ({ orgId, data }: UpdateParams) =>
       api.put(`organizations/${orgId}/users/${userId}`, data, {
         headers: {
@@ -43,14 +40,12 @@ export default function useUpdateUserOfOrganization(orgId: string,userId: string
 
     onSuccess: () => {
       try {
-        queryClient.refetchQueries({
+        queryClient.invalidateQueries({
           queryKey: ['organizationUsers', orgId],
           exact: true,
         });
-        toast({
-          title: 'success',
-          variant: 'success',
-          description: 'user Organization updated successfully',
+        toast.success('Success Notification !', {
+          position: 'top-center',
         });
         goBack();
       } catch (error) {
@@ -58,13 +53,10 @@ export default function useUpdateUserOfOrganization(orgId: string,userId: string
       }
     },
 
-    onError: (error) => {
-      toast({
-        title: 'Error updating user organization',
-        description: error.message,
-        variant: 'destructive',
+    onError: () => {
+      toast.error('Error Notification !', {
+        position: 'top-center',
       });
-      console.log('Error updating user organization:', error);
     },
   });
 }

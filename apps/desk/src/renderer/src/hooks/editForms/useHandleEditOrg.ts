@@ -20,7 +20,7 @@ export default function useHandelEditOrgs(
     resolver: zodResolver(schema),
   });
 
-  const updateMutation = useUpdateOrg({
+  const updateMutation = useUpdateOrg(defaultValues?.id, {
     onSettled: () => {
       goBack();
     },
@@ -33,7 +33,8 @@ export default function useHandelEditOrgs(
         data: {
           name: defaultValues.rs !== data.rs ? data.rs : undefined,
           cnss: defaultValues.cnss !== data.cnss ? data.cnss : undefined,
-          address: defaultValues.address !== data.address ? data.address : undefined,
+          address:
+            defaultValues.address !== data.address ? data.address : undefined,
           ice: defaultValues.ice !== data.ice ? data.ice : undefined,
         },
       });

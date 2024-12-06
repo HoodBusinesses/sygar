@@ -7,10 +7,11 @@ export type ThemesData = {
   name: string;
   price: string;
   year: number;
-  organizationId: string | null;  
+  organizationId: string | null;
+  createdAt: string;
+  updatedAt: string;
 };
 
-//TODO: use api Library to get the organizations data
 export const useGetAllThemes = (organizationId: string) => {
   const token = useAppSelector((state) => state.auth.auth.token);
   const { data, isLoading, isError, error, isSuccess, refetch } = useQuery({

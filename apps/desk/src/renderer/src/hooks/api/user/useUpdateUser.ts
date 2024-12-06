@@ -1,8 +1,12 @@
-import { useToast } from '@renderer/hooks/useToast';
 import { useAppSelector } from '@renderer/store/hooks';
 import { api } from '@renderer/utils/api';
-import { useMutation, UseMutationOptions } from '@tanstack/react-query';
+import {
+  useMutation,
+  UseMutationOptions,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
+import { toast } from 'react-toastify';
 
 export interface UpdateUserParams {
   userId: string;
@@ -18,12 +22,10 @@ export default function useUpdateUser(
   options?: UseMutationOptions<AxiosResponse<any, any>, Error, UpdateUserParams>
 ) {
   const token = useAppSelector((state) => state.auth.auth.token);
-  
-  const { toast } = useToast();
+
+  const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ['UpdateUser'],
-
     mutationFn: ({ userId, data }: UpdateUserParams) =>
       api.put(`user/${userId}`, data, {
         headers: {
@@ -32,18 +34,19 @@ export default function useUpdateUser(
       }),
 
     onSuccess: () => {
-      toast({
-        title: 'success',
-        description: 'user chenges successfully',
+      queryClient.invalidateQueries({
+        queryKey: ['usersSygarData'],
+        exact: true,
+      });
+      toast.success('Success Notification !', {
+        position: 'top-center',
       });
     },
     ...options,
 
     onError: () => {
-      toast({
-        title: 'error',
-        variant: 'destructive',
-        description: 'Error while changing data',
+      toast.error('Error Notification !', {
+        position: 'top-center',
       });
     },
   });

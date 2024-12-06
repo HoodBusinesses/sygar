@@ -1,7 +1,7 @@
 import { useAppSelector } from '@renderer/store/hooks';
 import { api } from '@renderer/utils/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useToast } from '../../useToast';
+import { toast } from 'react-toastify';
 
 export interface CreateParams {
   trainerName: string;
@@ -11,16 +11,16 @@ export interface CreateParams {
   themeId: string;
 }
 
-export default function useCreateGroup(goBack: () => void) {
+export default function useCreateGroup(
+  organizationId: string,
+  themeId: string,
+  goBack: () => void
+) {
   const token = useAppSelector((state) => state.auth.auth.token);
 
   const queryClient = useQueryClient();
 
-  const { toast } = useToast();
-
   return useMutation({
-    mutationKey: ['createGroup'],
-
     mutationFn: (params: CreateParams) =>
       api.post('/group', params, {
         headers: {
@@ -31,13 +31,11 @@ export default function useCreateGroup(goBack: () => void) {
     onSuccess: () => {
       try {
         queryClient.refetchQueries({
-          queryKey: ['groupsData'],
+          queryKey: ['groupsData', organizationId, themeId],
           exact: true,
         });
-        toast({
-          title: 'success',
-          variant: 'success',
-          description: 'group created successfully',
+        toast.success('Success Notification !', {
+          position: 'top-center',
         });
         goBack();
       } catch (error) {
@@ -46,10 +44,8 @@ export default function useCreateGroup(goBack: () => void) {
     },
 
     onError: () => {
-      toast({
-        title: 'Error',
-        variant: 'destructive',
-        description: 'Error creating group',
+      toast.error('Error Notification !', {
+        position: 'top-center',
       });
     },
   });

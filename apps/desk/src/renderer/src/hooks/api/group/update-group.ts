@@ -1,30 +1,30 @@
 import { useAppSelector } from '@renderer/store/hooks';
 import { api } from '@renderer/utils/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useToast } from '../../useToast';
+import { toast } from 'react-toastify';
 
 export interface CreateParams {
   //   organizationId: string;
-  //   themeId: string;
+  // themeId: string;
   groupId: string;
   data: Partial<{
     trainerName: string;
     animatorName: string;
     address: string;
     organizationId: string;
-  }>
+  }>;
 }
 
-export default function useUpdateGroup(goBack: () => void) {
+export default function useUpdateGroup(
+  organizationId: string,
+  themeId: string,
+  goBack: () => void
+) {
   const token = useAppSelector((state) => state.auth.auth.token);
 
   const queryClient = useQueryClient();
 
-  const { toast } = useToast();
-
   return useMutation({
-    mutationKey: ['UpdateGroup'],
-
     mutationFn: (params: CreateParams) =>
       api.put(`/group/${params.groupId}`, params.data, {
         headers: {
@@ -35,13 +35,10 @@ export default function useUpdateGroup(goBack: () => void) {
     onSuccess: () => {
       try {
         queryClient.refetchQueries({
-          queryKey: ['groupsData'],
-          exact: true,
+          queryKey: ['groupsData', organizationId, themeId],
         });
-        toast({
-          title: 'success',
-          variant: 'success',
-          description: 'group updated successfully',
+        toast.success('Success Notification !', {
+          position: 'top-center',
         });
         goBack();
       } catch (error) {
@@ -50,10 +47,8 @@ export default function useUpdateGroup(goBack: () => void) {
     },
 
     onError: () => {
-      toast({
-        title: 'Error',
-        variant: 'destructive',
-        description: 'Error updating group',
+      toast.error('Error Notification !', {
+        position: 'top-center',
       });
     },
   });

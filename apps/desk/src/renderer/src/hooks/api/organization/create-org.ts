@@ -1,7 +1,7 @@
 import { useAppSelector } from '@renderer/store/hooks';
 import { api } from '@renderer/utils/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useToast } from '../../useToast';
+import { toast } from 'react-toastify';
 
 type AddParticipant = {
   cnss: string;
@@ -28,11 +28,7 @@ export default function useCreateOrg(resetForm: () => void) {
 
   const queryClient = useQueryClient();
 
-  const { toast } = useToast();
-
   return useMutation({
-    mutationKey: ['createOrg'],
-
     mutationFn: (params: CreateOrganParams) =>
       api.post('/organizations', params, {
         headers: {
@@ -43,10 +39,8 @@ export default function useCreateOrg(resetForm: () => void) {
     onSuccess: () => {
       try {
         resetForm();
-        toast({
-          title: 'success',
-          variant: 'success',
-          description: 'Organization created successfully',
+        toast.success('Success Notification !', {
+          position: 'top-center',
         });
         queryClient.refetchQueries({
           queryKey: ['organizationsData'],
@@ -58,10 +52,8 @@ export default function useCreateOrg(resetForm: () => void) {
     },
 
     onError: () => {
-      toast({
-        title: 'Error',
-        variant: 'destructive',
-        description: 'Error creating organization',
+      toast.error('Error Notification !', {
+        position: 'top-center',
       });
     },
   });
