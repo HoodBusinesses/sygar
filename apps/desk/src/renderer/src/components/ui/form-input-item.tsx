@@ -34,13 +34,13 @@ export default function FormInputItem({
       <p
         className={cn(
           isLargeInput ? 'text-gray-600' : 'text-gray-950',
-          'text-sm mb-2'
+          'text-[12px] leading-[12px] tracking-[0.3px] mb-2 font-poppins font-normal'
         )}
       >
         {t(label)} {required && <span className="text-red-500">*</span>}
       </p>
       {isLogoInput ? (
-        <div className="flex flex-col items-center justify-center border border-dashed rounded-md p-4 cursor-pointer hover:bg-gray-50 w-3/4">
+        <div className="flex flex-col items-center justify-center border border-dashed rounded-md p-4 h-10 cursor-pointer hover:bg-gray-50 w-3/4">
           <input type="file" {...register} className="hidden" id="logo" />
           <label
             htmlFor="logo"

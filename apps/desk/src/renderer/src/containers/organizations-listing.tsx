@@ -1,4 +1,7 @@
-import { Columns, Organization } from '@renderer/components/organization/Organization-columns';
+import {
+  Columns,
+  Organization,
+} from '@renderer/components/organization/Organization-columns';
 import { Components, CustomTable } from '@renderer/components/custom-table';
 import withAuth from '@renderer/hoc/with-auth';
 import { useTranslate } from '@renderer/hooks/useTranslate';
@@ -6,6 +9,7 @@ import { useGetAllOrganizations } from '@renderer/hooks/api/organization/get-all
 import { useState } from 'react';
 import { OrganizationBasicInfo } from '@renderer/components/organization/OrganizationBasicInfo';
 import { useNavigate } from '@tanstack/react-router';
+import { Loading } from './laoding';
 
 const OrganizationsPage: React.FC = (): JSX.Element => {
   const { isRtl } = useTranslate();
@@ -15,15 +19,11 @@ const OrganizationsPage: React.FC = (): JSX.Element => {
   const [component, setComponent] = useState<Components>('table');
 
   const [defaultValue, setdefaultValue] = useState<Organization | null>(null);
+
   const navigate = useNavigate();
 
-  
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        Loading...
-      </div>
-    );
+    return <Loading />;
   }
 
   if (isError) {
@@ -70,6 +70,6 @@ const OrganizationsPage: React.FC = (): JSX.Element => {
     );
   }
   return <></>;
-}
+};
 
 export default withAuth(OrganizationsPage);

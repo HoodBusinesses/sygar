@@ -5,12 +5,13 @@ import ReactDOM from 'react-dom/client';
 import { ReactQueryProvider } from './providers/react-query';
 import { ReactRouterProvider } from './providers/router';
 import StoreProvider from './providers/redux-store';
-import { Toaster } from './components/ui/toaster';
+import { ToastContainer } from 'react-toastify';
+
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
+    <ToastContainer />
     <StoreProvider>
-      <Toaster />
       <ReactQueryProvider>
         <ReactRouterProvider />
       </ReactQueryProvider>

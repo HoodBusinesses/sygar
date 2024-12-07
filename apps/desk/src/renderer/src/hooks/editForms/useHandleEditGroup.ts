@@ -24,9 +24,9 @@ export default function useHandelEditGroup(
     resolver: zodResolver(schema),
   });
 
-  const createMutation = useCreateGroup(goBack);
+  const createMutation = useCreateGroup(organizationId, themeId, goBack);
 
-  const updateMutation = useUpdateGroup(goBack);
+  const updateMutation = useUpdateGroup(organizationId, themeId, goBack);
 
   const handleSubmit = (data: FormData) => {
     crud == 'edit'

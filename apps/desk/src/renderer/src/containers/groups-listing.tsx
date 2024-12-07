@@ -2,6 +2,7 @@ import GroupTable from '@renderer/components/group-table';
 import withAuth from '@renderer/hoc/with-auth';
 import { useGetAllGroups } from '@renderer/hooks/api/group/get-all';
 import React from 'react';
+import { Loading } from './laoding';
 
 const GroupListing: React.FC = () => {
   const url = new URLSearchParams(window.location.search);
@@ -15,11 +16,7 @@ const GroupListing: React.FC = () => {
 
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        Loading...
-      </div>
-    );
+    return <Loading />;
   }
 
   if (isError) {

@@ -14,6 +14,7 @@ import PhoneInputItem from '../ui/phone-input-item';
 interface EditUserProps {
   crud: string;
   defaultValues: Users | null;
+  orgId: string;
   goBack: () => void;
 }
 
@@ -21,6 +22,7 @@ const EditUsers = ({
   crud,
   defaultValues,
   goBack,
+  orgId,
 }: EditUserProps): JSX.Element => {
   const {
     openUnsavedChange,
@@ -32,7 +34,7 @@ const EditUsers = ({
     formValues,
     handleSubmit,
     handleUnsavedChange,
-  } = useHandleEditUser(defaultValues, crud, goBack);
+  } = useHandleEditUser(defaultValues, crud, goBack, orgId);
 
   const { t } = useTranslate();
   return (

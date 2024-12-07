@@ -1,11 +1,8 @@
 import { Button } from '@/components/ui/button';
-import CostumInputItem from '@/components/ui/custom-input-item';
 import FormInputItem from '@/components/ui/form-input-item';
-import { ownerType, personalSchema } from '@/lib/schema/schema';
+import { ownerType } from '@/lib/schema/schema';
 import { PersonalInfosFields } from '@/utils/form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { FormInput } from 'lucide-react';
-import { useForm, UseFormReturn } from 'react-hook-form';
+import { UseFormReturn } from 'react-hook-form';
 
 interface PersonalInfosProps {
   setStep: React.Dispatch<React.SetStateAction<number>>;

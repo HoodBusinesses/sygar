@@ -38,6 +38,7 @@ export default function GroupTable({
         columns={groupColumn(
           () => navigate({ to: '/participant-listing' as string }),
           organizationId,
+          themeId,
           (rowData: Group) => {
             setdefaultValue(rowData);
             setComponent('edit');

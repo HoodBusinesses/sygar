@@ -31,9 +31,10 @@
     "view": "العرض فقط"
   },
   "registration": {
-    "title": "معلومات أعضاء المؤسسة",
+    "title": "إدارة المعلومات: الأعضاء والمالك",
     "registration": "التسجيل",
-    "ownerInfo": "معلومات المالك",
+    "ownerInfo": "معلومات المالك :",
+    "MembersInfos": "معلومات الأعضاء :",
     "EditOrganization": "تعديل المؤسسة",
     "basicInfo": {
       "title": "معلومات المؤسسة",
