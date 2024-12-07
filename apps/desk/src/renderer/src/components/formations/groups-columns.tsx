@@ -4,6 +4,7 @@ import ButtonsAction from '../organization/org-table-actions';
 import { Checkbox } from '../ui/checkbox';
 import SortHeader from '../costum-data/sort-header';
 import RedirectButton from '../redirectButton';
+import Paragraph from '../ui/Paragraph';
 
 export interface Group {
   id: string;
@@ -47,6 +48,7 @@ export const groupColumn = (
             key="checkbox"
           />
           <p>{row.index + 1}</p>
+          <Paragraph paragraph={(row.index + 1).toString()} />
         </div>
       ),
     },
@@ -62,7 +64,7 @@ export const groupColumn = (
           />
         );
       },
-      cell: ({ row }) => <p>{row.getValue('facilator')}</p>,
+      cell: ({ row }) => <Paragraph paragraph={row.getValue('facilator')} />,
     },
     {
       accessorKey: 'trainer',
@@ -76,7 +78,7 @@ export const groupColumn = (
           />
         );
       },
-      cell: ({ row }) => <p>{row.getValue('trainer')}</p>,
+      cell: ({ row }) => <Paragraph paragraph={row.getValue('trainer')} />,
     },
     {
       accessorKey: 'location',

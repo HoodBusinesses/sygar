@@ -3,6 +3,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import ButtonsAction from '../organization/org-table-actions';
 import DeleteModal from '../DeleteModal';
 import SortHeader from '../costum-data/sort-header';
+import Paragraph from '../ui/Paragraph';
 
 export interface Participant {
   id: string;
@@ -39,7 +40,7 @@ export const participantColumns = (setRowData: (rowData: Participant) => void): 
           aria-label="Select row"
           key="checkbox"
         />
-        <p>{row.index + 1}</p>
+        <Paragraph paragraph={(row.index + 1).toString()} />
       </div>
     ),
   },
@@ -55,7 +56,7 @@ export const participantColumns = (setRowData: (rowData: Participant) => void): 
         />
       );
     },
-    cell: ({ row }) => <p>{row.getValue('name')}</p>,
+    cell: ({ row }) => <Paragraph paragraph={row.getValue('name')} />,
   },
   {
     accessorKey: 'email',
@@ -69,22 +70,22 @@ export const participantColumns = (setRowData: (rowData: Participant) => void): 
         />
       );
     },
-    cell: ({ row }) => <p>{row.getValue('email')}</p>,
+    cell: ({ row }) => <Paragraph paragraph={row.getValue('email')} />,
   },
   {
     accessorKey: 'cin',
     header: 'participant.fields.cin.label',
-    cell: ({ row }) => <p>{row.getValue('cin')}</p>,
+    cell: ({ row }) => <Paragraph paragraph={row.getValue('cin')} />,
   },
   {
     accessorKey: 'cnss',
     header: 'participant.fields.cnss.label',
-    cell: ({ row }) => <p>{row.getValue('cnss')}</p>,
+    cell: ({ row }) => <Paragraph paragraph={row.getValue('cnss')} />,
   },
   {
     accessorKey: 'status',
     header: 'participant.fields.status.label',
-    cell: ({ row }) => <p>{row.getValue('status')}</p>,
+    cell: ({ row }) => <Paragraph paragraph={row.getValue('status')} />,
   },
   {
     accessorKey: 'options',

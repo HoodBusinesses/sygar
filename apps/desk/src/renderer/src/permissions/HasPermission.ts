@@ -18,7 +18,7 @@ export const hasPermission = (
     // only SOLUTION_OWNER admin and owner can access organizations list
     AccessOrganizations: () => {
       return {
-        canRead: isAccountActivated && userProfile === 'SOLUTION_OWNER',
+        canRead: isAccountActivated ,
         canCUD: isAccountActivated && userProfile === 'SOLUTION_OWNER',
       };
     },

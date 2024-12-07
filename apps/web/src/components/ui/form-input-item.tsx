@@ -2,7 +2,7 @@
 import { UseFormRegisterReturn } from 'react-hook-form';
 import { Input } from './input';
 import { cn } from '@/lib/utils';
-import CostumSelect from '../costum-select';
+import CustomSelect from '../custom-select';
 
 
 interface FormInputProps {
@@ -31,11 +31,7 @@ export default function FormInputItem({
   isLogoInput,
   isSelect,
 }: FormInputProps) {
-  if (label === 'Identity Type'){
-    console.log("HELLO")
-    if (isSelect === true)
-      console.log("HEHE")
-}
+  
   return (
     <div className="flex flex-col mb-4 gap-1">
       <p
@@ -57,20 +53,25 @@ export default function FormInputItem({
           </label>
         </div>
       ) :
-      isSelect ? (
-        <p className='text-red-800'> HELLO </p>
-      )
-      : (
-        <Input
-          {...register}
-          defaultValue={value}
-          placeholder={(placeholder)}
-          type={type}
-          className={cn(
-            'bg-gray-100 text-gray-950 p-2 rounded-md'
+        isSelect ? (
+          <CustomSelect
+            register={register}
+            value={value}
+            placeholder={placeholder}
+            defaultValue={value}
+          />
+        )
+          : (
+            <Input
+              {...register}
+              defaultValue={value}
+              placeholder={(placeholder)}
+              type={type}
+              className={cn(
+                'bg-gray-100 text-gray-950 p-2 rounded-md'
+              )}
+            />
           )}
-        />
-      )}
       {error && <span className="text-sm text-red-500">{(error)}</span>}
     </div>
   );

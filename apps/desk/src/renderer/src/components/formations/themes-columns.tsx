@@ -4,6 +4,7 @@ import ButtonsAction from '../organization/org-table-actions';
 import DeleteModal from '../DeleteModal';
 import SortHeader from '../costum-data/sort-header';
 import RedirectButton from '../redirectButton';
+import Paragraph from '../ui/Paragraph';
 
 export interface Theme {
   id: string;
@@ -33,7 +34,7 @@ export const themeColumns = (
           {table.getIsSomeRowsSelected() && (
             <DeleteModal
               DeleteNumber={table.getFilteredSelectedRowModel().rows.length}
-              onDelete={() => {}}
+              onDelete={() => { }}
             />
           )}
         </div>
@@ -46,7 +47,7 @@ export const themeColumns = (
             aria-label="Select row"
             key="checkbox"
           />
-          <p>{row.index + 1}</p>
+          <Paragraph paragraph={(row.index + 1).toString()} />
         </div>
       ),
     },
@@ -63,7 +64,7 @@ export const themeColumns = (
         );
       },
       cell: ({ row }) => (
-        <p className="text-gray-600">{row.getValue('name')}</p>
+        <Paragraph paragraph='formation.formationOn' span={row.getValue('name')} />
       ),
     },
     {
@@ -78,7 +79,7 @@ export const themeColumns = (
           />
         );
       },
-      cell: ({ row }) => <p>{row.getValue('year')}</p>,
+      cell: ({ row }) => <Paragraph paragraph={row.getValue('year')} />,
     },
     {
       accessorKey: 'price',
@@ -92,18 +93,18 @@ export const themeColumns = (
           />
         );
       },
-      cell: ({ row }) => <p>{row.getValue('price')}</p>,
+      cell: ({ row }) => <Paragraph paragraph={row.getValue('price')} />,
     },
     {
       accessorKey: 'groups',
       header: 'themesTable.groups',
-      cell: ( {row} ) => (
+      cell: ({ row }) => (
         <RedirectButton click={setGroupThemes.bind(null, row.original.id, orgId)} text="themesTable.groups" />
       ),
     },
     {
       accessorKey: 'options',
-      header: 'themesTable.options',
+      header: '',
       cell: ({ row }) => (
         <ButtonsAction
           endpoint={`themes/${row.original.id}?organizationId=${orgId}`} // endpot /

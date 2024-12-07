@@ -6,6 +6,7 @@ import { FiPlus } from 'react-icons/fi'
 // import { useNavigate } from '@tanstack/react-router'
 import SearchTableInput from './costum-data/search-table-Input'
 import { ChangeEventHandler } from 'react'
+import Paragraph from './ui/Paragraph'
 
 interface ListingHeaderProps {
   headTitle: string;
@@ -30,9 +31,9 @@ const ListingHeader = ({
 
   return (
     <div className="flex flex-col gap-6 w-full">
-      <p className="text-2xl font-semibold text-gray-800">
+      <p className="text-2xl font-poppins font-normal text-gray-800">
         {t('formation.tables')}{' '}
-        <span className="text-sm rounded-sm bg-blue-100  text-blue-600">
+        <span className="text-sm font-poppins font-bold rounded-sm bg-blue-100  text-blue-600">
           {t(headTitle)}
         </span>
       </p>
