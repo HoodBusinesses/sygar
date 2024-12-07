@@ -39,6 +39,7 @@ const PersonalInfosForm: React.FC<PersonalInfosProps> = ({
             error={personMethods.formState.errors[field.name as keyof ownerType]?.message}
             required={field.required}
             isLogoInput={field.isLogoInput}
+            isSelect={field.isSelect}
           />
         ))}
       </div>

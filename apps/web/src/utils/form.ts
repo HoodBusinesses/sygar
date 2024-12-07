@@ -99,11 +99,11 @@ export const PersonalInfosFields: FieldsInput[] = [
   },
   {
     label: 'Identity Type',
-    placeholder: 'Enter Identity Type (CIN, PERMIS, PASSPORT)',
+    placeholder: 'IdentityType',
     name: 'identityType',
     value: 'identityType',
     required: true,
-    isSelect: true,
+    // isSelect: true,
   },
   {
     label: 'Identity',

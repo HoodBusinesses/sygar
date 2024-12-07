@@ -1,9 +1,10 @@
-import { Edit2 } from 'lucide-react';
+// import { Edit2, Image } from 'lucide-react';
 import DeleteModal from '../DeleteModal';
 import SubscriptionModal from '../SubscriptionModal';
 import { Button } from '../ui/button';
 import useDelete from '@renderer/hooks/api/organization/delete-org';
 import { QueryKey } from '@tanstack/react-query';
+import Edit from '@renderer/assets/images/edit-2.png';
 
 export default function ButtonsAction({
   rowId,
@@ -25,14 +26,15 @@ export default function ButtonsAction({
   });
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center ">
       <Button
         variant="ghost"
         onClick={saveDefaultData}
         size="icon"
-        className="bg-blue-800/10 text-blue-800 ltr:rounded-l-full rtl:rounded-r-full hover:bg-blue-400/50"
+        className="bg-blue-50 text-blue-800 h-[31px] w-[52px]   ltr:rounded-l-full rtl:rounded-r-full hover:bg-blue-100"
       >
-        <Edit2 className="h-4 w-4" />
+        {/* <Edit2 className="h-[14px] w-[14px]" /> */}
+        <img src={Edit} alt="Edit" width={14} height={14}  />
       </Button>
       {subscription && <SubscriptionModal />}
       <DeleteModal onDelete={() => mutation.mutate()} />

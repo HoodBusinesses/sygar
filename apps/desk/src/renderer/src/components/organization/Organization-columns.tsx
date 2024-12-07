@@ -6,6 +6,7 @@ import ButtonsAction from './org-table-actions';
 import { Checkbox } from '../ui/checkbox';
 import DeleteModal from '../DeleteModal';
 import RedirectButton from '../redirectButton';
+import Paragraph from '../ui/Paragraph';
 
 
 export type Organization = {
@@ -56,7 +57,7 @@ export const Columns = (
             aria-label="Select row"
             key="checkbox"
           />
-          <p>{row.index + 1}</p>
+          <Paragraph paragraph={(row.index + 1).toString()} />
         </div>
       ),
     },
@@ -76,26 +77,26 @@ export const Columns = (
     {
       accessorKey: 'rs',
       header: 'organization.rs',
-      cell: ({ row }) => <p className="text-gray-600">{row.getValue('rs')}</p>,
+      cell: ({ row }) => <Paragraph  paragraph={row.getValue('rs')} />,
     },
     {
       accessorKey: 'address',
       header: 'organization.address',
       cell: ({ row }) => (
-        <p className="text-gray-600">{row.getValue('address')}</p>
+        <Paragraph paragraph={row.getValue('address')} />
       ),
     },
     {
       accessorKey: 'cnss',
       header: 'organization.cnss',
       cell: ({ row }) => (
-        <p className="text-gray-600">{row.getValue('cnss')}</p>
+        <Paragraph paragraph={row.getValue('cnss')} />
       ),
     },
     {
       accessorKey: 'ice',
       header: 'ice',
-      cell: ({ row }) => <p className="text-gray-600">{row.getValue('ice')}</p>,
+      cell: ({ row }) => <Paragraph paragraph={row.getValue('ice')} />,
     },
     {
       accessorKey: 'viewUsers',
@@ -138,7 +139,7 @@ export const Columns = (
       header: 'organization.actions',
       cell: ({ row }) => (
         <ButtonsAction
-          subscription={true}
+          subscription={false}
           saveDefaultData={setRowData.bind(null, row.original)}
           rowId={row.original.cnss}
           endpoint={`/organizations/${row.original.id}`}

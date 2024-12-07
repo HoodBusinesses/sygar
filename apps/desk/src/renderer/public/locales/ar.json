@@ -129,7 +129,11 @@
     "export": "تصدير",
     "import": "استيراد",
     "sortBy": "ترتيب حسب",
-    "filter": "تصفية"
+    "filter": "تصفية",
+    "drag": "اسحب ملفك (ملفاتك) لبدء التحميل",
+    "browseFiles": "تصفح الملفات",
+    "or"  : "أو",
+    "onlyXls" : "يسمح فقط بملفات .xls"
   },
   "participantsTable": {
     "id": "المعرف",
@@ -164,6 +168,7 @@
     "tables": "الجداول",
     "addFormation": "إضافة تكوين",
     "editFormation": "تعديل تكوين",
+    "formationOn": " التكوين على",
     "fields": {
       "formationName": {
         "label": "اسم التكوين",
@@ -306,6 +311,22 @@
         "label": "نوع الهوية",
         "placeholder": "اختر نوع الهوية"
       }
+    }
+  },
+  "modals": {
+    "delete": {
+      "title": "حذف العنصر؟",
+      "message": "العنصر سيتم فقدانه. هل أنت متأكد أنك تريد حذف هذا العنصر؟ "
+    },
+    "export": {
+      "title": "تصدير البيانات",
+      "message": "هل تريد تصدير البيانات؟"
+    },
+    "import": {
+      "titleLogo": "استيراد الشعار",
+      "messageLogo": "هل تريد استيراد الشعار؟",
+      "titleDocument": "استيراد المستند",
+      "messageDocument": "هل تريد استيراد المستند؟"
     }
   }
 }

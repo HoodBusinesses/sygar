@@ -5,6 +5,7 @@ import ButtonsAction from '../organization/org-table-actions';
 import { Checkbox } from '../ui/checkbox';
 import RedirectButton from '../redirectButton';
 import { Role, UserType } from '@renderer/store/slices/auth.slice';
+import Paragraph from '../ui/Paragraph';
 
 export interface Users {
   id: string;
@@ -52,7 +53,7 @@ export const usersColumns = (
             aria-label="Select row"
             key="checkbox"
           />
-          <p className="text-gray-600">{row.index + 1}</p>
+          <Paragraph paragraph={(row.index + 1).toString()} />
         </div>
       ),
     },
@@ -69,7 +70,7 @@ export const usersColumns = (
         );
       },
       cell: ({ row }) => (
-        <p className="text-gray-600">{row.original.firstName}</p>
+        <Paragraph paragraph={row.original.firstName} />
       ),
     },
     {
@@ -85,7 +86,7 @@ export const usersColumns = (
         );
       },
       cell: ({ row }) => (
-        <p className="text-gray-600">{row.original.lastName}</p>
+        <Paragraph paragraph={row.original.lastName} />
       ),
     },
     {
@@ -100,12 +101,12 @@ export const usersColumns = (
           />
         );
       },
-      cell: ({ row }) => <p className="text-gray-600">{row.original.email}</p>,
+      cell: ({ row }) => <Paragraph paragraph={row.original.email} />,
     },
     {
       accessorKey: 'phone',
       header: 'themesTable.phone',
-      cell: ({ row }) => <p className="text-gray-600">{row.original.phone}</p>,
+      cell: ({ row }) => <Paragraph paragraph={row.original.phone} />,
     },
     {
       accessorKey: 'permissions',
@@ -122,7 +123,7 @@ export const usersColumns = (
     {
       accessorKey: 'role',
       header: 'themesTable.role',
-      cell: ({ row }) => <p className='text-gray-600'>{row.original.role}</p>,
+      cell: ({ row }) => <Paragraph paragraph={row.original.role} />,
     },
     {
       accessorKey: 'options',

@@ -129,7 +129,11 @@
     "export": "Exporter",
     "import": "Importer",
     "sortBy": "Trier par",
-    "filter": "Filtrer"
+    "filter": "Filtrer",
+    "drag": "Faites glisser votre (vos) fichier(s) pour commencer le téléchargement",
+    "browseFiles": "Parcourir les fichiers",
+    "or": "Ou",
+    "onlyXls": "Seuls les fichiers .xls sont autorisés"
   },
   "participantsTable": {
     "id": "ID",
@@ -164,6 +168,7 @@
     "tables": "Tables",
     "addFormation": "Ajouter une formation",
     "editFormation": "Modifier formation",
+    "formationOn": "Formation sur ",
     "fields": {
       "formationName": {
         "label": "Nom de la formation",
@@ -306,6 +311,22 @@
         "label": "Type d'identité",
         "placeholder": "Sélectionnez le type d'identité"
       }
+    }
+  },
+  "modals": {
+    "delete": {
+      "title": "Supprimer L'élément ?",
+      "message": "L'élément sera perdu. Êtes-vous sûr de vouloir supprimer cet élément ?"
+    },
+    "export": {
+      "title": "Exporter les données",
+      "message": "Voulez-vous exporter les données ?"
+    },
+    "import": {
+      "titleLogo": "Importer le logo",
+      "messageLogo": "Voulez-vous importer le Logo ?",
+      "titleDocument": "Importer le document",
+      "messageDocument": "Voulez-vous importer le document ?"
     }
   }
 }

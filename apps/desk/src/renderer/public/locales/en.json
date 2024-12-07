@@ -129,7 +129,11 @@
     "export": "Export",
     "import": "Import",
     "sortBy": "Sort By",
-    "filter": "Filter"
+    "filter": "Filter",
+    "drag": "Drag your file(s) to start uploading",
+    "browseFiles": "Browse Files",
+    "or": "Or",
+    "onlyXls" : "Only .xls files are allowed"
   },
   "participantsTable": {
     "id": "ID",
@@ -162,8 +166,9 @@
   "formation": {
     "formation": "Formation section",
     "tables": "Tables",
-    "addFormation" : "Add Formations",
-    "editFormation" : "Edit Formations",
+    "addFormation": "Add Formations",
+    "editFormation": "Edit Formations",
+    "formationOn": "Formation On     ",
     "fields": {
       "formationName": {
         "label": "Formation Name",
@@ -181,8 +186,8 @@
   },
   "group": {
     "group": "Group section",
-    "addGroup" : "Add Groups",
-    "editGroup" : "Edit Groups",
+    "addGroup": "Add Groups",
+    "editGroup": "Edit Groups",
     "fields": {
       "facilator": {
         "label": "Facilator",
@@ -263,49 +268,65 @@
     }
   },
   "user": {
-  "addUser": "Add User",
-  "editUser": "Edit User",
-  "fields": {
-    "fullName": {
-      "label": "Full Name",
-      "placeholder": "Enter full name"
+    "addUser": "Add User",
+    "editUser": "Edit User",
+    "fields": {
+      "fullName": {
+        "label": "Full Name",
+        "placeholder": "Enter full name"
+      },
+      "firstName": {
+        "label": "First Name",
+        "placeholder": "Enter first name"
+      },
+      "lastName": {
+        "label": "Last Name",
+        "placeholder": "Enter last name"
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "Enter email"
+      },
+      "role": {
+        "label": "Role",
+        "placeholder": "Select role"
+      },
+      "actionType": {
+        "label": "Action Type",
+        "placeholder": "Select action type"
+      },
+      "phone": {
+        "label": "Phone",
+        "placeholder": "Enter phone number"
+      },
+      "userCnss": {
+        "label": "User CNSS",
+        "placeholder": "Enter user CNSS"
+      },
+      "identity": {
+        "label": "Identity",
+        "placeholder": "Enter identity"
+      },
+      "identityType": {
+        "label": "Identity Type",
+        "placeholder": "Select identity type"
+      }
+    }
+  },
+  "modals": {
+    "delete": {
+      "title": "Delete Item ?",
+      "message": "Item will be lost, Are you sure you want to delete this item?"
     },
-    "firstName": {
-      "label": "First Name",
-      "placeholder": "Enter first name"
+    "export": {
+      "title": "Export Data",
+      "message": "Are you sure you want to export this data?"
     },
-    "lastName": {
-      "label": "Last Name",
-      "placeholder": "Enter last name"
-    },
-    "email": {
-      "label": "Email",
-      "placeholder": "Enter email"
-    },
-    "role": {
-      "label": "Role",
-      "placeholder": "Select role"
-    },
-    "actionType": {
-      "label": "Action Type",
-      "placeholder": "Select action type"
-    },
-    "phone": {
-      "label": "Phone",
-      "placeholder": "Enter phone number"
-    },
-    "userCnss": {
-      "label": "User CNSS",
-      "placeholder": "Enter user CNSS"
-    },
-    "identity": {
-      "label": "Identity",
-      "placeholder": "Enter identity"
-    },
-    "identityType": {
-      "label": "Identity Type",
-      "placeholder": "Select identity type"
+    "import": {
+      "titleLogo": "Import Logo",
+      "messageLogo": "Are you sure you want to import this data?",
+      "titleDocument": "Import Document",
+      "messageDocument": "Are you sure you want to import this document?"
     }
   }
-}
 }
