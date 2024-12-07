@@ -1,7 +1,7 @@
-import { useToast } from '@renderer/hooks/useToast';
+import { toast } from 'react-toastify';
 import { useAppSelector } from '@renderer/store/hooks';
 import { api } from '@renderer/utils/api';
-import {  QueryKey, useMutation, useQueryClient } from '@tanstack/react-query';
+import { QueryKey, useMutation, useQueryClient } from '@tanstack/react-query';
 
 export interface DeleteOrganParams {
   cnss: string;
@@ -14,17 +14,13 @@ type DeleteRowProps = {
 };
 
 export default function useDeleteRowTable({
-  rowId,
   endpoint,
   invalidateKeyData,
 }: DeleteRowProps) {
   const token = useAppSelector((state) => state.auth.auth.token);
   const queryClient = useQueryClient();
-  const { toast } = useToast();
 
   return useMutation({
-    mutationKey: ['DeleteRow', rowId],
-
     mutationFn: () =>
       api.delete(endpoint, {
         headers: {
@@ -35,30 +31,23 @@ export default function useDeleteRowTable({
     onSuccess: () => {
       if (invalidateKeyData) {
         try {
-            queryClient.invalidateQueries(
-              {
-                queryKey: invalidateKeyData,
-                exact: true,
-                refetchType: 'active',
-              },
-            );
+          queryClient.invalidateQueries({
+            queryKey: invalidateKeyData,
+            exact: true,
+          });
         } catch (error) {
-            console.log(error);
+          console.log(error);
         }
       }
-
-      toast({
-        title: 'success',
-        description: 'item deleted successfully',
-      });
+     toast.success('Success Notification !', {
+       position: 'top-center',
+     });
     },
 
     onError: () => {
-      toast({
-        title: 'Error',
-        variant: 'destructive',
-        description: 'Error deleting item',
-      }); 
-    },  
+      toast.error('Error Notification !', {
+        position: 'top-center',
+      });
+    },
   });
 }

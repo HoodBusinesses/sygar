@@ -14,7 +14,8 @@ import { areObjectsEqual } from '@renderer/utils/is-objects-equal';
 export default function useHandleEditUser(
   defaultValues: Users | null,
   crud: string,
-  goBack: () => void
+  goBack: () => void,
+  orgId:string
 ) {
   const schema = userSchema;
 
@@ -38,8 +39,6 @@ export default function useHandleEditUser(
     });
 
   const formValues = watch();
-
-  const orgId = useAppSelector((state) => state.auth.auth.organizationId);
 
   const userType = useAppSelector((state) => state.auth.auth.userType);
 

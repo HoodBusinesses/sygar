@@ -27,12 +27,15 @@ const Registration: React.FC = () => {
   return (
     <div className="p-4 w-full py-6 space-y-6">
       <h1 className="text-2xl font-semibold text-gray-950">
-        {t('registration.registration')}
+        {t('registration.registration')}{' '}
+        <span className="text-sm rounded-sm bg-blue-100  text-blue-600">
+          {t('registration.title')}
+        </span>
       </h1>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <Card className="flex flex-col gap-4 ">
-          <CardHeader className="text-sm rounded-sm text-green-600 bg-green-100 font-bold  p-0 w-fit">
-            {t('registration.title')}
+          <CardHeader className="text-sm rounded-sm font-bold  py-2 px-1 w-fit">
+            {t('registration.MembersInfos')}
           </CardHeader>
           <CardContent className="">
             <div className="grid grid-cols-3 gap-4">
@@ -52,7 +55,7 @@ const Registration: React.FC = () => {
           </CardContent>
         </Card>
         <Card className="flex flex-col  gap-4">
-          <CardHeader className="text-sm rounded-sm text-green-600 bg-green-100 font-bold  p-0 w-fit">
+          <CardHeader className="text-sm rounded-sm font-bold py-2 px-1 w-fit">
             {t('registration.ownerInfo')}
           </CardHeader>
           <CardContent>

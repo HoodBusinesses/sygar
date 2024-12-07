@@ -11,8 +11,6 @@ import { profileFields } from '@renderer/data/organinzation-fields-input';
 import FormInputItem from './ui/form-input-item';
 import { FaSpinner } from 'react-icons/fa';
 
-//TODO: USE REUSABLE FORM FIELDS COMPOONENT @PAPOCHA
-
 export default function EditProfile({ data }: { data: User }): JSX.Element {
 
   const { t, isRtl } = useTranslate();
@@ -88,7 +86,7 @@ export default function EditProfile({ data }: { data: User }): JSX.Element {
           <Button
             type="submit"
             disabled={isPending}
-            className="bg-blue-600 text-white hover:bg-blue-700 transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-md"
+            className="bg-blue-600 w-1/4 text-white hover:bg-blue-700 transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-md"
           >
             {isPending ? <FaSpinner /> : t('buttons.save')}
           </Button>

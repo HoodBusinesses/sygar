@@ -16,14 +16,17 @@ export default function EditeSettings({ data }: { data: OrganizationsData }) {
   return (
     <div className="p-4  py-6 space-y-6 w-screen h-screen">
       <h1 className="text-2xl font-semibold text-gray-950">
-        {t('registration.EditOrganization')}
+        {t('registration.EditOrganization')}{' '}
+        <span className="text-sm rounded-sm text-green-600 bg-green-100">
+          {t('registration.title')}
+        </span>
       </h1>
       <form onSubmit={methods.handleSubmit(handleSubmit)} className="space-y-6">
         <Card className="flex flex-col gap-4 ">
-          <CardHeader className="text-sm rounded-sm text-green-600 bg-green-100 font-bold  p-0 w-fit">
+          {/* <CardHeader className="text-sm rounded-sm text-green-600 bg-green-100 font-bold  p-1 m-2 w-fit">
             {t('registration.title')}
-          </CardHeader>
-          <CardContent className="">
+          </CardHeader> */}
+          <CardContent className="pt-4">
             <div className="grid grid-cols-3 gap-4">
               {registrationFields.map((field) => (
                 <FormInputItem
@@ -47,7 +50,7 @@ export default function EditeSettings({ data }: { data: OrganizationsData }) {
         </Card>
         <Button
           type="submit"
-          className="custom-button bg-blue-600"
+          className="custom-button bg-blue-600 w-1/4"
           disabled={isPending}
         >
           {isPending ? <FaSpinner className="" /> : t('buttons.save')}

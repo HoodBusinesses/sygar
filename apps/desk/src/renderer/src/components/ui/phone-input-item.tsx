@@ -22,14 +22,14 @@ export default function PhoneInputItem({
 
   return (
     <div className="flex flex-col mb-4 gap-1">
-      <p className={'text-gray-950 text-sm mb-2'}>
+      <p className={'text-gray-600 text-[12px] leading-[12px] tracking-[0.3px] mb-2 font-poppins font-normal'}>
         {t(label)} {required && <span className="text-red-500">*</span>}
       </p>
       <PhoneInput
         defaultCountry={defaultValue}
         value={value}
         onChange={onChange}
-        className="w-full bg-gray-100 text-gray-950 border border-input rounded-md  flex rtl:flex-row-reverse"
+        className="w-full h-10 bg-gray-100 text-gray-950 border border-input rounded-md  flex rtl:flex-row-reverse"
         inputStyle={{
           width: '100%',
           direction: 'ltr',

@@ -1,11 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Users } from "@renderer/components/formations/users-columns";
 import { profileSchema } from "@renderer/utils/schemas/formSchema";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import useUpdateUser from "../api/user/useUpdateUser";
 import { User } from "../api/user/me";
+import useUpdateUser from "../api/user/useUpdateUser";
 
 export default function useHandleEditProfile(defaultValues: User) {
   const schema = profileSchema;
@@ -21,7 +19,6 @@ export default function useHandleEditProfile(defaultValues: User) {
   });
 
   const handleSubmit = (data: FormData) => {
-    console.log('data :::', defaultValues);
     mutation.mutate({
       userId: defaultValues?.id ?? '',
       data: {
@@ -38,24 +35,9 @@ export default function useHandleEditProfile(defaultValues: User) {
     });
   };
 
-  const handleUnsavedChange = (data: FormData) => {
-    // check if there is an empty field
-    if (defaultValues) {
-      const { id, ...values } = defaultValues;
-      console.log('data : ', data);
-      console.log('defaultValues jjjj: ', values);
-      return JSON.stringify(data) !== JSON.stringify(values);
-    }
-  };
-
-  const [openUnsavedChange, setOpenUnsavedChange] = useState(false);
-
   return {
-    openUnsavedChange,
-    setOpenUnsavedChange,
     methods,
-    isPending: false,
+    isPending: mutation.isPending,
     handleSubmit,
-    handleUnsavedChange,
   };
 }

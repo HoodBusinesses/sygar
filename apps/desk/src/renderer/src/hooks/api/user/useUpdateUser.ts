@@ -1,8 +1,15 @@
-import { useToast } from '@renderer/hooks/useToast';
-import { useAppSelector } from '@renderer/store/hooks';
+import { useAppDispatch, useAppSelector } from '@renderer/store/hooks';
 import { api } from '@renderer/utils/api';
-import { useMutation, UseMutationOptions } from '@tanstack/react-query';
+import {
+  useMutation,
+  UseMutationOptions,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
+import { toast } from 'react-toastify';
+import { User } from './me';
+import { setUserData } from '@renderer/store/slices/auth.slice';
+import { da } from 'date-fns/locale';
 
 export interface UpdateUserParams {
   userId: string;
@@ -17,33 +24,44 @@ export interface UpdateUserParams {
 export default function useUpdateUser(
   options?: UseMutationOptions<AxiosResponse<any, any>, Error, UpdateUserParams>
 ) {
-  const token = useAppSelector((state) => state.auth.auth.token);
-  
-  const { toast } = useToast();
+  const user = useAppSelector((state) => state.auth.auth);
+
+  const queryClient = useQueryClient();
+
+  const dispatch = useAppDispatch();
 
   return useMutation({
-    mutationKey: ['UpdateUser'],
-
     mutationFn: ({ userId, data }: UpdateUserParams) =>
       api.put(`user/${userId}`, data, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${user.token}`,
         },
       }),
 
-    onSuccess: () => {
-      toast({
-        title: 'success',
-        description: 'user chenges successfully',
+    onSuccess: (res) => {
+      const data: User = res.data;
+      data.type === 'SOLUTION_OWNER'
+        ? queryClient.invalidateQueries({
+            queryKey: ['usersSygarData'],
+            exact: true,
+          })
+        : dispatch(
+            setUserData({
+              firstName: data.firstName,
+              lastName: data.lastName,
+              // email: data.email,
+              // phone: data.phone,
+            })
+          );
+      toast.success('Success Notification !', {
+        position: 'top-center',
       });
     },
     ...options,
 
     onError: () => {
-      toast({
-        title: 'error',
-        variant: 'destructive',
-        description: 'Error while changing data',
+      toast.error('Error Notification !', {
+        position: 'top-center',
       });
     },
   });

@@ -15,7 +15,7 @@ export type groupsData = {
 export const useGetAllGroups = (themeId: string, organizationId: string) => {
   const token = useAppSelector((state) => state.auth.auth.token);
   const { data, isLoading, isError, error, isSuccess, refetch } = useQuery({
-    queryKey: ['groupsData'], //TODO: add themeId and organizationId
+    queryKey: ['groupsData', organizationId, themeId], //TODO: add themeId and organizationId
     queryFn: () =>
       api.get(`group?organizationId=${organizationId}&themeId=${themeId}`, {
         headers: {

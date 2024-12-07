@@ -1,13 +1,12 @@
 import {
-  Cog6ToothIcon,
-  BellIcon,
-  HomeIcon,
   UsersIcon,
   IdentificationIcon,
 } from '@heroicons/react/24/outline';
 import { hasPermission } from '@renderer/permissions/HasPermission';
 import { Role, UserType } from '@renderer/store/slices/auth.slice';
+import { LucideChartPie, LucideSettings2 } from 'lucide-react';
 import { FaUsers } from 'react-icons/fa';
+import { TbEdit } from "react-icons/tb";
 
 export const navItems = (
   isAccountActivated: boolean,
@@ -18,7 +17,7 @@ export const navItems = (
     name: 'home',
     label: 'sidebar.items.home',
     href: '/dashboard',
-    icon: HomeIcon,
+    icon: LucideChartPie,
     canVue: true,
   },
   {
@@ -47,7 +46,7 @@ export const navItems = (
     name: 'settings',
     label: 'sidebar.items.settings',
     href: '/settings',
-    icon: Cog6ToothIcon,
+    icon: LucideSettings2,
     canVue: hasPermission(
       isAccountActivated,
       userRole,
@@ -58,7 +57,7 @@ export const navItems = (
     name: 'themes',
     label: 'sidebar.items.theme',
     href: '/themes-listing',
-    icon: BellIcon,
+    icon: TbEdit,
     canVue: hasPermission(
       isAccountActivated,
       userRole,
