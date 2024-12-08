@@ -33,7 +33,7 @@ export default function MainSelect({
         {t(label)} {required && <span className="text-red-500">*</span>}
       </p>
       <Select onValueChange={onChange} value={value}>
-        <SelectTrigger className="bg-gray-100 text-gray-950 h-10 rounded-md">
+        <SelectTrigger className="bg-gray-100 text-gray-950 h-10 rounded-md focus:ring-0 focus:border-blue-400">
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent className="bg-white text-gray-950 rounded-md">
