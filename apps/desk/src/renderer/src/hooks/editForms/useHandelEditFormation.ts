@@ -72,7 +72,7 @@ export default function   useHandelEditFormation(
       const { id, ...values } = defaultValues;
       return !areObjectsEqual(data, values);
     }
-    return false
+    return false;
   };
 
   const [openUnsavedChange, setOpenUnsavedChange] = useState(false);
@@ -80,6 +80,7 @@ export default function   useHandelEditFormation(
   return {
     openUnsavedChange,
     setOpenUnsavedChange,
+    isPending: createMuation.isPending || updateMuation.isPending,
     methods,
     handleSubmit,
     handleUnsavedChange,

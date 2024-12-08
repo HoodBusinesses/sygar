@@ -19,7 +19,7 @@ export class GroupsController {
 			address: dto.address,
 			animatorName: dto.animatorName,
 			theme: { connect: { id: dto.themeId } },
-			Organization: { connect: { id: dto.organizationId } }
+			organization: { connect: { id: dto.organizationId } }
 		})
 	}
 

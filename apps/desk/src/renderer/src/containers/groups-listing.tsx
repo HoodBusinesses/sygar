@@ -6,14 +6,15 @@ import { Loading } from './laoding';
 
 const GroupListing: React.FC = () => {
   const url = new URLSearchParams(window.location.search);
+
   const themId = url.get('themeId');
+
   const organizationId = url.get('organizationId');
 
   const { data, isLoading, isError, isSuccess } = useGetAllGroups(
     themId || '',
-    organizationId || ''
+    organizationId || '',
   );
-
 
   if (isLoading) {
     return <Loading />;
