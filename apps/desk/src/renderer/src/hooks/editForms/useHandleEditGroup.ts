@@ -61,8 +61,6 @@ export default function useHandelEditGroup(
     // check if there is an empty field
     if (defaultValues && crud == 'edit') {
       const { id, date, ...values } = defaultValues;
-      console.log('data : ', data);
-      console.log('defaultValues jjjj: ', values);
       return JSON.stringify(data) !== JSON.stringify(values);
     }
     return false;

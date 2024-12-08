@@ -3,10 +3,8 @@ import ExportModal from './ExportModal'
 import ImportModal from './ImportModal'
 import { Button } from './ui/button'
 import { FiPlus } from 'react-icons/fi'
-// import { useNavigate } from '@tanstack/react-router'
 import SearchTableInput from './costum-data/search-table-Input'
 import { ChangeEventHandler } from 'react'
-import Paragraph from './ui/Paragraph'
 
 interface ListingHeaderProps {
   headTitle: string;
@@ -20,14 +18,6 @@ const ListingHeader = ({
   goAdd,
 }: ListingHeaderProps): JSX.Element => {
   const { t } = useTranslate();
-  // const navigate = useNavigate();
-  // const type =
-  //   headTitle === 'formation.formation'
-  //     ? 'themes'
-  //     : headTitle === 'group.group'
-  //       ? 'group'
-  //       : 'participant';
-  // const href = `/edit?type=${type}&crud=add`;
 
   return (
     <div className="flex flex-col gap-6 w-full">

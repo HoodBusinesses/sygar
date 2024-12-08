@@ -56,7 +56,7 @@ export default function FormInputItem({
           placeholder={t(placeholder)}
           type={type ?? 'text'}
           className={cn(
-            'bg-gray-100 text-gray-950 p-2 rounded-md'
+            'bg-gray-100 text-gray-950 p-2 rounded-md outline-0 focus:border-blue-400 focus:border-2'
           )}
         />
       )}

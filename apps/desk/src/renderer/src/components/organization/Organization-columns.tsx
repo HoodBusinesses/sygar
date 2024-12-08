@@ -17,10 +17,6 @@ export type Organization = {
   address: string;
   ice: string;
   enabled: boolean;
-  // email: string;
-  // responsibleName: string;
-  // trainingManagerName: string;
-  // date: string;
 };
 
 export const Columns = (
@@ -41,7 +37,7 @@ export const Columns = (
             aria-label="Select all"
           />
 
-          {table.getIsSomeRowsSelected() && (
+          {table.getIsAllPageRowsSelected() && (
             <DeleteModal
               DeleteNumber={table.getFilteredSelectedRowModel().rows.length}
               onDelete={() => {}}

@@ -71,8 +71,8 @@ export function CustomTable<TData, TValue>({
 
   const { t } = useTranslate();
 
-  if (component === 'add' || component === 'edit'){
-    return <> {EditAndAddRowComponent} </>
+  if (component === 'add' || component === 'edit') {
+    return <> {EditAndAddRowComponent} </>;
     // return <p className='text-xl text-gray-900'>isjgbsjdb</p>
   }
 
@@ -176,7 +176,10 @@ export function CustomTable<TData, TValue>({
                   <p className="text-gray-500 mb-6">
                     Start adding your rows informations!
                   </p>
-                  <button className="flex items-center px-4 py-2 bg-blue-500 text-white rounded-full shadow-md">
+                  <button
+                    onClick={setComponent.bind(null, 'add')}
+                    className="flex items-center px-4 py-2 bg-blue-500 text-white rounded-full shadow-md"
+                  >
                     <FaPlus className="mr-2" /> Add Rows
                   </button>
                 </div>

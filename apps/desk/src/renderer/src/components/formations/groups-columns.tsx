@@ -32,7 +32,7 @@ export const groupColumn = (
             aria-label="Select all"
           />
 
-          {table.getIsSomeRowsSelected() && (
+          {table.getIsAllPageRowsSelected() && (
             <DeleteModal
               DeleteNumber={table.getFilteredSelectedRowModel().rows.length}
               onDelete={() => {}}
@@ -48,7 +48,6 @@ export const groupColumn = (
             aria-label="Select row"
             key="checkbox"
           />
-          <p>{row.index + 1}</p>
           <Paragraph paragraph={(row.index + 1).toString()} />
         </div>
       ),

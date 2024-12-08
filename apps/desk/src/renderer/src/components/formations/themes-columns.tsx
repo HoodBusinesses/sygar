@@ -31,7 +31,7 @@ export const themeColumns = (
             aria-label="Select all"
           />
 
-          {table.getIsSomeRowsSelected() && (
+          {table.getIsAllPageRowsSelected() && (
             <DeleteModal
               DeleteNumber={table.getFilteredSelectedRowModel().rows.length}
               onDelete={() => { }}
@@ -99,7 +99,10 @@ export const themeColumns = (
       accessorKey: 'groups',
       header: 'themesTable.groups',
       cell: ({ row }) => (
-        <RedirectButton click={setGroupThemes.bind(null, row.original.id, orgId)} text="themesTable.groups" />
+        <RedirectButton
+          click={setGroupThemes.bind(null, row.original.id, orgId)}
+          text="themesTable.groups"
+        />
       ),
     },
     {

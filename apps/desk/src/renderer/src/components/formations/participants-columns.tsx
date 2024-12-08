@@ -14,7 +14,9 @@ export interface Participant {
   status: string;
 }
 
-export const participantColumns = (setRowData: (rowData: Participant) => void): ColumnDef<Participant>[] => [
+export const participantColumns = (
+  setRowData: (rowData: Participant) => void
+): ColumnDef<Participant>[] => [
   {
     accessorKey: 'id',
     header: ({ table }) => (
@@ -24,10 +26,10 @@ export const participantColumns = (setRowData: (rowData: Participant) => void): 
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
           aria-label="Select all"
         />
-        {table.getIsSomeRowsSelected() && (
+        {table.getIsAllPageRowsSelected() && (
           <DeleteModal
             DeleteNumber={table.getFilteredSelectedRowModel().rows.length}
-            onDelete={() => { }}
+            onDelete={() => {}}
           />
         )}
       </div>
@@ -92,7 +94,7 @@ export const participantColumns = (setRowData: (rowData: Participant) => void): 
     header: 'themesTable.options',
     cell: ({ row }) => (
       <ButtonsAction
-        endpoint='/participant/delete'
+        endpoint="/participant/delete"
         saveDefaultData={setRowData.bind(null, row.original)}
         rowId={row.original.id}
         subscription={false}
