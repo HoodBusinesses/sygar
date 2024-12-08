@@ -29,7 +29,7 @@ export default function PhoneInputItem({
         defaultCountry={defaultValue}
         value={value}
         onChange={onChange}
-        className="w-full h-10 bg-gray-100 text-gray-950 border border-input rounded-md  flex rtl:flex-row-reverse"
+        className="w-full h-10 bg-gray-100 text-gray-950 border rounded-md  flex rtl:flex-row-reverse"
         inputStyle={{
           width: '100%',
           direction: 'ltr',

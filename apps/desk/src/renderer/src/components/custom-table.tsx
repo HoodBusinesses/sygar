@@ -71,8 +71,8 @@ export function CustomTable<TData, TValue>({
 
   const { t } = useTranslate();
 
-  if (component === 'add' || component === 'edit'){
-    return <> {EditAndAddRowComponent} </>
+  if (component === 'add' || component === 'edit') {
+    return <> {EditAndAddRowComponent} </>;
     // return <p className='text-xl text-gray-900'>isjgbsjdb</p>
   }
 
