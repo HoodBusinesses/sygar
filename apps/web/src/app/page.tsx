@@ -1,12 +1,8 @@
-import React from 'react';
-import ActivateAccount from '@/components/ActivateAccount';
-  
-const ForgotPassword: React.FC = () => {
+import React from 'react';  
+const Page: React.FC = () => {
   return (
-    <div className="flex flex-col">
-      <ActivateAccount />
-    </div>
+    <p>hello</p>
   );
 };
 
-export default ForgotPassword;
+export default Page;

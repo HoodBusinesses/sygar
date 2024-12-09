@@ -34,7 +34,7 @@ export const themeColumns = (
           {table.getIsAllPageRowsSelected() && (
             <DeleteModal
               DeleteNumber={table.getFilteredSelectedRowModel().rows.length}
-              onDelete={() => { }}
+              onDelete={() => {}}
             />
           )}
         </div>
@@ -64,7 +64,10 @@ export const themeColumns = (
         );
       },
       cell: ({ row }) => (
-        <Paragraph paragraph='formation.formationOn' span={row.getValue('name')} />
+        <Paragraph
+          paragraph="formation.formationOn"
+          span={row.getValue('name')}
+        />
       ),
     },
     {
@@ -107,7 +110,7 @@ export const themeColumns = (
     },
     {
       accessorKey: 'options',
-      header: '',
+      header: 'themesTable.options',    
       cell: ({ row }) => (
         <ButtonsAction
           endpoint={`themes/${row.original.id}?organizationId=${orgId}`} // endpot /

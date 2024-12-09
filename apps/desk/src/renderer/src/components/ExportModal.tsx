@@ -27,7 +27,7 @@ const ExportModal = (): JSX.Element => {
 
       <DialogContent className={"p-4 bg-white rounded-md shadow-md"}>
         
-        <DialogHeader className={cn('flex  red', isRtl ? "justify-start text-right" : "justify-end text-left")}>
+        <DialogHeader className={cn('flex', isRtl ? "justify-start text-right" : "justify-end text-left")}>
           <DialogTitle className='text-xl'>{t('modals.export.title')}</DialogTitle>
           <DialogDescription className='text-gray-500'>{t('modals.export.message')}</DialogDescription>
         </DialogHeader>

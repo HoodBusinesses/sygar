@@ -34,7 +34,8 @@ export default function useUpdateTheme(
          queryClient.invalidateQueries({
           queryKey: ['themesData', organizationId],
         });
-       toast.success('Success Notification !', {
+       //TODO: add toast notification messages HAMZA amur
+       toast.success('Theme updated !', {
          position: 'top-center',
        });
       } catch (error) {
