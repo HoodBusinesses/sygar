@@ -130,10 +130,13 @@
     "import": "Importer",
     "sortBy": "Trier par",
     "filter": "Filtrer",
+    "next": "Suivant",
     "drag": "Faites glisser votre (vos) fichier(s) pour commencer le téléchargement",
     "browseFiles": "Parcourir les fichiers",
     "or": "Ou",
-    "onlyXls": "Seuls les fichiers .xls sont autorisés"
+    "onlyXls": "Seuls les fichiers .xls sont autorisés",
+    "discard": "Annuler",
+    "keepEditing": "Continuer l'édition"
   },
   "participantsTable": {
     "id": "ID",
@@ -327,6 +330,10 @@
       "messageLogo": "Voulez-vous importer le Logo ?",
       "titleDocument": "Importer le document",
       "messageDocument": "Voulez-vous importer le document ?"
+    },
+    "unsavedChanges": {
+      "title": "Annuler les modifications non enregistrées ?",
+      "message": "Toutes les modifications non enregistrées seront perdues. Êtes-vous sûr de vouloir annuler et supprimer vos modifications ?"
     }
   }
 }

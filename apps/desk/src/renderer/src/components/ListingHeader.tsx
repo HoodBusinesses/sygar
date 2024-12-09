@@ -43,9 +43,9 @@ const ListingHeader = ({
           {!(headTitle === 'organization.organizations') && (
             <Button
               onClick={goAdd}
-              className="flex items-center custom-button gap-2 bg-blue-600 text-blue-50 px-6 py-2 rounded-lg"
+              className="flex flex-1 custom-button gap-4 font-normal font-roboto bg-blue-600 text-blue-50 px-6 py-2 rounded-lg"
             >
-              <FiPlus className="h-5 w-5" />
+              <FiPlus className="h-[22px] w-[22px]" />
               {t('buttons.add')}
             </Button>
           )}
