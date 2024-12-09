@@ -19,7 +19,7 @@ interface DeleteModalProps {
 }
 
 const DeleteModal: FC<DeleteModalProps> = ({ onDelete, DeleteNumber }: DeleteModalProps) => {
-  const { t } = useTranslate();
+  const { t , isRtl } = useTranslate();
 
   return (
     <Dialog>
@@ -43,15 +43,17 @@ const DeleteModal: FC<DeleteModalProps> = ({ onDelete, DeleteNumber }: DeleteMod
             {t('modals.delete.message')}
           </DialogDescription>
         </DialogHeader>
-        <div className="flex justify-end ">
+        <div className={cn("flex", 
+            isRtl ? "justify-start" : "justify-end"
+          )}>
           <DialogClose className="custom-button text-sm text-gray-500 hover:bg-gray-200 border border-gray-500 mr-2">
-            Cancel
+            {t('buttons.cancel')}
           </DialogClose>
           <DialogClose
             onClick={onDelete}
             className="custom-button text-sm bg-[#FF0000] hover:bg-red-800"
           >
-            {'Delete'}
+            {t('buttons.delete')}
           </DialogClose>
         </div>
       </DialogContent>

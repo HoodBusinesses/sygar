@@ -130,10 +130,13 @@
     "import": "Import",
     "sortBy": "Sort By",
     "filter": "Filter",
+    "next": "Next",
     "drag": "Drag your file(s) to start uploading",
     "browseFiles": "Browse Files",
     "or": "Or",
-    "onlyXls" : "Only .xls files are allowed"
+    "onlyXls": "Only .xls files are allowed",
+    "discard": "Discard",
+    "keepEditing": "Keep Editing"
   },
   "participantsTable": {
     "id": "ID",
@@ -327,6 +330,10 @@
       "messageLogo": "Are you sure you want to import this data?",
       "titleDocument": "Import Document",
       "messageDocument": "Are you sure you want to import this document?"
+    },
+    "unsavedChanges": {
+      "title": "Discard Unsaved Changes?",
+      "message": "Any unsaved changes will be lost. Are you sure you want to cancel and discard your edits?"
     }
   }
 }
