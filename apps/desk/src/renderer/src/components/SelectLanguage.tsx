@@ -25,7 +25,7 @@ export default function SelectLanguage(): JSX.Element {
         onClick={() => setIsOpen((curr) => !curr)}
         className="flex items-center cursor-pointer gap-2 text-gray-600 hover:text-gray-800"
       >
-        <span className="text-sm">{lng.name}</span>
+        <span className="text-sm font-nunito">{lng.name}</span>
         <HiOutlineChevronDown className="text-xs text-gray-500" />
       </PopoverTrigger>
 

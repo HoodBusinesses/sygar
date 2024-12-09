@@ -10,7 +10,6 @@ import {
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { Dispatch } from 'react';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 // Define a reusable function for handling Unauthorized errors
 function handleAxiosError(
@@ -24,9 +23,6 @@ function handleAxiosError(
   if (data && data.statusCode === 401 && data.error === 'Unauthorized') {
     dispatch(resetAuth());
     localStorage.clear();
-    toast.error('Unauthorized', {
-      position: 'top-center',
-    });
   }
 
   // Handle Permissions
@@ -63,7 +59,6 @@ export const ReactQueryProvider = ({ children }) => {
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      {/* <ReactQueryDevtools initialIsOpen={true} /> */}
     </QueryClientProvider>
   );
 };

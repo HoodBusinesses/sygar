@@ -73,7 +73,6 @@ export function CustomTable<TData, TValue>({
 
   if (component === 'add' || component === 'edit') {
     return <> {EditAndAddRowComponent} </>;
-    // return <p className='text-xl text-gray-900'>isjgbsjdb</p>
   }
 
   return (

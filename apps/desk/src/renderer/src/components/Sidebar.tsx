@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 export default function Sidebar() {
   const [active, setActive] = useState('home');
+
   const { t } = useTranslation();
 
   const { isAccountActivated, userRole, userProfile } = useAppSelector(

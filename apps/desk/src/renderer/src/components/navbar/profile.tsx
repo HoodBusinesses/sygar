@@ -14,8 +14,13 @@ export default function ProfilePopover() {
 
   return (
     <Popover>
-      <PopoverTrigger className="flex items-center cursor-pointer gap-2">
+      <PopoverTrigger className="flex items-center cursor-pointer gap-2 ">
         <FaUserCircle className="w-8 h-8 text-gray-700 rounded-full border-4 border-blue-200/80" />
+        <p className="text-xs font-normal font-poppins text-[#1F384C] hover:text-gray-800">
+          {user.userType === 'SOLUTION_OWNER'
+            ? `Sygafor ${user.role}`
+            : `Organization ${user.role}`}
+        </p>
         <HiOutlineChevronDown className="text-sm text-gray-500" />
       </PopoverTrigger>
 
@@ -53,4 +58,3 @@ export default function ProfilePopover() {
     </Popover>
   );
 }
-
