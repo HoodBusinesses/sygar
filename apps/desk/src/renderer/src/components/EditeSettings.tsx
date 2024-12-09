@@ -1,6 +1,6 @@
 import useRegistrations from '@renderer/hooks/useRegistrations';
 import { useTranslate } from '@renderer/hooks/useTranslate';
-import { Card, CardContent, CardHeader } from './ui/card';
+import { Card, CardContent } from './ui/card';
 import { OrganizationFormData } from '@renderer/utils/schemas/formSchema';
 import FormInputItem from './ui/form-input-item';
 import { registrationFields } from '@renderer/data/organinzation-fields-input';
@@ -23,9 +23,6 @@ export default function EditeSettings({ data }: { data: OrganizationsData }) {
       </h1>
       <form onSubmit={methods.handleSubmit(handleSubmit)} className="space-y-6">
         <Card className="flex flex-col gap-4 ">
-          {/* <CardHeader className="text-sm rounded-sm text-green-600 bg-green-100 font-bold  p-1 m-2 w-fit">
-            {t('registration.title')}
-          </CardHeader> */}
           <CardContent className="pt-4">
             <div className="grid grid-cols-3 gap-4">
               {registrationFields.map((field) => (

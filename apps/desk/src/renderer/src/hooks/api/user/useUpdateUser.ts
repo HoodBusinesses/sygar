@@ -9,7 +9,6 @@ import { AxiosResponse } from 'axios';
 import { toast } from 'react-toastify';
 import { User } from './me';
 import { setUserData } from '@renderer/store/slices/auth.slice';
-import { da } from 'date-fns/locale';
 
 export interface UpdateUserParams {
   userId: string;

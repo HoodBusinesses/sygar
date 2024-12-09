@@ -37,7 +37,7 @@ export const usersColumns = (
             aria-label="Select all"
           />
 
-          {table.getIsSomeRowsSelected() && (
+          {table.getIsAllPageRowsSelected() && (
             <DeleteModal
               DeleteNumber={table.getFilteredSelectedRowModel().rows.length}
               onDelete={() => {}}

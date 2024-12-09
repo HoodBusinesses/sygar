@@ -3,7 +3,7 @@ import { useGetMe } from '@renderer/hooks/api/user/me';
 import { Loading } from './laoding';
 
 const ProfilePage = (): JSX.Element => {
-  const { data, isLoading, isError, error, isSuccess, refetch } = useGetMe();
+  const { data, isLoading, isError, error, isSuccess } = useGetMe();
 
   if (isLoading) {
     return <Loading />;
