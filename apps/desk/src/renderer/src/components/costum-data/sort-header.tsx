@@ -1,6 +1,7 @@
 import { useTranslate } from '@renderer/hooks/useTranslate';
 import { BiSort } from 'react-icons/bi';
 import { RxReset } from 'react-icons/rx';
+import { cn } from '../ui/lib/utils';
 
 type Props = {
   OnClick: () => void;
@@ -14,10 +15,10 @@ export default function SortHeader({
   resetFn,
   isSomeSortSeted,
 }: Props) {
-  const { t } = useTranslate();
+  const { t, isRtl } = useTranslate();
 
   return (
-    <div className="w-full flex gap-2 items-center justify-center">
+    <div className={cn(isRtl && "flex-row-reverse","w-full flex gap-2 items-center justify-center")}>
       <button
         className="flex px-4 w-fit items-center justify-center gap-1 text-gray-600 font-semibold border border-white py-1  hover:border-gray-300 rounded-lg rtl:flex-row-reverse"
         onClick={OnClick}
