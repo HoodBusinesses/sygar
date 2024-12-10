@@ -5,7 +5,8 @@ import { Button } from './ui/button'
 import { FiPlus } from 'react-icons/fi'
 import SearchTableInput from './costum-data/search-table-Input'
 import { ChangeEventHandler } from 'react'
-import Paragraph from './ui/Paragraph'
+import { FaArrowLeft } from 'react-icons/fa6';
+import { useRouter } from '@tanstack/react-router'
 
 interface ListingHeaderProps {
   headTitle: string;
@@ -19,15 +20,21 @@ const ListingHeader = ({
   goAdd,
 }: ListingHeaderProps): JSX.Element => {
   const { t } = useTranslate();
-
+  const router = useRouter();
   return (
     <div className="flex flex-col gap-6 w-full">
-      <p className="text-2xl font-poppins font-normal text-gray-800">
-        {t('formation.tables')}{' '}
-        <span className="text-sm font-poppins font-bold rounded-sm bg-blue-100  text-blue-600">
-          {t(headTitle)}
-        </span>
-      </p>
+      <div className="flex items-center gap-3">
+        <FaArrowLeft
+          onClick={router.history.back.bind(null, {})}
+          className="text-blue-600 w-4 h-4 cursor-pointer rtl:rotate-180 "
+        />
+        <p className="text-2xl font-poppins font-normal text-gray-800">
+          {t('formation.tables')}{' '}
+          <span className="text-sm font-poppins font-bold rounded-sm bg-blue-100  text-blue-600">
+            {t(headTitle)}
+          </span>
+        </p>
+      </div>
       <div className="flex items-center justify-between w-full">
         <SearchTableInput onChange={onSearchChange} />
         <div className="flex gap-4">

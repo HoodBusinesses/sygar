@@ -25,15 +25,21 @@ const ExportModal = (): JSX.Element => {
         {t('buttons.export')}
       </DialogTrigger>
 
-      <DialogContent className={"p-4 bg-white rounded-md shadow-md"}>
-        
-        <DialogHeader className={cn('flex', isRtl ? "justify-start text-right" : "justify-end text-left")}>
-          <DialogTitle className='text-xl'>{t('modals.export.title')}</DialogTitle>
-          <DialogDescription className='text-gray-500'>{t('modals.export.message')}</DialogDescription>
+      <DialogContent
+        dir={isRtl ? 'rtl' : 'ltr'}
+        className={'p-4 bg-white rounded-md shadow-md'}
+      >
+        <DialogHeader>
+          <DialogTitle className="text-xl">
+            {t('modals.export.title')}
+          </DialogTitle>
+          <DialogDescription
+            className={cn(isRtl && 'self-start', 'text-gray-500')}
+          >
+            {t('modals.export.message')}
+          </DialogDescription>
         </DialogHeader>
-        <div className={cn("flex", 
-            isRtl ? "justify-start" : "justify-end"
-          )}>
+        <div className={cn('flex gap-2 justify-end')}>
           <DialogClose className="custom-button text-gray-500 hover:bg-gray-200 border border-gray-500 text-sm mr-2">
             {t('buttons.cancel')}
           </DialogClose>

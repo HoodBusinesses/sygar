@@ -36,16 +36,22 @@ const DeleteModal: FC<DeleteModalProps> = ({ onDelete, DeleteNumber }: DeleteMod
         <img src={Trash} alt="Delete" width={14} height={14} />
       </DialogTrigger>
 
-      <DialogContent className="bg-white p-4 rounded-md shadow-md  ">
-        <DialogHeader className=' '>
-          <DialogTitle className='text-xl'>{t('modals.delete.title')}</DialogTitle>
-          <DialogDescription className='text-gray-500'>
+      <DialogContent dir={isRtl ? 'rtl' : 'ltr'} className="bg-white p-4 rounded-md shadow-md  ">
+        <DialogHeader>
+          <DialogTitle className="text-xl">
+            {t('modals.delete.title')}
+          </DialogTitle>
+          <DialogDescription
+            className={cn(isRtl && 'self-start', 'text-gray-500')}
+          >
             {t('modals.delete.message')}
           </DialogDescription>
         </DialogHeader>
-        <div className={cn("flex", 
-            isRtl ? "justify-start" : "justify-end"
-          )}>
+        <div
+          className={cn(
+            'flex gap-2 justify-end',
+          )}
+        >
           <DialogClose className="custom-button text-sm text-gray-500 hover:bg-gray-200 border border-gray-500 mr-2">
             {t('buttons.cancel')}
           </DialogClose>

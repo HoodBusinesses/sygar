@@ -2,7 +2,7 @@
 import DeleteModal from '../DeleteModal';
 import SubscriptionModal from '../SubscriptionModal';
 import { Button } from '../ui/button';
-import useDelete from '@renderer/hooks/api/organization/delete-org';
+import useDeleteRowTable from '@renderer/hooks/api/organization/delete-org';
 import { QueryKey } from '@tanstack/react-query';
 import Edit from '@renderer/assets/images/edit-2.png';
 
@@ -19,7 +19,7 @@ export default function ButtonsAction({
   invalidateKeyData?: QueryKey;
   saveDefaultData: () => void;
 }): JSX.Element {
-  const mutation = useDelete({
+  const mutation = useDeleteRowTable({
     rowId,
     endpoint,
     invalidateKeyData,
