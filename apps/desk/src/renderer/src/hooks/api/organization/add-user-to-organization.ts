@@ -1,3 +1,4 @@
+import { useTranslate } from '@renderer/hooks/useTranslate';
 import { useAppSelector } from '@renderer/store/hooks';
 import { api } from '@renderer/utils/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -21,6 +22,7 @@ export default function useAddUserToOrganization(orgId: string, goBack: () => vo
 
   const queryClient = useQueryClient();
 
+  const { t } = useTranslate();
   return useMutation({
     mutationFn: (params: AddParticipant) =>
       api.post(`/organizations/${orgId}/users`, params, {
@@ -35,8 +37,9 @@ export default function useAddUserToOrganization(orgId: string, goBack: () => vo
           queryKey: ['organizationUsers', orgId],
           exact: true,
         });
-       toast.success('Success Notification !', {
+       toast.success(t('notifications.org.addUser.success'), {
          position: 'top-center',
+          className: '!bg-green-200 custom-toast',
        });
         goBack();
       } catch (error) {
@@ -45,8 +48,9 @@ export default function useAddUserToOrganization(orgId: string, goBack: () => vo
     },
 
     onError: () => {
-      toast.error('Error Notification !', {
+      toast.error(t('notifications.org.addUser.error'), {
         position: 'top-center',
+        className: '!bg-red-200 custom-toast',
       });
     },
   });

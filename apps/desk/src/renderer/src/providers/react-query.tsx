@@ -10,6 +10,7 @@ import {
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { Dispatch } from 'react';
+import { useTranslate } from '@renderer/hooks/useTranslate';
 
 // Define a reusable function for handling Unauthorized errors
 function handleAxiosError(
@@ -18,7 +19,7 @@ function handleAxiosError(
 ) {
   const axiosError = error as AxiosError;
   const data = axiosError.response?.data as any;
-
+  const { t } = useTranslate();
   // Handle Unauthorized error
   if (data && data.statusCode === 401 && data.error === 'Unauthorized') {
     dispatch(resetAuth());
@@ -27,8 +28,9 @@ function handleAxiosError(
 
   // Handle Permissions
   if (data && data.statusCode === 403 && data.message === 'Forbidden') {
-    toast.error('Permissions', {
+    toast.error(t('notifications.permission.error'), {
       position: 'top-center',
+      className : '!bg-red-200 custom-toast'
     });
   }
 }

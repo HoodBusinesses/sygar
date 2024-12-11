@@ -8,6 +8,7 @@ import {
 import { OrganizationsData } from './get-all-organizations';
 import { AxiosResponse } from 'axios';
 import { toast } from 'react-toastify';
+import { useTranslate } from '@renderer/hooks/useTranslate';
 
 export interface UpdateOrganParams {
   orgId: string;
@@ -26,6 +27,7 @@ export default function useUpdateOrg(
 
   const queryClient = useQueryClient();
 
+  const { t } = useTranslate();
   return useMutation({
     mutationFn: ({ orgId, data }: UpdateOrganParams) =>
       api.put(`organizations/${orgId}`, data, {
@@ -40,8 +42,9 @@ export default function useUpdateOrg(
           queryKey: [orgId ? 'organizationData' : 'organizationsData', orgId],
           exact: true,
         });
-        toast.success('Success Notification !', {
+        toast.success(t('notifications.org.edit.success'), {
           position: 'top-center',
+          className: '!bg-green-200 custom-toast',
         });
       } catch (error) {
         console.log(error);
@@ -51,8 +54,9 @@ export default function useUpdateOrg(
     ...options,
 
     onError: (error) => {
-      toast.error('Error Notification !', {
+      toast.error(t('notifications.org.edit.error'), {
         position: 'top-center',
+        className: '!bg-red-200 custom-toast',
       });
     },
   });

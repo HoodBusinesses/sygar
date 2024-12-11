@@ -2,6 +2,7 @@ import { toast } from 'react-toastify';
 import { useAppSelector } from '@renderer/store/hooks';
 import { api } from '@renderer/utils/api';
 import { QueryKey, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslate } from '@renderer/hooks/useTranslate';
 
 export interface DeleteOrganParams {
   cnss: string;
@@ -19,7 +20,7 @@ export default function useDeleteRowTable({
 }: DeleteRowProps) {
   const token = useAppSelector((state) => state.auth.auth.token);
   const queryClient = useQueryClient();
-
+  const { t } = useTranslate();
   return useMutation({
     mutationFn: () =>
       api.delete(endpoint, {
@@ -39,14 +40,16 @@ export default function useDeleteRowTable({
           console.log(error);
         }
       }
-     toast.success('Success Notification !', {
+     toast.success(t('notifications.org.delete.success'), {
        position: 'top-center',
+        className: '!bg-green-200 custom-toast',
      });
     },
 
     onError: () => {
-      toast.error('Error Notification !', {
+      toast.error(t('notifications.org.delete.error'), {
         position: 'top-center',
+        className: '!bg-red-200 custom-toast',
       });
     },
   });

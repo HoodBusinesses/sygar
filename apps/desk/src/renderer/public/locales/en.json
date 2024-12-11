@@ -335,5 +335,88 @@
       "title": "Discard Unsaved Changes?",
       "message": "Any unsaved changes will be lost. Are you sure you want to cancel and discard your edits?"
     }
+  },
+  "notifications": {
+    "permission": {
+      "error": "You don't have permission to access this page"
+    },
+    "theme": {
+      "add": {
+        "success": "Theme added successfully .",
+        "error": "Theme not added successfully ."
+      },
+      "edit": {
+        "success": "Theme edited successfully .",
+        "error": "Theme not edited successfully ."
+      },
+      "delete": {
+        "success": "Theme deleted successfully .",
+        "error": "Theme not deleted successfully ."
+      }
+    },
+    "group": {
+      "add": {
+        "success": "Group added successfully .",
+        "error": "Group not added successfully ."
+      },
+      "edit": {
+        "success": "Group edited successfully .",
+        "error": "Group not edited successfully ."
+      },
+      "delete": {
+        "success": "Group deleted successfully .",
+        "error": "Group not deleted successfully ."
+      }
+    },
+    "participant": {
+      "add": {
+        "success": "Participant added successfully .",
+        "error": "Participant not added successfully ."
+      },
+      "edit": {
+        "success": "Participant edited successfully .",
+        "error": "Participant not edited successfully ."
+      },
+      "delete": {
+        "success": "Participant deleted successfully .",
+        "error": "Participant not deleted successfully ."
+      }
+    },
+    "user": {
+      "add": {
+        "success": "User added successfully .",
+        "error": "User not added successfully ."
+      },
+      "edit": {
+        "success": "User edited successfully .",
+        "error": "User not edited successfully ."
+      },
+      "delete": {
+        "success": "User deleted successfully .",
+        "error": "User not deleted successfully ."
+      }
+    },
+    "org": {
+      "add": {
+        "success": "Organization added successfully .",
+        "error": "Organization not added successfully ."
+      },
+      "edit": {
+        "success": "Organization edited successfully .",
+        "error": "Organization not edited successfully ."
+      },
+      "delete": {
+        "success": "Organization deleted successfully .",
+        "error": "Organization not deleted successfully ."
+      },
+      "addUser": {
+        "success": "User added successfully .",
+        "error": "User not added successfully ."
+      },
+      "editUser": {
+        "success": "User edited successfully .",
+        "error": "User not edited successfully ."
+      }
+    }
   }
 }

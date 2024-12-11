@@ -2,6 +2,7 @@ import { toast } from 'react-toastify';
 import { useAppSelector } from '@renderer/store/hooks';
 import { api } from '@renderer/utils/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslate } from '@renderer/hooks/useTranslate';
 
 type AddParticipant = {
   cnss: string;
@@ -30,6 +31,7 @@ export default function useUpdateUserOfOrganization(
 
   const queryClient = useQueryClient();
 
+  const { t } = useTranslate();
   return useMutation({
     mutationFn: ({ orgId, data }: UpdateParams) =>
       api.put(`organizations/${orgId}/users/${userId}`, data, {
@@ -44,8 +46,9 @@ export default function useUpdateUserOfOrganization(
           queryKey: ['organizationUsers', orgId],
           exact: true,
         });
-        toast.success('Success Notification !', {
+        toast.success(t('notifications.org.editUser.success'), {
           position: 'top-center',
+          className: '!bg-green-200 custom-toast',
         });
         goBack();
       } catch (error) {
@@ -54,8 +57,9 @@ export default function useUpdateUserOfOrganization(
     },
 
     onError: () => {
-      toast.error('Error Notification !', {
+      toast.error(t('notifications.org.editUser.error'), {
         position: 'top-center',
+        className: '!bg-red-200 custom-toast',
       });
     },
   });

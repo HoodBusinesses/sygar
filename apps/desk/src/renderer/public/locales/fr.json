@@ -335,5 +335,88 @@
       "title": "Annuler les modifications non enregistrées ?",
       "message": "Toutes les modifications non enregistrées seront perdues. Êtes-vous sûr de vouloir annuler et supprimer vos modifications ?"
     }
+  },
+  "notifications": {
+    "permission": {
+      "error": "Vous n'avez pas la permission d'accéder à cette page"
+    },
+    "theme": {
+      "add": {
+        "success": "Thème ajouté avec succès.",
+        "error": "Le thème n'a pas été ajouté avec succès."
+      },
+      "edit": {
+        "success": "Thème modifié avec succès.",
+        "error": "Le thème n'a pas été modifié avec succès."
+      },
+      "delete": {
+        "success": "Thème supprimé avec succès.",
+        "error": "Le thème n'a pas été supprimé avec succès."
+      }
+    },
+    "group": {
+      "add": {
+        "success": "Groupe ajouté avec succès.",
+        "error": "Le groupe n'a pas été ajouté avec succès."
+      },
+      "edit": {
+        "success": "Groupe modifié avec succès.",
+        "error": "Le groupe n'a pas été modifié avec succès."
+      },
+      "delete": {
+        "success": "Groupe supprimé avec succès.",
+        "error": "Le groupe n'a pas été supprimé avec succès."
+      }
+    },
+    "participant": {
+      "add": {
+        "success": "Participant ajouté avec succès.",
+        "error": "Le participant n'a pas été ajouté avec succès."
+      },
+      "edit": {
+        "success": "Participant modifié avec succès.",
+        "error": "Le participant n'a pas été modifié avec succès."
+      },
+      "delete": {
+        "success": "Participant supprimé avec succès.",
+        "error": "Le participant n'a pas été supprimé avec succès."
+      }
+    },
+    "user": {
+      "add": {
+        "success": "Utilisateur ajouté avec succès.",
+        "error": "L'utilisateur n'a pas été ajouté avec succès."
+      },
+      "edit": {
+        "success": "Utilisateur modifié avec succès.",
+        "error": "L'utilisateur n'a pas été modifié avec succès."
+      },
+      "delete": {
+        "success": "Utilisateur supprimé avec succès.",
+        "error": "L'utilisateur n'a pas été supprimé avec succès."
+      }
+    },
+    "org": {
+      "add": {
+        "success": "Organisation ajoutée avec succès.",
+        "error": "L'organisation n'a pas été ajoutée avec succès."
+      },
+      "edit": {
+        "success": "Organisation modifiée avec succès.",
+        "error": "L'organisation n'a pas été modifiée avec succès."
+      },
+      "delete": {
+        "success": "Organisation supprimée avec succès.",
+        "error": "L'organisation n'a pas été supprimée avec succès."
+      },
+      "addUser": {
+        "success": "Utilisateur ajouté avec succès.",
+        "error": "L'utilisateur n'a pas été ajouté avec succès."
+      },
+      "editUser": {
+        "success": "Utilisateur modifié avec succès.",
+        "error": "L'utilisateur n'a pas été modifié avec succès."
+      }
+    }
   }
 }
