@@ -1,3 +1,4 @@
+import { useTranslate } from '@renderer/hooks/useTranslate';
 import { useAppSelector } from '@renderer/store/hooks';
 import { api } from '@renderer/utils/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -24,6 +25,8 @@ export default function useUpdateGroup(
 
   const queryClient = useQueryClient();
 
+  const { t } = useTranslate();
+
   return useMutation({
     mutationFn: (params: CreateParams) =>
       api.put(`/group/${params.groupId}`, params.data, {
@@ -37,8 +40,9 @@ export default function useUpdateGroup(
         queryClient.refetchQueries({
           queryKey: ['groupsData', organizationId, themeId],
         });
-        toast.success('Success Notification !', {
+        toast.success(t('notifications.group.edit.success'), {
           position: 'top-center',
+          className: '!bg-green-200 custom-toast',
         });
         goBack();
       } catch (error) {
@@ -47,8 +51,9 @@ export default function useUpdateGroup(
     },
 
     onError: () => {
-      toast.error('Error Notification !', {
+      toast.error(t('notifications.group.edit.error'), {
         position: 'top-center',
+        className: '!bg-red-200 custom-toast',
       });
     },
   });

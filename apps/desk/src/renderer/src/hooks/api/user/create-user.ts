@@ -3,6 +3,7 @@ import { useAppSelector } from '@renderer/store/hooks';
 import { api } from '@renderer/utils/api';
 import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
+import { useTranslate } from '@renderer/hooks/useTranslate';
 
 export interface UserParams {
   cnss: string;
@@ -23,6 +24,7 @@ export default function useCreateSygarUser(
 
   const queryClient = useQueryClient();
 
+  const { t } = useTranslate();
   return useMutation({
     mutationFn: (params: UserParams) =>
       api.post(`user`, params, {
@@ -37,16 +39,19 @@ export default function useCreateSygarUser(
         exact: true,
       });
 
-      toast.success('Success Notification !', {
+      toast.success(t('notifications.user.add.success'), {
         position: 'top-center',
+        className: '!bg-green-200 custom-toast',
       });
     },
     
     ...options,
 
     onError: () => {
-      toast.error('Error Notification !', {
+      toast.error(t('notifications.user.add.error'), {
         position: 'top-center',
+        
+        className: '!bg-red-200 custom-toast',
       });
     },
   });

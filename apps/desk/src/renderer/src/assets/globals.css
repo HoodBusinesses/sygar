@@ -21,6 +21,9 @@ body {
   .red {
     @apply border border-red-500;
   }
+  .custom-toast{
+    @apply  !w-[560px] !h-[55.6px]  !rounded-[8px];
+  }
 }
 
 .react-international-phone-input {

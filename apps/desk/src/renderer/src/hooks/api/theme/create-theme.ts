@@ -7,6 +7,7 @@ import {
 } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { AxiosResponse } from 'axios';
+import { useTranslate } from '@renderer/hooks/useTranslate';
 
 export interface CreateThemeParams {
   price: string;
@@ -23,6 +24,8 @@ export default function useCreateTheme(
 
   const queryClient = useQueryClient();
 
+
+  const { t } = useTranslate();
   return useMutation({
     mutationFn: (params: CreateThemeParams) =>
       api.post('/themes', params, {
@@ -37,8 +40,9 @@ export default function useCreateTheme(
           queryKey: ['themesData', organizationId],
           exact: true,
         });
-        toast.success('Success Notification !', {
+        toast.success(t('notifications.theme.add.success'), {
           position: 'top-center',
+          className : '!bg-green-200 custom-toast'
         });
       } catch (error) {
         console.log(error);
@@ -46,8 +50,9 @@ export default function useCreateTheme(
     },
 
     onError: () => {
-      toast.error('Error Notification !', {
+      toast.error(t('notifications.theme.add.error'), {
         position: 'top-center',
+        className : '!bg-red-200 custom-toast'
       });
     },
   });

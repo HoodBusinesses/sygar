@@ -9,6 +9,7 @@ import { AxiosResponse } from 'axios';
 import { toast } from 'react-toastify';
 import { User } from './me';
 import { setUserData } from '@renderer/store/slices/auth.slice';
+import { useTranslate } from '@renderer/hooks/useTranslate';
 
 export interface UpdateUserParams {
   userId: string;
@@ -29,6 +30,7 @@ export default function useUpdateUser(
 
   const dispatch = useAppDispatch();
 
+  const { t } = useTranslate();
   return useMutation({
     mutationFn: ({ userId, data }: UpdateUserParams) =>
       api.put(`user/${userId}`, data, {
@@ -52,14 +54,14 @@ export default function useUpdateUser(
               // phone: data.phone,
             })
           );
-      toast.success('Success Notification !', {
+      toast.success(t('notifications.user.edit.success'), {
         position: 'top-center',
       });
     },
     ...options,
 
     onError: () => {
-      toast.error('Error Notification !', {
+      toast.error(t('notifications.user.edit.error'), {
         position: 'top-center',
       });
     },

@@ -1,3 +1,4 @@
+import { useTranslate } from '@renderer/hooks/useTranslate';
 import { useAppSelector } from '@renderer/store/hooks';
 import { api } from '@renderer/utils/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -28,6 +29,7 @@ export default function useCreateOrg(resetForm: () => void) {
 
   const queryClient = useQueryClient();
 
+  const { t } = useTranslate();
   return useMutation({
     mutationFn: (params: CreateOrganParams) =>
       api.post('/organizations', params, {
@@ -39,8 +41,9 @@ export default function useCreateOrg(resetForm: () => void) {
     onSuccess: () => {
       try {
         resetForm();
-        toast.success('Success Notification !', {
+        toast.success(t('notifications.org.add.success'), {
           position: 'top-center',
+          className: '!bg-green-200 custom-toast',
         });
         queryClient.refetchQueries({
           queryKey: ['organizationsData'],
@@ -52,8 +55,9 @@ export default function useCreateOrg(resetForm: () => void) {
     },
 
     onError: () => {
-      toast.error('Error Notification !', {
+      toast.error(t('notifications.org.add.error'), {
         position: 'top-center',
+        className: '!bg-red-200 custom-toast',
       });
     },
   });

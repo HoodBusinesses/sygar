@@ -8,6 +8,7 @@ import {
 import { AxiosResponse } from 'axios';
 import { CreateThemeParams } from './create-theme';
 import { toast } from 'react-toastify';
+import { useTranslate } from '@renderer/hooks/useTranslate';
 
 export interface UpdateThemeParams {
   uid: string;
@@ -22,6 +23,7 @@ export default function useUpdateTheme(
 
   const queryClient = useQueryClient();
 
+  const { t } = useTranslate();
   return useMutation({
     mutationFn: (params: UpdateThemeParams) =>
       api.put(`themes/${params.uid}`, params.data, {
@@ -35,8 +37,9 @@ export default function useUpdateTheme(
           queryKey: ['themesData', organizationId],
         });
        //TODO: add toast notification messages HAMZA amur
-       toast.success('Theme updated !', {
+       toast.success(t('notifications.theme.edit.success'), {
          position: 'top-center',
+         className : '!bg-green-200 custom-toast'
        });
       } catch (error) {
         console.log(error);
@@ -46,8 +49,10 @@ export default function useUpdateTheme(
     ...options,
 
     onError: () => {
-      toast.error('Error Notification !', {
+      toast.error(t('notifications.theme.edit.error'), {
         position: 'top-center',
+        className : '!bg-red-200 custom-toast'
+
       });
     },
   });
