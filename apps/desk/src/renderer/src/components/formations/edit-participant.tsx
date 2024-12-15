@@ -9,13 +9,14 @@ import useHandelEditParticipant from '@renderer/hooks/editForms/useHandleEditPar
 import { Participant } from './participants-columns';
 
 interface EditParticipantProps {
+  orgId: string;
+  groupId: string;
   crud: string;
   defaultValues: Participant | null;
   goBack: () => void;
-
 }
 
-const EditParticipant = ({ crud, defaultValues, goBack }: EditParticipantProps): JSX.Element => {
+const EditParticipant = ({ crud, defaultValues, goBack, orgId, groupId }: EditParticipantProps): JSX.Element => {
   const { t } = useTranslate();
 
   const {
@@ -24,7 +25,7 @@ const EditParticipant = ({ crud, defaultValues, goBack }: EditParticipantProps):
     methods,
     handleSubmit,
     handleUnsavedChange,
-  } = useHandelEditParticipant(defaultValues, crud)
+  } = useHandelEditParticipant(orgId, groupId, defaultValues, crud, goBack);
 
   return (
     <div className="p-4 w-full py-6 space-y-6">
@@ -83,6 +84,7 @@ const EditParticipant = ({ crud, defaultValues, goBack }: EditParticipantProps):
               console.log('first redir');
               goBack();
             }}
+            onOpenChange={setOpenUnsavedChange}
             KeepEditFn={setOpenUnsavedChange.bind(null, false)}
           />
         </Card>

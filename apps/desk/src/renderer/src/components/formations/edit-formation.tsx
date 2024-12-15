@@ -84,6 +84,7 @@ const EditFormation = ({
 
           <UnsavedChangeEdit
             open={openUnsavedChange}
+            onOpenChange={setOpenUnsavedChange}
             ConfermFn={goBack}
             KeepEditFn={setOpenUnsavedChange.bind(null, false)}
           />

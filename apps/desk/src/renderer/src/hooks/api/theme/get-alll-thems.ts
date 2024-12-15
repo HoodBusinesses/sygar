@@ -12,16 +12,19 @@ export type ThemesData = {
   updatedAt: string;
 };
 
-export const useGetAllThemes = (organizationId: string) => {
+export const useGetAllThemes = (organizationId: string, search?: string) => {
   const token = useAppSelector((state) => state.auth.auth.token);
-  const { data, isLoading, isError, error, isSuccess, refetch } = useQuery({
+  const { data, isLoading, isError, error,isFetching, isSuccess, refetch } = useQuery({
     queryKey: ['themesData', organizationId],
     queryFn: () =>
-      api.get(`/themes?organizationId=${organizationId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }),
+      api.get(
+        `/themes?organizationId=${organizationId}${search ? '&search=' + search : ''}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      ),
   });
 
   return {
@@ -30,6 +33,7 @@ export const useGetAllThemes = (organizationId: string) => {
     isError,
     error,
     isSuccess,
+    isFetching,
     refetch,
   };
 };

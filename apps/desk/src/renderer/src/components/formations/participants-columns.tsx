@@ -15,6 +15,8 @@ export interface Participant {
 }
 
 export const participantColumns = (
+  orgId: string,
+  groupId: string,
   setRowData: (rowData: Participant) => void
 ): ColumnDef<Participant>[] => [
   {
@@ -94,7 +96,8 @@ export const participantColumns = (
     header: 'themesTable.options',
     cell: ({ row }) => (
       <ButtonsAction
-        endpoint="/participant/delete"
+        invalidateKeyData={['participantsData', orgId, groupId]}
+        endpoint={`group-participants/${row.original.id}?organizationId=${orgId}`}
         saveDefaultData={setRowData.bind(null, row.original)}
         rowId={row.original.id}
         subscription={false}

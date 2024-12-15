@@ -7,6 +7,7 @@ export type FieldsInput = {
   isSelect?: boolean;
   required?: boolean;
   options?: { value: string; label: string }[];
+  onlyAdd?: boolean;
 };
 
 export const participantFields: FieldsInput[] = [
@@ -132,6 +133,7 @@ export const usersFields: FieldsInput[] = [
     name: 'userCnss',
     value: 'userCnss',
     required: true,
+    onlyAdd: true,
   },
   {
     label: 'user.fields.identityType.label',
@@ -144,6 +146,7 @@ export const usersFields: FieldsInput[] = [
       { value: 'PASSPORT', label: 'PASSPORT' },
     ],
     required: true,
+    onlyAdd: true,
   },
   {
     label: 'user.fields.identity.label',
@@ -151,6 +154,7 @@ export const usersFields: FieldsInput[] = [
     name: 'identity',
     value: 'identity',
     required: true,
+    onlyAdd: true,
   },
   {
     // role
@@ -159,6 +163,7 @@ export const usersFields: FieldsInput[] = [
     name: 'role',
     value: 'role',
     isSelect: true,
+    onlyAdd: true,
     options: [
       { value: 'Admin', label: 'Admin' },
       { value: 'User', label: 'User' },

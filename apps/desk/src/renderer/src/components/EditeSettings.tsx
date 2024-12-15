@@ -18,13 +18,13 @@ export default function EditeSettings({ data }: { data: OrganizationsData }) {
       <h1 className="text-2xl font-semibold text-gray-950">
         {t('registration.EditOrganization')}{' '}
         <span className="text-sm rounded-sm text-green-600 bg-green-100">
-          {t('registration.title')}
+          {t('registration.MembersInfos')}
         </span>
       </h1>
       <form onSubmit={methods.handleSubmit(handleSubmit)} className="space-y-6">
         <Card className="flex flex-col gap-4 ">
           <CardContent className="pt-4">
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 gap-4">
               {registrationFields.map((field) => (
                 <FormInputItem
                   key={field.name}

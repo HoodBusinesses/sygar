@@ -1,17 +1,19 @@
 import { useTranslate } from '@renderer/hooks/useTranslate';
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import { Components, CustomTable } from './custom-table';
 import { Users, usersColumns } from './formations/users-columns';
 import EditUsers from './formations/edit-users';
 import { useAppSelector } from '@renderer/store/hooks';
 
-
 export interface UsersProps {
-  orgId:string;
+  orgId: string;
   data: Users[];
+  isReFetching: boolean;
+  setSearch: Dispatch<SetStateAction<string>>;
+  search: string;
 }
 
-export default function UsersTable({ data, orgId }: UsersProps) {
+export default function UsersTable({ data, orgId, setSearch, isReFetching, search }: UsersProps) {
   const [component, setComponent] = useState<Components>('table');
 
   const [defaultValue, setdefaultValue] = useState<Users | null>(null);
@@ -23,6 +25,9 @@ export default function UsersTable({ data, orgId }: UsersProps) {
   return (
     <div dir={isRtl ? 'rtl' : 'ltr'} className="h-full w-full p-6 space-y-6">
       <CustomTable
+        setSearch={setSearch}
+        search={search}
+        isReFetching={isReFetching}
         component={component}
         setComponent={setComponent}
         headTitle="themesTable.users"
@@ -30,7 +35,18 @@ export default function UsersTable({ data, orgId }: UsersProps) {
           setdefaultValue(rowData);
           setComponent('edit');
         })}
-        data={data}
+        data={data.map(user => ({
+          id: user.id,
+          role: user.role,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          phone: user.phone,
+          userCnss: user.userCnss,
+          identityType: user.identityType,
+          identity: user.identity,
+          organizationId: user.organizationId
+        }))}
         EditAndAddRowComponent={
           <EditUsers
             orgId={orgId}

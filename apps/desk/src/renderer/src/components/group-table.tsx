@@ -1,5 +1,5 @@
 import { groupsData } from '@renderer/hooks/api/group/get-all';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { Components, CustomTable } from './custom-table';
 import EditGroup from './formations/edit-group';
 import { useTranslate } from '@renderer/hooks/useTranslate';
@@ -10,10 +10,16 @@ export default function GroupTable({
   data,
   themeId,
   organizationId,
+  setSearch,
+  isReFetching,
+  search,
 }: {
   data: groupsData[];
   themeId: string;
   organizationId: string;
+  setSearch: Dispatch<SetStateAction<string>>;
+  isReFetching: boolean;
+  search: string;
 }) {
   const { isRtl } = useTranslate();
   const navigate = useNavigate();
@@ -24,6 +30,9 @@ export default function GroupTable({
     <div dir={isRtl ? 'rtl' : 'ltr'} className="h-full w-full p-6 space-y-6">
       <CustomTable
         component={component}
+        setSearch={setSearch}
+        search={search}
+        isReFetching={isReFetching}
         EditAndAddRowComponent={
           <EditGroup
             crud={component}
@@ -36,7 +45,7 @@ export default function GroupTable({
         setComponent={setComponent}
         headTitle="group.group"
         columns={groupColumn(
-          () => navigate({ to: '/participant-listing' as string }),
+          (organizationId: string, groupId: string) => navigate({ to: `/participant-listing?organizationId=${organizationId}&groupId=${groupId}` as string }),
           organizationId,
           themeId,
           (rowData: Group) => {

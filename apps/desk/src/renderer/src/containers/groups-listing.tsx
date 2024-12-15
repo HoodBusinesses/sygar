@@ -1,8 +1,8 @@
 import GroupTable from '@renderer/components/group-table';
 import withAuth from '@renderer/hoc/with-auth';
 import { useGetAllGroups } from '@renderer/hooks/api/group/get-all';
-import React from 'react';
-import { Loading } from './laoding';
+import React, { useEffect, useState } from 'react';
+import { useDebounce } from '@renderer/hooks/useDebounce';
 
 const GroupListing: React.FC = () => {
   const url = new URLSearchParams(window.location.search);
@@ -11,14 +11,21 @@ const GroupListing: React.FC = () => {
 
   const organizationId = url.get('organizationId');
 
-  const { data, isLoading, isError, isSuccess } = useGetAllGroups(
+  const [search, setSearch] = useState('');
+
+  const { data, isLoading, isError,refetch, isFetching, isSuccess } = useGetAllGroups(
     themId || '',
     organizationId || '',
+    search === '' ? undefined : search
   );
 
-  if (isLoading) {
-    return <Loading />;
-  }
+  const debouncedSearch = useDebounce(search, 800);
+
+  useEffect(() => {
+    if (search !== '' || isSuccess) {
+      refetch();
+    }
+  }, [debouncedSearch, refetch]);
 
   if (isError) {
     return (
@@ -28,7 +35,14 @@ const GroupListing: React.FC = () => {
 
   if (isSuccess) {
     return (
-     <GroupTable data={data} themeId={themId || ''} organizationId={organizationId || ''} />
+      <GroupTable
+        data={data || []}
+        setSearch={setSearch}
+        isReFetching={isFetching || isLoading}
+        search={search}
+        themeId={themId || ''}
+        organizationId={organizationId || ''}
+      />
     );
   }
 };

@@ -1,40 +1,44 @@
-import { mockParticipant } from '@renderer/utils/static/organizations';
-import { useTranslate } from '@renderer/hooks/useTranslate';
+import ParticipantsTable from '@renderer/components/participants-table';
 import withAuth from '@renderer/hoc/with-auth';
-import { Components, CustomTable } from '@renderer/components/custom-table';
-import { Participant, participantColumns } from '@renderer/components/formations/participants-columns';
-import { useState } from 'react';
-import EditParticipant from '@renderer/components/formations/edit-participant';
+import { useGetAllParticipants } from '@renderer/hooks/api/participant/get-all-participants';
+import { useDebounce } from '@renderer/hooks/useDebounce';
+import { useEffect, useState } from 'react';
 
 const ParticipantsListing: React.FC = () => {
-  const { isRtl } = useTranslate();
+  const url = new URLSearchParams(window.location.search);
 
-  const [component, setComponent] = useState<Components>('table');
+  const groupId = url.get('groupId');
 
-  const [defaultValue, setdefaultValue] = useState<Participant | null>(null);
+  const organizationId = url.get('organizationId');
 
+  const [search, setSearch] = useState('');
+
+  const { data, isLoading, isSuccess, isFetching, isError, refetch } =
+    useGetAllParticipants(groupId || '', organizationId || '', search);
+
+  const debouncedSearch = useDebounce(search, 800);
+
+  useEffect(() => {
+    if (search !== '' || isSuccess) {
+      refetch();
+    }
+  }, [debouncedSearch, refetch]);
+
+  if (isError) {
+    return (
+      <div className="text-red-500 p-4">Error loading organization data</div>
+    );
+  }
 
   return (
-    <div
-      dir={isRtl ? 'rtl' : 'ltr'}
-      className="h-full bg-white w-full p-6 space-y-6"
-    >
-        <CustomTable
-          component={component}
-          EditAndAddRowComponent={
-            <EditParticipant crud={component} defaultValues={defaultValue} goBack={() => setComponent('table')} />
-          }
-          setComponent={setComponent}
-          headTitle="participant.participant"
-          columns={participantColumns(
-            (rowData: Participant) => {
-              setdefaultValue(rowData);
-              setComponent('edit');
-            }
-          )}
-          data={mockParticipant}
-        />
-    </div>
+    <ParticipantsTable
+      groupId={groupId || ''}
+      data={data || []}
+      orgId={organizationId || ''}
+      setSearch={setSearch}
+      isReFetching={isFetching || isLoading}
+      search={search}
+    />
   );
 };
 

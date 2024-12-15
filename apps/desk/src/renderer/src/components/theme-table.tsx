@@ -7,9 +7,21 @@ import {
 import { ThemesData } from '@renderer/hooks/api/theme/get-alll-thems';
 import { useTranslate } from '@renderer/hooks/useTranslate';
 import { useNavigate } from '@tanstack/react-router';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 
-export default function ThemeTable({ data, orgId }: { data: ThemesData[], orgId: string }) {
+export default function ThemeTable({
+  data,
+  orgId,
+  setSearch,
+  isReFetching,
+  search,
+}: {
+  data: ThemesData[];
+  orgId: string;
+  isReFetching: boolean;
+  setSearch: Dispatch<SetStateAction<string>>;
+  search: string;
+}) {
   const navigate = useNavigate();
   const { isRtl } = useTranslate();
   const [component, setComponent] = useState<Components>('table');
@@ -19,6 +31,9 @@ export default function ThemeTable({ data, orgId }: { data: ThemesData[], orgId:
     <div dir={isRtl ? 'rtl' : 'ltr'} className="h-full w-full p-6 space-y-6">
       <CustomTable
         component={component}
+        setSearch={setSearch}
+        search={search}
+        isReFetching={isReFetching}
         EditAndAddRowComponent={
           <EditFormation
             crud={component}

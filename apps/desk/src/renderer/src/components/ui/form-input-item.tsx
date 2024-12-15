@@ -40,11 +40,11 @@ export default function FormInputItem({
         {t(label)} {required && <span className="text-red-500">*</span>}
       </p>
       {isLogoInput ? (
-        <div className="flex flex-col items-center justify-center border border-dashed rounded-md p-4 h-10 cursor-pointer hover:bg-gray-50 w-3/4">
+        <div className="flex flex-col bg-gray-100 text-gray-950 items-center justify-center border border-dashed rounded-md p-4 h-10 cursor-pointer hover:bg-gray-500 w-3/4">
           <input type="file" {...register} className="hidden" id="logo" />
           <label
             htmlFor="logo"
-            className="text-sm text-gray-500 cursor-pointer"
+            className="text-sm cursor-pointer"
           >
             {t('registration.basicInfo.fields.logo.placeholder')}
           </label>

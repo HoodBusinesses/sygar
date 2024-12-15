@@ -10,7 +10,7 @@ import {
   SortingState,
   useReactTable,
 } from '@tanstack/react-table';
-import React, { ReactNode, useState } from 'react';
+import React, { Dispatch, ReactNode, SetStateAction, useState } from 'react';
 import ListingHeader from './ListingHeader';
 import Pagination from './Pagination';
 import { cn } from './ui/lib/utils';
@@ -23,6 +23,7 @@ import {
   TableRow,
 } from './ui/table';
 import { FaPlus } from 'react-icons/fa';
+import { CgSpinner } from 'react-icons/cg';
 export type Components = 'add' | 'edit' | 'table';
 
 interface DataTableProps<TData, TValue> {
@@ -32,6 +33,9 @@ interface DataTableProps<TData, TValue> {
   component: Components;
   setComponent: React.Dispatch<React.SetStateAction<Components>>;
   EditAndAddRowComponent: ReactNode;
+  setSearch: Dispatch<SetStateAction<string>>;
+  search: string;
+  isReFetching: boolean;
 }
 
 export function CustomTable<TData, TValue>({
@@ -41,14 +45,15 @@ export function CustomTable<TData, TValue>({
   component,
   setComponent,
   EditAndAddRowComponent,
+  isReFetching,
+  setSearch,
+  search,
 }: DataTableProps<TData, TValue>): JSX.Element {
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const [rowSelection, setRowSelection] = useState({});
-
-  const [globalFilter, setGlobalFilter] = useState('');
 
   const table = useReactTable({
     data,
@@ -60,12 +65,10 @@ export function CustomTable<TData, TValue>({
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onRowSelectionChange: setRowSelection,
-    onGlobalFilterChange: setGlobalFilter,
     state: {
       sorting,
       columnFilters,
       rowSelection,
-      globalFilter,
     },
   });
 
@@ -82,7 +85,7 @@ export function CustomTable<TData, TValue>({
         <ListingHeader
           headTitle={headTitle}
           goAdd={() => setComponent('add')}
-          onSearchChange={(e) => table.setGlobalFilter(e.target.value)}
+          onSearchChange={(e) => setSearch(e.target.value)}
         />
       </div>
 
@@ -123,7 +126,15 @@ export function CustomTable<TData, TValue>({
           ))}
         </TableHeader>
         <TableBody>
-          {table.getRowModel().rows?.length ? (
+          {isReFetching ? (
+            <TableRow>
+              <TableCell colSpan={columns.length}>
+                <div className="flex justify-center items-center w-full h-32">
+                  <CgSpinner className="animate-spin text-blue-600" size={60} />
+                </div>
+              </TableCell>
+            </TableRow>
+          ) : table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow
                 className={cn(
@@ -149,6 +160,32 @@ export function CustomTable<TData, TValue>({
                 ))}
               </TableRow>
             ))
+          ) : search !== '' ? (
+            <TableRow>
+              <TableCell colSpan={columns.length} className="h-24 text-center">
+                {/* No Data Illustration */}
+                <div className="flex flex-col items-center w-full mt-20">
+                  <div className="bg-gray-200 rounded-full p-8 mb-6">
+                    {/* Placeholder SVG Icon */}
+                    <svg
+                      width="64"
+                      height="64"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      className="text-gray-400"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M19 8h-1V6c0-1.1-.9-2-2-2h-2.02c-.46-1.28-1.65-2-2.98-2s-2.52.72-2.98 2H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-5-1H10c0-.55.45-1 1-1s1 .45 1 1zM6 6h2v2H6V6zm0 4h12v2H6v-2zm0 4h12v2H6v-2zm0 4h12v2H6v-2z"
+                      />
+                    </svg>
+                  </div>
+                  <h2 className="text-lg font-semibold mb-2">
+                    {`No results found for "${search}"`}
+                  </h2>
+                </div>
+              </TableCell>
+            </TableRow>
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">

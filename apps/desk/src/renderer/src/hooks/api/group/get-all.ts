@@ -12,16 +12,19 @@ export type groupsData = {
 };
 
 //TODO: use api Library to get the organizations data
-export const useGetAllGroups = (themeId: string, organizationId: string) => {
+export const useGetAllGroups = (themeId: string, organizationId: string, search?: string) => {
   const token = useAppSelector((state) => state.auth.auth.token);
-  const { data, isLoading, isError, error, isSuccess, refetch } = useQuery({
+  const { data, isLoading, isError, error,isFetching, isSuccess, refetch } = useQuery({
     queryKey: ['groupsData', organizationId, themeId], //TODO: add themeId and organizationId
     queryFn: () =>
-      api.get(`group?organizationId=${organizationId}&themeId=${themeId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }),
+      api.get(
+        `group?organizationId=${organizationId}&themeId=${themeId}${search ? '&search=' + search : ''}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      ),
   });
 
   return {
@@ -31,5 +34,6 @@ export const useGetAllGroups = (themeId: string, organizationId: string) => {
     error,
     isSuccess,
     refetch,
+    isFetching,
   };
 };

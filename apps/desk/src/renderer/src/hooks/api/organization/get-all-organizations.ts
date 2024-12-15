@@ -13,12 +13,12 @@ export type OrganizationsData = {
 };
 
 //TODO: use api Library to get the organizations data
-export const useGetAllOrganizations = () => {
+export const useGetAllOrganizations = (search?: string) => {
   const token = useAppSelector((state) => state.auth.auth.token);
-  const { data, isLoading, isError, error, isSuccess, refetch } = useQuery({
+  const { data, isLoading, isError,isFetching, error, isSuccess, refetch } = useQuery({
     queryKey: ['organizationsData'],
     queryFn: () =>
-      api.get('organizations', {
+      api.get(`organizations${search ? '?search=' + search : ''}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -26,11 +26,14 @@ export const useGetAllOrganizations = () => {
   });
 
   return {
-    data: data?.data.organizations as OrganizationsData[],
+    data: search && search !== ''
+      ? ((data?.data ?? []) as OrganizationsData[])
+      : (data?.data.organizations as OrganizationsData[]),
     isLoading,
     isError,
     error,
     isSuccess,
+    isFetching,
     refetch,
   };
 };

@@ -30,7 +30,7 @@ export const participantSchema = z.object({
   email: z.string().email('Invalid email address'),
   cin: z.string().min(1, 'CIN is required'),
   cnss: z.string().min(1, 'CNSS is required'),
-  status: z.enum(['CTO', 'CEO'], {
+  status: z.enum(['Employer'], {
     required_error: 'Status is required',
   }),
 });

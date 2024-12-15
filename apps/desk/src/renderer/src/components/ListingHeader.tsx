@@ -21,6 +21,7 @@ const ListingHeader = ({
 }: ListingHeaderProps): JSX.Element => {
   const { t } = useTranslate();
   const router = useRouter();
+
   return (
     <div className="flex flex-col gap-6 w-full">
       <div className="flex items-center gap-3">
@@ -55,4 +56,4 @@ const ListingHeader = ({
   );
 };
 
-export default ListingHeader
+export default ListingHeader;
