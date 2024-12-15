@@ -169,4 +169,11 @@ export const profileFields: OrganizationFieldsInput[] = [
     value: 'email',
     required: true,
   },
+  {
+    label: 'user.fields.phone.label',
+    placeholder: 'user.fields.phone.placeholder',
+    name: 'phone',
+    value: 'phone',
+    required: true,
+  },
 ];

@@ -86,6 +86,12 @@ export const profileSchema = z
       .string()
       .email({ message: 'Invalid email address.' })
       .min(1, { message: 'Email is required.' }),
+    phone: z.string().refine(
+      (v: string) => {
+        return phone(v).isValid;
+      },
+      { message: 'Invalid phone number' }
+    ),
     // currentPassword: z
     //   .string()
     //   .min(6, { message: 'Current password must be at least 6 characters.' }),
@@ -96,15 +102,15 @@ export const profileSchema = z
     //   .string()
     //   .min(6, { message: 'Confirm password must be at least 6 characters.' }),
   })
-  // .refine(
-  //   (values) => {
-  //     return values.newPassword === values.confirmPassword;
-  //   },
-  //   {
-  //     message: 'Passwords must match!',
-  //     path: ['confirmPassword'],
-  //   }
-  // );
+// .refine(
+//   (values) => {
+//     return values.newPassword === values.confirmPassword;
+//   },
+//   {
+//     message: 'Passwords must match!',
+//     path: ['confirmPassword'],
+//   }
+// );
 
 export type OrganizationFormData = z.infer<typeof organizationSchema>;
 export type MemberFormData = z.infer<typeof memberSchema>;

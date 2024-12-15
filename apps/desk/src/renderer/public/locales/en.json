@@ -74,6 +74,10 @@
         "trainingManagerName": {
           "label": "Training Manager Name",
           "placeholder": "Enter the name of training manager"
+        },
+        "profileImage": {
+          "label": "Profile Image",
+          "placeholder": "Upload the profile image"
         }
       },
       "required": "Required field"
@@ -242,7 +246,7 @@
     }
   },
   "editProfile": {
-    "updateProfile": "Update your personal information",
+    "updateProfile": "Update your profile",
     "changePhoto": "Change your photo",
     "personalInfo": "Personal Information",
     "firstName": {

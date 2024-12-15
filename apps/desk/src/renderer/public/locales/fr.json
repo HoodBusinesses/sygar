@@ -74,6 +74,10 @@
         "trainingManagerName": {
           "label": "Nom du responsable de la formation",
           "placeholder": "Entrez le nom du responsable de la formation"
+        },
+        "profileImage": {
+          "label": "Image de profil",
+          "placeholder": "Téléchargez l'image de profil"
         }
       },
       "required": "Champ requis"
@@ -242,7 +246,7 @@
     }
   },
   "editProfile": {
-    "updateProfile": "Mettez à jour vos informations personnelles",
+    "updateProfile": "Mettez à jour votre profil",
     "changePhoto": "Changez votre photo",
     "personalInfo": "Informations personnelles",
     "firstName": {

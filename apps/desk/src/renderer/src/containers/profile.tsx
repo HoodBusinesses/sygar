@@ -3,7 +3,7 @@ import { useGetMe } from '@renderer/hooks/api/user/me';
 import { Loading } from './laoding';
 
 const ProfilePage = (): JSX.Element => {
-  const { data, isLoading, isError, error, isSuccess } = useGetMe();
+  const { data, isLoading, isError } = useGetMe();
 
   if (isLoading) {
     return <Loading />;
@@ -15,11 +15,7 @@ const ProfilePage = (): JSX.Element => {
     );
   }
 
-  return (
-    <div className="flex border items-center justify-center bg-white w-full">
-      <EditProfile data={data} />
-    </div>
-  );
+  return <EditProfile data={data} />;
 };
 
 export default ProfilePage;

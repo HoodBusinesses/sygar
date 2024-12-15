@@ -74,6 +74,10 @@
         "trainingManagerName": {
           "label": "اسم مدير التدريب",
           "placeholder": "أدخل اسم مدير التدريب"
+        },
+        "profileImage": {
+          "label": "صورة الملف الشخصي",
+          "placeholder": "قم بتحميل صورة الملف الشخصي"
         }
       },
       "required": "حقل مطلوب"
@@ -242,7 +246,7 @@
     }
   },
   "editProfile": {
-    "updateProfile": "تحديث معلوماتك الشخصية",
+    "updateProfile": "تحديث الملف الشخصي",
     "changePhoto": "تغيير صورتك",
     "personalInfo": "المعلومات الشخصية",
     "firstName": {
