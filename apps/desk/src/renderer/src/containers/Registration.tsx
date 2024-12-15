@@ -32,9 +32,12 @@ const Registration: React.FC = () => {
           {t('registration.title')}
         </span>
       </h1>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <Card className="flex flex-col gap-4 ">
-          <CardHeader className="text-sm rounded-sm font-bold  py-2 px-1 w-fit">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="space-y-6 justify-center flex flex-col"
+      >
+        <Card className="flex flex-col gap-4 p-2">
+          <CardHeader className="text-sm rounded-sm font-bold  py-2 w-fit">
             {t('registration.MembersInfos')}
           </CardHeader>
           <CardContent className="">
@@ -54,8 +57,9 @@ const Registration: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        <Card className="flex flex-col  gap-4">
-          <CardHeader className="text-sm rounded-sm font-bold py-2 px-1 w-fit">
+
+        <Card className="flex flex-col p-2 gap-4">
+          <CardHeader className="text-sm rounded-sm font-bold py-2 w-fit">
             {t('registration.ownerInfo')}
           </CardHeader>
           <CardContent>
@@ -111,7 +115,7 @@ const Registration: React.FC = () => {
         </Card>
         <Button
           type="submit"
-          className="custom-button bg-blue-600"
+          className="custom-button bg-blue-600 w-1/4 self-center"
           disabled={isPending}
         >
           {isPending ? <FaSpinner className="" /> : t('buttons.save')}

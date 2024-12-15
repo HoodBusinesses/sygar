@@ -25,6 +25,7 @@ export class AddGroupParticipantDto {
 	@IsEmail()
 	email!: string;
 
+	@IsString()
 	phone!: string;
 
 	@IsEnum(ParticipantStatus)

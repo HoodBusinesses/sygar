@@ -10,17 +10,20 @@ import useUpdateOrg from './api/organization/update-org';
 
 export default function useRegistrations(data: OrganizationsData) {
   const orgId = useAppSelector((state) => state.auth.auth.organizationId);
+  
   const defaultValues = {
     rs: data.name,
     cnss: data.cnss,
     address: data.address,
     ice: data.ice,
   };
+
   const methods = useForm<OrganizationFormData>({
     resolver: zodResolver(organizationSchema),
   });
 
   const updateMutation = useUpdateOrg();
+
   const handleSubmit = (data: OrganizationFormData) => {
      if (defaultValues) {
        updateMutation.mutate({

@@ -10,6 +10,7 @@ import UnsavedChangeEdit from '../unsaved-change-edit';
 import MainSelect from '../ui/main-select';
 import { Users } from './users-columns';
 import PhoneInputItem from '../ui/phone-input-item';
+import { FaSpinner } from 'react-icons/fa6';
 
 interface EditUserProps {
   crud: string;
@@ -31,6 +32,7 @@ const EditUsers = ({
     control,
     register,
     formState,
+    isPending,
     formValues,
     handleSubmit,
     handleUnsavedChange,
@@ -46,7 +48,9 @@ const EditUsers = ({
           </CardHeader>
           <CardContent className="">
             <div className="grid grid-cols-3 gap-4 mb-6">
-              {usersFields.map((field) =>
+              {usersFields
+              // .filter((field) => (crud === 'edit' && !field.onlyAdd) || crud === 'add')
+              .map((field) =>
                 field.name === 'phone' ? (
                   <Controller
                     key={field.name}
@@ -115,13 +119,15 @@ const EditUsers = ({
             <Button
               type="submit"
               className="w-full h-12 bg-blue-500 text-white"
+              disabled={isPending}
             >
-              {t('buttons.save')}
+              { isPending ? <FaSpinner className="" /> : t('buttons.save')}
             </Button>
           </div>
 
           <UnsavedChangeEdit
             open={openUnsavedChange}
+            onOpenChange={setOpenUnsavedChange}
             KeepEditFn={setOpenUnsavedChange.bind(null, false)}
             ConfermFn={goBack}
           />

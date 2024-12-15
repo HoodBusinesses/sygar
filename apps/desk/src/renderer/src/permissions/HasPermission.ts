@@ -8,23 +8,21 @@ export const hasPermission = (
   return {
     // only SOLUTION_OWNER admin and owner can access registration
     canAccessRegistration: () => ({
-      canRead:
-        isAccountActivated && userProfile === 'SOLUTION_OWNER',
-      canCUD:
-        isAccountActivated &&
-        userProfile === 'SOLUTION_OWNER'
+      canRead: isAccountActivated && userProfile === 'SOLUTION_OWNER',
+      canCUD: isAccountActivated && userProfile === 'SOLUTION_OWNER',
     }),
 
     // only SOLUTION_OWNER admin and owner can access organizations list
     AccessOrganizations: () => {
       return {
-        canRead: isAccountActivated ,
+        canRead: isAccountActivated && userProfile === 'SOLUTION_OWNER',
         canCUD: isAccountActivated && userProfile === 'SOLUTION_OWNER',
       };
     },
 
     // only  Activated  Account
-    canAccessSettings: () => isAccountActivated && userProfile === 'ORGANIZATION_USER',
+    canAccessSettings: () =>
+      isAccountActivated && userProfile === 'ORGANIZATION_USER',
 
     // only  Activated  Account can read .  only ORGANIZATION adimn and owner can CUD
     AccessThemes: () => {

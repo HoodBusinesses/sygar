@@ -1,30 +1,22 @@
-import {
-  Columns,
-  Organization,
-} from '@renderer/components/organization/Organization-columns';
-import { Components, CustomTable } from '@renderer/components/custom-table';
+import OrgTable from '@renderer/components/org-table';
 import withAuth from '@renderer/hoc/with-auth';
-import { useTranslate } from '@renderer/hooks/useTranslate';
 import { useGetAllOrganizations } from '@renderer/hooks/api/organization/get-all-organizations';
-import { useState } from 'react';
-import { OrganizationBasicInfo } from '@renderer/components/organization/OrganizationBasicInfo';
-import { useNavigate } from '@tanstack/react-router';
-import { Loading } from './laoding';
+import { useDebounce } from '@renderer/hooks/useDebounce';
+import { useEffect, useState } from 'react';
 
 const OrganizationsPage: React.FC = (): JSX.Element => {
-  const { isRtl } = useTranslate();
+  const [search, setSearch] = useState('');
 
-  const { data, isSuccess, isLoading, isError } = useGetAllOrganizations();
+  const { data, isSuccess, isLoading, isFetching, isError, refetch } =
+    useGetAllOrganizations(search === '' ? undefined : search);
+  
+  const debouncedSearch = useDebounce(search, 800);
 
-  const [component, setComponent] = useState<Components>('table');
-
-  const [defaultValue, setdefaultValue] = useState<Organization | null>(null);
-
-  const navigate = useNavigate();
-
-  if (isLoading) {
-    return <Loading />;
-  }
+  useEffect(() => {
+    if (search !== '' || isSuccess) {
+      refetch();
+    }
+  }, [debouncedSearch, refetch]);
 
   if (isError) {
     return (
@@ -32,44 +24,14 @@ const OrganizationsPage: React.FC = (): JSX.Element => {
     );
   }
 
-  if (isSuccess) {
-    return (
-      <div dir={isRtl ? 'rtl' : 'ltr'} className="h-full w-full p-6 gap-y-">
-        {/* Organization Table Component */}
-        <CustomTable
-          headTitle={'organization.organizations'}
-          columns={Columns(
-            (orgId: string) =>
-              navigate({ to: `/users-listing?orgId=${orgId}` as string }),
-            (orgId: string) =>
-              navigate({ to: `/themes-listing?orgId=${orgId}` as string }),
-            (rowData: Organization) => {
-              setdefaultValue(rowData);
-              setComponent('edit');
-            }
-          )}
-          component={component}
-          setComponent={setComponent}
-          EditAndAddRowComponent={
-            <OrganizationBasicInfo
-              defaultValues={defaultValue}
-              goBack={() => setComponent('table')}
-            />
-          }
-          data={data.map((org, index) => ({
-            id: org.id,
-            logo: '',
-            rs: org.name,
-            ice: org.ice,
-            cnss: org.cnss,
-            address: org.address,
-            enabled: index % 2 === 0,
-          }))}
-        />
-      </div>
-    );
-  }
-  return <></>;
+  return (
+    <OrgTable
+      data={data || []}
+      setSearch={setSearch}
+      isReFetching={isFetching || isLoading}
+      search={search}
+    />
+  );
 };
 
 export default withAuth(OrganizationsPage);

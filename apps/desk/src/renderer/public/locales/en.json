@@ -31,10 +31,10 @@
     "view": "Viewing only"
   },
   "registration": {
-    "title": "Information Management: Members and Owner",
+    "title": "Organization and Owner informations",
     "registration": "Registration",
     "ownerInfo": "Owner Information :",
-    "MembersInfos": "Member Information :",
+    "MembersInfos": "Organization Information :",
     "EditOrganization": "Edit Organization",
     "basicInfo": {
       "title": "Organization Information",

@@ -17,7 +17,8 @@ export default function useHandleEditUser(
   goBack: () => void,
   orgId:string
 ) {
-  const schema = userSchema;
+
+  const schema =  userSchema;
 
   type SchemaType = typeof schema;
 
@@ -31,10 +32,12 @@ export default function useHandleEditUser(
         lastName: (crud == 'edit' && defaultValues?.lastName) || '',
         email: (crud == 'edit' && defaultValues?.email) || '',
         phone: (crud == 'edit' && defaultValues?.phone) || '',
-        role: (crud == 'edit' && defaultValues?.role) || undefined,
-        identityType: (crud == 'edit' && defaultValues?.identityType) || '',
-        identity: (crud == 'edit' && defaultValues?.identity) || '',
-        userCnss: (crud == 'edit' && defaultValues?.userCnss) || '',
+        ...(crud === 'add' && {
+          identityType: '',
+          identity: '',
+          role: '',
+          userCnss: '',
+        }),
       },
     });
 
@@ -55,7 +58,6 @@ export default function useHandleEditUser(
   );
 
   const onSubmit = (data: FormData) => {
-    console.log('data :::', data);
     if (userType === 'SOLUTION_OWNER') {
       crud == 'edit'
         ? mutationUpdateUser.mutate({
@@ -106,21 +108,6 @@ export default function useHandleEditUser(
                 defaultValues && defaultValues.email !== data.email
                   ? data.email
                   : undefined,
-              identityType:
-                defaultValues &&
-                defaultValues.identityType !== data.identityType
-                  ? data.identityType
-                  : undefined,
-              identity:
-                data.identity === data.identity ? undefined : data.identity,
-              role:
-                defaultValues && defaultValues.role !== data.role
-                  ? data.role
-                  : undefined,
-              cnss:
-                defaultValues && defaultValues.userCnss !== data.userCnss
-                  ? data.userCnss
-                  : undefined,
               phone:
                 defaultValues && defaultValues.phone !== data.phone
                   ? data.phone
@@ -145,9 +132,8 @@ export default function useHandleEditUser(
     // check if there is an empty field
     if (defaultValues && crud == 'edit') {
       const { id, organizationId, ...values } = defaultValues;
-      console.log('data : ', data);
-      console.log('defaultValues jjjj: ', values);
-      return !areObjectsEqual(data, values);
+      const {role, identityType, identity, userCnss, ...values2} = values;
+      return crud == 'edit' ? !areObjectsEqual(data, values2) : !areObjectsEqual(data, values)
     }
     return false;
   };
@@ -161,7 +147,7 @@ export default function useHandleEditUser(
     control,
     formValues,
     formState,
-    isPending: false,
+    isPending: mutationUpdateUser.isPending || mutationUpdate.isPending,
     handleSubmit,
     onSubmit,
     handleUnsavedChange,

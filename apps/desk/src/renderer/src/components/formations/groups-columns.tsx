@@ -14,11 +14,11 @@ export interface Group {
 }
 
 export const groupColumn = (
-  setParticipants: () => void,
+  goToParticipant: (organizationId: string, groupId: string) => void,
   organizationId: string,
   themeId: string,
   setRowData: (rowData: Group) => void
-): ColumnDef<Group>[] => { 
+): ColumnDef<Group>[] => {
   return [
     {
       accessorKey: 'id',
@@ -88,9 +88,9 @@ export const groupColumn = (
     {
       accessorKey: 'participant',
       header: 'participant.participant',
-      cell: () => (
+      cell: ({ row }) => (
         <RedirectButton
-          click={setParticipants}
+          click={goToParticipant.bind(null, organizationId, row.original.id)}
           text="participant.participant"
         />
       ),

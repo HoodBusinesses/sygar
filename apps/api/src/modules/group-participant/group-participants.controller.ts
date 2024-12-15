@@ -50,7 +50,6 @@ export class GroupParticipantController {
 		return await this.participantService.deleteParticipant(participantId);
 	}
 
-
 	@Get(":participantId")
 	async getGroup(
 		@Param("participantId") participantId: string,
