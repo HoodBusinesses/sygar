@@ -47,9 +47,9 @@ export default function FormInputItem({
           <input type="file" {...register} className="hidden" id="logo" />
           <label
             htmlFor="logo"
-            className="text-sm text-gray-500 cursor-pointer"
+            className="text-xs text-gray-500 cursor-pointer h-[8px]"
           >
-            {('Upload Logo')}
+            {('upload')}
           </label>
         </div>
       ) :
