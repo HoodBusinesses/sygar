@@ -81,8 +81,9 @@ model GroupDate {
   id      String   @id @default(uuid())
   groupId String
   group   Group    @relation(fields: [groupId], references: [id])
-  date    DateTime
-  // attendances GroupAttendance[] // Relation to Attendance
+  startDate    DateTime
+  endDate DateTime
+  attendances GroupAttendance[] // Relation to Attendance
 
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
@@ -92,31 +93,32 @@ model Participant {
   id           String            @id @default(uuid())
   firstName    String
   lastName     String
-  phone        String
-  email        String
-  cnss         String
+  phone        String @unique()
+  email        String @unique()
+  cnss         String @unique()
   identityType IdentityType
-  identity     String
+  identity     String @unique()
   status       ParticipantStatus
   groupId      String
   group        Group             @relation(fields: [groupId], references: [id]) // feedbacks    Feedback[]
-  // attendances  GroupAttendance[] // Attendance relation
+  attendances  GroupAttendance[] // Attendance relation
 
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
 }
 
-// model GroupAttendance {
-//   id            String      @id @default(uuid())
-//   groupDateId   String      @relation(fields: [groupDateId], references: [id])
-//   groupDate     GroupDate // Relation to GroupDate
-//   participantId String      @relation(fields: [participantId], references: [id])
-//   participant   Participant // Relation to Participant
-//   attended      Boolean // Whether the participant attended
-//
-//   updatedAt DateTime @updatedAt
-//   createdAt DateTime @default(now())
-// }
+model GroupAttendance {
+  id            String      @id @default(uuid())
+  groupDateId   String      
+  groupDate     GroupDate @relation(fields: [groupDateId], references: [id])
+ // Relation to GroupDate
+  participantId String      
+  participant   Participant @relation(fields: [participantId], references: [id]) // Relation to Participant
+  attended      Boolean @default(true) // Whether the participant attended
+
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+}
 
 // model Reminder {
 //   id             String       @id @default(uuid())

@@ -16,6 +16,7 @@ import { RbacModule } from './global/rbac/roles.module';
 import { ThemesModule } from './modules/themes/themes.module';
 import { GroupParticipantModule } from './modules/group-participant/group-participants.module';
 import { GroupModule } from './modules/groups/groups.module';
+import { GroupDateModule } from './modules/group-date/group-dates.module';
 
 @Module({
   imports: [
@@ -37,7 +38,7 @@ import { GroupModule } from './modules/groups/groups.module';
     DatabaseModule,
     AuthModule,
     UserModule,
-
+    GroupDateModule,
     MailModule,
     EncryptionModule,
     TemplatesModule,
